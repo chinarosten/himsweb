@@ -2,6 +2,9 @@
 <html>
     <head>
         <title><g:layoutTitle default="Rosten" /></title>
+        <r:jsLoad dir="js/dojo" file="dojo.js"/>
+        
+        
         <script type="text/javascript">
 			if(typeof(dojo)=="undefined"){
 				var href = window.location.href;
@@ -13,7 +16,7 @@
 				document.write("<script type=\"text/javascript\" src=\""+ dojo_link + "\" djConfig=\"parseOnLoad:true,isDebug:" + isDebug + ",usePlainJson:true,bindEncoding:'utf-8'\"><\/script>");
 			}
 		</script>
-		<r:cssLoad dir="js/dojo-release-1.6.1/dojo/resources" file="dojo.css"/>
+		<r:cssLoad dir="js/dojo/resources" file="dojo.css"/>
         <r:cssLoad dir="css/rosten" file="rosten.css" id="rostenCss"/>
         <r:cssLoad dir="js/rosten/widget/css" file="rostenGrid.css"/>
         <link rel="shortcut icon" href="${resource(dir:'images/rosten/share',file:'rosten_logo_R.ico')}" type="image/x-icon" />
