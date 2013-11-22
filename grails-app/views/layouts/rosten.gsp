@@ -11,6 +11,7 @@
 		<!-- <script type="text/javascript">rosten.init({webpath:"/himsweb",gridcss:true,loadKernel:true});</script> -->
         <g:layoutHead />
     </head>
+    
     <body class="claro rosten">
         <g:layoutBody />
     </body>
