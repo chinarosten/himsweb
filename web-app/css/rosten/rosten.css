@@ -1,0 +1,27 @@
+/* 页面布局 */
+
+html, body, #container{
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
+	font-size:12px;
+}
+#header {
+	height:100px;
+	padding: 0 0 0 0;
+	overflow: hidden;
+}
+#contentBody{
+	padding: 0 0 0 0;
+}
+#sideBar {
+	width:206px; 
+	padding: 0 0 0 0;
+}
+#footer {
+	text-align:center;
+	color:#999999;
+
+}
