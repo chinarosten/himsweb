@@ -1,122 +1,85 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta name="layout" content="main"/>
-		<title>Welcome to Grails</title>
-		<style type="text/css" media="screen">
-			#status {
-				background-color: #eee;
-				border: .2em solid #fff;
-				margin: 2em 2em 1em;
-				padding: 1em;
-				width: 12em;
-				float: left;
-				-moz-box-shadow: 0px 0px 1.25em #ccc;
-				-webkit-box-shadow: 0px 0px 1.25em #ccc;
-				box-shadow: 0px 0px 1.25em #ccc;
-				-moz-border-radius: 0.6em;
-				-webkit-border-radius: 0.6em;
-				border-radius: 0.6em;
-			}
-
-			.ie6 #status {
-				display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
-			}
-
-			#status ul {
-				font-size: 0.9em;
-				list-style-type: none;
-				margin-bottom: 0.6em;
-				padding: 0;
-			}
-
-			#status li {
-				line-height: 1.3;
-			}
-
-			#status h1 {
-				text-transform: uppercase;
-				font-size: 1.1em;
-				margin: 0 0 0.3em;
-			}
-
-			#page-body {
-				margin: 2em 1em 1.25em 18em;
-			}
-
-			h2 {
-				margin-top: 1em;
-				margin-bottom: 0.3em;
-				font-size: 1em;
-			}
-
-			p {
-				line-height: 1.5;
-				margin: 0.25em 0;
-			}
-
-			#controller-list ul {
-				list-style-position: inside;
-			}
-
-			#controller-list li {
-				line-height: 1.3;
-				list-style-position: inside;
-				margin: 0.25em 0;
-			}
-
-			@media screen and (max-width: 480px) {
-				#status {
-					display: none;
-				}
-
-				#page-body {
-					margin: 0 1em 1em;
-				}
-
-				#page-body h1 {
-					margin-top: 0;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div id="status" role="complementary">
-			<h1>Application Status</h1>
-			<ul>
-				<li>App version: <g:meta name="app.version"/></li>
-				<li>Grails version: <g:meta name="app.grails.version"/></li>
-				<li>Groovy version: ${GroovySystem.getVersion()}</li>
-				<li>JVM version: ${System.getProperty('java.version')}</li>
-				<li>Reloading active: ${grails.util.Environment.reloadingAgentEnabled}</li>
-				<li>Controllers: ${grailsApplication.controllerClasses.size()}</li>
-				<li>Domains: ${grailsApplication.domainClasses.size()}</li>
-				<li>Services: ${grailsApplication.serviceClasses.size()}</li>
-				<li>Tag Libraries: ${grailsApplication.tagLibClasses.size()}</li>
-			</ul>
-			<h1>Installed Plugins</h1>
-			<ul>
-				<g:each var="plugin" in="${applicationContext.getBean('pluginManager').allPlugins}">
-					<li>${plugin.name} - ${plugin.version}</li>
-				</g:each>
-			</ul>
-		</div>
-		<div id="page-body" role="main">
-			<h1>Welcome to Grails</h1>
-			<p>Congratulations, you have successfully started your first Grails application! At the moment
-			   this is the default page, feel free to modify it to either redirect to a controller or display whatever
-			   content you may choose. Below is a list of controllers that are currently deployed in this application,
-			   click on each to execute its default action:</p>
-
-			<div id="controller-list" role="navigation">
-				<h2>Available Controllers:</h2>
-				<ul>
-					<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-						<li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
-					</g:each>
-				</ul>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title></title>
+    <meta name="layout" content="rosten" />
+   	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   	<script type="text/javascript">
+   	require([
+ 			"dojo/dom",
+ 			"dojo/parser",	// scan page for widgets and instantiate them
+ 	
+ 			"dijit/layout/BorderContainer",
+ 			"dijit/layout/ContentPane",
+ 			"dijit/layout/AccordionContainer",
+ 			"dojo/domReady!"
+ 		], function(dom, parser, BorderContainer, ContentPane, AccordionContainer){
+   			parser.parse();
+   	});
+   	</script>
+  </head>
+  <body>
+		<div data-dojo-type="dijit/layout/BorderContainer"  id="container" data-dojo-props='gutters:false'>
+			<div data-dojo-type="dijit/layout/ContentPane" id="header" data-dojo-props='region:"top"'>
+				<div class="headerTop">
+		            <table width="100%" border="0" margin=0 cellpadding="0" cellspacing="0">
+		                <tr width="100%">
+		                    <td valign="top" class="headerLogo"></td>
+		                    <td valign="top">
+		                        <div class="nav verticalAlign">
+		                            <span class="nav0Icon">&nbsp;</span>
+		                            <span class="nav0Div">&nbsp;<span id="header_username"></span>&nbsp;&nbsp;欢迎您的到来！</span>
+		                            <span class="nav5Icon">&nbsp;</span>
+									<span class="nav5Div"><a href="javascript:changeSkin();">更换皮肤</a></span>
+		                            <span class="nav4Icon">&nbsp;</span>
+									<span class="nav4Div"><a href="javascript:addBookmark();">添加为书签</a></span>
+									<g:if test="${normal}">
+			                            <span class="nav3Icon">&nbsp;</span>
+										<span class="nav3Div"><a href="javascript:chgPassword();">密码修改</a></span>
+									</g:if>
+									<span class="nav2Icon">&nbsp;</span>
+		                            <span class="nav2Div"><a href="javascript:logout();">注销</a></span>
+		                            <span class="nav1Icon">&nbsp;</span>
+		                            <span class="nav1Div"><a href="javascript:quit();">退出</a></span>
+		                        </div>
+		                    </td>
+		                </tr>
+		            </table>
+		        </div>
+		        <div class="headerMenu">
+		        	<div style="float:left;width:216px;text-align:center;padding: 5px 0 0 0;color: #004c7e;" id="header_time">
+		        		<g:formatDate format="yyyy-MM-dd ( EEE )" date="${new Date()}"/>
+					</div>
+					  <div class="naviMenuList">
+		                <ul id="naviMenuUL">
+				        </ul>
+		            </div>          
+		        </div>
 			</div>
-		</div>
+			
+			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"center",splitter:true,style:{padding:"1px 1px 0px 1px",height:"100%"}'>
+				<div data-dojo-type="dijit/layout/BorderContainer" id="sideBar" data-dojo-props='region:"left",minSize:"210",splitter:true,gutters:false,"class":"sideBar",style:"padding:0"'>
+				
+					<div id="navigationContainer" data-dojo-type="dijit/layout/AccordionContainer" data-dojo-props='region:"center"' >
+						<div id="navigation" data-dojo-type="dijit/layout/ContentPane" data-dojo-props='style:"padding:0px"'>
+							<div style="text-align:center;" class="verticalAlign">
+								<img src="images/rosten/share/wait.gif" alt="waiting..."></img>
+								<span>&nbsp;&nbsp;请稍候,正在获取内容...</span>
+							</div>
+						</div>
+					</div>
+				</div>
+		
+				<div data-dojo-type="dojox/layout/ContentPane" id="contentBody" data-dojo-props='region:"center",executeScripts:true,renderStyles:true,style:"padding:1px"'>
+					<div style="text-align:center;" class="verticalAlign">
+						<img src="images/rosten/share/wait.gif" alt="waiting..."></img>
+						<span>&nbsp;&nbsp;请稍候,正在获取内容...</span>
+					</div>
+				</div>
+			</div>
+			<div data-dojo-type="dijit/layout/ContentPane" id="footer" data-dojo-props='region:"bottom"'>
+					Copyright @2012 ; rosten 版权所有,提供技术支持
+				</div>
+		</div>	
 	</body>
 </html>
