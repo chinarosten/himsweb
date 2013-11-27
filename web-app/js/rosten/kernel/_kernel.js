@@ -93,10 +93,11 @@ define([
 	/*
 	 * 同步后台获取内容-----有3000毫秒默认时间限制
 	 */
-	rosten.readSync = rosten._readSyncByForm = function(url, content, callback, errorback, formname) {
+	rosten.readSync = rosten._readSync = function(url, content, callback, errorback, formname) {
 		var ioArgs = {
 			url : url,
 			timeout : 3000,
+			sync : true,
 			handleAs : "json",
 			preventCache : true,
 			encoding : "utf-8",
@@ -120,7 +121,7 @@ define([
 	/*
 	 * 同步后台获取内容-----无时间限制
 	 */
-	rosten.readSyncNoTime = rosten._readerNoTime = function(url, content, callback, errorback, formname) {
+	rosten.readSyncNoTime = rosten._readeSyncNoTime = function(url, content, callback, errorback, formname) {
 		var ioArgs = {
 			url : url,
 			sync : true,
@@ -293,18 +294,6 @@ define([
 		}
 		var themegridcss = kernel.moduleUrl("dojox", "grid/resources/" + rosten.dojothemecss + "Grid.css");
 		rosten.addCSSFile(themegridcss, "themeGridCss");
-	};
-	rosten.loadBaseJs = function() {
-		if ( typeof (dojo) == "undefined") {
-			var href = window.location.href;
-			var isDebug = "false";
-			if (href.indexOf("isDebug") != -1) {
-				isDebug = "true";
-			}
-			var dojolib = "/" + rosten.getDojoVersion() + "/dojo/dojo.js";
-			document.write("<script type=\"text/javascript\" src=\"" + dojolib + "\" data-dojo-config=\"parseOnLoad:true,has:{'dojo-firebug':" + isDebug + "},async:true\"><\/script>");
-		}
-		rosten.addThemeCss(rosten.dojothemecss);
 	};
 	rosten.init = function(datajson) {
 		if (datajson.webpath) {
