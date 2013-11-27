@@ -8,7 +8,11 @@
 		<r:cssLoad dir="js/dojo/resources" file="dojo.css"/>
         <r:cssLoad dir="css/rosten" file="rosten.css" id="rostenCss"/>
         <r:cssLoad dir="js/rosten/widget/css" file="rostenGrid.css"/>
-		<!-- <script type="text/javascript">rosten.init({webpath:"/himsweb",gridcss:true,loadKernel:true});</script> -->
+		<script type="text/javascript">
+			require(["rosten/kernel/_kernel"],function(rosten){
+				rosten.init({webpath:"/himsweb",gridcss:true,loadKernel:true});
+			});
+		</script>
         <g:layoutHead />
     </head>
     

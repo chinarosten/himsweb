@@ -314,7 +314,7 @@ define([
 			rosten.addRostenCss(datajson.rostencss);
 		}
 		if (datajson.loadKernel) {
-			require("rosten.kernel._kernel");
+			require(["rosten/kernel/kernel"]);
 		}
 	};
 
