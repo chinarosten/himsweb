@@ -1,6 +1,7 @@
 <html>
 <head>
 	<meta name='layout' content='main'/>
+	<link rel="shortcut icon" href="${resource(dir:'images/rosten/share',file:'rosten_logo_R.ico')}" type="image/x-icon" />
 	<title><g:message code="springSecurity.login.title"/></title>
 	<style type='text/css' media='screen'>
 	#login {
@@ -55,7 +56,7 @@
 	}
 
 	#login #remember_me_holder {
-		padding-left: 120px;
+		/* padding-left: 120px; */
 	}
 
 	#login #submit {
@@ -64,9 +65,9 @@
 
 	#login #remember_me_holder label {
 		float: none;
-		margin-left: 0;
+		margin-left: 4px;
 		text-align: left;
-		width: 200px
+		width: 120px
 	}
 
 	#login .inner .login_message {
