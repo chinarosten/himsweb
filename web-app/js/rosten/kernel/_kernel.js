@@ -17,7 +17,7 @@ define([
 		dojoPath : "js", //以当前载入的html页面判断dojo所在目录
 		dojothemecss : "claro", //采用dojo的默认样式
 		rostenthemecss : "normal", //rosten定制css样式
-		webPath : "/himsweb"	//根路径
+		webPath : "/web"	//根路径
 	};
 	rosten.setDojoVersion = function(dojoVersion) {
 		rosten.dojoVersion = dojoVersion;
@@ -258,7 +258,7 @@ define([
 		rosten.addDojoTheme(cssname);
 
 		if (model && model == true) {
-			rosten.addGridCss();
+			rosten.addDojoGridCss();
 		}
 	};
 	/*
@@ -274,13 +274,12 @@ define([
 		}
 		var themeCss = kernel.moduleUrl("dijit.themes", rosten.dojothemecss + "/" + rosten.dojothemecss + ".css");
 		rosten.addCSSFile(themeCss, "themeCss");
-		console.log("luhangyu");
 	};
 	/*
 	 * 添加表格css样式
 	 * rosten.defthemecss为特定的表格grid样式
 	 */
-	rosten.addGridCss = function() {
+	rosten.addDojoGridCss = function() {
 		var gridCssNode = dom.byId("gridCss");
 		if (gridCssNode) {
 			domConstruct.destroy(gridCssNode);
@@ -305,16 +304,13 @@ define([
 		} else {
 			dojocss = rosten.dojothemecss;
 		}
-		if (datajson.gridcss) {
+		if (datajson.dojogridcss) {
 			rosten.replaceDojoTheme(dojocss, true);
 		} else {
 			rosten.replaceDojoTheme(dojocss, false);
 		}
 		if (datajson.rostencss) {
-			rosten.addRostenCss(datajson.rostencss);
-		}
-		if (datajson.loadKernel) {
-			require(["rosten/kernel/kernel"]);
+			rosten.replaceRostenTheme(datajson.rostencss);
 		}
 	};
 

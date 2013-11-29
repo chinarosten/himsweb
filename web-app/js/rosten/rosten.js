@@ -4,15 +4,8 @@
  *
  */
 (function() {
-	rostenhas = {
-		jsweb : "jsweb"
-	};
-	dojoConfig = {
-		has : {
-			"dojo-firebug" : true,
-			"dojo-debug-messages" : true
-		},
-		parseOnLoad : true,
-		async : true
-	};
+	require(["rosten/kernel/_kernel"], function(kernel) {
+		console.log("start load rosten kernel file......");
+		rosten = kernel;
+	});
 })();

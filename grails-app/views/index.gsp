@@ -5,16 +5,12 @@
     <meta name="layout" content="rosten" />
    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    	<script type="text/javascript">
-   	require([
- 			"dojo/dom",
- 			"dojo/parser",	// scan page for widgets and instantiate them
- 	
- 			"dijit/layout/BorderContainer",
- 			"dijit/layout/ContentPane",
- 			"dijit/layout/AccordionContainer",
- 			"dojo/domReady!"
- 		], function(dom, parser, BorderContainer, ContentPane, AccordionContainer){
-   			parser.parse();
+   	require(["dojo/parser"
+ 		], function(parser){
+ 			rosten.init({webpath:"/himsweb",dojogridcss:true,rostencss:"normal"});
+	   		dojo.addOnLoad(function(){
+				console.log("hello add on load");
+			});
    	});
    	</script>
   </head>

@@ -4,8 +4,9 @@
  * control version
  */
 define([
-	"dojo/_base/window",
-	], function(win, kernel, lang, xhr, domConstruct, dom, has, domClass) {
+	"dojo/_base/window"
+	], function(win) {
 	
+	var kernel = {};
 	return kernel;
 });
