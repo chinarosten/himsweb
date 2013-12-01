@@ -1,0 +1,32 @@
+<div dojoAttachPoint="containerNode" class="rostenGridView">
+	<div dojoAttachPoint="_gridData">
+	    <div dojoAttachPoint="_gridNode"></div>
+	    <div class="pagecontrol" dojoAttachPoint="pageControl">
+	        
+        	<span>
+        		<div class="firstpagelink" dojoAttachPoint="firstButton" style="cursor:pointer;" dojoAttachEvent="onclick:firstPage">［首页］</div>
+        	</span>
+        	<span>
+        		<div class="prevpagelink" dojoAttachPoint="prevButton" style="cursor:pointer;" dojoAttachEvent="onclick:prevPage">［前一页］</div>
+        	</span>
+        	<span>
+        		<div class="nextpagelink" dojoAttachPoint="nextButton" style="cursor:pointer;" dojoAttachEvent="onclick:nextPage">［下一页］</div>
+        	</span>
+        	<span>
+        		<div class="lastpagelink" dojoAttachPoint="lastButton" style="cursor:pointer;" dojoAttachEvent="onclick:lastPage">［尾页］</div>
+        	</span>
+        	<span>第</span>
+        	<span>
+        		<input style="width:25px;margin-left:5px;margin-right:5px" value=1 dojoType="dijit.form.TextBox" dojoAttachEvent="onKeyPress:pageKeyPress" dojoAttachPoint="gotopage"/>
+        	</span>
+        	<span>页&nbsp;共</span>
+        	<span style="margin-left:5px;margin-right:5px" dojoAttachPoint="totalPages"></span>
+        	<span >页&nbsp;</span>
+        	<span>总共</span>
+        	<span dojoAttachPoint="totalCount" style="margin-left:5px;margin-right:5px;"></span>
+        	<img dojoAttachPoint="loadingimg" src='images/rosten/share/wait.gif' style="margin-right:5px;width:16px;height:16px;display:none;"/>
+        	<span style="margin-right:20px">条记录</span>
+	        
+		</div>
+	</div>
+</div>
