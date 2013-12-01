@@ -106,8 +106,8 @@ grails.plugin.springsecurity.authority.className = 'com.rosten.app.system.Role'
 //	'/**/favicon.ico':                ['permitAll']
 //]
 
-grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
-grails.plugins.springsecurity.interceptUrlMap = [
+grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
+grails.plugin.springsecurity.interceptUrlMap = [
 	'/js/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
 	'/css/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
 	'/images/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
