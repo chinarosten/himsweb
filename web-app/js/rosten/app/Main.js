@@ -4,6 +4,26 @@
  */
 define(["rosten/util/General"], function(general) {
 
+    rosten.addNaviMenu = function(node, menuList) {
+        node.innerHTML = "";
+        if (menuList.size() > 0) {
+            for (var i = 0; i < menuList.size(); i++) {
+                var div = document.createElement("div");
+                var li = document.createElement("li");
+                var a = document.createElement("a");
+
+                div.innerHTML = ">"
+                //dojo.addClass(div,"left_src");
+                //a.setAttribute("href","javascript:show_nav('"+lis.getKeyByIndex(i)+"')");
+                a.innerHTML = "";
+
+                li.appendChild(div);
+                li.appendChild(a);
+                node.appendChild(li);
+            }
+        }
+    };
+
     returnToMain = function() {
         var showInformation = rosten.kernel.getUserInforByKey("logoname");
         if (showInformation == "")

@@ -2,7 +2,19 @@
  * @author rosten
  * @created 2013-12-01
  */
-define(["dojo/_base/declare", "dijit/registry", "rosten/widget/ConfirmDialog", "rosten/widget/AlertDialog"], function(declare, registry, ConfirmDialog, AlertDialog) {
+define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/dom-class", "dijit/registry", "rosten/widget/ConfirmDialog", "rosten/widget/AlertDialog", "rosten/widget/ActionBar"], function(declare, kernel, domStyle, domClass, registry, ConfirmDialog, AlertDialog, ActionBar) {
+
+    rosten.addRostenBar = function(parentNode, barUrl) {
+        var barNode = kernel.create("div", null, parentNode, "first");
+        domClass.add(barNode, "rosten_action");
+
+        var actionBar = new ActionBar({
+            id : "rosten_actionBar",
+            actionBarSrc : barUrl
+        });
+        barNode.appendChild(actionBar.domNode);
+    };
+    
 
     rosten.confirm = function(oString) {
         if (!rosten.sys_confirmDialog || !registry.byId("sys_confirmDialog")) {
@@ -127,7 +139,7 @@ define(["dojo/_base/declare", "dijit/registry", "rosten/widget/ConfirmDialog", "
                 return str;
             return str.substring(0, index);
         },
-         // return the right string
+        // return the right string
         stringRight : function(/*String*/str, /*String*/parm) {
             var index = str.indexOf(parm);
             if (index == -1)

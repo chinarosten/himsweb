@@ -2,7 +2,7 @@
  * @author rosten
  * @created 2013-12-01
  */
-define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "rosten.widget._Dialog"], function(declare, kernel, domStyle,_Dialog) {
+define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "rosten/widget/_Dialog"], function(declare, kernel, domStyle,_Dialog) {
 	return declare("rosten.widget.AlertDialog", rosten.widget._Dialog, {
 		height: "90px",
 		width:"300px",
