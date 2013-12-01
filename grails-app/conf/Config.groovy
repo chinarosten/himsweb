@@ -95,13 +95,24 @@ log4j = {
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.rosten.app.system.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.rosten.app.system.UserRole'
 grails.plugin.springsecurity.authority.className = 'com.rosten.app.system.Role'
-grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-	'/':                              ['IS_AUTHENTICATED_FULLY'],
-	'/index':                         ['IS_AUTHENTICATED_FULLY'],
-	'/index.gsp':                     ['IS_AUTHENTICATED_FULLY'],
-	'/**/js/**':                      ['permitAll'],
-	'/**/css/**':                     ['permitAll'],
-	'/**/images/**':                  ['permitAll'],
-	'/**/favicon.ico':                ['permitAll']
+
+//grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+//	'/':                              ['IS_AUTHENTICATED_FULLY'],
+//	'/index':                         ['IS_AUTHENTICATED_FULLY'],
+//	'/index.gsp':                     ['IS_AUTHENTICATED_FULLY'],
+//	'/**/js/**':                      ['permitAll'],
+//	'/**/css/**':                     ['permitAll'],
+//	'/**/images/**':                  ['permitAll'],
+//	'/**/favicon.ico':                ['permitAll']
+//]
+
+grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
+grails.plugins.springsecurity.interceptUrlMap = [
+	'/js/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+	'/css/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+	'/images/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+	'/login/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+	'/logout/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+	'/**': ['IS_AUTHENTICATED_FULLY']
 ]
 
