@@ -46,7 +46,59 @@ class LoginController {
 	 */
 	def index() {
 		if (springSecurityService.isLoggedIn()) {
-			redirect uri: SpringSecurityUtils.securityConfig.successHandler.defaultTargetUrl
+			def model =[:]
+			
+			def user = springSecurityService.getCurrentUser()
+			model["user"] = user
+			
+			def userinfor = [:]
+			userinfor["username"] = user.username
+			userinfor["chinaname"] = user.chinaName
+			userinfor["idnumber"] = user.id
+			userinfor["type"] = "true"
+			userinfor["logoname"] = "企业信息管理平台"
+			
+			model["logoname"] = "企业信息管理平台"
+			
+			if(user.company){
+				def logoset = LogoSet.findByCompany(user.company)
+				if(logoset){
+					if(logoset.logoName && !"".equals(logoset.logoName)){
+						model["logoname"] = logoset.logoName
+						userinfor["logoname"] = logoset.logoName
+					}
+					if(logoset.cssStyle && !"".equals(logoset.cssStyle)){
+						userinfor["cssStyle"] = logoset.cssStyle
+					}
+				}
+				userinfor["companyid"] = user.company.id
+			}
+			def userDepartName = user.getDepartName()
+			if(userDepartName && !"".equals(userDepartName)){
+				userinfor["departName"] = userDepartName
+			}else{
+				userinfor["departName"] = user.getCompanyName()
+			}
+			
+			if(user.cssStyle && !"".equals(user.cssStyle)){
+				userinfor["individuationcss"] = user.cssStyle
+			}
+			if("rostenadmin".equals(user.username)){
+				//超级管理员
+				model["usertype"] = "[超级管理员]"
+			}else{
+				model["normal"] = true
+				//普通人员
+				if(user.sysFlag){
+					model["usertype"] = "[管理员]"
+				}else{
+					model["usertype"] = "[普通人员]"
+				}
+				//获取所有角色
+			}
+			model["userinfor"] = userinfor as JSON
+			render (view:SpringSecurityUtils.securityConfig.successHandler.defaultTargetUrl + "index",model:model)
+//			redirect uri: SpringSecurityUtils.securityConfig.successHandler.defaultTargetUrl
 		}
 		else {
 			redirect action: 'auth', params: params
@@ -57,9 +109,6 @@ class LoginController {
 	 * Show the login page.
 	 */
 	def auth() {
-		
-		println "-----------hello"
-		
 		def config = SpringSecurityUtils.securityConfig
 
 		if (springSecurityService.isLoggedIn()) {
