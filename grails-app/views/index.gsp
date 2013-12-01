@@ -1,11 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title></title>
+    <title>${logoname}</title>
     <meta name="layout" content="rosten" />
    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    	<script type="text/javascript">
-   	require(["dojo/parser"
+   	require(["dojo/parser","rosten/app/Main"
  		], function(parser){
  			rosten.init({webpath:"/himsweb",dojogridcss:true,rostencss:"normal"});
 	   		dojo.addOnLoad(function(){
@@ -24,7 +24,7 @@
 		                    <td valign="top">
 		                        <div class="nav verticalAlign">
 		                            <span class="nav0Icon">&nbsp;</span>
-		                            <span class="nav0Div">&nbsp;<span id="header_username"></span>&nbsp;&nbsp;欢迎您的到来！</span>
+		                            <span class="nav0Div">&nbsp;<span id="header_username">${(user.chinaName!=null?user.chinaName:user.username) + "&nbsp;" + usertype}</span>&nbsp;&nbsp;欢迎您的到来！</span>
 		                            <span class="nav5Icon">&nbsp;</span>
 									<span class="nav5Div"><a href="javascript:changeSkin();">更换皮肤</a></span>
 		                            <span class="nav4Icon">&nbsp;</span>
@@ -58,8 +58,8 @@
 				
 					<div id="navigationContainer" data-dojo-type="dijit/layout/AccordionContainer" data-dojo-props='region:"center"' >
 						<div id="navigation" data-dojo-type="dijit/layout/ContentPane" data-dojo-props='style:"padding:0px"'>
-							<div style="text-align:center;" class="verticalAlign">
-								<img src="images/rosten/share/wait.gif" alt="waiting..."></img>
+							<div style="text-align:center;position:absolute;top:30%;margin-left:20px" class="verticalAlign">
+								<img src="images/rosten/share/wait_big.gif" alt="waiting..."></img>
 								<span>&nbsp;&nbsp;请稍候,正在获取内容...</span>
 							</div>
 						</div>
@@ -67,8 +67,8 @@
 				</div>
 		
 				<div data-dojo-type="dojox/layout/ContentPane" id="contentBody" data-dojo-props='region:"center",executeScripts:true,renderStyles:true,style:"padding:1px"'>
-					<div style="text-align:center;" class="verticalAlign">
-						<img src="images/rosten/share/wait.gif" alt="waiting..."></img>
+					<div style="text-align:center;position:absolute;top:30%;left:30%" class="verticalAlign">
+						<img src="images/rosten/share/wait_big.gif" alt="waiting..."></img>
 						<span>&nbsp;&nbsp;请稍候,正在获取内容...</span>
 					</div>
 				</div>
