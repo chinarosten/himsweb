@@ -39,5 +39,5 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "rosten/wid
 			this.message = oString;
 			this.msgNode.innerHTML = "&nbsp;&nbsp;" + oString;
 		}
-	})；
+	});
 });
