@@ -11,7 +11,8 @@ define([
 	"dojo/dom-construct", 
 	"dojo/dom", 
 	"dojo/has", 
-	"dojo/dom-class"], function(win, kernel, lang, xhr, domConstruct, dom, has, domClass) {
+	"dojo/dom-class",
+	"dijit/registry"], function(win, kernel, lang, xhr, domConstruct, dom, has, domClass,registry) {
 	var rosten = {
 		variable : {},
 		dojoPath : "js", //以当前载入的html页面判断dojo所在目录
@@ -313,6 +314,5 @@ define([
 			rosten.replaceRostenTheme(datajson.rostencss);
 		}
 	};
-
 	return rosten;
 });
