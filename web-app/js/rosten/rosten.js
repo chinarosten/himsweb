@@ -5,7 +5,7 @@
  */
 (function() {
 	require(["rosten/kernel/_kernel"], function(kernel) {
-		console.log("start load rosten kernel file......");
+		console.log("load rosten kernel file......");
 		rosten = kernel;
 	});
 })();
