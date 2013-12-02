@@ -1,8 +1,20 @@
 /**
  * @author rosten
  */
-define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/xhr", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/form/Button", "dijit/Toolbar", "dojo/_base/connect", "rosten/kernel/_kernel"], function(declare, kernel, lang, xhr, _WidgetBase, _TemplatedMixin, Button, Toolbar, connect, _kernel) {
-    return declare([_WidgetBase, _TemplatedMixin], {
+define(["dojo/_base/declare", 
+		"dojo/_base/kernel", 
+		"dojo/_base/lang", 
+		"dojo/_base/xhr", 
+		"dojo/dom-style",
+		"dijit/_WidgetBase", 
+		"dijit/_TemplatedMixin", 
+		"dijit/form/Button", 
+		"dijit/Toolbar", 
+		"dojo/_base/connect", 
+		"rosten/kernel/_kernel"], 
+			function(declare, 
+				kernel, lang, xhr, domStyle,_WidgetBase, _TemplatedMixin, Button, Toolbar, connect, _kernel) {
+    return declare("rosten.widget.ActionBar",[_WidgetBase, _TemplatedMixin], {
         id : "",
         actionBarSrc : "",
         actionTextHeight : 12,
@@ -58,7 +70,7 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_bas
                 });
 
                 domStyle.set(button.domNode, "fontSize", this.actionTextHeight + "px");
-                domStyle, set(button.iconNode, {
+                domStyle.set(button.iconNode, {
                     backgroundImage : "url('" + (object.img) + "')"
                 });
 
