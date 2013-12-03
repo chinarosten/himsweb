@@ -10,10 +10,10 @@ define(["dojo/_base/declare",
 		"dijit/_TemplatedMixin", 
 		"dijit/form/Button", 
 		"dijit/Toolbar", 
-		"dojo/_base/connect", 
+		"dojo/_base/connect",
+		"rosten/util/general",
 		"rosten/kernel/_kernel"], 
-			function(declare, 
-				kernel, lang, xhr, domStyle,_WidgetBase, _TemplatedMixin, Button, Toolbar, connect, _kernel) {
+			function(declare,kernel, lang, xhr, domStyle,_WidgetBase, _TemplatedMixin, Button, Toolbar, connect,general,_kernel) {
     return declare("rosten.widget.ActionBar",[_WidgetBase, _TemplatedMixin], {
         id : "",
         actionBarSrc : "",
@@ -79,7 +79,7 @@ define(["dojo/_base/declare",
                  * 此版本只兼容包含一个"rosten."号的情况
                  */
                 if (object.action.indexOf(".") != -1) {
-                    connect.connect(button, "onClick", rosten, rosten.stringRight(object.action, "."));
+                    connect.connect(button, "onClick", rosten, general.stringRight(object.action, "."));
                 } else {
                     connect.connect(button, "onClick", object.action);
                 }

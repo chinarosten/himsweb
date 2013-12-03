@@ -11,10 +11,11 @@ define(["dojo/_base/window",
 		"dojo/dom", 
 		"dojo/has", 
 		"dojo/dom-class",
-		"dojo/dom-style", 
+		"dojo/dom-style",
 		"dijit/registry"], 
 		function(win, kernel, lang, xhr, domConstruct, dom, has, domClass, domStyle,registry) {
     var rosten = {
+    	version:"V1.0",
         variable : {},
         dojoPath : "js", //以当前载入的html页面判断dojo所在目录
         dojothemecss : "claro", //采用dojo的默认样式
@@ -317,6 +318,46 @@ define(["dojo/_base/window",
     };
     rosten.windowclose = function(){
         window.close();
+    };
+    rosten.errordeal = function(node, oString) {
+        node.innerHTML = "";
+        var div = document.createElement("div");
+        domStyle.set(div, {
+            "fontSize" : "18px",
+            "color" : "#FF0000",
+            "border" : "1px solid #c8c8c8",
+            "textAlign" : "center",
+            "height" : "35px",
+            "lineHeight" : "35px",
+            "margin" : "5px"
+        });
+        domClass.add(div, "verticalAlign");
+        node.appendChild(div);
+
+        var imgNode = document.createElement("img");
+        var imgSrc = kernel.moduleUrl("rosten", "widget/templates/alert_1.gif");
+        if (kernel.isIE) {
+            imgNode.src = imgSrc;
+        } else {
+            imgNode.setAttribute("src", imgSrc);
+        }
+        div.appendChild(imgNode);
+
+        div.appendChild(document.createTextNode("\u00A0" + oString));
+	};
+	//destroy the widget id
+    rosten.validatyById = function(idname){
+        var node = registry.byId(idname);
+        if (node) {
+            node.destroy();
+        }
+    };
+    rosten.validatyByArr = function(arr){
+        if ((arr && arr instanceof Array || typeof arr == "array")) {
+            for (var i = 0; i < arr.length; i++) {
+                rosten.validatyById(arr[i]);
+            }
+        }
     };
     return rosten;
 });

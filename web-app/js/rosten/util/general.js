@@ -2,7 +2,7 @@
  * @author rosten
  * @created 2013-12-01
  */
-define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/dom-class", "dijit/registry"], function(declare, kernel, domStyle, domClass, registry) {
+define(["dojo/_base/declare"], function(declare) {
     return declare("rosten.util.general", null, {
         setSpace : function(num) {
             var oString = "";
