@@ -21,7 +21,7 @@
 	     	"dijit/registry",
 	     	"dojox/layout/ContentPane",
 	     	"dijit/Dialog",
-	     	"rosten/app/Main" ],
+	     	"rosten/app/Main"],
 		function(parser, kernel,JSON,lang,query,win,domStyle,domClass,domConstruct,registry,ContentPane,Dialog) {
 			kernel.addOnLoad(function() {
 				var data = JSON.parse('${userinfor}');
