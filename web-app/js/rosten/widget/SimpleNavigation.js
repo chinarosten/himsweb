@@ -7,7 +7,7 @@ define(["dojo/_base/declare",
 		"dijit/_WidgetBase", 
 		"dijit/_TemplatedMixin",
 		"dojox/collections/SortedList", 
-		"rosten/uitl/General"], function(declare,lang, xhr,_WidgetBase,_TemplatedMixin,SortedList,General) {
+		"rosten/uitl/general"], function(declare,lang, xhr,_WidgetBase,_TemplatedMixin,SortedList,general) {
 	return declare("rosten.widget.SimpleNavigation", [_WidgetBase, _TemplatedMixin], {
 		id: "",
 		url: "", // back data--jsonString
@@ -75,7 +75,7 @@ define(["dojo/_base/declare",
                 linode.appendChild(linknode);
                 ulnode.appendChild(linode);
                 
-                this.navigationData.add(General.stringLeft(General.stringRight(href,"\""),"\""),showName);
+                this.navigationData.add(general.stringLeft(general.stringRight(href,"\""),"\""),showName);
                 
             }
 			this.containerNode.appendChild(ulnode);
