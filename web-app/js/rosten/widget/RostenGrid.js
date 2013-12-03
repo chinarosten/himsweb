@@ -17,8 +17,8 @@ define(["dojo/_base/declare",
 		"dojox/grid/DataGrid",
 		"rosten/kernel/_kernel",
 		"rosten/kernel/behavior",
-		"rosten/uitl/General"], 
-		function(declare,lang, xhr,domClass,domStyle,ItemFileWriteStore,connect,number,_WidgetBase,_TemplatedMixin,template,SortedList,_CheckBoxSelector,DataGrid,_kernel,behavior,General) {
+		"rosten/uitl/general"], 
+		function(declare,lang, xhr,domClass,domStyle,ItemFileWriteStore,connect,number,_WidgetBase,_TemplatedMixin,template,SortedList,_CheckBoxSelector,DataGrid,_kernel,behavior,general) {
 	return declare("rosten.widget.RostenGrid", [_WidgetBase, _TemplatedMixin], {
 		widgetsInTemplate: true, //解析RostenGrid.html中的dojoType等dojo特有信息，false不会解析
 		templateString: template,
