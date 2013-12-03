@@ -9,7 +9,7 @@ define(["dojo/_base/declare",
 		"dijit/registry",
 		"dijit/Dialog",
 		"rosten/widget/ShowDialog"], function(declare,kernel,domStyle,domAttr,win,registry,Dialog,ShowDialog) {
-	return declare("rosten.util.general", null, {
+	return declare("rosten.util.gen-dialog", null, {
 		createRostenShowDialog:function(src,args){
 			var obj = {src:src};
 			if(args){
