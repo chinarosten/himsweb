@@ -2,50 +2,7 @@
  * @author rosten
  * @created 2013-12-01
  */
-define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/dom-class", "dijit/registry", "rosten/widget/ConfirmDialog", "rosten/widget/AlertDialog", "rosten/widget/ActionBar"], function(declare, kernel, domStyle, domClass, registry, ConfirmDialog, AlertDialog, ActionBar) {
-
-    rosten.addRostenBar = function(parentNode, barUrl) {
-        var barNode = kernel.create("div", null, parentNode, "first");
-        domClass.add(barNode, "rosten_action");
-
-        var actionBar = new ActionBar({
-            id : "rosten_actionBar",
-            actionBarSrc : barUrl
-        });
-        barNode.appendChild(actionBar.domNode);
-    };
-    
-
-    rosten.confirm = function(oString) {
-        if (!rosten.sys_confirmDialog || !registry.byId("sys_confirmDialog")) {
-            rosten.sys_confirmDialog = new ConfirmDialog({
-                title : "Rosten_系统对话框",
-                id : "sys_confirmDialog"
-            });
-        }
-        rosten.sys_confirmDialog.callback = function() {
-        };
-        rosten.sys_confirmDialog.queryDlgClose = function() {
-        };
-        rosten.sys_confirmDialog.open();
-
-        rosten.sys_confirmDialog.refresh(oString);
-        return rosten.sys_confirmDialog;
-    };
-    rosten.alert = function(oString) {
-        if (!rosten.sys_alertDialog || !registry.byId("sys_alertDialog")) {
-            rosten.sys_alertDialog = new AlertDialog({
-                title : "Rosten_系统对话框",
-                id : "sys_alertDialog"
-            });
-        }
-        rosten.sys_alertDialog.queryDlgClose = function() {
-        };
-        rosten.sys_alertDialog.open();
-        rosten.sys_alertDialog.refresh(oString);
-        return rosten.sys_alertDialog;
-    };
-
+define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/dom-class", "dijit/registry"], function(declare, kernel, domStyle, domClass, registry) {
     return declare("rosten.util.general", null, {
         setSpace : function(num) {
             var oString = "";
