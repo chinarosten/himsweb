@@ -3,7 +3,17 @@
  * @created 2013-11-13
  * control version
  */
-define(["dojo/_base/window", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/xhr", "dojo/dom-construct", "dojo/dom", "dojo/has", "dojo/dom-class","dojo/dom-style", "dijit/registry"], function(win, kernel, lang, xhr, domConstruct, dom, has, domClass, domStyle,registry) {
+define(["dojo/_base/window", 
+		"dojo/_base/kernel", 
+		"dojo/_base/lang", 
+		"dojo/_base/xhr", 
+		"dojo/dom-construct", 
+		"dojo/dom", 
+		"dojo/has", 
+		"dojo/dom-class",
+		"dojo/dom-style", 
+		"dijit/registry"], 
+		function(win, kernel, lang, xhr, domConstruct, dom, has, domClass, domStyle,registry) {
     var rosten = {
         variable : {},
         dojoPath : "js", //以当前载入的html页面判断dojo所在目录
@@ -307,32 +317,6 @@ define(["dojo/_base/window", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base
     };
     rosten.windowclose = function(){
         window.close();
-    };
-    rosten.errordeal = function(node, oString) {
-        node.innerHTML = "";
-        var div = document.createElement("div");
-        domStyle.set(div, {
-            "fontSize" : "18px",
-            "color" : "#FF0000",
-            "border" : "1px solid #c8c8c8",
-            "textAlign" : "center",
-            "height" : "35px",
-            "lineHeight" : "35px",
-            "margin" : "5px"
-        });
-        domClass.add(div, "verticalAlign");
-        node.appendChild(div);
-
-        var imgNode = document.createElement("img");
-        var imgSrc = kernel.moduleUrl("rosten", "widget/templates/alert_1.gif");
-        if (kernel.isIE) {
-            imgNode.src = imgSrc;
-        } else {
-            imgNode.setAttribute("src", imgSrc);
-        }
-        div.appendChild(imgNode);
-
-        div.appendChild(document.createTextNode("\u00A0" + oString));
     };
     return rosten;
 });
