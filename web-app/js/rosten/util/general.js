@@ -104,7 +104,7 @@ define(["dojo/_base/declare"], function(declare) {
             return str.substr(index + 1);
         },
         // return the left string
-        stringLeft : function(/*String*/str, /*String*/parm) {
+        stringLeft:function(/*String*/str, /*String*/parm) {
             var index = str.indexOf(parm);
             if (index == -1)
                 return str;
@@ -125,7 +125,7 @@ define(["dojo/_base/declare"], function(declare) {
                 }
             }
         },
-        stringTrim : function(/*String*/str, /*String*/parm) {
+        stringTrim:function(/*String*/str, /*String*/parm) {
             if (!parm) {
                 var oStr = rosten.splitString(str, " ");
             } else {
@@ -196,6 +196,8 @@ define(["dojo/_base/declare"], function(declare) {
                     return obj;
             }
         }
+    
+    
     });
 
 });

@@ -7,7 +7,7 @@ define(["dojo/_base/declare",
 		"dijit/_WidgetBase", 
 		"dijit/_TemplatedMixin",
 		"dojox/collections/SortedList", 
-		"rosten/uitl/general"], function(declare,lang, xhr,_WidgetBase,_TemplatedMixin,SortedList,general) {
+		"rosten/util/general"], function(declare,lang, xhr,_WidgetBase,_TemplatedMixin,SortedList,general) {
 	return declare("rosten.widget.SimpleNavigation", [_WidgetBase, _TemplatedMixin], {
 		id: "",
 		url: "", // back data--jsonString
