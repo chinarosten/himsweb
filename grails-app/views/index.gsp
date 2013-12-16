@@ -30,7 +30,7 @@
 		            type: "stand"
 		        };
 	   	   		rosten.init({webpath : "/himsweb",dojogridcss : true,rostencss : "normal"});
-				//initInstance(naviJson,data);
+				initInstance(naviJson,data);
 			});
 			lang.extend(ContentPane,{
 	   			onDownloadError:function(error){
