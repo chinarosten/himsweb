@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript">
    	logout = function(){
-    	var url = "${createLink(controller:'logout')}";
+    	var url = "${createLink(controller:'j_spring_security_logout')}";
 		window.location = url;
 	}
 	require(["dojo/parser", 
