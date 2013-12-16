@@ -2,11 +2,11 @@
  * @author rosten
  * @created 2013-12-01
  */
-define(["dojo/_base/kernel", "dojo/_base/lang", "dijit/registry", "rosten/kernel/kernel", "rosten/kernel/_kernel", "rosten/kernel/behavior"], function(kernel, lang, registry, rostenKernel, _kernel, behavior) {
+define(["dojo/_base/kernel", "dojo/_base/lang", "dijit/registry", "dojo/_base/connect","rosten/kernel/kernel", "rosten/kernel/_kernel", "rosten/kernel/behavior"], function(kernel, lang, registry, connect,rostenKernel, _kernel, behavior) {
     initInstance = function(naviJson, data) {
         //载入缺省dojo的css样式
         if (data.cssStyle) {
-            rosten.changeDojoTheme(data.cssStyle, true);
+            rosten.replaceDojoTheme(data.cssStyle, true);
         }
         //载入用户指定的css样式
         var rostencss;
@@ -15,9 +15,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dijit/registry", "rosten/kernel
         } else {
             rostencss = rosten.rostenthemecss;
         }
-        rosten.changeRostenTheme(rostencss);
+        rosten.replaceRostenTheme(rostencss);
 
-        lang.subscribe("loadjsfile", null, function(oString) {
+        connect.subscribe("loadjsfile", null, function(oString) {
             /*
              * 用于加载对应的js文件,此方法在后续开发过程中需要修改
              */
