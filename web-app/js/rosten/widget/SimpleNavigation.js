@@ -9,6 +9,9 @@ define(["dojo/_base/declare",
 		"dojox/collections/SortedList", 
 		"rosten/util/general"], function(declare,lang, xhr,_WidgetBase,_TemplatedMixin,SortedList,general) {
 	return declare("rosten.widget.SimpleNavigation", [_WidgetBase, _TemplatedMixin], {
+		
+		general:new general(),
+		
 		id: "",
 		url: "", // back data--jsonString
 		urlArgs:null,//传入后台参数
@@ -75,7 +78,7 @@ define(["dojo/_base/declare",
                 linode.appendChild(linknode);
                 ulnode.appendChild(linode);
                 
-                this.navigationData.add(general.stringLeft(general.stringRight(href,"\""),"\""),showName);
+                this.navigationData.add(this.general.stringLeft(this.general.stringRight(href,"\""),"\""),showName);
                 
             }
 			this.containerNode.appendChild(ulnode);
