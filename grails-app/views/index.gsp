@@ -29,7 +29,7 @@
 		            naviMenuSrc: "${createLink(controller:'system',action:'naviMenu',id:user.id)}",
 		            type: "stand"
 		        };
-	   	   		rosten.init({webpath : "/himsweb",dojogridcss : true,rostencss : "normal"});
+	   	   		rosten.init({webpath : "${request.getContextPath()}",dojogridcss : true,rostencss : "normal"});
 				initInstance(naviJson,data);
 			});
 			lang.extend(ContentPane,{
