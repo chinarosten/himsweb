@@ -2,14 +2,18 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="layout" content="rostenApp" />
+    <meta name="layout" content="rosten" />
     <title>个性定制</title>
-    <r:jsLoad dir="js/app" file="SystemApplication.js"/>
 	<script type="text/javascript">
-		dojo.require("dijit.form.RadioButton");
-		dojo.require("rosten.widget.ActionBar");
-		dojo.addOnLoad(function(){
-			rosten.cssinit();
+		require(["dojo/parser"
+		 		,"dojo/_base/kernel"
+		     	,"rosten/widget/ActionBar"
+		     	,"rosten/app/Application"],
+			function(parser,kernel,ActionBar,Application){
+				kernel.addOnLoad(function(){
+					rosten.init({webpath:"${request.getContextPath()}"});
+					rosten.cssinit();
+				});
 		});
 		user_uiconfig_add = function(){
 			var radioItems = document.getElementsByName("theme");
@@ -24,7 +28,7 @@
 				return;
 			}
 			var urlArgs = {cssStyle:themeValue};
-			rosten.readerSync(rosten.webPath + "/system/skinSave/${user?.id}",urlArgs,function(data){
+			rosten.readSync(rosten.webPath + "/system/skinSave/${user?.id}",urlArgs,function(data){
 				if(data.result=="true"){
 					rosten.alert("成功保存!").queryDlgClose= function(){
 						page_quit_1(true);
@@ -41,7 +45,7 @@
 </head>
 <body>
 	<div class="rosten_action">
-		<div data-dojo-type="rosten.widget.ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'systemAction',action:'skin')}"'></div>
+		<div data-dojo-type="rosten/widget/ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'systemAction',action:'skin')}"'></div>
 	</div>
 		<div style="text-Align:center">
         <form class="rosten_form" id="rosten_form" onsubmit="return false;" style="text-align:left;">
