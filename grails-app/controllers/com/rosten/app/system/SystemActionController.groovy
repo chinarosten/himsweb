@@ -4,11 +4,10 @@ import grails.converters.JSON
 
 class SystemActionController {
 	def systemService
-	
-	def webPath = request.contextPath + "/"
 	def imgPath ="images/rosten/actionbar/"
 	
 	def skin ={
+		def webPath = request.getContextPath() + "/"
 		def actionList = []
 		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
 		actionList << createAction("保存",webPath + imgPath + "Save.gif","user_uiconfig_add")
@@ -59,6 +58,7 @@ class SystemActionController {
 		render createCommonAction(null,"model",true) as JSON
 	}
 	def modelForm ={
+		def webPath = request.getContextPath() + "/"
 		def actionList = []
 		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
 		
@@ -76,6 +76,7 @@ class SystemActionController {
 		render createCommonAction(null,"group",true) as JSON
 	}
 	def groupForm ={
+		def webPath = request.getContextPath() + "/"
 		def actionList = []
 		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
 		
@@ -89,6 +90,7 @@ class SystemActionController {
 		render createCommonAction(null,"userType",true) as JSON
 	}
 	def userTypeForm ={
+		def webPath = request.getContextPath() + "/"
 		def actionList = []
 		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
 		
@@ -110,6 +112,7 @@ class SystemActionController {
 		render createCommonAction(null,"role",true) as JSON
 	}
 	def roleForm ={
+		def webPath = request.getContextPath() + "/"
 		def actionList = []
 		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
 		
@@ -124,6 +127,7 @@ class SystemActionController {
 		render createCommonAction(null,"permission",true) as JSON
 	}
 	def permissionForm ={
+		def webPath = request.getContextPath() + "/"
 		def actionList = []
 		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
 		
@@ -138,6 +142,7 @@ class SystemActionController {
 		render createCommonAction(null,"resource",true) as JSON
 	}
 	def resourceForm ={
+		def webPath = request.getContextPath() + "/"
 		def actionList = []
 		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
 		
@@ -149,6 +154,7 @@ class SystemActionController {
 	}
 	
 	def administratorForm ={
+		def webPath = request.getContextPath() + "/"
 		def actionList = []
 		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
 		
@@ -162,12 +168,14 @@ class SystemActionController {
 		render createCommonAction(null,"administrator",true) as JSON
 	}
 	def departForm = {
+		def webPath = request.getContextPath() + "/"
 		def actionList =[]
 		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
 		actionList << createAction("保存",imgPath + "Save.gif","depart_save")
 		render actionList as JSON
 	}
 	def companyForm={
+		def webPath = request.getContextPath() + "/"
 		def actionList = []
 		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
 		
