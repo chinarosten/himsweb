@@ -23,18 +23,18 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dijit/registry", "dojo/_base/co
              */
             console.log("loadjs file is :" + oString);
             if (oString == "系统管理" || oString == "平台管理") {
-                require("rosten.js.SystemManage");
+               // require("rosten/app/SystemManage");
             } else if (oString == "系统配置") {
-                require("rosten.js.ConfigManage");
+                require("./ConfigManage");
                 //require("rosten.js.Usual");
             } else if (oString == "会员管理") {
-                require("rosten.js.ConsumerManage");
+                require("./ConsumerManage");
             } else if (oString == "员工管理") {
-                require("rosten.js.SystemManage");
+                require("./SystemManage");
             } else if (oString == "业绩管理") {
-                require("rosten.js.StaticManage");
+                require("./StaticManage");
             } else if (oString == "库存管理") {
-                require("rosten.js.StockManage");
+                require("./StockManage");
             }
         });
 
@@ -71,10 +71,10 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dijit/registry", "dojo/_base/co
     };
 
     returnToMain = function() {
-        var showInformation = rosten.getUserInforByKey("logoname");
+        var showInformation = rosten.kernel.getUserInforByKey("logoname");
         if (showInformation == "")
             showInformation = rosten.variable.logoname;
-        rosten.returnToMain("&nbsp;&nbsp;欢迎进入" + showInformation + "，当前您已成功登录！......");
+            rosten.kernel.returnToMain("&nbsp;&nbsp;欢迎进入" + showInformation + "，当前您已成功登录！......");
     };
     quit = function() {
         var dialog = rosten.confirm("是否确定退出系统?");
