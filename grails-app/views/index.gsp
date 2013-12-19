@@ -23,13 +23,13 @@
 	     	"dijit/Dialog",
 	     	"rosten/app/Main"],
 		function(parser, kernel,JSON,lang,query,win,domStyle,domClass,domConstruct,registry,ContentPane,Dialog) {
+			rosten.init({webpath : "${request.getContextPath()}",dojogridcss : true,rostencss : "normal"});
 			kernel.addOnLoad(function() {
 				var data = JSON.parse('${userinfor}');
 	   	   		var naviJson = {
 		            naviMenuSrc: "${createLink(controller:'system',action:'naviMenu',id:user.id)}",
 		            type: "stand"
 		        };
-	   	   		rosten.init({webpath : "${request.getContextPath()}",dojogridcss : true,rostencss : "normal"});
 				initInstance(naviJson,data);
 			});
 			lang.extend(ContentPane,{
