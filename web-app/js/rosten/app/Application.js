@@ -1,7 +1,7 @@
 /**
  * @author rosten
  */
-define(["rosten/kernel/_kernel", "rosten/kernel/behavior"], function(_kernel,behavior) {
+define(["rosten/kernel/_kernel"], function(_kernel) {
 
     rosten.cssinitcommon = function() {
         //此功能只添加css文件
@@ -27,8 +27,5 @@ define(["rosten/kernel/_kernel", "rosten/kernel/behavior"], function(_kernel,beh
 
         window.opener.rosten.kernel.refreshGrid();
         window.close();
-    };
-    page_quit = function(){
-    	
     };
 });
