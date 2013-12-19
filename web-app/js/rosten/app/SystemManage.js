@@ -1,7 +1,8 @@
 /**
  * @author rosten
  */
-define(["dojo/_base/window"], function(win) {
+define(["dojo/_base/connect"
+        ,"dijit/registry"], function(connect,registry) {
 
     searchGridSubmit = function() {
         var url = "jsproot/sysmanage/";
@@ -9,7 +10,7 @@ define(["dojo/_base/window"], function(win) {
         switch(rosten.kernel.navigationEntity) {
             case "modelManage":
 
-                var modelcode = dijit.byId("modelcode");
+                var modelcode = registry.byId("modelcode");
                 if (!modelcode.isValid()) {
                     rosten.alert("当前模块编号不正确！").queryDlgClose = function() {
                         modelcode.focus();
@@ -18,7 +19,7 @@ define(["dojo/_base/window"], function(win) {
                     return;
                 }
 
-                var modelname = dijit.byId("modelname");
+                var modelname = registry.byId("modelname");
                 if (!modelname.isValid()) {
                     rosten.alert("当前模块名称不正确！").queryDlgClose = function() {
                         modelname.focus();
@@ -42,7 +43,7 @@ define(["dojo/_base/window"], function(win) {
                 break;
             case "departManage":
 
-                var departcode = dijit.byId("departcode");
+                var departcode = registry.byId("departcode");
                 if (!departcode.isValid()) {
                     rosten.alert("当前部门编号不正确！").queryDlgClose = function() {
                         departcode.focus();
@@ -51,7 +52,7 @@ define(["dojo/_base/window"], function(win) {
                     return;
                 }
 
-                var departname = dijit.byId("departname");
+                var departname = registry.byId("departname");
                 if (!departname.isValid()) {
                     rosten.alert("当前部门名称不正确！").queryDlgClose = function() {
                         departname.focus();
@@ -76,7 +77,7 @@ define(["dojo/_base/window"], function(win) {
 
                 break;
             case "groupManage":
-                var groupcode = dijit.byId("groupcode");
+                var groupcode = registry.byId("groupcode");
                 if (!groupcode.isValid()) {
                     rosten.alert("当前群组编号不正确！").queryDlgClose = function() {
                         groupcode.focus();
@@ -85,7 +86,7 @@ define(["dojo/_base/window"], function(win) {
                     return;
                 }
 
-                var groupname = dijit.byId("groupname");
+                var groupname = registry.byId("groupname");
                 if (!groupname.isValid()) {
                     rosten.alert("当前群组名称不正确！").queryDlgClose = function() {
                         groupname.focus();
@@ -109,7 +110,7 @@ define(["dojo/_base/window"], function(win) {
                 break;
 
             case "userManage":
-                var usercode = dijit.byId("usercode");
+                var usercode = registry.byId("usercode");
                 if (!usercode.isValid()) {
                     rosten.alert("当前用户编号不正确！").queryDlgClose = function() {
                         usercode.focus();
@@ -118,7 +119,7 @@ define(["dojo/_base/window"], function(win) {
                     return;
                 }
 
-                var username = dijit.byId("username");
+                var username = registry.byId("username");
                 if (!username.isValid()) {
                     rosten.alert("当前用户名称不正确！").queryDlgClose = function() {
                         username.focus();
@@ -141,7 +142,7 @@ define(["dojo/_base/window"], function(win) {
                 url += "User_Search.jsp";
                 break;
             case "roleManage":
-                var rolecode = dijit.byId("rolecode");
+                var rolecode = registry.byId("rolecode");
                 if (!rolecode.isValid()) {
                     rosten.alert("当前角色编号不正确！").queryDlgClose = function() {
                         rolecode.focus();
@@ -150,7 +151,7 @@ define(["dojo/_base/window"], function(win) {
                     return;
                 }
 
-                var rolename = dijit.byId("rolename");
+                var rolename = registry.byId("rolename");
                 if (!rolename.isValid()) {
                     rosten.alert("当前角色名称不正确！").queryDlgClose = function() {
                         rolename.focus();
@@ -173,7 +174,7 @@ define(["dojo/_base/window"], function(win) {
                 url += "Role_Search.jsp";
                 break;
             case "permissionManage":
-                var permissioncode = dijit.byId("permissioncode");
+                var permissioncode = registry.byId("permissioncode");
                 if (!permissioncode.isValid()) {
                     rosten.alert("当前权限编号不正确！").queryDlgClose = function() {
                         permissioncode.focus();
@@ -182,7 +183,7 @@ define(["dojo/_base/window"], function(win) {
                     return;
                 }
 
-                var permissionname = dijit.byId("permissionname");
+                var permissionname = registry.byId("permissionname");
                 if (!permissionname.isValid()) {
                     rosten.alert("当前权限名称不正确！").queryDlgClose = function() {
                         permissionname.focus();
@@ -205,7 +206,7 @@ define(["dojo/_base/window"], function(win) {
                 url += "Permission_Search.jsp";
                 break;
             case "resourceManage":
-                var resourcecode = dijit.byId("resourcecode");
+                var resourcecode = registry.byId("resourcecode");
                 if (!resourcecode.isValid()) {
                     rosten.alert("当前资源编号不正确！").queryDlgClose = function() {
                         resourcecode.focus();
@@ -214,7 +215,7 @@ define(["dojo/_base/window"], function(win) {
                     return;
                 }
 
-                var resourcename = dijit.byId("resourcename");
+                var resourcename = registry.byId("resourcename");
                 if (!resourcename.isValid()) {
                     rosten.alert("当前资源名称不正确！").queryDlgClose = function() {
                         resourcename.focus();
@@ -758,5 +759,5 @@ define(["dojo/_base/window"], function(win) {
         }
 
     };
-    dojo.connect("show_naviEntity", show_systemNaviEntity);
+    connect.connect("show_naviEntity", show_systemNaviEntity);
 });
