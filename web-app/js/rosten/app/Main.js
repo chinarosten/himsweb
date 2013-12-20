@@ -2,7 +2,13 @@
  * @author rosten
  * @created 2013-12-01
  */
-define(["dojo/_base/kernel", "dojo/_base/lang", "dijit/registry", "dojo/_base/connect","rosten/kernel/kernel", "rosten/kernel/_kernel", "rosten/kernel/behavior"], function(kernel, lang, registry, connect,rostenKernel, _kernel, behavior) {
+define(["dojo/_base/kernel"
+		, "dojo/_base/lang"
+		, "dijit/registry"
+		, "dojo/_base/connect"
+		,"rosten/kernel/kernel"
+		, "rosten/kernel/behavior"], function(kernel, lang, registry, connect,rostenKernel) {
+			
     initInstance = function(naviJson, data) {
         //载入缺省dojo的css样式
         if (data.cssStyle) {
@@ -37,8 +43,8 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dijit/registry", "dojo/_base/co
                 require("./StockManage");
             }
         });
-
-        rosten.kernel = new rostenKernel(naviJson);
+		
+		rosten.kernel = new rostenKernel(naviJson);
         if (rosten.kernel.getMenuName() == "") {
             rosten.alert("获取后台数据出错！");
             return;
@@ -49,27 +55,6 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dijit/registry", "dojo/_base/co
             //setInterval("session_checkTimeOut()",60000*120 + 2000);
         }
     };
-
-    rosten.addNaviMenu = function(node, menuList) {
-        node.innerHTML = "";
-        if (menuList.size() > 0) {
-            for (var i = 0; i < menuList.size(); i++) {
-                var div = document.createElement("div");
-                var li = document.createElement("li");
-                var a = document.createElement("a");
-
-                div.innerHTML = ">";
-                //dojo.addClass(div,"left_src");
-                //a.setAttribute("href","javascript:show_nav('"+lis.getKeyByIndex(i)+"')");
-                a.innerHTML = "";
-
-                li.appendChild(div);
-                li.appendChild(a);
-                node.appendChild(li);
-            }
-        }
-    };
-
     returnToMain = function() {
         var showInformation = rosten.kernel.getUserInforByKey("logoname");
         if (showInformation == "")
@@ -91,7 +76,6 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dijit/registry", "dojo/_base/co
      *  更换皮肤
      */
     changeSkin = function() {
-
         var unid = rosten.kernel.getUserInforByKey("idnumber");
         if (unid == "rostenadmin") {
             rosten.alert("超级用户不允许执行此项操作！");

@@ -1,8 +1,9 @@
 /**
  * @author rosten
  */
-define(["dojo/_base/connect"
-        ,"dijit/registry"], function(connect,registry) {
+define(["dojo/_base/connect",
+        "dijit/registry",
+        "rosten/kernel/behavior"], function(connect,registry) {
 
     searchGridSubmit = function() {
         var url = "jsproot/sysmanage/";
@@ -246,7 +247,7 @@ define(["dojo/_base/connect"
     };
     searchGrid = function() {
 
-        console.debug(rosten.kernel.navigationEntity);
+        console.log(rosten.kernel.navigationEntity);
         var url = "jslib/rosten/html/sysmanage/";
         switch(rosten.kernel.navigationEntity) {
             case "modelManage":
@@ -276,7 +277,7 @@ define(["dojo/_base/connect"
 
     };
     cancelSearch = function() {
-        console.debug(rosten.kernel.getGrid().defaultUrl);
+        console.log(rosten.kernel.getGrid().defaultUrl);
         rosten.kernel.refreshGrid(rosten.kernel.getGrid().defaultUrl);
     };
     //------------------------------------------------------------------------------------------------------------------------
