@@ -8,7 +8,7 @@
 		require(["dojo/parser"
 		 		,"dojo/_base/kernel"
 		     	,"rosten/widget/ActionBar"
-		     	,"rosten/app/Application"],
+		     	,"rosten/app/SystemApplication"],
 			function(parser,kernel,ActionBar,Application){
 				kernel.addOnLoad(function(){
 					rosten.init({webpath:"${request.getContextPath()}"});
