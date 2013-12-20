@@ -17,8 +17,9 @@ define(["dojo/_base/declare",
 		"dojox/grid/DataGrid",
 		"rosten/kernel/_kernel",
 		"rosten/kernel/behavior",
+		"rosten/util/gen-dialog",
 		"rosten/util/general"], 
-		function(declare,lang, xhr,domClass,domStyle,ItemFileWriteStore,connect,number,_WidgetBase,_TemplatedMixin,template,SortedList,_CheckBoxSelector,DataGrid,_kernel,behavior,general) {
+		function(declare,lang, xhr,domStyle,domClass,ItemFileWriteStore,connect,number,_WidgetBase,_TemplatedMixin,template,SortedList,_CheckBoxSelector,DataGrid,_kernel,behavior,gendialog,general) {
 	return declare("rosten.widget.RostenGrid", [_WidgetBase, _TemplatedMixin], {
 		widgetsInTemplate: true, //解析RostenGrid.html中的dojoType等dojo特有信息，false不会解析
 		templateString: template,
@@ -253,14 +254,14 @@ define(["dojo/_base/declare",
         _openLoading:function(){
 			domStyle.set(this._gridData,"display","none");
 			if(this._gridUtil==null){
-				this._gridUtil = new behavior();
+				this._gridUtil = new gendialog();
 			}
 			this._gridUtil.showWaitDialog_1(this.containerNode,"rosten_gridDialog");
 		},
 		_closeLoading:function(){
 			domStyle.set(this._gridData,"display","block");
 			if(this._gridUtil==null){
-				this._gridUtil = new behavior();
+				this._gridUtil = new gendialog();
 			}
 			this._gridUtil.hideWaitDialog_1("rosten_gridDialog");
 		},
