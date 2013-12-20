@@ -29,7 +29,7 @@ define(["dojo/_base/kernel"
              */
             console.log("loadjs file is :" + oString);
             if (oString == "系统管理" || oString == "平台管理") {
-             	require("rosten/app/SystemManage");
+             	require(["rosten/app/SystemManage"]);
             } else if (oString == "系统配置") {
                 require("./ConfigManage");
                 //require("rosten.js.Usual");
