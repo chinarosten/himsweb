@@ -35,8 +35,8 @@ class GridUtil {
 			}
 		}
 
-		def initializer = new ConvertersConfigurationInitializer()
-		initializer.initialize()
+//		def initializer = new ConvertersConfigurationInitializer()
+//		initializer.initialize()
 		
 		/*
 		 * json
@@ -45,7 +45,6 @@ class GridUtil {
 //		def result = builder.build {
 //			[[type:"dojox.grid._CheckBoxSelector"],[cells:items]]
 //		}
-		
 		def result = items[0]
 		return result
 	}
