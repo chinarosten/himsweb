@@ -3,17 +3,14 @@
  */
 define(["dojo/_base/declare",
 		"dojo/_base/lang",
+		"dojo/data/ItemFileWriteStore",
 		"dojo/_base/xhr",
-		"dojo/query",
 		"dojo/dom-style",
-		"dojo/_base/kernel", 
+		"dojo/dom-class",
 		"dojo/_base/connect",
-		"dijit/registry",
-		"dijit/form/CheckBox",
-		"dijit/form/TextBox",
-		"dijit/form/Button",
 		"rosten/widget/_Dialog",
-		"rosten/util/general"], function(declare,lang, xhr,query,kernel,domStyle,connect,registry,CheckBox,TextBox,Button,_Dialog,general) {
+		"rosten/widget/CheckBoxTree"], 
+		function(declare,lang, ItemFileWriteStore,xhr,domStyle,domClass,connect,_Dialog,CheckBoxTree) {
 	return declare("rosten.widget.PickTreeDialog", [_Dialog], {
 		
 		title: "Rosten_Tree_Dialog",
@@ -34,7 +31,7 @@ define(["dojo/_base/declare",
                     url: this.url,
                     handleAs: "xml",
                     timeout: 5000,
-                    load: dojo.hitch(this, function(response, ioArgs){
+                    load: lang.hitch(this, function(response, ioArgs){
                         var doc = response.documentElement;
                         var valid = doc.getElementsByTagName("valid")[0];
                         
@@ -81,21 +78,21 @@ define(["dojo/_base/declare",
                                 
                                 data.items.push(level_1);
                             }
-                            console.debug(data);
-                            this.treeStore = new dojo.data.ItemFileWriteStore({
+                            console.log(data);
+                            this.treeStore = new ItemFileWriteStore({
                                 data: data
                             });
                             this._buildTree(node);
                         }
                         
                     }),
-                    error: dojo.hitch(this, function(response, ioArgs){
+                    error: lang.hitch(this, function(response, ioArgs){
                         console.error(response);
                     })
                 };
-                dojo.xhrGet(args);
+                xhr.get(args);
             }else {
-                this.treeStore = new dojo.data.ItemFileWriteStore({
+                this.treeStore = new ItemFileWriteStore({
                     url: this.url
                 });
                 this._buildTree(node);
@@ -103,7 +100,7 @@ define(["dojo/_base/declare",
         },
         _buildTree: function(node){
             var treepane = document.createElement("div");
-            dojo.style(treepane, {
+            domStyle.set(treepane, {
                 height: "295px",
                 padding: "3px",
                 marginBottom: "5px",
@@ -111,14 +108,14 @@ define(["dojo/_base/declare",
                 overflow: "auto"
             });
             if(this.folderClass!=null){
-            	dojo.addClass(treepane, this.folderClass);
+            	domClass.add(treepane, this.folderClass);
             }
             node.appendChild(treepane);
             var treenode = document.createElement("div");
             treepane.appendChild(treenode);
             
             //根据treestore生成tree；
-            var treeModel = new rosten.widget.CheckBoxStoreModel({
+            var treeModel = new CheckBoxTree.model({
                 store: this.treeStore,
                 query: this.query,
                 childrenAttrs: ["children"],
@@ -138,9 +135,9 @@ define(["dojo/_base/declare",
                 persist: false,
                 showRoot: this.showRoot
             };
-            this.tree = new rosten.widget.CheckBoxTree(_treeArgs, treenode);
+            this.tree = new CheckBoxTree.tree(_treeArgs, treenode);
             if (!this.showCheckBox) {
-                dojo.connect(this.tree, "onClick", this, "onclick");
+                connect.connect(this.tree, "onClick", this, "onclick");
             }
             
             this.tree.startup();

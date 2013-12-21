@@ -585,7 +585,7 @@ define(["dojo/_base/connect",
     };
     uploadLogo = function() {
         var upload = rosten.upLoad();
-        rosten.kernel.addConnect(dojo.connect(upload, 'callback', function() {
+        rosten.kernel.addConnect(connect.connect(upload, 'callback', function() {
             rosten.alert("上传成功后，请使用<重新登录系统>查看变化！");
         }));
     };

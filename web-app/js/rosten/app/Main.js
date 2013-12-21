@@ -7,8 +7,47 @@ define(["dojo/_base/kernel"
 		, "dijit/registry"
 		, "dojo/_base/connect"
 		,"rosten/kernel/kernel"
-		, "rosten/kernel/behavior"], function(kernel, lang, registry, connect,rostenKernel) {
+		,"rosten/util/general"
+		, "rosten/kernel/behavior"], function(kernel, lang, registry, connect,rostenKernel,general) {
+	var main = {};
+	main._getGridUnid = function(rostenGrid,type){
+		/*
+		 * type:single ---单个
+		 * type:multi ---多个
+		 */
+        var selectitems = rostenGrid.getSelected();
+		
+		if(selectitems.length<=0){
+			rosten.alert("请先选择需要修改的条目！");
+			return "";
+		}
+		var gridStore = rostenGrid.getStore();
+		var item;
+		var idArgs;
+		if(type=="single"){
+        	item = selectitems[0];
+        	idArgs = gridStore.getValue(item, "id");
+		}else if(type=="multi"){
+			var unids = [];
+			for(var i=0;i<selectitems.length;i++){
+				item = selectitems[i];
+				var _1 = gridStore.getValue(item, "id");
+				unids.push(_1);
+			}
 			
+			idArgs = new general().implodeArray(unids,",");
+		}
+       
+		return idArgs;
+	};
+	main.getGridUnid = function(type){
+		/*
+		 * type:single ---单个
+		 * type:multi ---多个
+		 */
+		var rostenGrid = rosten.kernel.getGrid();
+		return main._getGridUnid(rostenGrid,type);
+	};		
     initInstance = function(naviJson, data) {
         //载入缺省dojo的css样式
         if (data.cssStyle) {
@@ -172,4 +211,7 @@ define(["dojo/_base/kernel"
     freshGrid = function() {
         rosten.kernel.refreshGrid();
     };
+    
+    lang.mixin(rosten,main);
+    return main;
 });

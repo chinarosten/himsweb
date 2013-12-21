@@ -435,8 +435,9 @@ define(["dojo/_base/declare",
 		
     });
     var checkBoxTree = {
-    	
-    	
+    	model:_CheckBoxStoreModel,
+    	tree:_CheckBoxTree,
+    	treeNode:_CheckBoxTreeNode
     };
     return checkBoxTree;
 });

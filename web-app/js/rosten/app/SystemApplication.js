@@ -3,8 +3,9 @@
  */
 define(["dojo/dom",
         "dijit/registry",
+        "rosten/widget/PickTreeDialog",
         "rosten/app/Application",
-        "rosten/kernel/behavior"], function(dom,registry) {
+        "rosten/kernel/behavior"], function(dom,registry,PickTreeDialog) {
 
     page_quit_1 = function(flag) {
         window.close();
@@ -54,7 +55,7 @@ define(["dojo/dom",
                 showCheckBox : false,
                 folderClass : "departTree"
             };
-            rosten[id] = new rosten.widget.PickTreeDialog(args);
+            rosten[id] = new PickTreeDialog(args);
             rosten[id].open();
         }
         rosten[id].callback = function(data) {
@@ -88,7 +89,7 @@ define(["dojo/dom",
                 showCheckBox : true,
                 folderClass : "departTree"
             };
-            rosten[id] = new rosten.widget.PickTreeDialog(args);
+            rosten[id] = new PickTreeDialog(args);
             rosten[id].open();
         }
         rosten[id].callback = function(data) {
@@ -198,7 +199,7 @@ define(["dojo/dom",
                 showCheckBox : true,
                 folderClass : "departTree"
             };
-            rosten[id] = new rosten.widget.PickTreeDialog(args);
+            rosten[id] = new PickTreeDialog(args);
             rosten[id].open();
         }
         rosten[id].callback = function(data) {

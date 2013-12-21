@@ -55,7 +55,15 @@ define([
         _kernel.sys_alertDialog.refresh(oString);
         return _kernel.sys_alertDialog;
     };
-    
+	behavior.getStoreItem = function(store,args,callback){
+		store.fetch({
+			query:args,
+			queryOptions: {
+                deep: true
+            },
+			onComplete: callback
+		});
+	};
     lang.mixin(_kernel,behavior);
     return behavior;
 });
