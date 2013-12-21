@@ -2,6 +2,7 @@
  * @author rosten
  */
 define(["dojo/_base/declare",
+		"dojo/_base/kernel",
 		"dojo/_base/lang",
 		"dojo/_base/xhr",
 		"dojo/dom-style",
@@ -11,6 +12,7 @@ define(["dojo/_base/declare",
 		"dojo/number",
 		"dijit/_WidgetBase", 
 		"dijit/_TemplatedMixin",
+		"dijit/form/TextBox",
 		"dojo/text!./templates/RostenGrid.html",
 		"dojox/collections/SortedList", 
 		"dojox/grid/_CheckBoxSelector",
@@ -19,7 +21,7 @@ define(["dojo/_base/declare",
 		"rosten/kernel/behavior",
 		"rosten/util/gen-dialog",
 		"rosten/util/general"], 
-		function(declare,lang, xhr,domStyle,domClass,ItemFileWriteStore,connect,number,_WidgetBase,_TemplatedMixin,template,SortedList,_CheckBoxSelector,DataGrid,_kernel,behavior,gendialog,general) {
+		function(declare,kernel,lang, xhr,domStyle,domClass,ItemFileWriteStore,connect,number,_WidgetBase,_TemplatedMixin,TextBox,template,SortedList,_CheckBoxSelector,DataGrid,_kernel,behavior,gendialog,general) {
 	return declare("rosten.widget.RostenGrid", [_WidgetBase, _TemplatedMixin], {
 		widgetsInTemplate: true, //解析RostenGrid.html中的dojoType等dojo特有信息，false不会解析
 		templateString: template,
