@@ -9,7 +9,7 @@
 		 		,"dojo/_base/kernel"
 		     	,"rosten/widget/ActionBar"
 		     	,"rosten/app/SystemApplication"],
-			function(parser,kernel,ActionBar,Application){
+			function(parser,kernel,ActionBar){
 				kernel.addOnLoad(function(){
 					rosten.init({webpath:"${request.getContextPath()}"});
 					rosten.cssinit();

@@ -56,7 +56,7 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 			} else {
 				this.contentPane = kernel.query("#system_dialog_contentpane",
 				this._dialog.domNode)[0];
-				this.controlPane = dojo.query("#system_dialog_controlpane",
+				this.controlPane = kernel.query("#system_dialog_controlpane",
 				this._dialog.domNode)[0];
 				this.initialized = true;
 			}

@@ -12,8 +12,8 @@ define(["dojo/_base/declare",
 		"dojo/number",
 		"dijit/_WidgetBase", 
 		"dijit/_TemplatedMixin",
-		"dijit/form/TextBox",
 		"dojo/text!./templates/RostenGrid.html",
+		"dijit/form/TextBox",
 		"dojox/collections/SortedList", 
 		"dojox/grid/_CheckBoxSelector",
 		"dojox/grid/DataGrid",
@@ -21,9 +21,28 @@ define(["dojo/_base/declare",
 		"rosten/kernel/behavior",
 		"rosten/util/gen-dialog",
 		"rosten/util/general"], 
-		function(declare,kernel,lang, xhr,domStyle,domClass,ItemFileWriteStore,connect,number,_WidgetBase,_TemplatedMixin,TextBox,template,SortedList,_CheckBoxSelector,DataGrid,_kernel,behavior,gendialog,general) {
+		function(declare,
+		         kernel,
+		         lang, 
+		         xhr,
+		         domStyle,
+		         domClass,
+		         ItemFileWriteStore,
+		         connect,
+		         number,
+		         _WidgetBase,
+		         _TemplatedMixin,
+		         template,
+		         TextBox,
+		         SortedList,
+		         _CheckBoxSelector,
+		         DataGrid,
+		         _kernel,
+		         behavior,
+		         gendialog,
+		         general) {
 	return declare("rosten.widget.RostenGrid", [_WidgetBase, _TemplatedMixin], {
-		widgetsInTemplate: true, //解析RostenGrid.html中的dojoType等dojo特有信息，false不会解析
+		//widgetsInTemplate: true, //解析RostenGrid.html中的dojoType等dojo特有信息，false不会解析
 		templateString: template,
 		id: "",
         url: "",
@@ -187,7 +206,8 @@ define(["dojo/_base/declare",
             this._renderLink();
             this.totalCount.innerHTML = this.pageControl.total;
             this.totalPages.innerHTML = this.pageControl.totalpages;
-            this.gotopage.attr("value", this.pageControl.page);
+            
+            this.gotopage.setAttribute("value", this.pageControl.page);
             if (this.showPageControl) {
                 domStyle.set(this.loadingimg, "display", "none");
             }
@@ -287,7 +307,7 @@ define(["dojo/_base/declare",
         },
         pageKeyPress: function(event){
             if (event.keyCode == 13) {
-                var _9 = number.format(this.gotopage.attr("value"));
+                var _9 = number.format(this.gotopage.setAttribute("value"));
                 if (_9 != null) {
                     if (_9 > this.pageControl.totalpages) {
                         _9 = this.pageControl.totalpages;
@@ -298,7 +318,7 @@ define(["dojo/_base/declare",
                     this.pageControl.page = parseInt(_9);
                     this._gotoPage(this.pageControl.page);
                 }else{
-					this.gotopage.attr("value", this.pageControl.page);
+					this.gotopage.setAttribute("value", this.pageControl.page);
 					behavior.alert("请正确输入页码数字！");
 				}
             }

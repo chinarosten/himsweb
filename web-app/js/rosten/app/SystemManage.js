@@ -526,7 +526,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.readerSync(rosten.webPath + "/system/userDelete", content, delete_callback);
+            rosten.readSync(rosten.webPath + "/system/userDelete", content, delete_callback);
         };
     };
     add_company = function() {
@@ -552,7 +552,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.readerSync(rosten.webPath + "/system/companyDelete", content, delete_callback);
+            rosten.readSync(rosten.webPath + "/system/companyDelete", content, delete_callback);
         };
     };
     add_userType = function() {
@@ -580,7 +580,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.readerSync(rosten.webPath + "/system/userTypeDelete", content, delete_callback);
+            rosten.readSync(rosten.webPath + "/system/userTypeDelete", content, delete_callback);
         };
     };
     uploadLogo = function() {
