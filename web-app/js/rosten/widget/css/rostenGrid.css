@@ -12,6 +12,7 @@
 	font-size:12px;
 	background-color:#fcfcfc;
 	border:1px solid #ccc;
+	text-align:center;
 }
 .rosten .rostenGridView input:focus {
 	border:1px solid #b2d1ff;
