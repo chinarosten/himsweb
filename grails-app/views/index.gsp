@@ -15,16 +15,28 @@
 	     	"dojo/_base/lang",
 	     	"dojo/query",
 	     	"dojo/_base/window",
+	     	"dojo/dom",
 	     	"dojo/dom-style",
 	     	"dojo/dom-class",
 	     	"dojo/dom-construct",
 	     	"dijit/registry",
 	     	"dojox/layout/ContentPane",
 	     	"dijit/Dialog",
+	     	"dijit/layout/BorderContainer",
+	     	"dijit/layout/AccordionContainer",
 	     	"rosten/app/Main"],
-		function(parser, kernel,JSON,lang,query,win,domStyle,domClass,domConstruct,registry,ContentPane,Dialog) {
+		function(parser, kernel,JSON,lang,query,win,dom,domStyle,domClass,domConstruct,registry,ContentPane,Dialog) {
 			rosten.init({webpath : "${request.getContextPath()}",dojogridcss : true,rostencss : "normal"});
 			kernel.addOnLoad(function() {
+				var n = dom.byId("preLoader");
+		        kernel.fadeOut({
+	                node:n,
+	                duration:720,
+	                onEnd:function(){
+                        domStyle.set(n,"display","none");
+	                }
+		        }).play();
+				
 				var data = JSON.parse('${userinfor}');
 	   	   		var naviJson = {
 		            naviMenuSrc: "${createLink(controller:'system',action:'naviMenu',id:user.id)}",
@@ -60,6 +72,7 @@
 </script>
 </head>
 <body>
+	<div id="preLoader"><p></p></div>
 	<div data-dojo-type="dijit/layout/BorderContainer" id="container"
 		data-dojo-props='gutters:false'>
 		<div data-dojo-type="dijit/layout/ContentPane" id="header"
@@ -114,24 +127,25 @@
 					data-dojo-props='region:"center"'>
 					<div id="navigation" data-dojo-type="dijit/layout/ContentPane"
 						data-dojo-props='style:"padding:0px"'>
-						<div
-							style="text-align: center; position: absolute; top: 30%; margin-left: 20px"
+						<!--
+						<div style="text-align: center; position: absolute; top: 30%; margin-left: 20px"
 							class="verticalAlign">
 							<img src="images/rosten/share/wait_big.gif" alt="waiting..."></img>
 							<span>&nbsp;&nbsp;请稍候,正在获取内容...</span>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
 
 			<div data-dojo-type="dojox/layout/ContentPane" id="contentBody"
 				data-dojo-props='region:"center",executeScripts:true,renderStyles:true,style:"padding:1px"'>
+				<!--
 				<div
 					style="text-align: center; position: absolute; top: 30%; left: 30%"
 					class="verticalAlign">
 					<img src="images/rosten/share/wait_big.gif" alt="waiting..."></img>
 					<span>&nbsp;&nbsp;请稍候,正在获取内容...</span>
-				</div>
+				</div>   -->
 			</div>
 		</div>
 		<div data-dojo-type="dijit/layout/ContentPane" id="footer"
