@@ -60,6 +60,10 @@ class BootStrap {
 			model.addToResources(resource)
 			
 			model.save(failOnError: true)
+			
+			model = new Model(modelName:"个人办公",description:"个人办公")
+			model.modelUrl = "/himsweb/mail/navigation@tree"
+			model.save(fialOnError:true)
 		}
 
 	}

@@ -16,7 +16,7 @@ define(["dojo/_base/declare",
 		url: "", // back data--jsonString
 		urlArgs:null,//传入后台参数
         templateString: '<div class="simpleNavigation"' +
-        '	><div dojoAttachPoint="containerNode"' +
+        '	><div  data-dojo-attach-point="containerNode"' +
         '	>Loading...</div>' +
         '</div>',
         navigationData:null,//传入参数记录

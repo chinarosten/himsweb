@@ -70,16 +70,16 @@ define(["dojo/_base/kernel"
             if (oString == "系统管理" || oString == "平台管理") {
              	require(["rosten/app/SystemManage"]);
             } else if (oString == "系统配置") {
-                require("./ConfigManage");
+                require(["./ConfigManage"]);
                 //require("rosten.js.Usual");
-            } else if (oString == "会员管理") {
-                require("./ConsumerManage");
+            } else if (oString == "个人办公") {
+                require(["rosten/app/Mail"]);
             } else if (oString == "员工管理") {
-                require("./SystemManage");
+                require(["./SystemManage"]);
             } else if (oString == "业绩管理") {
-                require("./StaticManage");
+                require(["./StaticManage"]);
             } else if (oString == "库存管理") {
-                require("./StockManage");
+                require(["./StockManage"]);
             }
         });
 		
