@@ -35,14 +35,8 @@ define(["dojo/_base/declare",
                     this.containerNode.appendChild(treenode);
                     domClass.add(this.containerNode, "tree");
                     
-                    var _data = {
-                        identifier: 'id',
-                        label: 'name',
-                        items: []
-                    };
-                    var _data_test = response;
                     this.store = new ItemFileReadStore({
-                        data: _data_test
+                        data: response
                     });
                     var model = new ForestStoreModel({
                         store: this.store,
@@ -60,10 +54,11 @@ define(["dojo/_base/declare",
                     }else{
                         _treeArgs.showRoot = false;
                     }
+                    // _treeArgs.onClick = this.onclick;
                     
                     var _tree = new Tree(_treeArgs, treenode);
                     _tree.startup();
-                    connect.connect(_tree, "onClick", this, "onclick");
+                    connect.connect(_tree, "onClick", this,"onclick");
                     
                     if (this.defaultentry != "") {
                         var fetchArgs = {
@@ -99,8 +94,8 @@ define(["dojo/_base/declare",
             });
         },
         onclick:function(item,node){
-            var url = this.store.getValue(item, "url");
-            eval(url);
+            var action = this.store.getValue(item,"action");
+            lang.hitch(null,action,item,node)();
         }
 	});
 });

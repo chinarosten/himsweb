@@ -46,8 +46,20 @@ define(["dojo/_base/kernel",
 // 		
 		// genIndex();
 	// });
-	rosten.kernel.rostenNavigation.onclick = function(item,node){
-	    alert(item);
+	mail_showInbox = function(item,node){
+	    var mail_box = registry.byId("mail_inbox");
+	    var oString = "收件箱";
+	    if(mail_box){
+            mail_table.setQuery({
+                type: "message",
+                folder: mailStore.getValue(item, "id")
+            });
+            
+            mail_box.attr("title",mailStore.getValue(item, "label"));
+            mail_tabs.selectChild(mail_box);    
+	    }else{
+	        rosten.kernel.setHref(rosten.webPath + "/mail/mailBox", oString);
+	    }
 	};
 	paneId = 1;
 	function genIndex(){
