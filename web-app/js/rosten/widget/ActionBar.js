@@ -19,7 +19,7 @@ define(["dojo/_base/declare",
         actionBarSrc : "",
         actionTextHeight : 12,
 
-        templateString : '<div dojoAttachPoint="containerNode" class="ActionBarOuter">actionBar is Loading...</div>',
+        templateString : '<div data-dojo-attach-point="containerNode" class="ActionBarOuter">actionBar is Loading...</div>',
 
         constructor : function() {
         },

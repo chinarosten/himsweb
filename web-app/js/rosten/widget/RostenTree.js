@@ -95,7 +95,9 @@ define(["dojo/_base/declare",
         },
         onclick:function(item,node){
             var action = this.store.getValue(item,"action");
-            lang.hitch(null,action,item,node)();
+            var name = this.store.getValue(item,"name");
+            var id = this.store.getValue(item,"id");
+            lang.hitch(null,action,name,id)();
         }
 	});
 });

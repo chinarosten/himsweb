@@ -46,22 +46,26 @@ define(["dojo/_base/kernel",
 // 		
 		// genIndex();
 	// });
-	mail_showInbox = function(item,node){
+	mail_showInbox = function(name,id){
 	    var mail_box = registry.byId("mail_inbox");
-	    var oString = "收件箱";
 	    if(mail_box){
             mail_table.setQuery({
                 type: "message",
-                folder: mailStore.getValue(item, "id")
+                folder: id
             });
             
-            mail_box.attr("title",mailStore.getValue(item, "label"));
+            mail_box.attr("title",name);
             mail_tabs.selectChild(mail_box);    
 	    }else{
-	        rosten.kernel.setHref(rosten.webPath + "/mail/mailBox", oString);
+	        rosten.kernel.setHref(rosten.webPath + "/mail/mailBox", name);
 	    }
 	};
-	paneId = 1;
+    read_mail = function(){
+        
+    };
+    delete_mail = function(){
+        
+    };
 	function genIndex(){
 		// summary:
 		//		generate A-Z push buttons for navigating contact list

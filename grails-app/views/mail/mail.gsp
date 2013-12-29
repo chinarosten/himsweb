@@ -7,6 +7,7 @@
 		require(["dojo/parser",
 		        "dojo/_base/kernel",
 		        "rosten/widget/ActionBar",
+		        "rosten/widget/RostenGrid",
 		 		"dojox/grid/DataGrid",
 				"dijit/layout/BorderContainer",
 				"dijit/layout/TabContainer",
@@ -24,43 +25,24 @@
 </head>
 <body>
 	<div data-dojo-type="dojo/data/ItemFileWriteStore" data-dojo-id="mailStore" url="${createLink(controller:'mail',action:'mailData')}"></div>
+	<div data-dojo-type="dojo/data/ItemFileWriteStore" data-dojo-id="contactStore" url="${createLink(controller:'mail',action:'mailData')}"></div>
+	
 	<div data-dojo-type="dijit/layout/BorderContainer">
 		<div data-dojo-type="dijit/layout/TabContainer" id="mail_tabs" data-dojo-id="mail_tabs" region="center" tabStrip="true" >
 			<div data-dojo-type="dijit/layout/BorderContainer" title="收件箱" id="mail_inbox">
 				
-				<div data-dojo-type="dijit/Toolbar" region="top" >
-					<button data-dojo-type="dijit/form/Button" iconClass="mailIconNewMessage">回复
-						<script type="dojo/method" data-dojo-event="onClick">
-								onMessageDbClick();
-							</script>
-					</button>
+				<div data-dojo-type="dijit/layout/ContentPane" region="top" style="height: 320px;padding:0px">
+					<div class="rosten_action">
+						<div data-dojo-type="rosten/widget/ActionBar" data-dojo-id="mail_actionBar" 
+						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'inbox')}"'></div>
+					</div>
+					<div data-dojo-type="rosten/widget/RostenGrid" data-dojo-id="mail_grid" 
+						data-dojo-props='url:"${createLink(controller:'mail',action:'inboxGrid')}"'></div>
+				</div>
+				<!-- message preview pane -->
+				<div id="mail_message" data-dojo-type="dijit/layout/ContentPane" region="center" >
 					
 				</div>
-				<div data-dojo-type="dijit/layout/BorderContainer"  region="center" style="padding:0px" >
-					<!-- list of messages pane -->
-					<table data-dojo-type="dojox/grid/DataGrid"
-						region="top" 
-						data-dojo-id="mail_table"
-						id="mail_table"
-						store="mailStore" query="{ type: 'message' ,folder: 'inbox'}"
-						onRowClick="onMessageClick"
-						onRowDblClick = "onMessageDbClick"
-						style="height: 320px;padding:0px">
-						<thead>
-							<tr>
-								<th field="sender" width="10%">发件人</th>
-								<th field="label" width="80%">主题</th>
-								<th field="sent" width="10%" formatter="formatDate">发件时间</th>
-							</tr>
-						</thead>
-					</table>
-					<!-- end of listPane -->
-	
-					<!-- message preview pane -->
-					<div id="mail_message" data-dojo-type="dijit/layout/ContentPane" region="center" >
-						
-					</div>
-				</div>	
 				
 				<!-- end of "message" -->
 			</div>
