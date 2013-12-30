@@ -40,17 +40,25 @@ class MailController {
 			def offset = (nowPage-1) * perPageNum
 			def max  = perPageNum
 			
-			def _json = [identifier:'id',label:'title',items:[]]
+			def _json = [identifier:'id',label:'name',items:[]]
 //			hairdressService.getAllCardType(offset,max,company,type).eachWithIndex{ item,idx->
 //				def sMap = ["rowIndex":idx+1,"id":item.id,"title":item.cardtypeName]
 //				_json.items+=sMap
 //			}
+			
+			def _data = ["rowIndex":1,"type":"message","id":"node1.1","sender":"张三","subject":"主题","sent": "2013-12-30"]
+	
+			_json.items << _data
 			
 			json["gridData"] = _json
 			
 		}
 
 		render json as JSON
+	}
+	def quick = {
+		def model = []
+		render(view:'/mail/quick',model:model)
 	}
 	def mailBox = {
 		def model = []
@@ -60,6 +68,13 @@ class MailController {
 		def json = [identifier:'id',label:'name',items:[]]
 		def _data = ["type":"message","id":"node1.1","name":"today's meeting",folder: 'inbox',label: "today's meeting",sender: "Adam Arlen", sent: "2005-12-19",
 			text: "Today's meeting is cancelled.<br>Let's do it tomorrow instead.<br><br>Adam"]
+
+		json.items << _data
+		render json as JSON
+	}
+	def contactData ={
+		def json = [identifier:'id',label:'name',items:[]]
+		def _data = ["type":"message","id":"node1.1","name":"张三",email: "luhangyu@163.com",phone:"13587878785"]
 
 		json.items << _data
 		render json as JSON
