@@ -71,18 +71,23 @@ define(["dojo/_base/kernel"
              */
             console.log("loadjs file is :" + oString);
             if (oString == "系统管理" || oString == "平台管理") {
+            	deleteMailNavigation();
              	require(["rosten/app/SystemManage"]);
             } else if (oString == "系统配置") {
+            	deleteMailNavigation();
                 require(["./ConfigManage"]);
                 //require("rosten.js.Usual");
             } else if (oString == "个人办公") {
             	addMailNavigation();
                 require(["rosten/app/Mail"]);
             } else if (oString == "员工管理") {
+            	deleteMailNavigation();
                 require(["./SystemManage"]);
             } else if (oString == "业绩管理") {
+            	deleteMailNavigation();
                 require(["./StaticManage"]);
             } else if (oString == "库存管理") {
+            	deleteMailNavigation();
                 require(["./StockManage"]);
             }
         });
@@ -103,13 +108,20 @@ define(["dojo/_base/kernel"
     		console.log("mail_quick is null....");
     		
     		// var div = document.createElement('div');
-    		var cp = new ContentPane({id:"mail_quick",executeScripts:true,renderStyles:true,region:"top",style:"padding:0px"});
+    		var cp = new ContentPane({id:"mail_quick",executeScripts:true,renderStyles:true,region:"top",style:"padding:0px;height:30px"});
     		// rosten.kernel.navigationContainer.domNode.appendChild(div);
 	    	// domConstruct.place(cp.domNode,rosten.kernel.navigationContainer.domNode,"before");
 		   	cp.attr("href",rosten.webPath + "/mail/quick");
 		   	registry.byId("sideBar").addChild(cp);
     	}else{
     		console.log("mail_quick is existed....");
+    	}
+    };
+    deleteMailNavigation = function(){
+    	var mail_quick = registry.byId("mail_quick");
+    	if(mail_quick){
+    		registry.byId('sideBar').removeChild(mail_quick);
+    		mail_quick.destroy();
     	}
     };
     returnToMain = function() {
