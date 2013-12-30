@@ -33,19 +33,6 @@ define(["dojo/_base/kernel",
 			dateStamp,
 			lang
 		) {
-	// kernel.addOnLoad(function(){
-		// var n = dom.byId("preLoader");
-		// kernel.fadeOut({
-			// node:n,
-			// duration:720,
-			// onEnd:function(){
-				// // dojo._destroyElement(n);
-				// domStyle.set(n,"display","none");
-			// }
-		// }).play();
-// 		
-		// genIndex();
-	// });
 	mail_showInbox = function(name,id){
 	    var mail_box = registry.byId("mail_inbox");
 	    if(mail_box){
@@ -57,7 +44,7 @@ define(["dojo/_base/kernel",
             mail_box.attr("title",name);
             mail_tabs.selectChild(mail_box);    
 	    }else{
-	        rosten.kernel.setHref(rosten.webPath + "/mail/mailBox", name);
+	        rosten.kernel.setHref(rosten.webPath + "/mail/mailBox", name,genIndex);
 	    }
 	};
     read_mail = function(){
@@ -71,12 +58,12 @@ define(["dojo/_base/kernel",
 		//		generate A-Z push buttons for navigating contact list
 		var ci = dom.byId("contactIndex");
 		
-		function addChar(c, func, cls){
+		function addChar(node,c, func, cls){
 			// add specified character, when clicked will execute func
 			var span = document.createElement("span");
 			span.innerHTML = c;
 			span.className = cls || "contactIndex";
-			ci.appendChild(span);
+			node.appendChild(span);
 			new FisheyeLite(
 				{
 					properties: {fontSize: 1.5},
@@ -94,11 +81,11 @@ define(["dojo/_base/kernel",
 			});
 		}
 	
-		addChar("ALL", function(){contactTable.setQuery({})}, 'contactIndexAll' );
+		addChar(ci,"ALL", function(){contactTable.setQuery({})}, 'contactIndexAll' );
 		for(var l = "A".charCodeAt(0); l <= "Z".charCodeAt(0); l++){
-			addChar(String.fromCharCode(l))
+			addChar(ci,String.fromCharCode(l))
 		}
-		addChar("ALL", function(){contactTable.setQuery({})}, 'contactIndexAll' );
+		addChar(ci,"ALL", function(){contactTable.setQuery({})}, 'contactIndexAll' );
 	}
 	onMessageClick = function(cell){
 		// summary:

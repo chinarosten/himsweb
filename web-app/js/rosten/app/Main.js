@@ -5,10 +5,13 @@
 define(["dojo/_base/kernel"
 		, "dojo/_base/lang"
 		, "dijit/registry"
+		, "dojo/dom-style"
+		, "dojo/dom-construct"
 		, "dojo/_base/connect"
+		, "dojox/layout/ContentPane"
 		,"rosten/kernel/kernel"
 		,"rosten/util/general"
-		, "rosten/kernel/behavior"], function(kernel, lang, registry, connect,rostenKernel,general) {
+		, "rosten/kernel/behavior"], function(kernel, lang, registry, domStyle,domConstruct,connect,ContentPane,rostenKernel,general) {
 	var main = {};
 	main._getGridUnid = function(rostenGrid,type){
 		/*
@@ -73,6 +76,7 @@ define(["dojo/_base/kernel"
                 require(["./ConfigManage"]);
                 //require("rosten.js.Usual");
             } else if (oString == "个人办公") {
+            	addMailNavigation();
                 require(["rosten/app/Mail"]);
             } else if (oString == "员工管理") {
                 require(["./SystemManage"]);
@@ -93,6 +97,20 @@ define(["dojo/_base/kernel"
             //增加时获取后台session功能
             //setInterval("session_checkTimeOut()",60000*120 + 2000);
         }
+    };
+    addMailNavigation = function(){
+    	if(registry.byId("mail_quick")==undefined){
+    		console.log("mail_quick is null....");
+    		
+    		// var div = document.createElement('div');
+    		var cp = new ContentPane({id:"mail_quick",executeScripts:true,renderStyles:true,region:"top",style:"padding:0px"});
+    		// rosten.kernel.navigationContainer.domNode.appendChild(div);
+	    	// domConstruct.place(cp.domNode,rosten.kernel.navigationContainer.domNode,"before");
+		   	cp.attr("href",rosten.webPath + "/mail/quick");
+		   	registry.byId("sideBar").addChild(cp);
+    	}else{
+    		console.log("mail_quick is existed....");
+    	}
     };
     returnToMain = function() {
         var showInformation = rosten.kernel.getUserInforByKey("logoname");
