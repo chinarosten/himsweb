@@ -28,7 +28,7 @@ class MailController {
 			def layout =[]
 			layout<<["name":"序号","width":"60px","colIdx":0,"field":"rowIndex"]
 			layout<<["name":"发件人","field":"sender","width":"auto"]
-			layout<<["name":"主题","field":"subject","width":"auto"]
+			layout<<["name":"主题","field":"subject","width":"auto","formatter":"formatSubject"]
 			layout<<["name":"发件时间","field":"sent","width":"auto"]
 
 			json["gridHeader"] = layout

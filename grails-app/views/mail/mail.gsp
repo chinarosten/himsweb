@@ -24,15 +24,21 @@
 	<script type="text/javascript">
 		require(["dojo/parser",
 		        "dojo/_base/kernel",
+		        "dojo/data/ItemFileWriteStore",
 		        "rosten/widget/ActionBar",
 		        "rosten/widget/RostenGrid",
 		 		"dojox/grid/DataGrid",
 				"dijit/layout/BorderContainer",
 				"dijit/layout/TabContainer",
 				"dijit/Toolbar",
+				"dijit/Declaration",
 				"dijit/form/Button",
+				"dijit/form/ComboBox",
 				"dijit/layout/ContentPane",
-				"dojo/data/ItemFileWriteStore",
+				"dijit/Editor",
+				"dijit/_editor/plugins/FontChoice",
+				"dijit/Dialog",
+				"dijit/ProgressBar",
 				"rosten/app/Mail"
 		     	],
 			function(parser,kernel,ActionBar){
@@ -84,6 +90,63 @@
 				</div>
 			</div>
 		</div>	
-	</div>	
+	</div>
+	
+	<div data-dojo-type="dijit/Declaration" widgetClass="mail.NewMessage">
+		<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-attach-point="container" title="Composing..." closeable="true">
+			<div data-dojo-type="dijit/layout/ContentPane" region="top" style="height:60px; overflow: visible; z-index: 10; color:#666;">
+				<table width="100%">
+					<tr style="padding-top:5px;">
+						<td style="width:100px; text-align:right;"><label for="${id}_to">收件人:</label></td>
+						<td>
+							<input data-dojo-type="dijit/form/ComboBox" data-dojo-attach-point="to" id="${id}_to" hasDownArrow="false" store="contactStore" searchAttr="display"
+								style="width: 40em;">
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;"><label for="${id}_subject">主题:</label></td>
+						<td>
+							<select data-dojo-type="dijit/form/ComboBox" id="${id}_subject" data-dojo-attach-point="subject" hasDownArrow="false" style="width: 40em;">
+								<option></option>
+								<option>会议</option>
+								<option>报告</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+				<hr noshade size="1">
+			</div>
+
+			<!-- new message part -->
+			<div data-dojo-type="dijit/Editor" region="center" style="overflow:hidden" data-dojo-attach-point="content"
+				extraPlugins="[{name:'dijit/_editor/plugins/FontChoice', command: 'fontName', generic: true},'fontSize']">
+
+			</div>
+			<div data-dojo-type="dijit/layout/ContentPane" region="bottom" style="height:32px" align="center">
+				<button data-dojo-type="dijit/form/Button" iconClass="mailIconOk">发送
+				<script type="dojo/method" data-dojo-event="onClick">
+					var toField = dojo.byId("${id}_to");
+					if (toField.value == ""){
+						alert("Please enter a recipient address");
+					}else{
+						showSendBar();
+					}
+				</script>
+				</button>
+				<button data-dojo-type="dijit/form/Button" iconClass="mailIconCancel" >取消
+				<script type="dojo/method" data-dojo-event="onClick">
+					mail_tabs.closeChild(mail_tabs.selectedChildWidget);
+				</script>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div data-dojo-type="dijit/Dialog" id="sendDialog" title="发送邮件">
+		<div id="sendMailBar" style="text-align:center">
+			<div  id="fakeSend" data-dojo-type="dijit/ProgressBar" style="height:15px; width:175px;" indeterminate="true" ></div>
+		</div>
+	</div>		
+	
+		
 </body>
 </html>

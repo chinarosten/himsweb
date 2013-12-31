@@ -67,7 +67,7 @@
 		<div id="mail_getMail" data-dojo-type="dijit/form/ComboButton"
 			iconClass="mailIconGetMail" optionsTitle="Mail Source Options">
 			<script type="dojo/method" data-dojo-event="onClick">
-				fakeDownload();
+				/* fakeDownload(); */
 			</script>
 			<span>收件</span>
 			<ul data-dojo-type="dijit/Menu">
@@ -77,7 +77,7 @@
 		</div>
 		<button id="mail_newMsg" data-dojo-type="dijit/form/Button" iconClass="mailIconNewMessage">写信
 			<script type="dojo/method" data-dojo-event="onClick">
-				var newTab = new mail.NewMessage({id: "new"+paneId  }).container;
+				var newTab = new mail.NewMessage({id: "new" + rosten.variable.paneId  }).container;
 				dojo.mixin(newTab,
 					{
 						title: "写邮件",
@@ -85,7 +85,7 @@
 						onClose: testClose
 					}
 				);
-				paneId++;
+				rosten.variable.paneId++;
 				mail_tabs.addChild(newTab);
 				mail_tabs.selectChild(newTab);
 			</script>

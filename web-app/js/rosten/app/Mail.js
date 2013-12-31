@@ -33,6 +33,7 @@ define(["dojo/_base/kernel",
 			dateStamp,
 			lang
 		) {
+	rosten.variable.paneId = 1;
 	mail_showInbox = function(name,id){
 	    var mail_box = registry.byId("mail_inbox");
 	    if(mail_box){
@@ -53,6 +54,9 @@ define(["dojo/_base/kernel",
     delete_mail = function(){
         
     };
+    formatSubject = function(value, rowIndex) {
+		return "<a href=\"" + value + "\" target=\"_blank\">Image Link</a>";
+	}
 	function genIndex(){
 		// summary:
 		//		generate A-Z push buttons for navigating contact list

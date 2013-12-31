@@ -78,10 +78,10 @@ define(["dojo/_base/kernel"
             	deleteMailNavigation();
                 require(["./ConfigManage"]);
             } else if (oString == "个人办公") {
-            	require(["rosten/app/Mail"],function(){
-            		addMailNavigation();
-//            		mail_showInbox();
-            	});
+            	addMailNavigation();
+//            	require(["rosten/app/Mail"],function(){
+//            		addMailNavigation();
+//            	});
             } else if (oString == "员工管理") {
             	deleteMailNavigation();
                 require(["./SystemManage"]);
