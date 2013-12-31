@@ -8,7 +8,7 @@ class MailController {
 	def navigation ={
 		def json = [identifier:'id',label:'name',items:[]]
 
-		def inbox = ["type":"folder","id":"inbox","name":"收件箱","icon":"mailIconFolderInbox","action":"mail_showInbox"]
+		def inbox = ["type":"folder","id":"inbox","name":"收件箱","icon":"mailIconFolderInbox","action":"mail_showInbox","expand":"yes"]
 		def saveBox = ["type":"folder","id":"save","name":"草稿箱"]
 		def sendBox = ["type":"folder","id":"send","name":"已发送"]
 		def otherBox = ["type":"folder","id":"other","name":"其他文件夹","children":[]]

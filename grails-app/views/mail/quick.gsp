@@ -16,7 +16,7 @@
 		.mailIconMailbox,
 		.mailIconOk,
 		.mailIconTrashcanFull {
-			/*background-image: url('icons.png');  mail icons sprite image */
+			background-image: url('../images/rosten/share/icons.png');  /*mail icons sprite image */
 			background-repeat: no-repeat; 
 			width: 16px;
 			height: 16px;
@@ -34,7 +34,7 @@
 		.dj_ie6 .mailIconMailbox,
 		.dj_ie6 .mailIconOk,
 		.dj_ie6 .mailIconTrashcanFull {
-			/* background-image: url('icons.gif');*/
+			 background-image: url('../images/rosten/share/icons.gif');
 		}
 		
 		

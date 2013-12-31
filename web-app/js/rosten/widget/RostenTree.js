@@ -39,6 +39,7 @@ define(["dojo/_base/declare",
                         data: response
                     });
                     var model = new ForestStoreModel({
+                    	rootId:"rostenTreeRoot",
                         store: this.store,
                         query: {type: '*'},
                         childrenAttrs: ["children"]
@@ -54,7 +55,6 @@ define(["dojo/_base/declare",
                     }else{
                         _treeArgs.showRoot = false;
                     }
-                    // _treeArgs.onClick = this.onclick;
                     
                     var _tree = new Tree(_treeArgs, treenode);
                     _tree.startup();
@@ -77,7 +77,8 @@ define(["dojo/_base/declare",
                                     var entryItem = items[items.length-1];
                                     var id = model.getIdentity(entryItem);
                                     var entryNode = _tree._itemNodesMap[id][0];             
-                                    _tree._onNodeFocus(entryNode);
+                                    _tree.focusNode(entryNode);
+                                    _tree.set("paths", [["rostenTreeRoot",id]]);
                                     this.onclick(entryItem,entryNode);
                                 }   
                             })  
