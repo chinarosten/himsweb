@@ -55,8 +55,38 @@ define(["dojo/_base/kernel",
         
     };
     formatSubject = function(value, rowIndex) {
-		return "<a href=\"" + value + "\" target=\"_blank\">Image Link</a>";
-	}
+		return "<a href=\"javascript:onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+	};
+	onMessageOpen = function(rowIndex){
+        var item = mail_grid.getGrid().getItem(rowIndex);
+        var store = mail_grid.getStore();
+        
+        sender = store.getValue(item, "sender"),
+        subject = store.getValue(item, "subject"),
+        sent = dateLocale.format(
+                dateStamp.fromISOString(store.getValue(item, "sent")),
+                {formatLength: "long", selector: "date"}),
+        text = store.getValue(item, "text");
+        
+        var _message = new mail.NewMessage({id: "new "+ rosten.variable.paneId  });
+        var newTab = _message.container;
+        lang.mixin(newTab,
+            {
+                title: subject,
+                closable: true,
+                onClose: function(){
+                    return mail_tabs.selectChild(registry.byId("mail_inbox"));
+                }
+            }
+        );
+        rosten.variable.paneId++;
+        mail_tabs.addChild(newTab);
+        mail_tabs.selectChild(newTab);
+        _message.to.attr("value",sender);
+        _message.subject.attr("value",subject);
+        _message.content.attr("value",text);
+            
+    };
 	function genIndex(){
 		// summary:
 		//		generate A-Z push buttons for navigating contact list
@@ -107,34 +137,7 @@ define(["dojo/_base/kernel",
 			text;
 		registry.byId("mail_message").setContent(messageInner);
 	};
-	onMessageDbClick = function(cell){
-		var item = cell.grid.getItem(cell.rowIndex),
-			sender = this.store.getValue(item, "sender"),
-			subject = this.store.getValue(item, "label"),
-			sent = dateLocale.format(
-					dateStamp.fromISOString(this.store.getValue(item, "sent")),
-					{formatLength: "long", selector: "date"}),
-			text = this.store.getValue(item, "text");
-			
-			var _message = new mail.NewMessage({id: "new"+paneId  });
-			var newTab = _message.container;
-			lang.mixin(newTab,
-				{
-					title: subject,
-					closable: true,
-					onClose: function(){
-						return mail_tabs.selectChild(registry.byId("mail_inbox"));
-					}
-				}
-			);
-			paneId++;
-			mail_tabs.addChild(newTab);
-			mail_tabs.selectChild(newTab);
-			_message.to.attr("value",sender);
-			_message.subject.attr("value",subject);
-			_message.content.attr("value",text);
-			
-	};
+	
 	showSendBar = function(){
 		registry.byId('fakeSend').update({ indeterminate: true });
 		registry.byId('sendDialog').show();
