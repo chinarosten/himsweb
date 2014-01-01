@@ -49,7 +49,6 @@
     </script>
 </head>
 <body>
-	<div data-dojo-type="dojo/data/ItemFileWriteStore" data-dojo-id="mailStore" url="${createLink(controller:'mail',action:'mailData')}"></div>
 	<div data-dojo-type="dojo/data/ItemFileWriteStore" data-dojo-id="contactStore" url="${createLink(controller:'mail',action:'contactData')}"></div>
 	
 	<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='style:"padding:0px"'>>
@@ -59,8 +58,9 @@
 				<div data-dojo-type="dijit/layout/ContentPane" region="top" data-dojo-props='style:"padding:0px;height:350px",splitter:true'>
 					<div class="rosten_action">
 						<div data-dojo-type="rosten/widget/ActionBar" data-dojo-id="mail_actionBar" 
-							data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'inbox')}"'></div>
+							data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'inbox')}"'>
 						</div>
+					</div>
 					<div data-dojo-type="rosten/widget/RostenGrid" data-dojo-id="mail_grid" 
 						data-dojo-props='url:"${createLink(controller:'mail',action:'inboxGrid')}"'></div>
 				</div>
@@ -93,36 +93,43 @@
 	</div>
 	
 	<div data-dojo-type="dijit/Declaration" widgetClass="mail.NewMessage">
-		<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-attach-point="container" title="Composing..." closeable="true">
-			<div data-dojo-type="dijit/layout/ContentPane" region="top" style="height:60px; overflow: visible; z-index: 10; color:#666;">
-				<table width="100%">
-					<tr style="padding-top:5px;">
-						<td style="width:100px; text-align:right;"><label for="${id}_to">收件人:</label></td>
-						<td>
-							<input data-dojo-type="dijit/form/ComboBox" data-dojo-attach-point="to" id="${id}_to" hasDownArrow="false" store="contactStore" searchAttr="display"
-								style="width: 40em;">
-						</td>
-					</tr>
-					<tr>
-						<td style="text-align:right;"><label for="${id}_subject">主题:</label></td>
-						<td>
-							<select data-dojo-type="dijit/form/ComboBox" id="${id}_subject" data-dojo-attach-point="subject" hasDownArrow="false" style="width: 40em;">
-								<option></option>
-								<option>会议</option>
-								<option>报告</option>
-							</select>
-						</td>
-					</tr>
-				</table>
-				<hr noshade size="1">
+		<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-attach-point="container" title="Composing..." closeable="true" style="padding:1px">
+			<div data-dojo-type="dijit/layout/ContentPane" region="center" data-dojo-props='style:"padding:0px"'>
+				<div class="rosten_action">
+					<div data-dojo-type="rosten/widget/ActionBar"
+						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'inbox')}"'>
+					</div>
+				</div>
+				<div style="height:60px; overflow: visible; z-index: 10; color:#666;">
+					<table width="100%">
+						<tr style="padding-top:5px;">
+							<td style="width:100px; text-align:right;"><label for="${id}_to">收件人:</label></td>
+							<td>
+								<input data-dojo-type="dijit/form/ComboBox" data-dojo-attach-point="to" id="${id}_to" hasDownArrow="false" store="contactStore" searchAttr="display"
+									style="width: 40em;">
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align:right;"><label for="${id}_subject">主题:</label></td>
+							<td>
+								<select data-dojo-type="dijit/form/ComboBox" id="${id}_subject" data-dojo-attach-point="subject" hasDownArrow="false" style="width: 40em;">
+									<option></option>
+									<option>会议</option>
+									<option>报告</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<hr noshade size="1">
+				</div>
+				<!-- new message part -->
+				<div data-dojo-type="dijit/Editor"style="overflow:hidden" data-dojo-attach-point="content"
+					extraPlugins="[{name:'dijit/_editor/plugins/FontChoice', command: 'fontName', generic: true},'fontSize']">
+	
+				</div>
 			</div>
-
-			<!-- new message part -->
-			<div data-dojo-type="dijit/Editor" region="center" style="overflow:hidden" data-dojo-attach-point="content"
-				extraPlugins="[{name:'dijit/_editor/plugins/FontChoice', command: 'fontName', generic: true},'fontSize']">
-
-			</div>
-			<div data-dojo-type="dijit/layout/ContentPane" region="bottom" style="height:32px" align="center">
+			
+			<div data-dojo-type="dijit/layout/ContentPane" region="bottom" style="height:30px" align="center">
 				<button data-dojo-type="dijit/form/Button" iconClass="mailIconOk">发送
 				<script type="dojo/method" data-dojo-event="onClick">
 					var toField = dojo.byId("${id}_to");
