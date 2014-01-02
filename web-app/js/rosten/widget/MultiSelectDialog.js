@@ -13,7 +13,7 @@ define(["dojo/_base/declare",
 		"dijit/form/TextBox",
 		"dijit/form/Button",
 		"rosten/widget/_Dialog",
-		"rosten/util/general"], function(declare,lang, xhr,query,kernel,domStyle,connect,registry,CheckBox,TextBox,Button,_Dialog,general) {
+		"rosten/util/general"], function(declare,lang, xhr,query,domStyle,kernel,connect,registry,CheckBox,TextBox,Button,_Dialog,general) {
 	return declare("rosten.widget.MultiSelectDialog", [_Dialog], {
 		
 		height: "370px",
