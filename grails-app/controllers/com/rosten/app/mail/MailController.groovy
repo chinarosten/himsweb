@@ -1,10 +1,12 @@
 package com.rosten.app.mail
 
 import grails.converters.JSON
+import com.rosten.app.util.GridUtil
 import com.rosten.app.util.Util
 
 class MailController {
-
+	def springSecurityService
+	
 	def navigation ={
 		def json = [identifier:'id',label:'name',items:[]]
 
@@ -22,17 +24,22 @@ class MailController {
 		json.items << otherBox
 		render json as JSON
 	}
+	private def getEmailBoxListLayout={
+		def gridUtil = new GridUtil()
+		gridUtil.buildLayoutJSON(new EmailBox())
+	}
 	def inboxGrid ={
 		def json=[:]
 		if(params.refreshHeader){
-			def layout =[]
-			layout<<["name":"序号","width":"60px","colIdx":0,"field":"rowIndex"]
-			layout<<["name":"发件人","field":"sender","width":"auto"]
-			layout<<["name":"主题","field":"subject","width":"auto","formatter":"formatSubject"]
-			layout<<["name":"发件时间","field":"sent","width":"auto"]
-
+			def layout = getEmailBoxListLayout()
+			layout.each {item ->
+				if(item.field.equals("subject")){
+					item.formatter = "formatSubject"
+				}
+			}
 			json["gridHeader"] = layout
 		}
+		def totalNum = 0
 		if(params.refreshData){
 			int perPageNum = Util.str2int(params.perPageNum)
 			int nowPage =  Util.str2int(params.showPageNum)
@@ -41,19 +48,26 @@ class MailController {
 			def max  = perPageNum
 			
 			def _json = [identifier:'id',label:'name',items:[]]
-//			hairdressService.getAllCardType(offset,max,company,type).eachWithIndex{ item,idx->
-//				def sMap = ["rowIndex":idx+1,"id":item.id,"title":item.cardtypeName]
-//				_json.items+=sMap
-//			}
+			def _dataList = EmailBox.findAllByMailUser(springSecurityService.getCurrentUser())
+			totalNum = _dataList.size()
 			
-			def _data = ["rowIndex":1,"type":"message","id":"node1.1","sender":"张三","subject":"主题","sent": "2013-12-30"]
-	
-			_json.items << _data
+			_dataList.eachWithIndex{ item,idx->
+				if(idx>=offset && idx <offset+max){
+					def sMap =[:]
+					sMap["rowIndex"] = idx+1
+					sMap["id"] = item.id
+					sMap["sender"] = item.sender
+					sMap["subject"] = item.subject
+					sMap["sent"] = item.sent
 			
+					_json.items+=sMap
+				}
+			}
 			json["gridData"] = _json
-			
 		}
-
+		if(params.refreshPageControl){
+			json["pageControl"] = ["total":totalNum.toString()]
+		}
 		render json as JSON
 	}
 	def quick = {
