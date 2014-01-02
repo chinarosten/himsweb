@@ -62,7 +62,7 @@
 						</div>
 					</div>
 					<div data-dojo-type="rosten/widget/RostenGrid" data-dojo-id="mail_grid" 
-						data-dojo-props='url:"${createLink(controller:'mail',action:'inboxGrid')}"'></div>
+						data-dojo-props='url:"${createLink(controller:'mail',action:'inboxGrid')}",showRowSelector : "new"'></div>
 				</div>
 				<!-- message preview pane -->
 				<div id="mail_message" data-dojo-type="dijit/layout/ContentPane" data-dojo-props='region: "center"'>
