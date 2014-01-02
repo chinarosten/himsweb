@@ -2,6 +2,8 @@ package com.rosten.app.mail
 
 import java.text.SimpleDateFormat
 import java.util.Date;
+import java.util.List;
+
 import com.rosten.app.annotation.GridColumn
 import com.rosten.app.system.Company
 import com.rosten.app.system.User
@@ -39,6 +41,9 @@ class EmailBox {
 	Integer emailStatus	//邮件类型：0 未读;1 已读;2 回复 ; 3 转发 ; 4 全部转发
 	
 	static belongsTo = [mailUser:User]
+	
+	List attachments
+	static hasMany=[contacts:Contact,attachments:Attachments]
 	
 	//创建日期
 	Date createdDate = new Date()
