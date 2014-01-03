@@ -1506,6 +1506,7 @@ class SystemController {
 		}else if("admin".equals(userType)){
 			//管理员
 			modelList = Model.findAllWhere(company:user.company)
+			modelList << Model.findByModelName("个人办公")
 		}else if("normal".equals(userType)){
 			//普通用户-----------------------------------------------
 			//获取缺省允许登录模块
@@ -1534,7 +1535,9 @@ class SystemController {
 					modelList << item.model
 				}
 			}
+			modelList << Model.findByModelName("个人办公")
 			modelList.unique()
+			
 		}
 		def logoset = LogoSet.findWhere(company:user.company)
 		if(logoset && modelList.contains(logoset.model)){
