@@ -38,12 +38,12 @@ class EmailBox {
 	
 	Integer boxType=0	//邮箱类型：0  草稿箱;1 收件箱;2 发件箱;3 垃圾箱
 	
-	Integer emailStatus	//邮件类型：0 未读;1 已读;2 回复 ; 3 转发 ; 4 全部转发
+	Integer emailStatus=0	//邮件类型：0 未读;1 已读;2 回复 ; 3 转发 ; 4 全部转发
 	
 	static belongsTo = [mailUser:User]
 	
 	List attachments
-	static hasMany=[contacts:Contact,attachments:Attachments]
+	static hasMany=[attachments:Attachments]
 	
 	//创建日期
 	Date createdDate = new Date()
@@ -67,6 +67,11 @@ class EmailBox {
 	}
 	static transients = ["formattedDate","sent"]
     static constraints = {
+		copyer nullable:true,blank:true
+		copyerCode nullable:true,blank:true
+		content nullable:true,blank:true
+		sendDate nullable:true,blank:true
+		readDate nullable:true,blank:true
     }
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']

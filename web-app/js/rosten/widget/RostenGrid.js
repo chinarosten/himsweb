@@ -169,7 +169,7 @@ define(["dojo/_base/declare",
             var args = {
                 url: this.url,
                 handleAs: "json",
-                timeout: 2000,
+                // timeout: 2000,
                 preventCache: true,
                 content:content,
                 encoding:"utf-8",

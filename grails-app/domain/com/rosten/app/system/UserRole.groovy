@@ -37,25 +37,34 @@ class UserRole implements Serializable {
 	}
 
 	static boolean remove(User u, Role r, boolean flush = false) {
-
-		int rowCount = UserRole.where {
-			user == User.load(u.id) &&
-			role == Role.load(r.id)
-		}.deleteAll()
-
-		rowCount > 0
+		
+		UserDepart instance = UserRole.findByUserAndRole(u, r)
+		if (!instance) {
+			return false
+		}
+		instance.delete(flush: flush)
+		true
+		
+//		int rowCount = UserRole.where {
+//			user == User.load(u.id) &&
+//			role == Role.load(r.id)
+//		}.deleteAll()
+//
+//		rowCount > 0
 	}
 
 	static void removeAll(User u) {
-		UserRole.where {
-			user == User.load(u.id)
-		}.deleteAll()
+		executeUpdate 'DELETE FROM UserRole WHERE user=:user', [user: u]
+//		UserRole.where {
+//			user == User.load(u.id)
+//		}.deleteAll()
 	}
 
 	static void removeAll(Role r) {
-		UserRole.where {
-			role == Role.load(r.id)
-		}.deleteAll()
+		executeUpdate 'DELETE FROM UserRole WHERE role=:role', [role: r]
+//		UserRole.where {
+//			role == Role.load(r.id)
+//		}.deleteAll()
 	}
 
 	static mapping = {

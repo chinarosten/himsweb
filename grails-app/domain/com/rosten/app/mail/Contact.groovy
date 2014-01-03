@@ -15,9 +15,13 @@ class Contact {
 	@GridColumn(name="手机号码")
 	String tellCall
 	
-	static belongsTo = [mailUser:User,contactGroup:ContactGroup]
+	ContactGroup contactGroup
+	
+	static belongsTo = [mailUser:User]
 	
     static constraints = {
+		contactGroup nullable:true,blank:true
+		tellCall nullable:true,blank:true
     }
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']

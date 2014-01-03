@@ -1218,6 +1218,7 @@ class SystemController {
 			}
 			json = [result:'true']
 		}catch(Exception e){
+			log.debug(e);
 			json = [result:'error']
 		}
 		render json as JSON
