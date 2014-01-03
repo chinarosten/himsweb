@@ -4,63 +4,67 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>广告设置</title>
 	<script type="text/javascript">
-        dojo.require("dijit.form.ValidationTextBox");
-        dojo.require("dijit.form.FilteringSelect");
-		dojo.require("rosten.widget.ActionBar");
+		require([
+			"dojo/dom",
+			"dijit/registry",
+	 		"dijit/form/ValidationTextBox",
+	 		"dijit/form/FilteringSelect",
+	 		"rosten/widget/ActionBar"
+	     	],function(dom,registry){
 
-		saveAdvertise = function(){
-			var isUse = dijit.byId("isUse");
-			if(!isUse.isValid()){
-				rosten.alert("启用广告不正确！").queryDlgClose = function(){
-					isUse.focus();
-				};
-				return;
-			}
-			var url = dijit.byId("url");
-			if(!url.isValid()){
-				rosten.alert("服务器地址不正确！").queryDlgClose = function(){
-					url.focus();
-				};
-				return;
-			}
-			var title = dijit.byId("title");
-			if(!title.isValid()){
-				rosten.alert("广告标题不正确！").queryDlgClose = function(){
-					title.focus();
-				};
-				return;
-			}
-			var content = {};
-			content.isUse = isUse.attr("value");
-			content.url = url.attr("value");
-			content.title = title.attr("value");
-			
-			var contentStr = dijit.byId("content");
-			if(contentStr.attr("value")!=""){
-				content.content = contentStr.attr("value");
-			}
-			var unid = dojo.byId("unid");
-			if(unid.innerHTML!=""){
-				content.id = unid.innerHTML;
-			}
-			rosten.reader("${createLink(controller:'system',action:'advertiseSave')}",content,function(data){
-				if(data.result=="true"){
-					if(data.unid){
-						if(unid.innerHTML==""){
-							unid.innerHTML = data.unid;
+			saveAdvertise = function(){
+				var isUse = registry.byId("isUse");
+				if(!isUse.isValid()){
+					rosten.alert("启用广告不正确！").queryDlgClose = function(){
+						isUse.focus();
+					};
+					return;
+				}
+				var url = registry.byId("url");
+				if(!url.isValid()){
+					rosten.alert("服务器地址不正确！").queryDlgClose = function(){
+						url.focus();
+					};
+					return;
+				}
+				var title = registry.byId("title");
+				if(!title.isValid()){
+					rosten.alert("广告标题不正确！").queryDlgClose = function(){
+						title.focus();
+					};
+					return;
+				}
+				var content = {};
+				content.isUse = isUse.attr("value");
+				content.url = url.attr("value");
+				content.title = title.attr("value");
+				
+				var contentStr = registry.byId("content");
+				if(contentStr.attr("value")!=""){
+					content.content = contentStr.attr("value");
+				}
+				var unid = dom.byId("unid");
+				if(unid.innerHTML!=""){
+					content.id = unid.innerHTML;
+				}
+				rosten.read("${createLink(controller:'system',action:'advertiseSave')}",content,function(data){
+					if(data.result=="true"){
+						if(data.unid){
+							if(unid.innerHTML==""){
+								unid.innerHTML = data.unid;
+							}
 						}
-					}
-					rosten.alert("成功保存!");
-				}else{
-					rosten.alert("保存失败!");
-				}	
-			});
-		}
-		
+						rosten.alert("成功保存!");
+					}else{
+						rosten.alert("保存失败!");
+					}	
+				});
+			}
+	     });
     </script>
 </head>
 <body>
-		<div data-dojo-type="rosten.widget.ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'systemAction',action:'advertise')}"'></div>
+		<div data-dojo-type="rosten/widget/ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'systemAction',action:'advertise')}"'></div>
 		<div style="text-Align:center">
         <div class="rosten_form" style="width:600px">
         	<div style="display:none" id="unid">${advertise?.id }</div>
@@ -75,7 +79,7 @@
                                 </div>
                             </td>
                             <td  width="450">
-                                <select id="isUse" data-dojo-type="dijit.form.FilteringSelect" 
+                                <select id="isUse" data-dojo-type="dijit/form/FilteringSelect" 
                                 	data-dojo-props='name:"isUse",style:{width:"182px"},trim:true,required:true,value:"${advertise?.isUsed }"'>
 					   				<option value="true">是</option>
 					   				<option value="false">否</option>
@@ -91,7 +95,7 @@
                             </td>
                             <td  width="450">
                                 <input id="url" data-dojo-props='"class":"input",style:{width:"400px"},trim:true,required:true,promptMessage:"输入错误,样例:http://www.rostensoft.com",value:"${advertise?.url }"'
-                                	data-dojo-type="dijit.form.ValidationTextBox" />
+                                	data-dojo-type="dijit/form/ValidationTextBox" />
                             </td>
                     	</tr>
                         <tr>
@@ -100,7 +104,7 @@
                             </td>
                             <td>
                                 <input id="content" data-dojo-props='"class":"input",style:{width:"400px"},trim:true,promptMessage:"输入样例:{args:argsdata}",value:"${advertise?.content }"' 
-                                	data-dojo-type="dijit.form.ValidationTextBox"
+                                	data-dojo-type="dijit/form/ValidationTextBox"
                                 />
                             </td>
                            
@@ -113,7 +117,7 @@
                             </td>
                             <td>
                                 <input id="title"
-                                	data-dojo-type="dijit.form.ValidationTextBox" 
+                                	data-dojo-type="dijit/form/ValidationTextBox" 
                                 	data-dojo-props='"class":"input",style:{width:"400px"},promptMessage:"请正确输入广告标题...",trim:true,required:true,value:"${advertise?.title }"'	
                                 	
                                 />
