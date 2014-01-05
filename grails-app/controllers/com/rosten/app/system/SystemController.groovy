@@ -1090,6 +1090,11 @@ class SystemController {
 	def systemTool_Init={
 		def json = [:]
 		def company = Company.get(params.dealCompany)
+		if(company){
+			Model.findAllByCompany(company).each{model->
+				model.delete()
+			}
+		}
 		
 		def result
 		if(params.fromCompany){

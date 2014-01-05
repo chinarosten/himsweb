@@ -51,11 +51,13 @@
 			
 		});
 		createSubDepart = function(selectedTreeNode){
+			console.log(depart_treenode);
+			
 			var w = dijit.byId("departEditPane");
 			var href = "${createLink(controller:'system',action:'departCreate')}";
 			href = href + "?companyId=${company?.id}";
-			if(!selectedTreeNode.item.root){
-				href = href + "&parentId="+selectedTreeNode.item.id;
+			if(!depart_treenode.item.root){
+				href = href + "&parentId="+depart_treenode.item.id;
 			}
 			w.attr("href",href);
 		}

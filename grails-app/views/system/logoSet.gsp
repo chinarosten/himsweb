@@ -4,67 +4,74 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Logo设置</title>
 	<script type="text/javascript">
-        dojo.require("dijit.form.ValidationTextBox");
-		dojo.require("dijit.form.SimpleTextarea");
-		dojo.require("dijit.form.FilteringSelect");
-		dojo.require("rosten.widget.ActionBar");
 
-		saveLogoSet = function(){
-			var logoname = dijit.byId("logoName");
-			if(!logoname.isValid()){
-				rosten.alert("Logo配置名称不正确！").queryDlgClose = function(){
-					logoname.focus();
-				};
+		require([
+				"dijit/registry",
+				"dijit/form/SimpleTextarea",
+		 		"dijit/form/ValidationTextBox",
+		 		"dijit/form/FilteringSelect",
+		 		"rosten/widget/ActionBar"
+		     	],function(registry){
+			saveLogoSet = function(){
+				var logoname = registry.byId("logoName");
+				if(!logoname.isValid()){
+					rosten.alert("Logo配置名称不正确！").queryDlgClose = function(){
+						logoname.focus();
+					};
+					
+					return;
+				}
+				var imgfilename = registry.byId("imgFileName");
+				if(!imgfilename.isValid()){
+					rosten.alert("图像资源附件名称不正确！").queryDlgClose = function(){
+						imgfilename.focus();
+					};
+					
+					return;
+				}
+				var cssStyle = registry.byId("cssStyle");
+				if(!cssStyle.isValid()){
+					rosten.alert("css样式不正确！").queryDlgClose = function(){
+						cssStyle.focus();
+					};
+					
+					return;
+				}
+				var content = {};
+				content.logoName = logoname.attr("value");
+				content.imgFileName = imgfilename.attr("value");
+				content.modelId = registry.byId("modelId").attr("value");
+				content.imgfilepath = content.imgFileName;
+				content.cssStyle = cssStyle.attr("value");
 				
-				return;
-			}
-			var imgfilename = dijit.byId("imgFileName");
-			if(!imgfilename.isValid()){
-				rosten.alert("图像资源附件名称不正确！").queryDlgClose = function(){
-					imgfilename.focus();
-				};
-				
-				return;
-			}
-			var cssStyle = dijit.byId("cssStyle");
-			if(!cssStyle.isValid()){
-				rosten.alert("css样式不正确！").queryDlgClose = function(){
-					cssStyle.focus();
-				};
-				
-				return;
-			}
-			var content = {};
-			content.logoName = logoname.attr("value");
-			content.imgFileName = imgfilename.attr("value");
-			content.modelId = dijit.byId("modelId").attr("value");
-			content.imgfilepath = content.imgFileName;
-			content.cssStyle = cssStyle.attr("value");
+				var description = registry.byId("description");
+				if(description.attr("value")!=""){
+					content.description = description.attr("value");
+				}
+				content.id = registry.byId("id").attr("value");
+				content.companyId = registry.byId("companyId").attr("value");
 			
-			var description = dijit.byId("description");
-			if(description.attr("value")!=""){
-				content.description = description.attr("value");
+				rosten.readSync("${createLink(controller:'system',action:'logoSetSave')}",content,function(data){
+					if(data.result==true){
+						show_systemNaviEntity("logSet");
+						rosten.alert("成功，请使用<重新登录系统>查看变化！");
+					}else{
+						rosten.alert("保存失败！");
+					}	
+				});
 			}
-			content.id = dijit.byId("id").attr("value");
-			content.companyId = dijit.byId("companyId").attr("value");
+
+		});	
+
 		
-			rosten.readerSync("${createLink(controller:'system',action:'logoSetSave')}",content,function(data){
-				if(data.result==true){
-					show_systemNaviEntity("logSet");
-					rosten.alert("成功，请使用<重新登录系统>查看变化！");
-				}else{
-					rosten.alert("保存失败！");
-				}	
-			});
-		}
     </script>
 </head>
 <body>
-	<div data-dojo-type="rosten.widget.ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'systemAction',action:'logoSet')}"'></div>
+	<div data-dojo-type="rosten/widget/ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'systemAction',action:'logoSet')}"'></div>
 		<div style="text-Align:center">
         <div class="rosten_form">
-        	<input id="id" data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-props='name:"id",style:{display:"none"},value:"${logoSet?.id }"' />
-        	<input id="companyId" data-dojo-type="dijit.form.ValidationTextBox"  data-dojo-props='name:"companyId",style:{display:"none"},value:"${companyId }"' />
+        	<input id="id" data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-props='name:"id",style:{display:"none"},value:"${logoSet?.id }"' />
+        	<input id="companyId" data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-props='name:"companyId",style:{display:"none"},value:"${companyId }"' />
             <fieldset class="fieldset-form">
                 <legend class="tableHeader">Logo配置</legend>
                 <table class="tableData" style="text-align:left">
@@ -76,7 +83,7 @@
                                 </div>
                             </td>
                             <td  width="450">
-                                <input id="logoName" data-dojo-type="dijit.form.ValidationTextBox" 
+                                <input id="logoName" data-dojo-type="dijit/form/ValidationTextBox" 
                                 	data-dojo-props='name:"logoName",
                                 		"class":"input",
                                 		trim:true,
@@ -93,7 +100,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input id="imgFileName" data-dojo-type="dijit.form.ValidationTextBox" 
+                                <input id="imgFileName" data-dojo-type="dijit/form/ValidationTextBox" 
                                 	data-dojo-props='name:"imgFileName",
                                 		"class":"input",
                                 		trim:true,
@@ -134,7 +141,7 @@
                                 </div>
                             </td>
                             <td>
-                            	<select id="modelId" data-dojo-type="dijit.form.FilteringSelect"
+                            	<select id="modelId" data-dojo-type="dijit/form/FilteringSelect"
                                 	data-dojo-props = 'name:"modelId",style:{width:"197px",fontFamily:"Courier"},trim:true,required:true'
                                 >
                                 	<g:each var="model" in="${modelList}">
@@ -150,7 +157,7 @@
                                 </div>
                             </td>
                             <td>
-                            	<select id="cssStyle" data-dojo-type="dijit.form.FilteringSelect" 
+                            	<select id="cssStyle" data-dojo-type="dijit/form/FilteringSelect" 
                             		data-dojo-props='name:"cssStyle",
                                 		style:{width:"197px",fontFamily:"Courier"},
                                 		trim:true,
@@ -167,7 +174,7 @@
                                 <div align="right" >内容描述：</div>
                             </td>
 
-							<td ><textarea id="description" data-dojo-type="dijit.form.SimpleTextarea" 
+							<td ><textarea id="description" data-dojo-type="dijit/form/SimpleTextarea" 
     							data-dojo-props='name:"description",
                                 		"class":"input",
                                 		style:{width:"400px",marginLeft:"1px"},

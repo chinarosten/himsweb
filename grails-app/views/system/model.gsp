@@ -2,47 +2,54 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="layout" content="rostenApp" />
+    <meta name="layout" content="rosten" />
     <title>模块管理</title>
-    <r:jsLoad dir="js/app" file="SystemApplication.js"/>
 	<script type="text/javascript">
-		dojo.require("dijit.form.ValidationTextBox");
-		dojo.require("dijit.form.SimpleTextarea");
-		dojo.require("dijit.form.Button");
-		dojo.require("rosten.widget.ActionBar");
-		dojo.require("rosten.widget.MultiSelectDialog");
+		require(["dojo/parser",
+		 		"dojo/_base/kernel",
+		 		"dijit/registry",
+		 		"dijit/form/ValidationTextBox",
+		 		"dijit/form/SimpleTextarea",
+		 		"dijit/form/Button",
+		     	"rosten/widget/ActionBar",
+		     	"rosten/widget/MultiSelectDialog",
+		     	"rosten/app/SystemApplication"],
+			function(parser,kernel,registry){
+				kernel.addOnLoad(function(){
+					rosten.init({webpath:"${request.getContextPath()}"});
+					rosten.cssinit();
+				});
 
-		dojo.addOnLoad(function(){
-			rosten.cssinit();
-		});
-
-		model_add = function(){
-			var modelName = dijit.byId("modelName");
-			if(!modelName.isValid()){
-				rosten.alert("模块名称不正确！").queryDlgClose = function(){
-					modelName.focus();
-				};
-				return;
-			}
-			/*
-			var modelUrl = dijit.byId("modelUrl");
-			if(!modelUrl.isValid()){
-				rosten.alert("链接导航路径不正确！").queryDlgClose = function(){
-					modelUrl.focus();
-				};
-				return;
-			}*/
-			var content = {};
-			rosten.readerByFormSync(rosten.webPath + "/system/modelSave","rosten_form",content,function(data){
-				if(data.result=="true"){
-					rosten.alert("保存成功！").queryDlgClose= function(){
-						page_quit();	
-					};
-				}else{
-					rosten.alert("保存失败!");
+				model_add = function(){
+					var modelName = registry.byId("modelName");
+					if(!modelName.isValid()){
+						rosten.alert("模块名称不正确！").queryDlgClose = function(){
+							modelName.focus();
+						};
+						return;
+					}
+					/*
+					var modelUrl = registry.byId("modelUrl");
+					if(!modelUrl.isValid()){
+						rosten.alert("链接导航路径不正确！").queryDlgClose = function(){
+							modelUrl.focus();
+						};
+						return;
+					}*/
+					var content = {};
+					rosten.readSync(rosten.webPath + "/system/modelSave",content,function(data){
+						if(data.result=="true"){
+							rosten.alert("保存成功！").queryDlgClose= function(){
+								page_quit();	
+							};
+						}else{
+							rosten.alert("保存失败!");
+						}
+					},null,"rosten_form");
 				}
-			});
-		}
+		});
+		
+		
 		
     </script>
 </head>
