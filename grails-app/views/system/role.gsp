@@ -2,50 +2,56 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="layout" content="rostenApp" />
+    <meta name="layout" content="rosten" />
     <title>角色管理</title>
-    <r:jsLoad dir="js/app" file="SystemApplication.js"/>
 	<script type="text/javascript">
-		dojo.require("dijit.form.ValidationTextBox");
-		dojo.require("dijit.form.SimpleTextarea");
-		dojo.require("dijit.form.Button");
-		dojo.require("rosten.widget.ActionBar");
-		dojo.require("rosten.widget.MultiSelectDialog");
+		require(["dojo/parser",
+		 		"dojo/_base/kernel",
+		 		"dijit/registry",
+		 		"dijit/form/ValidationTextBox",
+		 		"dijit/form/SimpleTextarea",
+		 		"dijit/form/Button",
+		     	"rosten/widget/ActionBar",
+		     	"rosten/widget/MultiSelectDialog",
+		     	"rosten/app/SystemApplication"],
+			function(parser,kernel,registry){
+				kernel.addOnLoad(function(){
+					rosten.init({webpath:"${request.getContextPath()}"});
+					rosten.cssinit();
+				});
 
-		dojo.addOnLoad(function(){
-			rosten.cssinit();
-		});
-		role_add = function(){
-			var authority = dijit.byId("authority");
-			if(!authority.isValid()){
-				rosten.alert("角色名称不正确！").queryDlgClose = function(){
-					authority.focus();
-				};
-				return;
-			}
-			var content = {};
-			
-			rosten.readerByFormSync(rosten.webPath + "/system/roleSave","rosten_form",content,function(data){
-				if(data.result=="true"){
-					rosten.alert("保存成功！").queryDlgClose= function(){
-						page_quit();	
+			role_add = function(){
+				var authority = registry.byId("authority");
+				if(!authority.isValid()){
+					rosten.alert("角色名称不正确！").queryDlgClose = function(){
+						authority.focus();
 					};
-				}else{
-					rosten.alert("保存失败!");
+					return;
 				}
-			});
-		}
+				var content = {};
+				
+				rosten.readSync(rosten.webPath + "/system/roleSave",content,function(data){
+					if(data.result=="true"){
+						rosten.alert("保存成功！").queryDlgClose= function(){
+							page_quit();	
+						};
+					}else{
+						rosten.alert("保存失败!");
+					}
+				},null,"rosten_form");
+			}
+		});
     </script>
 </head>
 <body>
 	<div class="rosten_action">
-		<div data-dojo-type="rosten.widget.ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'systemAction',action:'roleForm',params:[userid:user?.id])}"'></div>
+		<div data-dojo-type="rosten/widget/ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'systemAction',action:'roleForm',params:[userid:user?.id])}"'></div>
 	</div>
 		<div style="text-Align:center">
         <form class="rosten_form" id="rosten_form" onsubmit="return false;" style="text-align:left;">
 			
-        	<input  data-dojo-type="dijit.form.ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${role?.id }"' />
-        	<input  data-dojo-type="dijit.form.ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
+        	<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${role?.id }"' />
+        	<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
             <fieldset class="fieldset-form">
                 <legend class="tableHeader">角色配置</legend>
                 <table class="tableData" style="width:550px">
@@ -57,7 +63,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input id="authority" data-dojo-type="dijit.form.ValidationTextBox" 
+                                <input id="authority" data-dojo-type="dijit/form/ValidationTextBox" 
                                 	data-dojo-props='name:"authority",${fieldAcl.isReadOnly("authority")},
                                 		"class":"input",
                                 		style:{width:"400px"},
@@ -73,7 +79,7 @@
                                 <div align="right" >具有权限：</div>
                             </td>
                              <td>
-                             	<input id="allowpermissionsName" data-dojo-type="dijit.form.ValidationTextBox"
+                             	<input id="allowpermissionsName" data-dojo-type="dijit/form/ValidationTextBox"
                    					data-dojo-props='"class":"input",
                    						style:"width:400px",
                    						trim:true,
@@ -81,7 +87,7 @@
                    						value:"${allowpermissionsName }"
                    				'/>
                    				<g:hiddenField name="allowpermissionsId" value="${allowpermissionsId }" />
-								<button data-dojo-type="dijit.form.Button" 
+								<button data-dojo-type="dijit/form/Button" 
 									data-dojo-props = 'onClick:function(){selectPermission("${createLink(controller:'system',action:'permissionSelect',params:[companyId:company?.id])}")}'
 								>选择</button>
                              
@@ -92,7 +98,7 @@
                                 <div align="right" >内容描述：</div>
                             </td>
                              <td>
-                             	<textarea id="description" data-dojo-type="dijit.form.SimpleTextarea"
+                             	<textarea id="description" data-dojo-type="dijit/form/SimpleTextarea"
                              		data-dojo-props='name:"description",${fieldAcl.isReadOnly("description")},
                                 		"class":"input",
                                 		style:{width:"400px"},
