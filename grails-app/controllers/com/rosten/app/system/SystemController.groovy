@@ -142,7 +142,7 @@ class SystemController {
 		}
 		model["user"]=user
 		model["company"] = company
-		model["resource"] = resource
+		model["_resource"] = resource
 		
 		FieldAcl fa = new FieldAcl()
 		if("normal".equals(user.getUserType())){

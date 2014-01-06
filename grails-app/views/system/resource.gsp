@@ -69,7 +69,7 @@
 		<div style="text-Align:center">
         <form class="rosten_form" id="rosten_form" onsubmit="return false;" style="text-align:left;">
 			
-        	<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${resource?.id }"' />
+        	<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${_resource?.id }"' />
         	<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
             <fieldset class="fieldset-form">
                 <legend class="tableHeader">资源配置</legend>
@@ -88,7 +88,7 @@
                                 		trim:true,
                                 		required:true,
                                 		promptMessage:"请正确输入资源名称...",
-              							value:"${resource?.resourceName}"
+              							value:"${_resource?.resourceName}"
                                '/>
                             </td>
                         </tr>
@@ -103,9 +103,9 @@
                                 		trim:true,
                                 		required:true,
                                 		disabled:true,
-              							value:"${resource?.model?.modelName}"
+              							value:"${_resource?.model?.modelName}"
                                 '/>
-                                <input id="modelId" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-props='name:"modelId",value:"${resource?.model?.id }",style:{display:"none"}'/>
+                                <input id="modelId" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-props='name:"modelId",value:"${_resource?.model?.id }",style:{display:"none"}'/>
 								<button data-dojo-type="dijit.form.Button" data-dojo-props='onClick:function(){selectModel("${company?.id }")}'>选择</button>
                              
     						</td>
@@ -124,7 +124,7 @@
                                 		trim:true,
                                 		required:true,
                                 		promptMessage:"请正确输入图标地址...",
-              							value:"${resource?.imgUrl}"
+              							value:"${_resource?.imgUrl}"
                                '/>
                             </td>
                         </tr>
@@ -142,7 +142,7 @@
                                 		trim:true,
                                 		required:true,
                                 		promptMessage:"请正确输入导航地址...",
-              							value:"${resource?.url}"
+              							value:"${_resource?.url}"
                                '/>
                             </td>
                         </tr>
@@ -156,7 +156,7 @@
                                 		"class":"input",
                                 		style:{width:"400px"},
                                 		trim:true,
-              							value:"${resource?.description}"
+              							value:"${_resource?.description}"
                                 '></textarea>
     						</td>
                         </tr>
