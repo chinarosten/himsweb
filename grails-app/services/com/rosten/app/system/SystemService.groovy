@@ -30,6 +30,7 @@ class SystemService {
 			p.removeFromChildren(depart)
 			p.save(flush:true)
 		}
+		depart.refresh()
 		depart.delete(flush:true)
 	}
 	def getResourceListLayout ={
@@ -346,201 +347,38 @@ class SystemService {
 			model.save(flush:true)
 
 			model = new Model(company:company)
-			model.modelName = "库存管理"
+			model.modelName = "公告栏"
 			model.modelUrl = path + "/system/navigation"
-			model.description ="库存管理模块"
+			model.description ="公告栏模块"
 
 			resource = new Resource()
-			resource.resourceName = "库存信息"
-			resource.url = "hairdress_stock"
+			resource.resourceName = "公告栏"
+			resource.url = "bbs"
 			resource.imgUrl = "images/rosten/navigation/Hairdress_Stock.gif"
 			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "库存记录"
-			resource.url = "hairdress_stockUseLog"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_StockUseLog.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "库存消耗"
-			resource.url = "hairdress_stockUse"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_StockUse.gif"
-			model.addToResources(resource)
 			model.save(flush:true)
 
 			model = new Model(company:company)
-			model.modelName = "系统配置"
+			model.modelName = "发文管理"
 			model.modelUrl = path + "/system/navigation"
-			model.description ="系统配置模块"
+			model.description ="发文管理模块"
 
 			resource = new Resource()
-			resource.resourceName = "服务类别"
-			resource.url = "hairdress_serviceType"
+			resource.resourceName = "发文管理"
+			resource.url = "sendfile"
 			resource.imgUrl = "images/rosten/navigation/Hairdress_ServiceType.gif"
 			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "服务项目"
-			resource.url = "hairdress_service"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_Service.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "促销服务项目"
-			resource.url = "hairdress_service_sale"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_Service_Sale.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "消费卡种类"
-			resource.url = "hairdress_cardType"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_ConsumeType.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "疗程卡种类"
-			resource.url = "hairdress_periodCard"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_ConsumeType.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "折扣信息"
-			resource.url = "hairdress_discount"
-			resource.imgUrl = "images/rosten/navigation/Discount.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "充卡设置"
-			resource.url = "hairdress_fillSet"
-			resource.imgUrl = "images/rosten/navigation/Set.gif"
-			model.addToResources(resource)
 			model.save(flush:true)
 
 			model = new Model(company:company)
-			model.modelName = "员工管理"
+			model.modelName = "收文管理"
 			model.modelUrl = path + "/system/navigation"
-			model.description ="员工管理模块"
+			model.description ="收文管理模块"
 
 			resource = new Resource()
-			resource.resourceName = "员工类型"
-			resource.url = "userTypeManage"
+			resource.resourceName = "收文管理"
+			resource.url = "receivefile"
 			resource.imgUrl = "images/rosten/navigation/UserType.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "员工信息"
-			resource.url = "userManage"
-			resource.imgUrl = "images/rosten/navigation/User.gif"
-			model.addToResources(resource)
-			model.save(flush:true)
-
-			model = new Model(company:company)
-			model.modelName = "会员管理"
-			model.modelUrl = path + "/system/navigation"
-			model.description ="会员管理模块"
-
-			resource = new Resource()
-			resource.resourceName = "卡号管理"
-			resource.url = "hairdress_cardCode"
-			resource.imgUrl = "images/rosten/navigation/ConsumeType.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "客户管理"
-			resource.url = "hairdress_consumer"
-			resource.imgUrl = "images/rosten/navigation/Consumer.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "充值记录"
-			resource.url = "hairdress_fillLog"
-			resource.imgUrl = "images/rosten/navigation/FillLog.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "消费记录"
-			resource.url = "hairdress_consumeLog"
-			resource.imgUrl = "images/rosten/navigation/ConsumeType.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "添加新客户"
-			resource.url = "hairdress_addConsumer"
-			resource.imgUrl = "images/rosten/navigation/Consumer_Add.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "客户登录"
-			resource.url = "hairdress_login"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_Login.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "修改密码"
-			resource.url = "hairdress_chgPassword"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_ChgPassword.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "账户注销"
-			resource.url = "hairdress_logout"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_Logout.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "客户补卡"
-			resource.url = "hairdress_repair"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_OldToNew.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "顾客查询"
-			resource.url = "hairdress_consumer_search"
-			resource.imgUrl = "images/rosten/navigation/Search.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "日志查询"
-			resource.url = "hairdress_search"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_Search.gif"
-			model.addToResources(resource)
-
-			model.save(flush:true)
-
-			model = new Model(company:company)
-			model.modelName = "业绩管理"
-			model.modelUrl = path + "/system/navigation"
-			model.description ="业绩管理模块"
-
-			resource = new Resource()
-			resource.resourceName = "个人业绩统计"
-			resource.url = "hairdress_static_staff"
-			resource.imgUrl = "images/rosten/navigation/Report.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "公司业绩统计"
-			resource.url = "hairdress_static_company"
-			resource.imgUrl = "images/rosten/navigation/Report.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "公司项目数统计"
-			resource.url = "hairdress_static_comProject"
-			resource.imgUrl = "images/rosten/navigation/Report.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "公司客服数统计"
-			resource.url = "hairdress_static_comConsumer"
-			resource.imgUrl = "images/rosten/navigation/Report.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "顾客消费业绩统计"
-			resource.url = "hairdress_static_consumerConsume"
-			resource.imgUrl = "images/rosten/navigation/Report.gif"
 			model.addToResources(resource)
 			model.save(flush:true)
 
