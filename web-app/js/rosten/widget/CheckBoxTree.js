@@ -5,13 +5,18 @@ define(["dojo/_base/declare",
 		"dojo/_base/window",
 		"dojo/_base/lang",
 		"dojo/_base/kernel", 
+		"dojo/dom-construct",
 		"dijit/tree/ForestStoreModel",
-		"dijit/Tree"], function(declare,
+		"dijit/Tree",
+		"dojo/data/api/Write"], 
+		function(declare,
 			win,
 			lang,
 			kernel,
+			domConstruct,
 			ForestStoreModel,
-			Tree) {
+			Tree,
+			Write) {
 			
 	var _CheckBoxStoreModel =  declare("rosten.widget.CheckBoxStoreModel", ForestStoreModel , {
 		// checkboxAll: Boolean
@@ -170,7 +175,7 @@ define(["dojo/_base/declare",
 	        //		The new state of the checkbox: true or false
 	        //
 	        if (this.mayHaveChildren(parentItem)) {
-	            this.getChildren(parentItem, dojo.hitch(this, function(children){
+	            this.getChildren(parentItem, lang.hitch(this, function(children){
 	                kernel.forEach(children, function(child){
 	                    if (this._setCheckboxState(child, newState)) {
 	                        var parents = this._getParentsItem(child);
@@ -324,7 +329,7 @@ define(["dojo/_base/declare",
 	            this._checkbox = win.doc.createElement('input');
 	            this._checkbox.type = 'checkbox';
 	            this._checkbox.checked = currState;
-	            kernel.place(this._checkbox, this.expandoNode, 'after');
+	            domConstruct.place(this._checkbox, this.expandoNode, 'after');
 	        }
 		},
 	    postCreate: function(){
@@ -435,8 +440,8 @@ define(["dojo/_base/declare",
 		
     });
     var checkBoxTree = {
-    	model:_CheckBoxStoreModel,
     	tree:_CheckBoxTree,
+    	model:_CheckBoxStoreModel,
     	treeNode:_CheckBoxTreeNode
     };
     return checkBoxTree;
