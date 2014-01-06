@@ -218,7 +218,7 @@ define(["dojo/_base/kernel"
         content.newpassword = newpassword.getValue();
         content.id = rosten.kernel.getUserInforByKey("idnumber");
 
-        rosten.reader(rosten.webPath + "/system/passwordChangeSubmit", content, function(data) {
+        rosten.read(rosten.webPath + "/system/passwordChangeSubmit", content, function(data) {
             if (data.result == "true") {
                 rosten.kernel.hideRostenShowDialog();
                 rosten.alert("修改密码成功,重新登录后生效!");
