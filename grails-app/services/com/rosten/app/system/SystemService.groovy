@@ -320,7 +320,19 @@ class SystemService {
 			resource.url = "departManage"
 			resource.imgUrl = "images/rosten/navigation/Depart.gif"
 			model.addToResources(resource)
-
+			
+			resource = new Resource()
+			resource.resourceName = "员工类型"
+			resource.url = "userTypeManage"
+			resource.imgUrl = "images/rosten/navigation/UserType.gif"
+			model.addToResources(resource)
+			
+			resource = new Resource()
+			resource.resourceName = "员工信息"
+			resource.url = "userManage"
+			resource.imgUrl = "images/rosten/navigation/User.gif"
+			model.addToResources(resource)
+			
 			resource = new Resource()
 			resource.resourceName = "群组管理"
 			resource.url = "groupManage"
