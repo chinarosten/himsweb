@@ -104,6 +104,16 @@ class LoginController {
 			redirect action: 'auth', params: params
 		}
 	}
+	def dlgauth = {
+		def config = SpringSecurityUtils.securityConfig
+		
+		if (springSecurityService.isLoggedIn()) {
+			redirect uri: config.successHandler.defaultTargetUrl
+			return
+		}
+		String view = "dlgauth"
+		render view:view
+	}
 
 	/**
 	 * Show the login page.
