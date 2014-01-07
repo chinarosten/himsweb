@@ -8,8 +8,28 @@ class MailActionController {
 	def inbox = {
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("查看",imgPath + "read.gif","read_mail")
-		actionList << createAction("删除",imgPath + "delete.png","delete_mail")
+		switch (params.id){
+			case [null,"inbox"]://收件箱
+				actionList << createAction("查看",imgPath + "read.gif","read_mail")
+				actionList << createAction("删除",imgPath + "delete.png","delete_mail")
+				break
+			case "save"://草稿箱
+				actionList << createAction("查看",imgPath + "read.gif","read_mail")
+				actionList << createAction("删除",imgPath + "delete.png","delete_mail")
+				break
+			case "send"://已发送
+				actionList << createAction("查看",imgPath + "read.gif","read_mail")
+				actionList << createAction("删除",imgPath + "delete.png","delete_mail")
+				break
+			case "deleted"://已删除
+				actionList << createAction("查看",imgPath + "read.gif","read_mail")
+				actionList << createAction("清空",imgPath + "delete.png","delete_mail")
+				break
+			case "trash"://垃圾邮件
+				actionList << createAction("查看",imgPath + "read.gif","read_mail")
+				break
+		}
+		
 		render actionList as JSON
 	}
 	private def createAction={name,img,action->

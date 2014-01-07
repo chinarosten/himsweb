@@ -37,13 +37,13 @@ define(["dojo/_base/kernel",
 	mail_showInbox = function(name,id){
 	    var mail_box = registry.byId("mail_inbox");
 	    if(mail_box){
-            mail_table.setQuery({
-                type: "message",
-                folder: id
-            });
+	        
+	        mail_box.attr("title",name);
+	        mail_actionBar.refresh(rosten.webPath + "/mailAction/inbox/" + id);
+            mail_grid.refresh(rosten.webPath + "/mail/inboxGrid/" + id,{refreshHeader:false});
             
-            mail_box.attr("title",name);
-            mail_tabs.selectChild(mail_box);    
+            mail_tabs.selectChild(mail_box); 
+               
 	    }else{
 	        rosten.kernel.setHref(rosten.webPath + "/mail/mailBox", name,genIndex);
 	    }

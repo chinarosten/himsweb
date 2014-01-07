@@ -36,7 +36,7 @@ class EmailBox {
 	
 	Date readDate	//读取日期
 	
-	Integer boxType=0	//邮箱类型：0  草稿箱;1 收件箱;2 发件箱;3 垃圾箱
+	Integer boxType=0	//邮箱类型：0  草稿箱;1 收件箱;2 发件箱;3已删除;4垃圾邮件
 	
 	Integer emailStatus=0	//邮件类型：0 未读;1 已读;2 回复 ; 3 转发 ; 4 全部转发
 	
