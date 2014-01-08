@@ -100,6 +100,59 @@ class MailController {
 		def model = []
 		render(view:'/mail/mail',model:model)
 	}
+	def mail_save = {
+		def json =[:]
+		if(User.findByUsername(params.to) == null){
+			json["result"] = "noUser"
+			render json as JSON
+			return
+		}
+		def user = (User) springSecurityService.getCurrentUser()
+		
+		//创建收件信息
+		def receiveMail = new EmailBox()
+		receiveMail.sender = user.username
+		receiveMail.senderCode = user.id
+		receiveMail.receiver = params.to
+		receiveMail.receiverCode = params.to
+		receiveMail.subject = params.subject
+		receiveMail.content = params.content
+		receiveMail.sendDate = new Date()
+		receiveMail.boxType = 1
+		receiveMail.mailUser = User.findByUsername(params.to)
+		receiveMail.save()
+		
+		//增加收件人信息
+		if(!Contact.findByMailUserAndName(user,params.to)){
+			def contact = new Contact()
+			contact.mailUser = user
+			contact.name = user.username
+			contact.email = params.to
+			contact.save()
+		}
+		
+		//保存发件信息
+		def sendMail = new EmailBox()
+		sendMail.sender = user.username
+		sendMail.senderCode = user.id
+		sendMail.receiver = params.to
+		sendMail.receiverCode = params.to
+		sendMail.subject = params.subject
+		sendMail.content = params.content
+		sendMail.sendDate = new Date()
+		sendMail.boxType = 2
+		sendMail.mailUser = user
+		
+		if(sendMail.save(flush:true)){
+			json["result"] = "true"
+		}else{
+			sendMail.errors.each{
+				println it
+			}
+			json["result"] = "false"
+		}
+		render json as JSON
+	}
 	def contactData ={
 		def json = [identifier:'id',label:'name',items:[]]
 		def user = (User) springSecurityService.getCurrentUser()

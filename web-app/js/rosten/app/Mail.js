@@ -15,7 +15,8 @@ define(["dojo/_base/kernel",
 		"dojo/fx/easing",
 		"dojo/date/locale",
 		"dojo/date/stamp",
-		"dojo/_base/lang"
+		"dojo/_base/lang",
+		"dojox/uuid/generateRandomUuid"
 		], function(
 			kernel,
 			connect,
@@ -31,7 +32,8 @@ define(["dojo/_base/kernel",
 			easing,
 			dateLocal,
 			dateStamp,
-			lang
+			lang,
+			RandomUuid
 		) {
 	rosten.variable.paneId = 1;
 	mail_showInbox = function(name,id){
@@ -71,13 +73,55 @@ define(["dojo/_base/kernel",
             }
         });
     };
+    write_mail =function(){
+        var newMessage = new mail.NewMessage({id: RandomUuid()});
+        var newTab = newMessage.container;
+        lang.mixin(newTab,
+            {
+                title: "写邮件",
+                closable: true,
+                onClose: function(){return mail_tabs.selectChild(registry.byId("mail_inbox"));}
+            }
+        );
+        connect.connect(newMessage.sendButton,"onClick",function(){
+            if(newMessage.to.attr("value")==""){
+                rosten.alert("请正确填写收件人！");
+                return;
+            }
+            if(newMessage.subject.attr("value")==""){
+                rosten.alert("请正确填写主题！");
+                return;
+            }
+            showSendBar();
+            var content = {};
+            content.to = newMessage.to.attr("value");
+            content.subject = newMessage.subject.attr("value");
+            content.content = newMessage.content.attr("value");
+            rosten.read(rosten.webPath + "/mail/mail_save", content, function(data){
+                stopSendBar();
+                if (data.result == "true" || data.result == true) {
+                    rosten.alert("发送成功!");
+                    mail_tabs.closeChild(mail_tabs.selectedChildWidget);
+                } else if(data.result == "noUser"){
+                    rosten.alert("收件人不才存在，请检查！");
+                } else {
+                    rosten.alert("发送失败!");
+                }
+            },function(data){
+                stopSendBar();
+                rosten.alert("服务器出错！");
+            });
+        });
+        mail_tabs.addChild(newTab);
+        mail_tabs.selectChild(newTab);
+    };
     formatSubject = function(value, rowIndex) {
 		return "<a href=\"javascript:onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
 	};
 	onMessageOpen = function(rowIndex){
         var item = mail_grid.getGrid().getItem(rowIndex);
         var store = mail_grid.getStore();
-        var id = store.getValue(item, "id")
+        var id = store.getValue(item, "id");
         var _message = registry.byId(id);
         if(_message){
         	mail_tabs.selectChild(_message.container);
@@ -103,6 +147,7 @@ define(["dojo/_base/kernel",
         );
         mail_tabs.addChild(newTab);
         mail_tabs.selectChild(newTab);
+        _message.msgId.attr("value",id);
         _message.to.attr("value",sender);
         _message.subject.attr("value",subject);
         _message.content.attr("value",text);
@@ -129,18 +174,18 @@ define(["dojo/_base/kernel",
 				},
 				span
 			);
-			connect.connect(span, "onclick", func || function(){ contactTable.setQuery({first: c+"*"}, {ignoreCase: true}) });
+			connect.connect(span, "onclick", func || function(){ contactTable.setQuery({first: c+"*"}, {ignoreCase: true}); });
 			connect.connect(span, "onclick", function(){
 				query(">", ci).removeClass("contactIndexSelected");
 				domClass.add(span, "contactIndexSelected");
 			});
 		}
 	
-		addChar(ci,"ALL", function(){contactTable.setQuery({})}, 'contactIndexAll' );
+		addChar(ci,"ALL", function(){contactTable.setQuery({});}, 'contactIndexAll' );
 		for(var l = "A".charCodeAt(0); l <= "Z".charCodeAt(0); l++){
-			addChar(ci,String.fromCharCode(l))
+			addChar(ci,String.fromCharCode(l));
 		}
-		addChar(ci,"ALL", function(){contactTable.setQuery({})}, 'contactIndexAll' );
+		addChar(ci,"ALL", function(){contactTable.setQuery({});}, 'contactIndexAll' );
 	}
 	onMessageClick = function(cell){
 		// summary:
@@ -162,13 +207,13 @@ define(["dojo/_base/kernel",
 	showSendBar = function(){
 		registry.byId('fakeSend').update({ indeterminate: true });
 		registry.byId('sendDialog').show();
-		setTimeout(function(){stopSendBar();}, 3000);
+		// setTimeout(function(){stopSendBar();}, 3000);
 	};
 	stopSendBar = function(){
 		registry.byId('fakeSend').update({ indeterminate: false });
 		registry.byId('sendDialog').hide();
-		mail_tabs.selectedChildWidget.onClose = function(){return true;};  // don't want confirm message
-		mail_tabs.closeChild(mail_tabs.selectedChildWidget);
+		// mail_tabs.selectedChildWidget.onClose = function(){return true;};  // don't want confirm message
+		// mail_tabs.closeChild(mail_tabs.selectedChildWidget);
 	};
 	searchMessages = function(){
 		// summary:
