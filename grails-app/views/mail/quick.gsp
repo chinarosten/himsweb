@@ -57,6 +57,7 @@
 		 		"dijit/Menu",
 		 		"dijit/MenuItem",
 				"dijit/form/Button",
+				"dojox/uuid/generateRandomUuid",
 				"rosten/app/Mail"
 		     	]);
     </script>
@@ -68,6 +69,7 @@
 			iconClass="mailIconGetMail" optionsTitle="Mail Source Options">
 			<script type="dojo/method" data-dojo-event="onClick">
 				/* fakeDownload(); */
+				rosten.alert("暂未开通,敬请关注...");
 			</script>
 			<span>收件</span>
 			<ul data-dojo-type="dijit/Menu">
@@ -77,15 +79,24 @@
 		</div>
 		<button id="mail_newMsg" data-dojo-type="dijit/form/Button" iconClass="mailIconNewMessage">写信
 			<script type="dojo/method" data-dojo-event="onClick">
-				var newTab = new mail.NewMessage({id: "new" + rosten.variable.paneId  }).container;
+				var newMessage = new mail.NewMessage({id: dojox.uuid.generateRandomUuid()});
+				var newTab = newMessage.container;
 				dojo.mixin(newTab,
 					{
 						title: "写邮件",
 						closable: true,
-						onClose: testClose
+						onClose: function(){return mail_tabs.selectChild(dijit.byId("mail_inbox"));}
 					}
 				);
-				rosten.variable.paneId++;
+				dojo.connect(newMessage.sendButton,"onClick",function(){
+					showSendBar();
+					console.log(newMessage.to.attr("value"));
+					if(newMessage.to.attr("value")==""){
+						
+					}else{
+						
+					}
+				});
 				mail_tabs.addChild(newTab);
 				mail_tabs.selectChild(newTab);
 			</script>

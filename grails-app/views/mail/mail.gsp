@@ -103,16 +103,16 @@
 				<div style="height:60px; overflow: visible; z-index: 10; color:#666;">
 					<table width="100%">
 						<tr style="padding-top:5px;">
-							<td style="width:100px; text-align:right;"><label for="${id}_to">收件人:</label></td>
+							<td style="width:100px; text-align:right;"><label>收件人:</label></td>
 							<td>
-								<input data-dojo-type="dijit/form/ComboBox" data-dojo-attach-point="to" id="${id}_to" hasDownArrow="false" store="contactStore" searchAttr="display"
+								<input data-dojo-type="dijit/form/ComboBox" data-dojo-attach-point="to" hasDownArrow="false" store="contactStore" searchAttr="display"
 									style="width: 40em;">
 							</td>
 						</tr>
 						<tr>
-							<td style="text-align:right;"><label for="${id}_subject">主题:</label></td>
+							<td style="text-align:right;"><label>主题:</label></td>
 							<td>
-								<select data-dojo-type="dijit/form/ComboBox" id="${id}_subject" data-dojo-attach-point="subject" hasDownArrow="false" style="width: 40em;">
+								<select data-dojo-type="dijit/form/ComboBox" data-dojo-attach-point="subject" hasDownArrow="false" style="width: 40em;">
 									<option></option>
 									<option>会议</option>
 									<option>报告</option>
@@ -130,14 +130,15 @@
 			</div>
 			
 			<div data-dojo-type="dijit/layout/ContentPane" region="bottom" style="height:30px" align="center">
-				<button data-dojo-type="dijit/form/Button" iconClass="mailIconOk">发送
+				<button data-dojo-type="dijit/form/Button" iconClass="mailIconOk" data-dojo-attach-point="sendButton">发送
 				<script type="dojo/method" data-dojo-event="onClick">
-					var toField = dojo.byId("${id}_to");
-					if (toField.value == ""){
-						alert("Please enter a recipient address");
-					}else{
-						showSendBar();
-					}
+					console.log(this);
+					//var toField = dojo.byId("${id}_to");
+					//if (toField.value == ""){
+						//alert("Please enter a recipient address");
+					//}else{
+						//showSendBar();
+					//}
 				</script>
 				</button>
 				<button data-dojo-type="dijit/form/Button" iconClass="mailIconCancel" >取消

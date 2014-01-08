@@ -49,10 +49,27 @@ define(["dojo/_base/kernel",
 	    }
 	};
     read_mail = function(){
-        
+    	var unid = rosten.getGridUnid("single");
+    	if (unid == "")
+            return;
+    	var store = mail_grid.getStore();
+    	var item = store.fetchItemByIdentity(unid);
+    	onMessageOpen(store.getValue(item, "rowIndex"));	
     };
     delete_mail = function(){
-        
+    	var unids = rosten.getGridUnid("multi");
+        if (unids == "")
+            return;
+        var content = {};
+        content.id = unids;
+        rosten.read(rosten.webPath + "/mail/mail_delete", content, function(data){
+        	if (data.result == "true" || data.result == true) {
+                rosten.alert("成功移除到已删除文件夹!");
+                rosten.kernel.refreshGrid();
+            } else {
+                rosten.alert("删除失败!");
+            }
+        });
     };
     formatSubject = function(value, rowIndex) {
 		return "<a href=\"javascript:onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
@@ -60,7 +77,12 @@ define(["dojo/_base/kernel",
 	onMessageOpen = function(rowIndex){
         var item = mail_grid.getGrid().getItem(rowIndex);
         var store = mail_grid.getStore();
-        
+        var id = store.getValue(item, "id")
+        var _message = registry.byId(id);
+        if(_message){
+        	mail_tabs.selectChild(_message.container);
+        	return;
+        }
         sender = store.getValue(item, "sender"),
         subject = store.getValue(item, "subject"),
         sent = dateLocale.format(
@@ -68,7 +90,7 @@ define(["dojo/_base/kernel",
                 {formatLength: "long", selector: "date"}),
         text = store.getValue(item, "text");
         
-        var _message = new mail.NewMessage({id: "new "+ rosten.variable.paneId  });
+        _message = new mail.NewMessage({id: id });
         var newTab = _message.container;
         lang.mixin(newTab,
             {
@@ -79,7 +101,6 @@ define(["dojo/_base/kernel",
                 }
             }
         );
-        rosten.variable.paneId++;
         mail_tabs.addChild(newTab);
         mail_tabs.selectChild(newTab);
         _message.to.attr("value",sender);
@@ -148,10 +169,6 @@ define(["dojo/_base/kernel",
 		registry.byId('sendDialog').hide();
 		mail_tabs.selectedChildWidget.onClose = function(){return true;};  // don't want confirm message
 		mail_tabs.closeChild(mail_tabs.selectedChildWidget);
-	};
-	testClose = function(pane,tab){
-		confirm("您确定离开?");
-		return mail_tabs.selectChild(registry.byId("mail_inbox"));
 	};
 	searchMessages = function(){
 		// summary:
