@@ -5,6 +5,15 @@ import grails.converters.JSON
 class MailActionController {
 	def imgPath ="images/rosten/actionbar/"
 	
+	def newMessage = {
+		def webPath = request.getContextPath() + "/"
+		def actionList = []
+		actionList << createAction("发送",imgPath + "ok.png","send_mail")
+		actionList << createAction("存草稿",imgPath + "save.gif","save_mail")
+		actionList << createAction("取消",imgPath + "delete.png","cancel_mail")
+		
+		render actionList as JSON
+	}
 	def inbox = {
 		def webPath = request.getContextPath() + "/"
 		def actionList = []

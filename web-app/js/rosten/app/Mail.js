@@ -74,46 +74,79 @@ define(["dojo/_base/kernel",
         });
     };
     write_mail =function(){
-        var newMessage = new mail.NewMessage({id: RandomUuid()});
+    	var randomUuid = RandomUuid();
+        var newMessage = new mail.NewMessage({id: randomUuid});
         var newTab = newMessage.container;
         lang.mixin(newTab,
             {
                 title: "写邮件",
                 closable: true,
-                onClose: function(){return mail_tabs.selectChild(registry.byId("mail_inbox"));}
+                onClose: function(){
+                	return cancel_mail_close(newMessage);
+                }
             }
         );
+        lang.mixin(newMessage.actionBar,{targetId:randomUuid});
         connect.connect(newMessage.sendButton,"onClick",function(){
-            if(newMessage.to.attr("value")==""){
-                rosten.alert("请正确填写收件人！");
-                return;
-            }
-            if(newMessage.subject.attr("value")==""){
-                rosten.alert("请正确填写主题！");
-                return;
-            }
-            showSendBar();
-            var content = {};
-            content.to = newMessage.to.attr("value");
-            content.subject = newMessage.subject.attr("value");
-            content.content = newMessage.content.attr("value");
-            rosten.read(rosten.webPath + "/mail/mail_save", content, function(data){
-                stopSendBar();
-                if (data.result == "true" || data.result == true) {
-                    rosten.alert("发送成功!");
-                    mail_tabs.closeChild(mail_tabs.selectedChildWidget);
-                } else if(data.result == "noUser"){
-                    rosten.alert("收件人不才存在，请检查！");
-                } else {
-                    rosten.alert("发送失败!");
-                }
-            },function(data){
-                stopSendBar();
-                rosten.alert("服务器出错！");
-            });
+        	save_mail_common(newMessage,"send");
         });
         mail_tabs.addChild(newTab);
         mail_tabs.selectChild(newTab);
+    };
+    send_mail = function(e){
+    	var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
+    	var messageNode = registry.byId(actionBar.targetId);
+    	save_mail_common(messageNode,"send")
+    	
+    };
+    save_mail = function(e){
+    	var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
+    	var messageNode = registry.byId(actionBar.targetId);
+    	save_mail_common(messageNode,"save")
+    };
+    save_mail_common = function(messageNode,type){
+    	var typeName = "保存";
+    	if(type=="send") typeName = "发送";
+    	
+    	if(messageNode.to.attr("value")==""){
+            rosten.alert("请正确填写收件人！");
+            return;
+        }
+        if(messageNode.subject.attr("value")==""){
+            rosten.alert("请正确填写主题！");
+            return;
+        }
+        showSendBar();
+        var content = {};
+        content.id = messageNode.attr("id");
+        content.to = messageNode.to.attr("value");
+        content.subject = messageNode.subject.attr("value");
+        content.content = messageNode.content.attr("value");
+        rosten.read(rosten.webPath + "/mail/mail_" + type, content, function(data){
+            stopSendBar();
+            if (data.result == "true" || data.result == true) {
+                rosten.alert(typeName + "成功!");
+                if(type == "send"){
+                	cancel_mail(messageNode);
+                }
+            } else if(data.result == "noUser"){
+                rosten.alert("收件人不存在，请检查！");
+            } else {
+                rosten.alert(typeName + "失败!");
+            }
+        },function(data){
+            stopSendBar();
+            rosten.alert("服务器出错！");
+        });
+    };
+    cancel_mail_close = function(messageNode){
+    	mail_tabs.selectChild(registry.byId("mail_inbox"));
+    	mail_grid.refresh();
+    	messageNode.destroyRecursive();
+    	return true;
+    }
+    cancel_mail = function(){
+    	mail_tabs.closeChild(mail_tabs.selectedChildWidget);
     };
     formatSubject = function(value, rowIndex) {
 		return "<a href=\"javascript:onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
@@ -141,10 +174,11 @@ define(["dojo/_base/kernel",
                 title: subject,
                 closable: true,
                 onClose: function(){
-                    return mail_tabs.selectChild(registry.byId("mail_inbox"));
+                	return cancel_mail_close(_message);
                 }
             }
         );
+        lang.mixin(_message.actionBar,{targetId:id});
         mail_tabs.addChild(newTab);
         mail_tabs.selectChild(newTab);
         _message.msgId.attr("value",id);
