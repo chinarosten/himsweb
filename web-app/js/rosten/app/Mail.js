@@ -43,7 +43,20 @@ define(["dojo/_base/kernel",
 	        mail_box.attr("title",name);
 	        mail_actionBar.refresh(rosten.webPath + "/mailAction/inbox/" + id);
             mail_grid.refresh(rosten.webPath + "/mail/inboxGrid/" + id,{refreshHeader:false});
-            
+            connect.connect(mail_grid.getGrid(),"onCellClick",function(cell){
+            	var store = mail_grid.getStore();
+            	var item = cell.grid.getItem(cell.rowIndex),
+    			sender = store.getValue(item, "sender"),
+    			subject = store.getValue(item, "subject"),
+    			sent = dateLocale.format(
+    					dateStamp.fromISOString(store.getValue(item, "sent")),
+    					{formatLength: "long", selector: "date"}),
+    			text = store.getValue(item, "content"),
+    			messageInner = "<span class='messageHeader'>发送人: " + sender + "<br>" +
+    			"主题: "+ subject + "<br>" +
+    			"日期: " + sent + "<br><br></span>" + text;
+            	registry.byId("mail_message").setContent(messageInner);
+            });
             mail_tabs.selectChild(mail_box); 
                
 	    }else{

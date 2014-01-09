@@ -96,7 +96,6 @@
 	<div data-dojo-type="dijit/Declaration" widgetClass="mail.NewMessage">
 		<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-attach-point="container" title="Composing..." closeable="true" style="padding:1px">
 			<div data-dojo-type="dijit/layout/ContentPane" region="center" data-dojo-props='style:"padding:0px"'>
-				<input style="display:none" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-attach-point="msgId"></input>
 				<div class="rosten_action">
 					<div data-dojo-type="rosten/widget/ActionBar" data-dojo-attach-point="actionBar"
 						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'newMessage')}"'>
@@ -149,7 +148,6 @@
 	<div data-dojo-type="dijit/Declaration" widgetClass="mail.showMessage">
 		<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-attach-point="container" title="Composing..." closeable="true" style="padding:1px">
 			<div data-dojo-type="dijit/layout/ContentPane" region="center" data-dojo-props='style:"padding:0px"'>
-				<input style="display:none" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-attach-point="msgId"></input>
 				<div class="rosten_action">
 					<div data-dojo-type="rosten/widget/ActionBar"
 						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'showMessage')}"'>
@@ -182,15 +180,6 @@
 					extraPlugins="[{name:'dijit/_editor/plugins/FontChoice', command: 'fontName', generic: true},'fontSize']">
 	
 				</div>
-			</div>
-			
-			<div data-dojo-type="dijit/layout/ContentPane" region="bottom" style="height:30px" align="center">
-				<button data-dojo-type="dijit/form/Button" iconClass="mailIconOk" data-dojo-attach-point="sendButton">发送</button>
-				<button data-dojo-type="dijit/form/Button" iconClass="mailIconCancel" >取消
-				<script type="dojo/method" data-dojo-event="onClick">
-					mail_tabs.closeChild(mail_tabs.selectedChildWidget);
-				</script>
-				</button>
 			</div>
 		</div>
 	</div>
