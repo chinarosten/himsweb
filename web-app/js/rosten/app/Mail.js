@@ -51,7 +51,7 @@ define(["dojo/_base/kernel",
     			sent = dateLocale.format(
     					dateStamp.fromISOString(store.getValue(item, "sent")),
     					{formatLength: "long", selector: "date"}),
-    			text = store.getValue(item, "content"),
+    			text = store.getValue(item, "sent"),
     			messageInner = "<span class='messageHeader'>发送人: " + sender + "<br>" +
     			"主题: "+ subject + "<br>" +
     			"日期: " + sent + "<br><br></span>" + text;

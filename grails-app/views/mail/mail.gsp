@@ -147,7 +147,7 @@
 	</div>		
 	<div data-dojo-type="dijit/Declaration" widgetClass="mail.showMessage">
 		<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-attach-point="container" title="Composing..." closeable="true" style="padding:1px">
-			<div data-dojo-type="dijit/layout/ContentPane" region="center" data-dojo-props='style:"padding:0px"'>
+			<div data-dojo-type="dijit/layout/ContentPane" region="top" data-dojo-props='style:"padding:0px"'>
 				<div class="rosten_action">
 					<div data-dojo-type="rosten/widget/ActionBar"
 						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'showMessage')}"'>
@@ -158,14 +158,18 @@
 						<tr style="padding-top:5px;">
 							<td style="width:100px; text-align:right;"><label>收件人:</label></td>
 							<td>
-								<input data-dojo-type="dijit/form/ComboBox" data-dojo-attach-point="to" hasDownArrow="false" store="contactStore" searchAttr="display"
+								<input data-dojo-type="dijit/form/ComboBox" 
+									data-dojo-props='readOnly:true'
+									data-dojo-attach-point="to" hasDownArrow="false" store="contactStore" searchAttr="display"
 									style="width: 40em;">
 							</td>
 						</tr>
 						<tr>
 							<td style="text-align:right;"><label>主题:</label></td>
 							<td>
-								<select data-dojo-type="dijit/form/ComboBox" data-dojo-attach-point="subject" hasDownArrow="false" style="width: 40em;">
+								<select data-dojo-type="dijit/form/ComboBox" 
+									data-dojo-props='readOnly:true'
+									data-dojo-attach-point="subject" hasDownArrow="false" style="width: 40em;">
 									<option></option>
 									<option>会议</option>
 									<option>报告</option>
@@ -175,10 +179,11 @@
 					</table>
 					<hr noshade size="1">
 				</div>
-				<!-- new message part -->
-				<div data-dojo-type="dijit/Editor"style="overflow:hidden" data-dojo-attach-point="content"
-					extraPlugins="[{name:'dijit/_editor/plugins/FontChoice', command: 'fontName', generic: true},'fontSize']">
-	
+				
+			</div>
+			<div data-dojo-type="dijit/layout/ContentPane" region="center" align="center" data-dojo-props='style:"padding:0px"'>
+				<div>
+					hello.....
 				</div>
 			</div>
 		</div>
