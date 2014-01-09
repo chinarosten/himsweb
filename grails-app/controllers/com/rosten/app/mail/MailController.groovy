@@ -81,6 +81,7 @@ class MailController {
 					sMap["sender"] = item.sender
 					sMap["subject"] = item.subject
 					sMap["sent"] = item.sent
+					sMap["content"] = item.content
 			
 					_json.items+=sMap
 				}
@@ -99,6 +100,39 @@ class MailController {
 	def mailBox = {
 		def model = []
 		render(view:'/mail/mail',model:model)
+	}
+	def mail_delete = {
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def emailBox = EmailBox.get(it)
+				if(emailBox){
+					emailBox.boxType = 3
+					emailBox.save(flush: true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
+	}
+	def mail_destroy = {
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def emailBox = EmailBox.get(it)
+				if(emailBox){
+					emailBox.delete(flush: true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
 	}
 	def mail_save = {
 		def json =[:]

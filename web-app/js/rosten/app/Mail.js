@@ -39,32 +39,32 @@ define(["dojo/_base/kernel",
 	mail_showInbox = function(name,id){
 	    var mail_box = registry.byId("mail_inbox");
 	    if(mail_box){
-	        
 	        mail_box.attr("title",name);
 	        mail_actionBar.refresh(rosten.webPath + "/mailAction/inbox/" + id);
             mail_grid.refresh(rosten.webPath + "/mail/inboxGrid/" + id,{refreshHeader:false});
-            connect.connect(mail_grid.getGrid(),"onCellClick",function(cell){
-            	var store = mail_grid.getStore();
-            	var item = cell.grid.getItem(cell.rowIndex),
-    			sender = store.getValue(item, "sender"),
-    			subject = store.getValue(item, "subject"),
-    			sent = dateLocale.format(
-    					dateStamp.fromISOString(store.getValue(item, "sent")),
-    					{formatLength: "long", selector: "date"}),
-    			text = store.getValue(item, "sent"),
-    			messageInner = "<span class='messageHeader'>发送人: " + sender + "<br>" +
-    			"主题: "+ subject + "<br>" +
-    			"日期: " + sent + "<br><br></span>" + text;
-            	registry.byId("mail_message").setContent(messageInner);
-            });
             mail_tabs.selectChild(mail_box); 
-               
 	    }else{
 	        rosten.kernel.setHref(rosten.webPath + "/mail/mailBox", name,genIndex);
 	    }
+	    
 	};
+   onMessageClick = function(cell){
+        var store = mail_grid.getStore();
+        var item = cell.grid.getItem(cell.rowIndex),
+        sender = store.getValue(item, "sender"),
+        subject = store.getValue(item, "subject"),
+        sent = dateLocale.format(
+                dateStamp.fromISOString(store.getValue(item, "sent")),
+                {formatLength: "long", selector: "date"}),
+        text = store.getValue(item, "content"),
+        messageInner = "<span class='messageHeader'>发送人: " + sender + "<br>" +
+        "主题: "+ subject + "<br>" +
+        "日期: " + sent + "<br><br></span>" + text;
+        registry.byId("mail_message").setContent(messageInner);
+    };
+
     read_mail = function(){
-    	var unid = rosten.getGridUnid("single");
+    	var unid = rosten._getGridUnid(mail_grid,"single");
     	if (unid == "")
             return;
     	var store = mail_grid.getStore();
@@ -72,15 +72,30 @@ define(["dojo/_base/kernel",
     	onMessageOpen(store.getValue(item, "rowIndex"));	
     };
     delete_mail = function(){
-    	var unids = rosten.getGridUnid("multi");
+        var unids = rosten._getGridUnid(mail_grid,"multi");
         if (unids == "")
             return;
         var content = {};
         content.id = unids;
         rosten.read(rosten.webPath + "/mail/mail_delete", content, function(data){
-        	if (data.result == "true" || data.result == true) {
+            if (data.result == "true" || data.result == true) {
                 rosten.alert("成功移除到已删除文件夹!");
-                rosten.kernel.refreshGrid();
+                mail_grid.refresh();
+            } else {
+                rosten.alert("删除失败!");
+            }
+        });
+    };
+    destroy_mail = function(){
+        var unids = rosten._getGridUnid(mail_grid,"multi");
+        if (unids == "")
+            return;
+        var content = {};
+        content.id = unids;
+        rosten.read(rosten.webPath + "/mail/mail_destroy", content, function(data){
+            if (data.result == "true" || data.result == true) {
+                rosten.alert("成功删除!");
+                mail_grid.refresh();
             } else {
                 rosten.alert("删除失败!");
             }
@@ -109,13 +124,13 @@ define(["dojo/_base/kernel",
     send_mail = function(e){
     	var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
     	var messageNode = registry.byId(actionBar.targetId);
-    	save_mail_common(messageNode,"send")
+    	save_mail_common(messageNode,"send");
     	
     };
     save_mail = function(e){
     	var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
     	var messageNode = registry.byId(actionBar.targetId);
-    	save_mail_common(messageNode,"save")
+    	save_mail_common(messageNode,"save");
     };
     save_mail_common = function(messageNode,type){
     	var typeName = "保存";
@@ -134,7 +149,7 @@ define(["dojo/_base/kernel",
         content.id = messageNode.attr("id");
         content.to = messageNode.to.attr("value");
         content.subject = messageNode.subject.attr("value");
-        content.content = messageNode.content.attr("value");
+        content.content = messageNode.content.get("value");
         rosten.read(rosten.webPath + "/mail/mail_" + type, content, function(data){
             stopSendBar();
             if (data.result == "true" || data.result == true) {
@@ -157,9 +172,19 @@ define(["dojo/_base/kernel",
     	mail_grid.refresh();
     	messageNode.destroyRecursive();
     	return true;
-    }
+    };
     cancel_mail = function(){
     	mail_tabs.closeChild(mail_tabs.selectedChildWidget);
+    };
+    receive_mail = function(){
+        //回复
+    };
+    repeat_mail = function(){
+        //转发
+    
+    };
+    resend_mail = function(){
+        //再次编辑发送
     };
     formatSubject = function(value, rowIndex) {
 		return "<a href=\"javascript:onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
@@ -178,9 +203,9 @@ define(["dojo/_base/kernel",
         sent = dateLocale.format(
                 dateStamp.fromISOString(store.getValue(item, "sent")),
                 {formatLength: "long", selector: "date"}),
-        text = store.getValue(item, "text");
+        text = store.getValue(item, "content");
         
-        _message = new mail.NewMessage({id: id });
+        _message = new mail.showMessage({id: id });
         var newTab = _message.container;
         lang.mixin(newTab,
             {
@@ -194,10 +219,10 @@ define(["dojo/_base/kernel",
         lang.mixin(_message.actionBar,{targetId:id});
         mail_tabs.addChild(newTab);
         mail_tabs.selectChild(newTab);
-        _message.msgId.attr("value",id);
         _message.to.attr("value",sender);
         _message.subject.attr("value",subject);
-        _message.content.attr("value",text);
+        _message.sent.attr("value",sent);
+        _message.content.innerHTML = text;
             
     };
 	function genIndex(){
@@ -234,23 +259,6 @@ define(["dojo/_base/kernel",
 		}
 		addChar(ci,"ALL", function(){contactTable.setQuery({});}, 'contactIndexAll' );
 	}
-	onMessageClick = function(cell){
-		// summary:
-		// when user clicks a row in the message list pane
-		var item = cell.grid.getItem(cell.rowIndex),
-			sender = this.store.getValue(item, "sender"),
-			subject = this.store.getValue(item, "label"),
-			sent = dateLocale.format(
-					dateStamp.fromISOString(this.store.getValue(item, "sent")),
-					{formatLength: "long", selector: "date"}),
-			text = this.store.getValue(item, "text"),
-			messageInner = "<span class='messageHeader'>发送人: " + sender + "<br>" +
-			"主题: "+ subject + "<br>" +
-			"日期: " + sent + "<br><br></span>" +
-			text;
-		registry.byId("mail_message").setContent(messageInner);
-	};
-	
 	showSendBar = function(){
 		registry.byId('fakeSend').update({ indeterminate: true });
 		registry.byId('sendDialog').show();

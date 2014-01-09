@@ -43,9 +43,7 @@
 				"rosten/app/Mail"
 		     	],
 			function(parser,kernel,ActionBar){
-				//kernel.addOnLoad(function(){
-					 //genIndex();
-				//});
+			
 		});
     </script>
 </head>
@@ -56,14 +54,18 @@
 		<div data-dojo-type="dijit/layout/TabContainer" id="mail_tabs" data-dojo-id="mail_tabs" region="center" tabStrip="true" >
 			<div data-dojo-type="dijit/layout/BorderContainer" title="收件箱" id="mail_inbox" data-dojo-props='style:"padding:1px"'>
 				
-				<div data-dojo-type="dijit/layout/ContentPane" region="top" data-dojo-props='style:"padding:0px;height:350px",splitter:true'>
+				<div data-dojo-type="dijit/layout/ContentPane" region="top" data-dojo-props='style:"padding:0px;height:280px",splitter:true'>
 					<div class="rosten_action">
 						<div data-dojo-type="rosten/widget/ActionBar" data-dojo-id="mail_actionBar" 
 							data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'inbox')}"'>
 						</div>
 					</div>
 					<div data-dojo-type="rosten/widget/RostenGrid" data-dojo-id="mail_grid" 
-						data-dojo-props='url:"${createLink(controller:'mail',action:'inboxGrid')}",showRowSelector : "new"'></div>
+						data-dojo-props='url:"${createLink(controller:'mail',action:'inboxGrid')}",showRowSelector : "new"'>
+						 <script type="dojo/method" data-dojo-event="onCellClick" data-dojo-args="cell">
+							onMessageClick(cell)
+						</script>
+					</div>
 				</div>
 				<!-- message preview pane -->
 				<div id="mail_message" data-dojo-type="dijit/layout/ContentPane" data-dojo-props='region: "center"'>
@@ -101,19 +103,21 @@
 						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'newMessage')}"'>
 					</div>
 				</div>
-				<div style="height:60px; overflow: visible; z-index: 10; color:#666;">
+				<div style="height:60px; overflow: visible; z-index: 10; color:#666;margin-top:10px">
 					<table width="100%">
 						<tr style="padding-top:5px;">
 							<td style="width:100px; text-align:right;"><label>收件人:</label></td>
 							<td>
-								<input data-dojo-type="dijit/form/ComboBox" data-dojo-attach-point="to" hasDownArrow="false" store="contactStore" searchAttr="display"
+								<input data-dojo-type="dijit/form/ComboBox" 
+									data-dojo-attach-point="to" hasDownArrow="false" store="contactStore" searchAttr="name"
 									style="width: 40em;">
 							</td>
 						</tr>
 						<tr>
 							<td style="text-align:right;"><label>主题:</label></td>
 							<td>
-								<select data-dojo-type="dijit/form/ComboBox" data-dojo-attach-point="subject" hasDownArrow="false" style="width: 40em;">
+								<select data-dojo-type="dijit/form/ComboBox" 
+									data-dojo-attach-point="subject" hasDownArrow="false" style="width: 40em;">
 									<option></option>
 									<option>会议</option>
 									<option>报告</option>
@@ -147,33 +151,39 @@
 	</div>		
 	<div data-dojo-type="dijit/Declaration" widgetClass="mail.showMessage">
 		<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-attach-point="container" title="Composing..." closeable="true" style="padding:1px">
-			<div data-dojo-type="dijit/layout/ContentPane" region="top" data-dojo-props='style:"padding:0px"'>
+			<div data-dojo-type="dijit/layout/ContentPane" region="top" data-dojo-props='style:"padding:0px;height:130px"'>
 				<div class="rosten_action">
 					<div data-dojo-type="rosten/widget/ActionBar"
 						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'showMessage')}"'>
 					</div>
 				</div>
-				<div style="height:60px; overflow: visible; z-index: 10; color:#666;">
+				<div style="height:90px; overflow: visible; z-index: 10; color:#666;margin-top:10px">
 					<table width="100%">
 						<tr style="padding-top:5px;">
 							<td style="width:100px; text-align:right;"><label>收件人:</label></td>
 							<td>
-								<input data-dojo-type="dijit/form/ComboBox" 
-									data-dojo-props='readOnly:true'
-									data-dojo-attach-point="to" hasDownArrow="false" store="contactStore" searchAttr="display"
-									style="width: 40em;">
+								<input id="to" data-dojo-type="dijit/form/ValidationTextBox"
+								data-dojo-attach-point="to"
+								data-dojo-props='style:"width:40em",readOnly:true'/>
+								
 							</td>
 						</tr>
 						<tr>
 							<td style="text-align:right;"><label>主题:</label></td>
 							<td>
-								<select data-dojo-type="dijit/form/ComboBox" 
-									data-dojo-props='readOnly:true'
-									data-dojo-attach-point="subject" hasDownArrow="false" style="width: 40em;">
-									<option></option>
-									<option>会议</option>
-									<option>报告</option>
-								</select>
+								<input id="subject" data-dojo-type="dijit/form/ValidationTextBox" 
+								data-dojo-attach-point="subject"
+								data-dojo-props='style:"width:40em",readOnly:true'/>
+								
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align:right;"><label>时间:</label></td>
+							<td>
+								<input id="sent" data-dojo-type="dijit/form/ValidationTextBox" 
+								data-dojo-attach-point="sent"
+								data-dojo-props='style:"width:40em",readOnly:true'/>
+								
 							</td>
 						</tr>
 					</table>
@@ -181,9 +191,8 @@
 				</div>
 				
 			</div>
-			<div data-dojo-type="dijit/layout/ContentPane" region="center" align="center" data-dojo-props='style:"padding:0px"'>
-				<div>
-					hello.....
+			<div data-dojo-type="dijit/layout/ContentPane" region="center" data-dojo-props='style:"padding:10px"'>
+				<div data-dojo-attach-point="content">
 				</div>
 			</div>
 		</div>

@@ -121,6 +121,9 @@ define(["dojo/_base/declare",
         onRowDblClick: function(){
             console.log("onRowDblClick");
         },
+        onCellClick:function(){
+            console.log("onCellClick");
+        },
         _gotoPage:function(pagenum){
         	var content = {refreshHeader:false,refreshPageControl:false,refreshData:true};
         	this.gotoPage(pagenum,content);
@@ -264,6 +267,7 @@ define(["dojo/_base/declare",
                 this.grid.startup();
 //                this.resize();
                 connect.connect(this.grid, "onRowDblClick", this, "onRowDblClick");
+                connect.connect(this.grid, "onCellClick", this, "onCellClick");
             }
             else {
                 this.grid.setStore(this.store);
