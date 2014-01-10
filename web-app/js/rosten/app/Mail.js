@@ -216,7 +216,7 @@ define(["dojo/_base/kernel",
         sent = store.getValue(item, "sent"),
         text = store.getValue(item, "content");
         
-        _message = new mail.showMessage({id: id });
+        _message = new mail.showMessage({id: id,mailnavigation:rosten.variable.mailNavigation });
         var newTab = _message.container;
         lang.mixin(newTab,
             {
@@ -227,13 +227,7 @@ define(["dojo/_base/kernel",
                 }
             }
         );
-        connect.connect(_message,"onShow",function(){
-        	_message.actionBar.actionBarSrc = _message.actionBar.actionBarSrc + "/" + rosten.variable.mailNavigation;
-        });
-        //var actionBarSrc= _message.actionBar.actionBarSrc + "/" + rosten.variable.mailNavigation;
         lang.mixin(_message.actionBar,{targetId:id});
-        console.log(_message.actionBar.actionBarSrc);
-        
         mail_tabs.addChild(newTab);
         mail_tabs.selectChild(newTab);
         _message.sender.attr("value",sender);

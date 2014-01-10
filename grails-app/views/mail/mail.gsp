@@ -154,7 +154,7 @@
 			<div data-dojo-type="dijit/layout/ContentPane" region="top" data-dojo-props='style:"padding:0px;height:145px"'>
 				<div class="rosten_action">
 					<div data-dojo-type="rosten/widget/ActionBar" data-dojo-attach-point="actionBar"
-						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'showMessage')}"'>
+						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'showMessage')}/${'\${mailnavigation}'}" '>
 					</div>
 				</div>
 				<div style="height:90px; overflow: visible; z-index: 10; color:#666;margin-top:8px">
