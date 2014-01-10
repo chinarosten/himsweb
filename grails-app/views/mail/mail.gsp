@@ -103,7 +103,7 @@
 						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'newMessage')}"'>
 					</div>
 				</div>
-				<div style="height:60px; overflow: visible; z-index: 10; color:#666;margin-top:10px">
+				<div style="height:60px; overflow: visible; z-index: 10; color:#666;margin-top:8px">
 					<table width="100%">
 						<tr style="padding-top:5px;">
 							<td style="width:100px; text-align:right;"><label>收件人:</label></td>
@@ -151,28 +151,37 @@
 	</div>		
 	<div data-dojo-type="dijit/Declaration" widgetClass="mail.showMessage">
 		<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-attach-point="container" title="Composing..." closeable="true" style="padding:1px">
-			<div data-dojo-type="dijit/layout/ContentPane" region="top" data-dojo-props='style:"padding:0px;height:130px"'>
+			<div data-dojo-type="dijit/layout/ContentPane" region="top" data-dojo-props='style:"padding:0px;height:145px"'>
 				<div class="rosten_action">
-					<div data-dojo-type="rosten/widget/ActionBar"
+					<div data-dojo-type="rosten/widget/ActionBar" data-dojo-attach-point="actionBar"
 						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'showMessage')}"'>
 					</div>
 				</div>
-				<div style="height:90px; overflow: visible; z-index: 10; color:#666;margin-top:10px">
+				<div style="height:90px; overflow: visible; z-index: 10; color:#666;margin-top:8px">
 					<table width="100%">
 						<tr style="padding-top:5px;">
-							<td style="width:100px; text-align:right;"><label>收件人:</label></td>
+							<td style="text-align:right;"><label>主题:</label></td>
 							<td>
-								<input id="to" data-dojo-type="dijit/form/ValidationTextBox"
-								data-dojo-attach-point="to"
+								<input data-dojo-type="dijit/form/ValidationTextBox" 
+								data-dojo-attach-point="subject"
 								data-dojo-props='style:"width:40em",readOnly:true'/>
 								
 							</td>
 						</tr>
 						<tr>
-							<td style="text-align:right;"><label>主题:</label></td>
+							<td style="width:100px; text-align:right;"><label>发件人:</label></td>
 							<td>
-								<input id="subject" data-dojo-type="dijit/form/ValidationTextBox" 
-								data-dojo-attach-point="subject"
+								<input data-dojo-type="dijit/form/ValidationTextBox"
+								data-dojo-attach-point="sender"
+								data-dojo-props='style:"width:40em",readOnly:true'/>
+								
+							</td>
+						</tr>
+						<tr>
+							<td style="width:100px; text-align:right;"><label>收件人:</label></td>
+							<td>
+								<input data-dojo-type="dijit/form/ValidationTextBox"
+								data-dojo-attach-point="to"
 								data-dojo-props='style:"width:40em",readOnly:true'/>
 								
 							</td>
@@ -180,7 +189,7 @@
 						<tr>
 							<td style="text-align:right;"><label>时间:</label></td>
 							<td>
-								<input id="sent" data-dojo-type="dijit/form/ValidationTextBox" 
+								<input data-dojo-type="dijit/form/ValidationTextBox" 
 								data-dojo-attach-point="sent"
 								data-dojo-props='style:"width:40em",readOnly:true'/>
 								
