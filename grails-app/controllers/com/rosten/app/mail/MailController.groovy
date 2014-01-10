@@ -79,6 +79,7 @@ class MailController {
 					sMap["rowIndex"] = idx+1
 					sMap["id"] = item.id
 					sMap["sender"] = item.sender
+					sMap["to"] = item.receiver
 					sMap["subject"] = item.subject
 					sMap["sent"] = item.sent
 					sMap["content"] = item.content

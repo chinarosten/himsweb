@@ -52,7 +52,7 @@ class EmailBox {
 	String sent = getFormattedDate()
 	
 	def getFormattedDate(){
-		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd")
+		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		def showDate
 		if(boxType==0){
 			showDate = createdDate

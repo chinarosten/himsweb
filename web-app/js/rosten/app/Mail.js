@@ -35,8 +35,8 @@ define(["dojo/_base/kernel",
 			lang,
 			RandomUuid
 		) {
-	rosten.variable.paneId = 1;
 	mail_showInbox = function(name,id){
+		rosten.variable.mailNavigation = id;
 	    var mail_box = registry.byId("mail_inbox");
 	    if(mail_box){
 	        mail_box.attr("title",name);
@@ -53,9 +53,7 @@ define(["dojo/_base/kernel",
         var item = cell.grid.getItem(cell.rowIndex),
         sender = store.getValue(item, "sender"),
         subject = store.getValue(item, "subject"),
-        sent = dateLocale.format(
-                dateStamp.fromISOString(store.getValue(item, "sent")),
-                {formatLength: "long", selector: "date"}),
+        sent = store.getValue(item, "sent"),
         text = store.getValue(item, "content"),
         messageInner = "<span class='messageHeader'>发送人: " + sender + "<br>" +
         "主题: "+ subject + "<br>" +
@@ -81,6 +79,20 @@ define(["dojo/_base/kernel",
             if (data.result == "true" || data.result == true) {
                 rosten.alert("成功移除到已删除文件夹!");
                 mail_grid.refresh();
+            } else {
+                rosten.alert("删除失败!");
+            }
+        });
+    };
+    delete_mailByForm = function(e){
+    	var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
+    	console.log(actionBar);
+    	var content = {};
+        content.id = actionBar.targetId;
+        rosten.read(rosten.webPath + "/mail/mail_delete", content, function(data){
+            if (data.result == "true" || data.result == true) {
+                rosten.alert("成功移除到已删除文件夹!");
+                cancel_mail();
             } else {
                 rosten.alert("删除失败!");
             }
@@ -198,11 +210,10 @@ define(["dojo/_base/kernel",
         	mail_tabs.selectChild(_message.container);
         	return;
         }
-        sender = store.getValue(item, "sender"),
+        var sender = store.getValue(item, "sender"),
+        to = store.getValue(item, "to"),
         subject = store.getValue(item, "subject"),
-        sent = dateLocale.format(
-                dateStamp.fromISOString(store.getValue(item, "sent")),
-                {formatLength: "long", selector: "date"}),
+        sent = store.getValue(item, "sent"),
         text = store.getValue(item, "content");
         
         _message = new mail.showMessage({id: id });
@@ -216,10 +227,17 @@ define(["dojo/_base/kernel",
                 }
             }
         );
+        connect.connect(_message,"onShow",function(){
+        	_message.actionBar.actionBarSrc = _message.actionBar.actionBarSrc + "/" + rosten.variable.mailNavigation;
+        });
+        //var actionBarSrc= _message.actionBar.actionBarSrc + "/" + rosten.variable.mailNavigation;
         lang.mixin(_message.actionBar,{targetId:id});
+        console.log(_message.actionBar.actionBarSrc);
+        
         mail_tabs.addChild(newTab);
         mail_tabs.selectChild(newTab);
-        _message.to.attr("value",sender);
+        _message.sender.attr("value",sender);
+        _message.to.attr("value",to);
         _message.subject.attr("value",subject);
         _message.sent.attr("value",sent);
         _message.content.innerHTML = text;
