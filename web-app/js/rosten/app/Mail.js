@@ -188,18 +188,122 @@ define(["dojo/_base/kernel",
     cancel_mail = function(){
     	mail_tabs.closeChild(mail_tabs.selectedChildWidget);
     };
-    receive_mail = function(){
+    receive_mail = function(e){
         //回复
+    	var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
+    	var id = actionBar.targetId;
+    	var messageNode = registry.byId(id);
+    	
+    	var sender = messageNode.sender.innerHTML,
+    		to = messageNode.to.innerHTML,
+    		subject = messageNode.subject.innerHTML,
+    		sent = messageNode.sent.innerHTML,
+    		content = messageNode.content.innerHTML;
+    	
+    	//新增内容
+    	var randomUuid = RandomUuid();
+    	var _Message = new mail.NewMessage({id: randomUuid});
+    	var newTab = _Message.container;
+    	
+    	lang.mixin(newTab,
+            {
+                title: "回复：" + subject,
+                closable: true,
+                onClose: function(){
+                	return cancel_mail_close(_Message);
+                }
+            }
+        );
+    	lang.mixin(_Message.actionBar,{targetId:randomUuid});
+    	connect.connect(_Message.sendButton,"onClick",function(){
+        	save_mail_common(_Message,"send");
+        });
+    	
+    	_Message.to.attr("value",sender);
+    	_Message.subject.attr("value","回复：" + subject);
+    	var addContent = "<hr noshade size=\"1\">在" + sent + ", \" " + sender + " \"写道：<br>" ;
+    	_Message.content.attr("value","<br><br><br><br><br><br>" + addContent + content);
+    	
+    	mail_tabs.addChild(newTab);
+    	mail_tabs.selectChild(newTab);
     };
-    repeat_mail = function(){
+    repeat_mail = function(e){
         //转发
-    
+    	var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
+    	var id = actionBar.targetId;
+    	var messageNode = registry.byId(id);
+    	
+    	var sender = messageNode.sender.innerHTML,
+    		to = messageNode.to.innerHTML,
+    		subject = messageNode.subject.innerHTML,
+    		sent = messageNode.sent.innerHTML,
+    		content = messageNode.content.innerHTML;
+    	
+    	//新增内容
+    	var randomUuid = RandomUuid();
+    	var _Message = new mail.NewMessage({id: randomUuid});
+    	var newTab = _Message.container;
+    	
+    	lang.mixin(newTab,
+            {
+                title: "转发：" + subject,
+                closable: true,
+                onClose: function(){
+                	return cancel_mail_close(_Message);
+                }
+            }
+        );
+    	lang.mixin(_Message.actionBar,{targetId:randomUuid});
+    	connect.connect(_Message.sendButton,"onClick",function(){
+        	save_mail_common(_Message,"send");
+        });
+    	
+    	_Message.subject.attr("value","转发：" + subject);
+    	var addContent = "<hr noshade size=\"1\">在" + sent + ", \" " + sender + " \"写道：<br>" ;
+    	_Message.content.attr("value","<br><br><br><br><br><br>" + addContent + content);
+    	
+    	mail_tabs.addChild(newTab);
+    	mail_tabs.selectChild(newTab);
     };
-    resend_mail = function(){
-        //再次编辑发送
-    };
-    edit_mail = function(){
-        
+    edit_mail = function(e){
+    	var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
+    	var id = actionBar.targetId;
+    	var messageNode = registry.byId(id);
+    	
+    	var sender = messageNode.sender.innerHTML,
+    		to = messageNode.to.innerHTML,
+    		subject = messageNode.subject.innerHTML,
+    		sent = messageNode.sent.innerHTML,
+    		content = messageNode.content.innerHTML;
+    	
+    	//摧毁当前内容
+    	mail_tabs.removeChild(mail_tabs.selectedChildWidget);
+    	messageNode.destroyRecursive();
+    	
+    	//新增内容
+    	var _Message = new mail.NewMessage({id: id});
+    	var newTab = _Message.container;
+    	
+    	lang.mixin(newTab,
+            {
+                title: subject,
+                closable: true,
+                onClose: function(){
+                	return cancel_mail_close(_Message);
+                }
+            }
+        );
+    	lang.mixin(_Message.actionBar,{targetId:id});
+    	connect.connect(_Message.sendButton,"onClick",function(){
+        	save_mail_common(_Message,"send");
+        });
+    	
+    	_Message.to.attr("value",to);
+    	_Message.subject.attr("value",subject);
+    	_Message.content.attr("value",content);
+    	
+    	mail_tabs.addChild(newTab);
+    	mail_tabs.selectChild(newTab);
     };
     formatSubject = function(value, rowIndex) {
 		return "<a href=\"javascript:onMessageOpen(" + rowIndex + ");\">" + value + "</a>";

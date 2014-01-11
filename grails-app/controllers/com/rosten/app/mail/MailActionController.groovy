@@ -30,7 +30,7 @@ class MailActionController {
 				actionList << createAction("编辑",imgPath + "read.gif","edit_mail")
 				break;
 			case "send"://已发送
-				actionList << createAction("再次编辑发送",imgPath + "read.gif","resend_mail")
+				actionList << createAction("再次编辑发送",imgPath + "read.gif","edit_mail")
 				actionList << createAction("回复",imgPath + "read.gif","receive_mail")
 				actionList << createAction("转发",imgPath + "read.gif","repeat_mail")
 				actionList << createAction("删除",imgPath + "delete.png","delete_mailByForm")
