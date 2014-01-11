@@ -198,6 +198,9 @@ define(["dojo/_base/kernel",
     resend_mail = function(){
         //再次编辑发送
     };
+    edit_mail = function(){
+        
+    };
     formatSubject = function(value, rowIndex) {
 		return "<a href=\"javascript:onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
 	};
@@ -230,10 +233,11 @@ define(["dojo/_base/kernel",
         lang.mixin(_message.actionBar,{targetId:id});
         mail_tabs.addChild(newTab);
         mail_tabs.selectChild(newTab);
-        _message.sender.attr("value",sender);
-        _message.to.attr("value",to);
-        _message.subject.attr("value",subject);
-        _message.sent.attr("value",sent);
+        
+        _message.sender.innerHTML = sender;
+        _message.to.innerHTML = to;
+        _message.subject.innerHTML = subject;
+        _message.sent.innerHTML = sent;
         _message.content.innerHTML = text;
             
     };
