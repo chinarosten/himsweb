@@ -133,7 +133,23 @@
 	
 				</div>
 			</div>
-			
+			<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='region:"trailing", style:"width: 200px;", splitter:true'>
+				
+				<div data-dojo-id="store_${'\${id}'}" data-dojo-type="dojo/data/ItemFileWriteStore" 
+					data-dojo-props='url:"${createLink(controller:'mail',action:'getDepart')}"'></div>
+				<div data-dojo-id="model_${'\${id}'}" data-dojo-type="dijit/tree/ForestStoreModel" 
+					data-dojo-props='store:store_${'\${id}'}, query:{type:"depart"},rootLabel:"部门层级", childrenAttrs:["children"]'></div>	
+				<div data-dojo-type="dijit/Tree" data-dojo-props='title:"通讯录",model:model_${'\${id}'}, openOnClick:true'>
+					<script type="dojo/method" data-dojo-event="onClick" data-dojo-args="item">
+						
+					</script>
+					<script type="dojo/method" data-dojo-event="onOpen" data-dojo-args="item">
+						if( item && !item.root && item.children.length == 0){
+							mail_addDepart(item,store_${'\${id}'});
+						}
+					</script>
+				</div>	
+			</div>
 			<div data-dojo-type="dijit/layout/ContentPane" region="bottom" style="height:30px" align="center">
 				<button data-dojo-type="dijit/form/Button" iconClass="mailIconOk" data-dojo-attach-point="sendButton">发送</button>
 				<button data-dojo-type="dijit/form/Button" iconClass="mailIconCancel" >取消

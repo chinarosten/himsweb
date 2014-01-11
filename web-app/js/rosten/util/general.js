@@ -127,9 +127,9 @@ define(["dojo/_base/declare"], function(declare) {
         },
         stringTrim:function(/*String*/str, /*String*/parm) {
             if (!parm) {
-                var oStr = rosten.splitString(str, " ");
+                var oStr = this.splitString(str, " ");
             } else {
-                var oStr = rosten.splitString(str, parm);
+                var oStr = this.splitString(str, parm);
             }
             return oStr.join("");
         },

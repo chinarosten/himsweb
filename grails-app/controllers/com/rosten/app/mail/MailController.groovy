@@ -4,6 +4,7 @@ import grails.converters.JSON
 import com.rosten.app.util.GridUtil
 import com.rosten.app.util.Util
 import com.rosten.app.system.User
+import com.rosten.app.system.Depart
 
 class MailController {
 	def springSecurityService
@@ -240,6 +241,36 @@ class MailController {
 		
 		json.items.unique()
 		
+		render json as JSON
+	}
+	def getDepart={
+		def user = (User) springSecurityService.getCurrentUser()
+		def dataList = Depart.findAllByCompanyAndParent(user.company,null)
+		def json = [identifier:'id',label:'name',items:[]]
+		dataList.each{
+			def sMap = ["id":it.id,"name":it.departName,"type":"depart","parentId":it.parent?.id,"children":[]]
+			json.items+=sMap
+		}
+		render json as JSON
+	}
+	def mail_getDepartChild ={
+		def json = []
+		
+		def depart = Depart.get(params.id)
+		log.debug(depart);
+		if(depart.children!=null){
+			//获取部门
+			depart.children.each{
+				def sMap = ["id":it.id,"name":it.departName,"type":"depart","parentId":it.parent?.id,"children":[]]
+				json << sMap
+			}
+		}else{
+			//获取用户
+			depart.getAllUser().each{
+				def sMap = ["id":it.id,"name":it.username,"type":"user"]
+				json << sMap
+			}
+		}
 		render json as JSON
 	}
 	def index() {

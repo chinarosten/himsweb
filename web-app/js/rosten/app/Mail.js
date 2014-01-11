@@ -16,7 +16,8 @@ define(["dojo/_base/kernel",
 		"dojo/date/locale",
 		"dojo/date/stamp",
 		"dojo/_base/lang",
-		"dojox/uuid/generateRandomUuid"
+		"dojox/uuid/generateRandomUuid",
+		"rosten/util/general"
 		], function(
 			kernel,
 			connect,
@@ -33,8 +34,11 @@ define(["dojo/_base/kernel",
 			dateLocal,
 			dateStamp,
 			lang,
-			RandomUuid
+			RandomUuid,
+			General
 		) {
+	
+	var general = new General();
 	mail_showInbox = function(name,id){
 		rosten.variable.mailNavigation = id;
 	    var mail_box = registry.byId("mail_inbox");
@@ -114,7 +118,7 @@ define(["dojo/_base/kernel",
         });
     };
     write_mail =function(){
-    	var randomUuid = RandomUuid();
+    	var randomUuid = general.stringTrim(RandomUuid(),"-");
         var newMessage = new mail.NewMessage({id: randomUuid});
         var newTab = newMessage.container;
         lang.mixin(newTab,
@@ -201,7 +205,7 @@ define(["dojo/_base/kernel",
     		content = messageNode.content.innerHTML;
     	
     	//新增内容
-    	var randomUuid = RandomUuid();
+    	var randomUuid = general.stringTrim(RandomUuid(),"-");
     	var _Message = new mail.NewMessage({id: randomUuid});
     	var newTab = _Message.container;
     	
@@ -240,7 +244,7 @@ define(["dojo/_base/kernel",
     		content = messageNode.content.innerHTML;
     	
     	//新增内容
-    	var randomUuid = RandomUuid();
+    	var randomUuid = general.stringTrim(RandomUuid(),"-");
     	var _Message = new mail.NewMessage({id: randomUuid});
     	var newTab = _Message.container;
     	
@@ -403,6 +407,25 @@ define(["dojo/_base/kernel",
 			mail_table.setQuery(query, {ignoreCase: true});
 			registry.byId("mail_inbox").attr("title","搜索邮件");
 		}
-		
+	};
+	mail_addDepart = function(item,store){
+		var content = {};
+		content.id = store.getValue(item, "id");
+		rosten.read(rosten.webPath + "/mail/mail_getDepartChild", content, function(data){
+			for (var i = 0; i < data.length; i++) {
+				store.fetchItemByIdentity({
+					identity:data[i].id,
+					onItem: function(node){
+						if(!node){
+							var parent = {parent: item,attribute: 'children'};
+							store.newItem({
+								id: data[i].id,  //节点ID
+								name: data[i].name  //节点名称
+							}, parent);//给父节点添加子节点	
+						}
+					}	
+				});
+			}	
+        });
 	};
 });
