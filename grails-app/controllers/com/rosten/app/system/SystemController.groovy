@@ -226,6 +226,15 @@ class SystemController {
 		if(params.id && !"".equals(params.id)){
 			permission = Permission.get(params.id)
 			permission.properties = params
+			
+			PermissionResource.removeAll(permission)
+			if(params.allowresourcesId){
+				params.allowresourcesId.split(",").each{
+					def resource = Resource.get(it)
+					PermissionResource.create(resource, permission)
+				}
+			}
+			
 			if(permission.save(flush:true)){
 				json["result"] = "true"
 			}else{
