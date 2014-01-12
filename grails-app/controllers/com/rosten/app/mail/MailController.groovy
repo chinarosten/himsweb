@@ -1,10 +1,13 @@
 package com.rosten.app.mail
 
 import grails.converters.JSON
+
+import com.rosten.app.util.GB2Alpha;
 import com.rosten.app.util.GridUtil
 import com.rosten.app.util.Util
 import com.rosten.app.system.User
 import com.rosten.app.system.Depart
+import com.rosten.app.util.GB2Alpha
 
 class MailController {
 	def springSecurityService
@@ -96,11 +99,11 @@ class MailController {
 		render json as JSON
 	}
 	def quick = {
-		def model = []
+		def model = [:]
 		render(view:'/mail/quick',model:model)
 	}
 	def mailBox = {
-		def model = []
+		def model = [:]
 		render(view:'/mail/mail',model:model)
 	}
 	def mail_delete = {
@@ -167,34 +170,46 @@ class MailController {
 	}
 	def mail_send = {
 		def json =[:]
-		if(User.findByUsername(params.to) == null){
+		
+		def oktos=[]
+		def tos = params.to.split(",")
+		tos.each{to->
+			if(User.findByUsername(to)!=null){
+				oktos<<to
+			}
+		}
+		if(oktos.size==0){
 			json["result"] = "noUser"
 			render json as JSON
 			return
 		}
+		
 		def user = (User) springSecurityService.getCurrentUser()
 		
-		//增加收件人信息
-		if(!Contact.findByMailUserAndName(user,params.to)){
-			def contact = new Contact()
-			contact.mailUser = user
-			contact.name = params.to
-			contact.email = params.to
-			contact.save()
+		oktos.each{to->
+			/*
+			//增加收件人信息
+			if(!Contact.findByMailUserAndName(user,params.to)){
+				def contact = new Contact()
+				contact.mailUser = user
+				contact.name = params.to
+				contact.email = params.to
+				contact.save()
+			}
+			*/
+			//创建收件信息
+			def receiveMail = new EmailBox()
+			receiveMail.sender = user.username
+			receiveMail.senderCode = user.id
+			receiveMail.receiver = to
+			receiveMail.receiverCode = to
+			receiveMail.subject = params.subject
+			receiveMail.content = params.content
+			receiveMail.sendDate = new Date()
+			receiveMail.boxType = 1
+			receiveMail.mailUser = User.findByUsername(to)
+			receiveMail.save()
 		}
-		
-		//创建收件信息
-		def receiveMail = new EmailBox()
-		receiveMail.sender = user.username
-		receiveMail.senderCode = user.id
-		receiveMail.receiver = params.to
-		receiveMail.receiverCode = params.to
-		receiveMail.subject = params.subject
-		receiveMail.content = params.content
-		receiveMail.sendDate = new Date()
-		receiveMail.boxType = 1
-		receiveMail.mailUser = User.findByUsername(params.to)
-		receiveMail.save()
 		
 		//保存发件信息
 		def sendMail = EmailBox.get(params.id)
@@ -225,16 +240,18 @@ class MailController {
 		def json = [identifier:'id',label:'name',items:[]]
 		def user = (User) springSecurityService.getCurrentUser()
 		
+		GB2Alpha gb2Alpha = new GB2Alpha();
+		
 		//获取Contact人员
 		Contact.findAllByMailUser(user).each{
-			def _data = ["id":it.id,"name":it.name,email:it.email,phone:it.tellCall,type:"contact"]
+			def _data = ["id":it.id,"name":it.name,email:it.email,phone:it.tellCall,type:"contact",first:gb2Alpha.String2Alpha(it.name)]
 			json.items << _data
 		}
 		
 		//获取当前单位人员信息
 		User.findAllByCompany(user.company).each{
 			if(!it.equals(user)){
-				def _data = ["id":it.id,"name":it.username,email:it.username,phone:it.telephone,type:"user"]
+				def _data = ["id":it.id,"name":it.username,email:it.username,phone:it.telephone,type:"user",,first:gb2Alpha.String2Alpha(it.username)]
 				json.items << _data
 			}
 		}
@@ -257,8 +274,7 @@ class MailController {
 		def json = []
 		
 		def depart = Depart.get(params.id)
-		log.debug(depart);
-		if(depart.children!=null){
+		if(depart.children && depart.children.size()!=0){
 			//获取部门
 			depart.children.each{
 				def sMap = ["id":it.id,"name":it.departName,"type":"depart","parentId":it.parent?.id,"children":[]]
@@ -266,9 +282,12 @@ class MailController {
 			}
 		}else{
 			//获取用户
+			def user = (User) springSecurityService.getCurrentUser()
 			depart.getAllUser().each{
-				def sMap = ["id":it.id,"name":it.username,"type":"user"]
-				json << sMap
+				if(!user.equals(it)){
+					def sMap = ["id":it.id,"name":it.username,"type":"user"]
+					json << sMap
+				}
 			}
 		}
 		render json as JSON

@@ -108,9 +108,13 @@
 						<tr style="padding-top:5px;">
 							<td style="width:100px; text-align:right;"><label>收件人:</label></td>
 							<td>
-								<input data-dojo-type="dijit/form/ComboBox" 
+								<div data-dojo-type="dijit/form/ComboBox" 
 									data-dojo-attach-point="to" hasDownArrow="false" store="contactStore" searchAttr="name"
 									style="width: 40em;">
+									<script type="dojo/method" data-dojo-event="onClick" data-dojo-args="event">
+										rosten.variable.mailTargetNode = this;
+									</script>
+								</div>	
 							</td>
 						</tr>
 						<tr>
@@ -135,17 +139,24 @@
 			</div>
 			<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='region:"trailing", style:"width: 200px;", splitter:true'>
 				
-				<div data-dojo-id="store_${'\${id}'}" data-dojo-type="dojo/data/ItemFileWriteStore" 
+				<div data-dojo-id="store_${'\${departid}'}" data-dojo-type="dojo/data/ItemFileWriteStore" 
 					data-dojo-props='url:"${createLink(controller:'mail',action:'getDepart')}"'></div>
-				<div data-dojo-id="model_${'\${id}'}" data-dojo-type="dijit/tree/ForestStoreModel" 
-					data-dojo-props='store:store_${'\${id}'}, query:{type:"depart"},rootLabel:"部门层级", childrenAttrs:["children"]'></div>	
-				<div data-dojo-type="dijit/Tree" data-dojo-props='title:"通讯录",model:model_${'\${id}'}, openOnClick:true'>
+				<div data-dojo-id="model_${'\${departid}'}" data-dojo-type="dijit/tree/ForestStoreModel" 
+					data-dojo-props='store:store_${'\${departid}'}, query:{type:"depart"},rootLabel:"部门层级", childrenAttrs:["children"]'></div>	
+				<div data-dojo-type="dijit/Tree" data-dojo-props='title:"通讯录",model:model_${'\${departid}'}, openOnClick:true'>
 					<script type="dojo/method" data-dojo-event="onClick" data-dojo-args="item">
-						
+						if(rosten.variable.mailTargetNode == undefined) return;
+						var username = store_${'\${departid}'}.getValue(item, "name");
+						var inputValue = rosten.variable.mailTargetNode.attr("value");
+						if(inputValue==""){
+							rosten.variable.mailTargetNode.attr("value",username);
+						}else{
+							rosten.variable.mailTargetNode.attr("value",inputValue + "," + username);
+						}
 					</script>
 					<script type="dojo/method" data-dojo-event="onOpen" data-dojo-args="item">
 						if( item && !item.root && item.children.length == 0){
-							mail_addDepart(item,store_${'\${id}'});
+							mail_addDepart(item,store_${'\${departid}'});
 						}
 					</script>
 				</div>	

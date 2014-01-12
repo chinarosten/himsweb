@@ -118,8 +118,9 @@ define(["dojo/_base/kernel",
         });
     };
     write_mail =function(){
-    	var randomUuid = general.stringTrim(RandomUuid(),"-");
-        var newMessage = new mail.NewMessage({id: randomUuid});
+        var randomUuid = RandomUuid();
+    	var departid = general.stringTrim(randomUuid,"-");
+        var newMessage = new mail.NewMessage({id: randomUuid,departid:departid});
         var newTab = newMessage.container;
         lang.mixin(newTab,
             {
@@ -136,6 +137,8 @@ define(["dojo/_base/kernel",
         });
         mail_tabs.addChild(newTab);
         mail_tabs.selectChild(newTab);
+        newMessage.to.focus();
+        rosten.variable.mailTargetNode = newMessage.to;
     };
     send_mail = function(e){
     	var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
@@ -205,8 +208,9 @@ define(["dojo/_base/kernel",
     		content = messageNode.content.innerHTML;
     	
     	//新增内容
-    	var randomUuid = general.stringTrim(RandomUuid(),"-");
-    	var _Message = new mail.NewMessage({id: randomUuid});
+    	var randomUuid = RandomUuid();
+        var departid = general.stringTrim(randomUuid,"-");
+    	var _Message = new mail.NewMessage({id: randomUuid,departid:departid});
     	var newTab = _Message.container;
     	
     	lang.mixin(newTab,
@@ -230,6 +234,9 @@ define(["dojo/_base/kernel",
     	
     	mail_tabs.addChild(newTab);
     	mail_tabs.selectChild(newTab);
+    	
+    	_Message.to.focus();
+        rosten.variable.mailTargetNode = _Message.to;
     };
     repeat_mail = function(e){
         //转发
@@ -244,8 +251,9 @@ define(["dojo/_base/kernel",
     		content = messageNode.content.innerHTML;
     	
     	//新增内容
-    	var randomUuid = general.stringTrim(RandomUuid(),"-");
-    	var _Message = new mail.NewMessage({id: randomUuid});
+    	var randomUuid = RandomUuid();
+        var departid = general.stringTrim(randomUuid,"-");
+    	var _Message = new mail.NewMessage({id: randomUuid,departid:departid});
     	var newTab = _Message.container;
     	
     	lang.mixin(newTab,
@@ -268,6 +276,9 @@ define(["dojo/_base/kernel",
     	
     	mail_tabs.addChild(newTab);
     	mail_tabs.selectChild(newTab);
+    	
+    	_Message.to.focus();
+        rosten.variable.mailTargetNode = _Message.to;
     };
     edit_mail = function(e){
     	var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
@@ -285,7 +296,8 @@ define(["dojo/_base/kernel",
     	messageNode.destroyRecursive();
     	
     	//新增内容
-    	var _Message = new mail.NewMessage({id: id});
+        var departid = general.stringTrim(id,"-");
+    	var _Message = new mail.NewMessage({id: id,departid:departid});
     	var newTab = _Message.container;
     	
     	lang.mixin(newTab,
@@ -308,6 +320,9 @@ define(["dojo/_base/kernel",
     	
     	mail_tabs.addChild(newTab);
     	mail_tabs.selectChild(newTab);
+    	
+    	_Message.to.focus();
+        rosten.variable.mailTargetNode = _Message.to;
     };
     formatSubject = function(value, rowIndex) {
 		return "<a href=\"javascript:onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
@@ -362,7 +377,7 @@ define(["dojo/_base/kernel",
 			node.appendChild(span);
 			new FisheyeLite(
 				{
-					properties: {fontSize: 1.5},
+					properties: {fontSize: 2},
 					easeIn: easing.linear,
 					durationIn: 100,
 					easeOut: easing.linear,
@@ -418,10 +433,14 @@ define(["dojo/_base/kernel",
 					onItem: function(node){
 						if(!node){
 							var parent = {parent: item,attribute: 'children'};
-							store.newItem({
-								id: data[i].id,  //节点ID
-								name: data[i].name  //节点名称
-							}, parent);//给父节点添加子节点	
+							var newItem = {id: data[i].id,name: data[i].name,}; 
+							if(data[i].parentId){
+							    newItem.parentId = data[i].parentId;
+							}
+							if(data[i].children){
+                                newItem.children = data[i].children;
+                            }
+							store.newItem(newItem, parent);//给父节点添加子节点	
 						}
 					}	
 				});
