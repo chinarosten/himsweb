@@ -23,7 +23,7 @@ define(["dojo/_base/declare",
 									'<span data-dojo-attach-point="arrowNodeInner" class="dijitArrowNodeInner"></span>' +
 								 '</span>' +
 						        '<span data-dojo-attach-point="titleNode" class="dijitTitlePaneTextNode"></span>' +
-								'<span data-dojo-attach-point="moreNode" class="rostenTitlePaneMoreNode" data-dojo-attach-event="onclick:_moreClick"> </span>' + 
+								'<span style="float:right;cursor:pointer;" data-dojo-attach-point="moreNode" data-dojo-attach-event="onclick:_moreClick"> </span>' + 
 						    '</div>' +
 						    '<div class="dijitTitlePaneContentOuter" data-dojo-attach-point="hideNode">' +
 						        '<div class="dijitReset" data-dojo-attach-point="wipeNode">' +
