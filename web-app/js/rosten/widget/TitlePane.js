@@ -51,7 +51,9 @@ define(["dojo/_base/declare",
                     "height": this.height
                 });
             }
-            this.moreNode.innerHTML = this.moreText;
+			if(this.moreNode!=""){
+				this.moreNode.innerHTML = this.moreText;
+			}
         },
     	changeWidth: function(){
             domStyle.set(this.domNode, {
@@ -64,7 +66,7 @@ define(["dojo/_base/declare",
             });
         },
 		_moreClick:function(){
-			if(this.moreUrl!=""){
+			if(this.moreUrl!="" && this.moreNode!=""){
 				window.open(this.moreUrl,"_blank");
 			}
 			
