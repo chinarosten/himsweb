@@ -1521,8 +1521,11 @@ class SystemController {
 			//管理员
 			modelList = Model.findAllWhere(company:user.company)
 			modelList << Model.findByModelName("个人办公")
+			
+			modelList.unique()
 		}else if("normal".equals(userType)){
 			//普通用户-----------------------------------------------
+			
 			//获取缺省允许登录模块
 			Model.findAllWhere(company:user.company).each{
 				def modelUser = ModelUser.findAllByModel(it)
@@ -1533,6 +1536,7 @@ class SystemController {
 					modelList << it
 				}
 			}
+			
 			//获取用户模块集合
 			ModelUser.findAllByUser(user).each{
 				modelList << it.model
@@ -1549,10 +1553,26 @@ class SystemController {
 					modelList << item.model
 				}
 			}
-			modelList << Model.findByModelName("个人办公")
 			modelList.unique()
 			
+			def _modelList =[]
+			_modelList << Model.findByModelName("个人办公")
+			
+			modelList.each{modelEntity->
+				//过滤无子菜单的model
+				def _resourceList = []
+				user.getAllRoles().each{
+					it.getAllPermissions().each{item->
+						_resourceList += item.getAllResourcesByModel(modelEntity)
+					}
+				}
+				if(_resourceList.size!=0){
+					_modelList << modelEntity
+				}
+			}
+			modelList = _modelList
 		}
+		
 		def logoset = LogoSet.findWhere(company:user.company)
 		if(logoset && modelList.contains(logoset.model)){
 			defaultModel = logoset.model

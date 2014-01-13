@@ -14,7 +14,7 @@ class GridUtil {
 	def items=[[]]
 
 	def buildLayoutJSON = {Object->
-		items[0]<<["name":"序号","width":"60px","colIdx":0,"field":"rowIndex"]
+		items[0]<<["name":"序号","width":"30px","colIdx":0,"field":"rowIndex"]
 		Field[] fields = Object.class.getDeclaredFields()
 		Method[] methods = Object.class.getDeclaredMethods()
 

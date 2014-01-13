@@ -40,6 +40,8 @@ class MailController {
 			layout.each {item ->
 				if(item.field.equals("subject")){
 					item.formatter = "formatSubject"
+				}else if("emailStatus".equals(item.field)){
+					item.formatter = "formatEmailStatus"
 				}
 			}
 			json["gridHeader"] = layout
@@ -87,7 +89,11 @@ class MailController {
 					sMap["subject"] = item.subject
 					sMap["sent"] = item.sent
 					sMap["content"] = item.content
-			
+					
+					if(item.emailStatus==0){
+						//未读
+						sMap["emailStatus"] = "images/rosten/actionbar/mail_wd.png"
+					}
 					_json.items+=sMap
 				}
 			}
@@ -139,6 +145,25 @@ class MailController {
 		}
 		render json as JSON
 	}
+	def mail_changeEmailStatus = {
+		//设置邮件标记为已读状态
+		def json =[:]
+		def email = EmailBox.get(params.id)
+		if(email && email.emailStatus!=1){
+			email.emailStatus = 1
+			if(email.save(flush:true)){
+				json["result"] = "true"
+			}else{
+				email.errors.each{
+					println it
+				}
+				json["result"] = "false"
+			}
+		}else{
+			json["result"] = "true"
+		}
+		render json as JSON
+	} 
 	def mail_save = {
 		def json =[:]
 		def user = (User) springSecurityService.getCurrentUser()

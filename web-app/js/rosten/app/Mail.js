@@ -83,6 +83,7 @@ define(["dojo/_base/kernel",
             if (data.result == "true" || data.result == true) {
                 rosten.alert("成功移除到已删除文件夹!");
                 mail_grid.refresh();
+                registry.byId("mail_message").attr("content","");
             } else {
                 rosten.alert("删除失败!");
             }
@@ -112,6 +113,7 @@ define(["dojo/_base/kernel",
             if (data.result == "true" || data.result == true) {
                 rosten.alert("成功删除!");
                 mail_grid.refresh();
+                registry.byId("mail_message").attr("content","");
             } else {
                 rosten.alert("删除失败!");
             }
@@ -189,6 +191,7 @@ define(["dojo/_base/kernel",
     cancel_mail_close = function(messageNode){
     	mail_tabs.selectChild(registry.byId("mail_inbox"));
     	mail_grid.refresh();
+    	registry.byId("mail_message").attr("content","");
     	messageNode.destroyRecursive();
     	return true;
     };
@@ -327,6 +330,13 @@ define(["dojo/_base/kernel",
     formatSubject = function(value, rowIndex) {
 		return "<a href=\"javascript:onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
 	};
+	formatEmailStatus = function(value){
+		if(value && value!=""){
+			return "<img src=\"" + rosten.webPath + "/" + value + "\" />";
+		}else{
+			return "";
+		}
+	};
 	onMessageOpen = function(rowIndex){
         var item = mail_grid.getGrid().getItem(rowIndex);
         var store = mail_grid.getStore();
@@ -362,7 +372,9 @@ define(["dojo/_base/kernel",
         _message.subject.innerHTML = subject;
         _message.sent.innerHTML = sent;
         _message.content.innerHTML = text;
-            
+        
+        //标记邮件为已读状态
+        rosten.read(rosten.webPath + "/mail/mail_changeEmailStatus", {id:id});
     };
 	function genIndex(){
 		// summary:
