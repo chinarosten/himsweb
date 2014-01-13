@@ -8,74 +8,67 @@ define(["dojo/_base/declare",
 		function(declare,TitlePane,domStyle) {
     return declare("rosten.widget.TitlePane",TitlePane, {
     	
-    	// click tools ,so cancle the toggle
-        _canToggle: true,
+        moreText:"more",
+		moreUrl:"",
         
         width: "",
         height: "",
         marginBottom: "6px",
 								
 		templateString: '<div class="dijitTitlePane">' +
-        '   <div style="vertical-align:middle" class="dijitTitlePaneTitle" data-dojo-attach-point="titleBarNode,focusNode" dojoAttachEvent="onclick:toggle,onkeypress: _onTitleKey" tabindex="0" waiRole="button" >' +
-        '      <div data-dojo-attach-point="arrowNode" class="dijitInline dijitArrowNode  dijitTitlePaneTitleFocus" style="float:right">' +
-        '         <span data-dojo-attach-point="arrowNodeInner" class="dijitArrowNodeInner"></span>' +
-        '      </div>' +
-        '      <div data-dojo-attach-point="titleNode" class="dijitTitlePaneTextNode  dijitTitlePaneTitleFocus"></div>' +
-        '   </div>' +
-        '   <div class="dijitTitlePaneContentOuter" data-dojo-attach-point="hideNode">' +
-        '      <div class="dijitReset" dojoAttachPoint="wipeNode">' +
-        '        <div class="dijitTitlePaneContentInner" data-dojo-attach-point="containerNode" waiRole="region" tabindex="-1"></div>' +
-        '      </div>' +
-        '   </div>' +
-        '</div>',
+						'    <div class="dijitTitlePaneTitle" data-dojo-attach-point="titleBarNode" style="cursor: default;">' +
+						        '<span dojoAttachEvent="onclick:toggle,onkeypress: _onTitleKey" tabindex="0"' +
+						                'role="button" data-dojo-attach-point="focusNode,arrowNode" style="cursor: pointer;">' +
+									'<img src="${_blankGif}" alt="" class="dijitArrowNode" role="presentation"/>' +
+									'<span data-dojo-attach-point="arrowNodeInner" class="dijitArrowNodeInner"></span>' +
+								 '</span>' +
+						        '<span data-dojo-attach-point="titleNode" class="dijitTitlePaneTextNode"></span>' +
+								'<span data-dojo-attach-point="moreNode" class="rostenTitlePaneMoreNode" data-dojo-attach-event="onclick:_moreClick"> </span>' + 
+						    '</div>' +
+						    '<div class="dijitTitlePaneContentOuter" data-dojo-attach-point="hideNode">' +
+						        '<div class="dijitReset" data-dojo-attach-point="wipeNode">' +
+						            '<div class="dijitTitlePaneContentInner" data-dojo-attach-point="containerNode" role="region" tabindex="-1">' +
+						            '</div>' +
+						        '</div>' +
+						    '</div>' +
+						'</div>',
     	
     	postCreate: function(){
             rosten.widget.TitlePane.superclass.postCreate.apply(this, arguments);
             domStyle.set(this.domNode, {
                 "marginBottom": this.marginBottom
             });
-            if (this.width != "") {
+			if(!this.toggleable){
+				domStyle.set(this.arrowNode,"display","none");
+			}
+			if (this.width != "") {
                 domStyle.set(this.domNode, {
                     "width": this.width
                 });
             }
-            if (!this._canToggle) {
-                domStyle.set(this.arrowNode, {
-                    "display": "none"
-                });
-            }
-            if (this.height != "") {
+			if (this.height != "") {
                 domStyle.set(this.containerNode, {
                     "height": this.height
                 });
             }
+            this.moreNode.innerHTML = this.moreText;
         },
-    	toggle: function(){
-            if (!this._canToggle) {
-                console.log("can not toggle......");
-                return;
-            }
-            else {
-                rosten.widget.TitlePane.superclass.toggle.apply(this, arguments);
-            }
-        },
-        cancelToggle: function(){
-            this._canToggle = false;
-            domStyle.set(this.arrowNode, {
-                "display": "none"
-            });
-        },
-    	doToggle: function(){
-            this._canToggle = true;
-            domStyle.set(this.arrowNode, {
-                "display": ""
-            });
-        },
-        changeWidth: function(){
+    	changeWidth: function(){
             domStyle.set(this.domNode, {
                 "width": this.width
             });
-        }
+        },
+		changeHeight: function(){
+            domStyle.set(this.containerNode, {
+                "height": this.height
+            });
+        },
+		_moreClick:function(){
+			if(this.moreUrl!=""){
+				window.open(this.moreUrl,"_blank");
+			}
+			
+		}
     	
     });
 });
