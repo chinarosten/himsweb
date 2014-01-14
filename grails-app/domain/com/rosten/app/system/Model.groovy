@@ -19,7 +19,7 @@ class Model {
 	String description
 	
 	//显示顺序
-	int serialNo
+	Integer serialNo
 	
 	//创建日期
 	Date createdDate = new Date()
