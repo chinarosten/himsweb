@@ -1583,7 +1583,7 @@ class SystemController {
 		if(modelList && modelList.size()>0){
 			modelList.eachWithIndex{item,i->
 				def _index
-				if(item.serialNo){
+				if(item.serialNo!=null){
 					_index = item.serialNo
 				}else{
 					_index = i
