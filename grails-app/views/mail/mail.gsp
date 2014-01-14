@@ -145,7 +145,11 @@
 					data-dojo-props='store:store_${'\${departid}'}, query:{type:"depart"},rootLabel:"部门层级", childrenAttrs:["children"]'></div>	
 				<div data-dojo-type="dijit/Tree" data-dojo-props='title:"通讯录",model:model_${'\${departid}'}, openOnClick:true'>
 					<script type="dojo/method" data-dojo-event="onClick" data-dojo-args="item">
+						if(!item || item.root)return;
 						if(rosten.variable.mailTargetNode == undefined) return;
+						var type = store_${'\${departid}'}.getValue(item, "type");
+						if(type=="depart") return ;
+						
 						var username = store_${'\${departid}'}.getValue(item, "name");
 						var inputValue = rosten.variable.mailTargetNode.attr("value");
 						if(inputValue==""){
