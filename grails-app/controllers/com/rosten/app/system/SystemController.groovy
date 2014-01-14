@@ -1513,15 +1513,17 @@ class SystemController {
 		
 		def modelList=[],defaultModel,userType
 		
+		defaultModel = Model.findByModelName("首页");
+		def personModel = Model.findByModelName("个人办公")
 		userType = user.getUserType()
 		if("super".equals(userType)){
 			//超级管理员
 			modelList = Model.findAllWhere(company:null)
 		}else if("admin".equals(userType)){
 			//管理员
-			modelList = Model.findAllWhere(company:user.company)
-			modelList << Model.findByModelName("个人办公")
-			
+			modelList << defaultModel
+			modelList << personModel
+			modelList += Model.findAllWhere(company:user.company)
 			modelList.unique()
 		}else if("normal".equals(userType)){
 			//普通用户-----------------------------------------------
@@ -1556,7 +1558,8 @@ class SystemController {
 			modelList.unique()
 			
 			def _modelList =[]
-			_modelList << Model.findByModelName("个人办公")
+			_modelList << defaultModel
+			_modelList << personModel
 			
 			modelList.each{modelEntity->
 				//过滤无子菜单的model
@@ -1578,8 +1581,14 @@ class SystemController {
 			defaultModel = logoset.model
 		}
 		if(modelList && modelList.size()>0){
-			modelList.each{
-				model[it.id] = it.modelName + "&" + it.modelUrl
+			modelList.eachWithIndex{item,i->
+				def _index
+				if(item.serialNo){
+					_index = item.serialNo
+				}else{
+					_index = i
+				}
+				model[item.id + "&" + _index] = item.modelName + "&" + item.modelUrl
 			}
 			if(defaultModel){
 				model["default"] = defaultModel.id

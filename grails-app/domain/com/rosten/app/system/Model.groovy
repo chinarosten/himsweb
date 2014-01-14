@@ -18,6 +18,9 @@ class Model {
 	@GridColumn(name="描述")
 	String description
 	
+	//显示顺序
+	int serialNo
+	
 	//创建日期
 	Date createdDate = new Date()
 	
@@ -31,6 +34,7 @@ class Model {
 		company nullable:true,blank:true
 		modelUrl nullable:true,blank:true
 		description nullable:true,blank:true
+		serialNo nullable:true,blank:true
     }
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']

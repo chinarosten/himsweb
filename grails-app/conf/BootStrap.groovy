@@ -20,7 +20,7 @@ class BootStrap {
 		}
 		
 		if(Model.findByCompany(null)==null){
-			def model = new Model(modelName:"平台管理",description:"超级管理员系统平台配置文件管理模块")
+			def model = new Model(modelName:"平台管理",description:"超级管理员系统平台配置文件管理模块",serialNo:3)
 			model.modelUrl = "/himsweb/system/navigation"
 			
 			def resource = new Resource()
@@ -61,7 +61,11 @@ class BootStrap {
 			
 			model.save(failOnError: true)
 			
-			model = new Model(modelName:"个人办公",description:"个人办公")
+			model = new Model(modelName:"首页",description:"首页",serialNo:1)
+			model.modelUrl = "js:home"
+			model.save(fialOnError:true)
+			
+			model = new Model(modelName:"个人办公",description:"个人办公",serialNo:2)
 			model.modelUrl = "/himsweb/mail/navigation@tree"
 			model.save(fialOnError:true)
 		}
