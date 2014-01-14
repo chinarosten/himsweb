@@ -67,6 +67,10 @@ define(["dojo/_base/kernel"
         rosten.replaceRostenTheme(rostencss);
 
         connect.subscribe("loadjsfile", null, function(oString) {
+        	domStyle.set(registry.byId("home").domNode,"display","none");
+    		domStyle.set(registry.byId("modelMain").domNode,"display","");
+    		registry.byId("modelMain").resize();
+    		
             /*
              * 用于加载对应的js文件,此方法在后续开发过程中需要修改
              */
@@ -79,9 +83,6 @@ define(["dojo/_base/kernel"
                 require(["./ConfigManage"]);
             } else if (oString == "个人办公") {
             	addMailNavigation();
-//            	require(["rosten/app/Mail"],function(){
-//            		addMailNavigation();
-//            	});
             } else if (oString == "员工管理") {
             	deleteMailNavigation();
                 require(["./SystemManage"]);
@@ -94,16 +95,32 @@ define(["dojo/_base/kernel"
             }
         });
 		
+        connect.subscribe("loadspecmenu", null, function(oString) {
+        	switch(oString){
+        	case "home":
+        		domStyle.set(registry.byId("home").domNode,"display","");
+        		domStyle.set(registry.byId("modelMain").domNode,"display","none");
+        		registry.byId("home").resize();
+        		rosten.kernel.navigationMenu = "";
+        		break;
+        	case "sms":
+        		
+        		break;
+			case "question":
+        		
+        		break;
+        	}
+        });
+        
 		rosten.kernel = new rostenKernel(naviJson);
+			rosten.kernel.addUserInfo(data);
         if (rosten.kernel.getMenuName() == "") {
-            rosten.alert("获取后台数据出错！");
             return;
         } else {
-            rosten.kernel.addUserInfo(data);
             returnToMain();
-            //增加时获取后台session功能
-            //setInterval("session_checkTimeOut()",60000*120 + 2000);
         }
+        //增加时获取后台session功能
+        //setInterval("session_checkTimeOut()",60000*120 + 2000);
     };
     addMailNavigation = function(){
     	if(registry.byId("mail_quick")==undefined){

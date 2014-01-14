@@ -16,7 +16,7 @@ define(["dojo/_base/declare",
         marginBottom: "6px",
 								
 		templateString: '<div class="dijitTitlePane">' +
-						'    <div class="dijitTitlePaneTitle" data-dojo-attach-point="titleBarNode" style="cursor: default;">' +
+						'    <div class="dijitTitlePaneTitle" data-dojo-attach-point="titleBarNode" style="cursor: default;padding-top:5px">' +
 						        '<span dojoAttachEvent="onclick:toggle,onkeypress: _onTitleKey" tabindex="0"' +
 						                'role="button" data-dojo-attach-point="focusNode,arrowNode" style="cursor: pointer;">' +
 									'<img src="${_blankGif}" alt="" class="dijitArrowNode" role="presentation"/>' +

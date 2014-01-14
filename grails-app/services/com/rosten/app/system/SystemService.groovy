@@ -298,7 +298,14 @@ class SystemService {
 	}
 	def initData_first ={path,company->
 		try{
+			
 			def model = new Model(company:company)
+			model.modelName = "首页"
+			model.modelUrl = "js:home"
+			model.description ="首页模块"
+			model.save(flush:true)
+			
+			model = new Model(company:company)
 			model.modelName = "系统管理"
 			model.modelUrl = path + "/system/navigation"
 			model.description ="系统配置文件管理模块"
