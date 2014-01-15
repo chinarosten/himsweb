@@ -20,6 +20,59 @@
 			/* the most recently selected letter gets this class too */
 			color: red;
 		}
+		.dojoxUploaderFileList{
+			border:1px solid #ccc;
+			min-height:50px;
+		}
+		.dojoxUploaderFileListTable{
+			width:100%;
+			border-collapse:collapse;
+			margin-top:5px;
+		}
+		.dojoxUploaderFileListHeader th{
+			background-color:#eee;
+			padding:3px;
+		}
+		.dojoxUploaderFileListRow{
+		
+		}
+		.dojoxUploaderIndex{
+			width:20px;
+		}
+		.dojoxUploaderIcon{
+			width:50px;
+		}
+		.dojoxUploaderFileName{
+		
+		}
+		.dojoxUploaderSize{
+			width:70px;
+		}
+		.dojoxUploaderFileListContent{
+			width:100%;
+		}
+		.dojoxUploaderFileListProgress{
+			border:1px solid #666;
+			height:15px;
+			position:relative;
+			background:#fff;
+			overflow:hidden;
+		}
+		.dojoxUploaderFileListPercentText{
+			position:absolute;
+			right:3px;
+			top:3px;
+			font-size:10px;
+			text-align:right;
+		}
+		.dojoxUploaderFileListProgressBar{
+			position:absolute;
+			top:0px;
+			left:0px;
+			height:15px;
+			width:0%;
+			background:#bfe1fd;
+		}
     </style>
 	<script type="text/javascript">
 		require(["dojo/parser",
@@ -40,6 +93,11 @@
 				"dijit/Dialog",
 				"dijit/ProgressBar",
 				"dijit/form/ValidationTextBox",
+				"dijit/form/DropDownButton",
+				'dojox/form/Uploader',
+				'dojox/form/uploader/FileList',
+				"dijit/form/Form",
+				"dijit/TooltipDialog",
 				"rosten/app/Mail"
 		     	],
 			function(parser,kernel,ActionBar){
@@ -103,14 +161,14 @@
 						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'newMessage')}"'>
 					</div>
 				</div>
-				<div style="height:60px; overflow: visible; z-index: 10; color:#666;margin-top:8px">
+				<div style="height:90px; overflow: visible; z-index: 10; color:#666;margin-top:8px">
 					<table width="100%">
 						<tr style="padding-top:5px;">
 							<td style="width:100px; text-align:right;"><label>收件人:</label></td>
 							<td>
 								<div data-dojo-type="dijit/form/ComboBox" 
 									data-dojo-attach-point="to" hasDownArrow="false" store="contactStore" searchAttr="name"
-									style="width: 40em;">
+									style="width: 40em;margin-left:2px">
 									<script type="dojo/method" data-dojo-event="onClick" data-dojo-args="event">
 										rosten.variable.mailTargetNode = this;
 									</script>
@@ -121,11 +179,37 @@
 							<td style="text-align:right;"><label>主题:</label></td>
 							<td>
 								<select data-dojo-type="dijit/form/ComboBox" 
-									data-dojo-attach-point="subject" hasDownArrow="false" style="width: 40em;">
+									data-dojo-attach-point="subject" hasDownArrow="false" style="width: 40em;margin-left:2px">
 									<option></option>
 									<option>会议</option>
 									<option>报告</option>
 								</select>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align:right;"><label>附件:</label></td>
+							<td>
+								<div data-dojo-type="dijit/form/DropDownButton" data-dojo-props="dropDownPosition: ['below-centered', 'above-centered']">
+									<span>添加附件</span>
+									<div data-dojo-type="dijit/TooltipDialog" id="fileUpload_dialog_${'\${departid}'}" data-dojo-props="title: 'fileUpload'" style="width:380px">
+											<form data-dojo-type="dijit/form/Form" method="post" 
+												action="UploadFile.json" id="fileUpload_form_${'\${departid}'}" enctype="multipart/form-data">
+												
+												<div data-dojo-type="dojox/form/Uploader"  multiple="true" type="file"
+													id="fileUploader_${'\${departid}'}"  data-dojo-props="name:'uploadedfile'">添加</div>
+												
+												<div id="fileUpload_fileList_${'\${departid}'}" data-dojo-type="dojox/form/uploader/FileList" 
+													data-dojo-props='uploaderId:"fileUploader_${'\${departid}'}",headerIndex:"#",headerType:"类型",headerFilename:"文件名",headerFilesize:"大小"'></div>
+												
+												<div class="dijitDialogPaneActionBar">
+													<button data-dojo-type="dijit/form/Button" type="reset">重置</button>
+													<button data-dojo-type="dijit/form/Button" type="submit">上传</button>
+													<button data-dojo-type="dijit/form/Button" type="button">取消</button>
+												</div>
+											</form>
+										
+									</div>
+								</div>
 							</td>
 						</tr>
 					</table>
@@ -225,6 +309,6 @@
 			</div>
 		</div>
 	</div>
-		
+	
 </body>
 </html>
