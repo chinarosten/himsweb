@@ -1581,14 +1581,19 @@ class SystemController {
 			defaultModel = logoset.model
 		}
 		if(modelList && modelList.size()>0){
+			def _indexList =[]
+			def _index = 4
 			modelList.eachWithIndex{item,i->
-				def _index
+				def indexValue
 				if(item.serialNo!=null){
-					_index = item.serialNo
+					indexValue = item.serialNo
 				}else{
-					_index = i
+					indexValue = getIndexValue(_index,_indexList)
+					_indexList << indexValue
+					_index = indexValue + 1
 				}
-				model[item.id + "&" + _index] = item.modelName + "&" + item.modelUrl
+				model[item.id + "&" + indexValue] = item.modelName + "&" + item.modelUrl
+				
 			}
 			if(defaultModel){
 				model["default"] = defaultModel.id
@@ -1597,6 +1602,14 @@ class SystemController {
 			}
 		}
 		render model as JSON
+	}
+	private def getIndexValue = {index,arrayList->
+		if(arrayList.contains(index)){
+			index +=1 
+			getIndexValue(index,arrayList)
+		}else{
+			return index
+		}
 	}
 	def logoSet = {
 		def model = [:]

@@ -83,15 +83,15 @@ define(["dojo/_base/kernel"
                 require(["./ConfigManage"]);
             } else if (oString == "个人办公") {
             	addMailNavigation();
-            } else if (oString == "员工管理") {
+            } else if (oString == "公告栏") {
             	deleteMailNavigation();
-                require(["./SystemManage"]);
-            } else if (oString == "业绩管理") {
+//                require(["./SystemManage"]);
+            } else if (oString == "发文管理") {
             	deleteMailNavigation();
-                require(["./StaticManage"]);
-            } else if (oString == "库存管理") {
+//                require(["./StaticManage"]);
+            } else if (oString == "收文管理") {
             	deleteMailNavigation();
-                require(["./StockManage"]);
+//                require(["./StockManage"]);
             }
         });
 		
