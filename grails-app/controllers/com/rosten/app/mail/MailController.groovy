@@ -20,10 +20,8 @@ class MailController {
 		def filename = attachmentInstance.name
 		response.setHeader("Content-disposition", "attachment; filename=" + filename)
 		response.contentType = ""
-
-		SystemUtil sysUtil = new SystemUtil()
-		def webRootDir = sysUtil.getUploadPath()
-		def filepath = new File(webRootDir, attachmentInstance.realName)
+		
+		def filepath = new File(attachmentInstance.url, attachmentInstance.realName)
 		def out = response.outputStream
 		def inputStream = new FileInputStream(filepath)
 		byte[] buffer = new byte[1024]
@@ -65,11 +63,12 @@ class MailController {
 			}
 		}
 		String name = f.getOriginalFilename()//获得文件原始的名称
-		f.transferTo(new File(uploadPath,name))
+		def realName = getRandName(name)
+		f.transferTo(new File(uploadPath,realName))
 		
 		def attachment = new Attachment()
 		attachment.name = name
-		attachment.realName = getRandName(name)
+		attachment.realName = realName
 		attachment.type = "mail"
 		attachment.url = uploadPath
 		attachment.size = f.size
@@ -78,6 +77,7 @@ class MailController {
 		
 		json["result"] = "true"
 		json["fileId"] = attachment.id
+		json["fileName"] = name
 		render json as JSON
 	}
 	def navigation ={

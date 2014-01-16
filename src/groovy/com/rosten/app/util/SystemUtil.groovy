@@ -6,15 +6,16 @@ class SystemUtil {
 	ConfigObject configObject = ConfigurationHolder.getConfig()
 	
 	def getUploadPath={
-		def userDir
+		def userPath
 		if(configObject.getProperty("rostenFileConfig")){
 			def webRootDir =configObject.getProperty("rostenFileConfig").fileUpload;
-			userDir = new File(webRootDir, "/upload");
+			userPath = webRootDir +"/upload";
 		}else{
-			userDir = new File(webRootDir, "rostenFileUpload/upload");
+			userPath = "rostenFileUpload/upload"
 		}
+		def userDir = new File(userPath);
 		userDir.mkdirs()
-		return userDir
+		return userPath
 	}
 	
 	def getUploadSize ={

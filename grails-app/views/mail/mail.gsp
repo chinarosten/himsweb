@@ -216,9 +216,17 @@
 													id="fileUploader_${'\${departid}'}"  data-dojo-props="name:'uploadedfile'">添加
 													<script type="dojo/method" data-dojo-event="onComplete" data-dojo-args="dataArray">
 														if(dataArray.result=="true"){
+															dijit.byId("fileUpload_dialog_${'\${departid}'}").reset();
 															dijit.byId("fileUpload_dialog_${'\${departid}'}").onCancel();
-															dojo.byId("fileShow_${'\${departid}'}").innerHTML = dataArray.fileId;
-														}
+
+															var a = document.createElement("a");
+															a.setAttribute("href", rosten.webPath + "/mail/downloadFile/" + dataArray.fileId);
+															a.setAttribute("style","margin-right:20px");
+															a.innerHTML = dataArray.fileName;
+															dojo.byId("fileShow_${'\${departid}'}").appendChild(a);
+														}else if(dataArray.result=="big"){
+															alert("上传文件过大，请重新上传！");
+														}else{rosten.alert("上传失败");}
 													</script>
 												</div>
 												
