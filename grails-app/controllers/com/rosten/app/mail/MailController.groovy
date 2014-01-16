@@ -1,6 +1,7 @@
 package com.rosten.app.mail
 
 import grails.converters.JSON
+import java.text.SimpleDateFormat
 
 import com.rosten.app.util.GB2Alpha;
 import com.rosten.app.util.GridUtil
@@ -14,16 +15,39 @@ import com.rosten.app.system.Attachment
 class MailController {
 	def springSecurityService
 	
+	def downloadFile = {
+		def attachmentInstance =  Attachment.get(params.id)
+		def filename = attachmentInstance.name
+		response.setHeader("Content-disposition", "attachment; filename=" + filename)
+		response.contentType = ""
+
+		SystemUtil sysUtil = new SystemUtil()
+		def webRootDir = sysUtil.getUploadPath()
+		def filepath = new File(webRootDir, attachmentInstance.realName)
+		def out = response.outputStream
+		def inputStream = new FileInputStream(filepath)
+		byte[] buffer = new byte[1024]
+		int i = -1
+		while ((i = inputStream.read(buffer)) != -1) {
+			out.write(buffer, 0, i)
+		}
+		out.flush()
+		out.close()
+		inputStream.close()
+	}
+	private def getRandName ={name->
+		def sdf = new SimpleDateFormat("yyyyMMddHHmmssS")//格式化时间输出
+		def rname = sdf.format(new Date())//取得当前时间，Date()是java.util包里的，这作为真实名称
+		int i = name.lastIndexOf(".")//原名称里倒数第一个"."在哪里
+		def ext = name.substring(i+1)//取得后缀，及"."后面的字符
+		return rname+"."+ext//拼凑而成
+	}
 	def uploadFile = {
 		def json=[:]
 		SystemUtil sysUtil = new SystemUtil()
 		
 		def uploadPath = sysUtil.getUploadPath()
-		println uploadPath
-		
 		def f = request.getFile("uploadedfile")
-		println f
-		
 		if (f.empty) {
 			json["result"] = "blank"
 			render json as JSON
@@ -41,18 +65,19 @@ class MailController {
 			}
 		}
 		String name = f.getOriginalFilename()//获得文件原始的名称
-		String absolutePath = uploadPath + "/" + name
-		f.transferTo(new File(absolutePath))
+		f.transferTo(new File(uploadPath,name))
 		
 		def attachment = new Attachment()
 		attachment.name = name
+		attachment.realName = getRandName(name)
 		attachment.type = "mail"
-		attachment.url = absolutePath
+		attachment.url = uploadPath
 		attachment.size = f.size
 		attachment.upUser = (User) springSecurityService.getCurrentUser()
 		attachment.save(flush:true)
 		
 		json["result"] = "true"
+		json["fileId"] = attachment.id
 		render json as JSON
 	}
 	def navigation ={

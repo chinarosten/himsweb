@@ -14,6 +14,9 @@ class Attachment {
 	//附件存放地址
 	String url
 	
+	//附件存放的实际名称
+	String realName
+	
 	//关联数据
 	String beUseId
 	

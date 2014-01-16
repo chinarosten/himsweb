@@ -212,8 +212,15 @@
 											<form data-dojo-type="dijit/form/Form" method="post" 
 												action="${createLink(controller:'mail',action:'uploadFile')}" id="fileUpload_form_${'\${departid}'}" enctype="multipart/form-data">
 												
-												<div data-dojo-type="dojox/form/Uploader"  multiple="true" type="file"
-													id="fileUploader_${'\${departid}'}"  data-dojo-props="name:'uploadedfile'">添加</div>
+												<div data-dojo-type="dojox/form/Uploader"  type="file" 
+													id="fileUploader_${'\${departid}'}"  data-dojo-props="name:'uploadedfile'">添加
+													<script type="dojo/method" data-dojo-event="onComplete" data-dojo-args="dataArray">
+														if(dataArray.result=="true"){
+															dijit.byId("fileUpload_dialog_${'\${departid}'}").onCancel();
+															dojo.byId("fileShow_${'\${departid}'}").innerHTML = dataArray.fileId;
+														}
+													</script>
+												</div>
 												
 												<div id="fileUpload_fileList_${'\${departid}'}" data-dojo-type="dojox/form/uploader/FileList" 
 													data-dojo-props='uploaderId:"fileUploader_${'\${departid}'}",headerIndex:"#",headerType:"类型",headerFilename:"文件名",headerFilesize:"大小"'></div>
@@ -231,7 +238,13 @@
 										
 									</div>
 								</div>
+								
 							</td>
+						</tr>
+						<tr><td></td>
+						<td>
+							<div id="fileShow_${'\${departid}'}" style="margin-top:5px"></div>
+						</td>
 						</tr>
 					</table>
 					<hr noshade size="1">
