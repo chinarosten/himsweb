@@ -18,7 +18,8 @@ class MailController {
 	def downloadFile = {
 		def attachmentInstance =  Attachment.get(params.id)
 		def filename = attachmentInstance.name
-		response.setHeader("Content-disposition", "attachment; filename=" + filename)
+		
+		response.setHeader("Content-disposition", "attachment; filename=" + new String(filename.getBytes("GB2312"), "ISO_8859_1"))
 		response.contentType = ""
 		
 		def filepath = new File(attachmentInstance.url, attachmentInstance.realName)
