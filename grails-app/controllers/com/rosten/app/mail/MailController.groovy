@@ -8,10 +8,53 @@ import com.rosten.app.util.Util
 import com.rosten.app.system.User
 import com.rosten.app.system.Depart
 import com.rosten.app.util.GB2Alpha
+import com.rosten.app.util.SystemUtil
+import com.rosten.app.system.Attachment
 
 class MailController {
 	def springSecurityService
 	
+	def uploadFile = {
+		def json=[:]
+		SystemUtil sysUtil = new SystemUtil()
+		
+		def uploadPath = sysUtil.getUploadPath()
+		println uploadPath
+		
+		def f = request.getFile("uploadedfile")
+		println f
+		
+		if (f.empty) {
+			json["result"] = "blank"
+			render json as JSON
+			return
+		}
+		
+		def uploadSize = sysUtil.getUploadSize()
+		if(uploadSize!=null){
+			//控制附件上传大小
+			def maxSize = uploadSize * 1024 * 1024
+			if(f.size>=maxSize){
+				json["result"] = "big"
+				render json as JSON
+				return
+			}
+		}
+		String name = f.getOriginalFilename()//获得文件原始的名称
+		String absolutePath = uploadPath + "/" + name
+		f.transferTo(new File(absolutePath))
+		
+		def attachment = new Attachment()
+		attachment.name = name
+		attachment.type = "mail"
+		attachment.url = absolutePath
+		attachment.size = f.size
+		attachment.upUser = (User) springSecurityService.getCurrentUser()
+		attachment.save(flush:true)
+		
+		json["result"] = "true"
+		render json as JSON
+	}
 	def navigation ={
 		def json = [identifier:'id',label:'name',items:[]]
 

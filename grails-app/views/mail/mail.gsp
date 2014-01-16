@@ -73,6 +73,23 @@
 			width:0%;
 			background:#bfe1fd;
 		}
+		.rosten .tooltipLink .dijitButtonNode,
+		.rosten .tooltipLink .dijitButtonNode .dijitDropDownButtonHover,
+		.rosten .buttonLink .dijitButtonNode,
+		.rosten .buttonLink .dijitButtonHover .dijitButtonNode {
+			background: none !important;
+			border:none;
+		}
+		.rosten .tooltipLink .dijitArrowButtonInner {
+			display:none;
+		}
+		.rosten .tooltipLink button,
+		.rosten .tooltipLink button .dijitButtonText,
+		.rosten .buttonLink button .dijitButtonText {
+			text-decoration:underline !important;
+			color:blue;
+			display:inline;
+		}
     </style>
 	<script type="text/javascript">
 		require(["dojo/parser",
@@ -161,7 +178,7 @@
 						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'newMessage')}"'>
 					</div>
 				</div>
-				<div style="height:90px; overflow: visible; z-index: 10; color:#666;margin-top:8px">
+				<div style="overflow: visible; z-index: 10; color:#666;margin-top:8px">
 					<table width="100%">
 						<tr style="padding-top:5px;">
 							<td style="width:100px; text-align:right;"><label>收件人:</label></td>
@@ -189,11 +206,11 @@
 						<tr>
 							<td style="text-align:right;"><label>附件:</label></td>
 							<td>
-								<div data-dojo-type="dijit/form/DropDownButton" data-dojo-props="dropDownPosition: ['below-centered', 'above-centered']">
+								<div data-dojo-type="dijit/form/DropDownButton" data-dojo-props="dropDownPosition: ['below-centered', 'above-centered'],class:'tooltipLink'">
 									<span>添加附件</span>
 									<div data-dojo-type="dijit/TooltipDialog" id="fileUpload_dialog_${'\${departid}'}" data-dojo-props="title: 'fileUpload'" style="width:380px">
 											<form data-dojo-type="dijit/form/Form" method="post" 
-												action="UploadFile.json" id="fileUpload_form_${'\${departid}'}" enctype="multipart/form-data">
+												action="${createLink(controller:'mail',action:'uploadFile')}" id="fileUpload_form_${'\${departid}'}" enctype="multipart/form-data">
 												
 												<div data-dojo-type="dojox/form/Uploader"  multiple="true" type="file"
 													id="fileUploader_${'\${departid}'}"  data-dojo-props="name:'uploadedfile'">添加</div>
@@ -204,7 +221,11 @@
 												<div class="dijitDialogPaneActionBar">
 													<button data-dojo-type="dijit/form/Button" type="reset">重置</button>
 													<button data-dojo-type="dijit/form/Button" type="submit">上传</button>
-													<button data-dojo-type="dijit/form/Button" type="button">取消</button>
+													<button data-dojo-type="dijit/form/Button" type="button">取消
+														<script type="dojo/method" data-dojo-event="onClick">
+															dijit.byId("fileUpload_dialog_${'\${departid}'}").onCancel();
+														</script>
+													</button>
 												</div>
 											</form>
 										
@@ -272,7 +293,7 @@
 						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'showMessage')}/${'\${mailnavigation}'}" '>
 					</div>
 				</div>
-				<div style="height:80px; overflow: visible; z-index: 10; color:#666;margin-top:8px">
+				<div style="overflow: visible; z-index: 10; color:#666;margin-top:8px">
 					<table width="100%">
 						<tr style="padding-top:5px;">
 							<td style="text-align:right;"><label>主题:</label></td>
