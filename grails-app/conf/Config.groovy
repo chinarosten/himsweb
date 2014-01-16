@@ -68,7 +68,10 @@ environments {
         // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
-
+rostenFileConfig {
+	fileUpload = "rostenFileUpload"
+	fileSize = 10 //单位为M
+}
 // log4j configuration
 log4j = {
     // Example of changing the log pattern for the default console appender:
