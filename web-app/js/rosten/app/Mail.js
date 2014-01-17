@@ -353,7 +353,16 @@ define(["dojo/_base/kernel",
 	};
 	formatEmailStatus = function(value){
 		if(value && value!=""){
-			return "<img src=\"" + rosten.webPath + "/" + value + "\" />";
+			var imgs = general.splitString(value,",");
+			var _values=""
+			for(var i = 0; i < imgs.length; i ++){
+				if(_values==""){
+					_values = "<img src=\"" + rosten.webPath + "/" + imgs[i] + "\" />";
+				}else{
+					_values += "<img src=\"" + rosten.webPath + "/" + imgs[i] + "\" />";
+				}
+			}
+			return _values;
 		}else{
 			return "";
 		}
