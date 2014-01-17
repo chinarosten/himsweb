@@ -171,6 +171,19 @@ define(["dojo/_base/kernel",
         content.to = messageNode.to.attr("value");
         content.subject = messageNode.subject.attr("value");
         content.content = messageNode.content.get("value");
+        
+        //增加对附件的添加功能
+        if(messageNode.attachFile.hasChildNodes()){
+        	content.files = "";
+        	var fileNodes = messageNode.attachFile.childNodes;
+        	for(var i = 0; i < fileNodes.length; i ++){
+        		if(content.files==""){
+        			content.files = fileNodes[i].getAttribute("dealId");
+        		}else{
+        			content.files = content.files + "," + fileNodes[i].getAttribute("dealId");
+        		}
+        	}
+        }
         rosten.read(rosten.webPath + "/mail/mail_" + type, content, function(data){
             stopSendBar();
             if (data.result == "true" || data.result == true) {
@@ -208,7 +221,8 @@ define(["dojo/_base/kernel",
     		to = messageNode.to.innerHTML,
     		subject = messageNode.subject.innerHTML,
     		sent = messageNode.sent.innerHTML,
-    		content = messageNode.content.innerHTML;
+    		content = messageNode.content.innerHTML,
+    		files = messageNode.fileNode.innerHTML;
     	
     	//新增内容
     	var randomUuid = RandomUuid();
@@ -231,6 +245,8 @@ define(["dojo/_base/kernel",
         });
     	
     	_Message.to.attr("value",sender);
+    	_Message.attachFile.innerHTML = files;
+    	
     	_Message.subject.attr("value","回复：" + subject);
     	var addContent = "<hr noshade size=\"1\">在" + sent + ", \" " + sender + " \"写道：<br>" ;
     	_Message.content.attr("value","<br><br><br><br><br><br>" + addContent + content);
@@ -251,7 +267,8 @@ define(["dojo/_base/kernel",
     		to = messageNode.to.innerHTML,
     		subject = messageNode.subject.innerHTML,
     		sent = messageNode.sent.innerHTML,
-    		content = messageNode.content.innerHTML;
+    		content = messageNode.content.innerHTML,
+    		files = messageNode.fileNode.innerHTML;
     	
     	//新增内容
     	var randomUuid = RandomUuid();
@@ -274,6 +291,8 @@ define(["dojo/_base/kernel",
         });
     	
     	_Message.subject.attr("value","转发：" + subject);
+    	_Message.attachFile.innerHTML = files;
+    	
     	var addContent = "<hr noshade size=\"1\">在" + sent + ", \" " + sender + " \"写道：<br>" ;
     	_Message.content.attr("value","<br><br><br><br><br><br>" + addContent + content);
     	
@@ -292,7 +311,8 @@ define(["dojo/_base/kernel",
     		to = messageNode.to.innerHTML,
     		subject = messageNode.subject.innerHTML,
     		sent = messageNode.sent.innerHTML,
-    		content = messageNode.content.innerHTML;
+    		content = messageNode.content.innerHTML,
+    		files = messageNode.fileNode.innerHTML;
     	
     	//摧毁当前内容
     	mail_tabs.removeChild(mail_tabs.selectedChildWidget);
@@ -320,6 +340,7 @@ define(["dojo/_base/kernel",
     	_Message.to.attr("value",to);
     	_Message.subject.attr("value",subject);
     	_Message.content.attr("value",content);
+    	_Message.attachFile.innerHTML = files;
     	
     	mail_tabs.addChild(newTab);
     	mail_tabs.selectChild(newTab);
@@ -350,7 +371,8 @@ define(["dojo/_base/kernel",
         to = store.getValue(item, "to"),
         subject = store.getValue(item, "subject"),
         sent = store.getValue(item, "sent"),
-        text = store.getValue(item, "content");
+        text = store.getValue(item, "content"),
+        attachList = store.getValue(item, "attachList");
         
         _message = new mail.showMessage({id: id,mailnavigation:rosten.variable.mailNavigation });
         var newTab = _message.container;
@@ -372,6 +394,15 @@ define(["dojo/_base/kernel",
         _message.subject.innerHTML = subject;
         _message.sent.innerHTML = sent;
         _message.content.innerHTML = text;
+        
+        if(attachList && attachList!=""){
+        	domStyle.set(_message.fileNodeTr,"display","");
+        	var attachListArray = general.splitString(attachList,",");
+        	for (var i = 0; i < attachListArray.length; i++) {
+        		var jsonObj = {fileId:general.stringLeft(attachListArray[i],"&"),fileName:general.stringRight(attachListArray[i],"&")};
+        		mail_addAttachShow(_message.fileNode,jsonObj);
+        	}
+        }
         
         //标记邮件为已读状态
         rosten.read(rosten.webPath + "/mail/mail_changeEmailStatus", {id:id});
@@ -459,4 +490,13 @@ define(["dojo/_base/kernel",
 			}	
         });
 	};
+	mail_addAttachShow = function(node,jsonObj){
+		var a = document.createElement("a");
+		a.setAttribute("href", rosten.webPath + "/mail/downloadFile/" + jsonObj.fileId);
+		a.setAttribute("style","margin-right:20px");
+		a.setAttribute("dealId",jsonObj.fileId);
+		a.innerHTML = jsonObj.fileName;
+		node.appendChild(a);
+	};
+	
 });

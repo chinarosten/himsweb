@@ -136,7 +136,8 @@ define(["dojo/_base/declare"], function(declare) {
         splitString : function(/*String*/str, /*String*/parm) {
             var o = [];
             if (str.indexOf(parm) == -1) {
-                return o.push(str);
+            	o.push(str);
+                return o;
             } else {
                 return o = str.split(parm);
             }

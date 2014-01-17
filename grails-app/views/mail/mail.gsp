@@ -218,12 +218,7 @@
 														if(dataArray.result=="true"){
 															dijit.byId("fileUpload_dialog_${'\${departid}'}").reset();
 															dijit.byId("fileUpload_dialog_${'\${departid}'}").onCancel();
-
-															var a = document.createElement("a");
-															a.setAttribute("href", rosten.webPath + "/mail/downloadFile/" + dataArray.fileId);
-															a.setAttribute("style","margin-right:20px");
-															a.innerHTML = dataArray.fileName;
-															dojo.byId("fileShow_${'\${departid}'}").appendChild(a);
+															mail_addAttachShow(dojo.byId("fileShow_${'\${departid}'}"),dataArray);
 														}else if(dataArray.result=="big"){
 															alert("上传文件过大，请重新上传！");
 														}else{rosten.alert("上传失败");}
@@ -251,7 +246,7 @@
 						</tr>
 						<tr><td></td>
 						<td>
-							<div id="fileShow_${'\${departid}'}" style="margin-top:5px"></div>
+							<div id="fileShow_${'\${departid}'}" style="margin-top:5px;" data-dojo-attach-point="attachFile"></div>
 						</td>
 						</tr>
 					</table>
@@ -308,7 +303,7 @@
 	</div>		
 	<div data-dojo-type="dijit/Declaration" widgetClass="mail.showMessage">
 		<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-attach-point="container" title="Composing..." closeable="true" style="padding:1px">
-			<div data-dojo-type="dijit/layout/ContentPane" region="top" data-dojo-props='style:"padding:0px;height:120px"'>
+			<div data-dojo-type="dijit/layout/ContentPane" region="top" data-dojo-props='style:"padding:0px;height:140px"'>
 				<div class="rosten_action">
 					<div data-dojo-type="rosten/widget/ActionBar" data-dojo-attach-point="actionBar"
 						data-dojo-props='actionBarSrc:"${createLink(controller:'mailAction',action:'showMessage')}/${'\${mailnavigation}'}" '>
@@ -322,22 +317,28 @@
 								<div data-dojo-attach-point="subject" style="margin-left:10px"></div>
 							</td>
 						</tr>
-						<tr>
+						<tr style="padding-top:5px;">
 							<td style="width:100px; text-align:right;"><label>发件人:</label></td>
 							<td>
 								<div data-dojo-attach-point="sender" style="margin-left:10px"></div>
 							</td>
 						</tr>
-						<tr>
+						<tr style="padding-top:5px;">
 							<td style="width:100px; text-align:right;"><label>收件人:</label></td>
 							<td>
 								<div data-dojo-attach-point="to" style="margin-left:10px"></div>
 							</td>
 						</tr>
-						<tr>
+						<tr style="padding-top:5px;">
 							<td style="text-align:right;"><label>时间:</label></td>
 							<td>
 								<div data-dojo-attach-point="sent" style="margin-left:10px"></div>
+							</td>
+						</tr>
+						<tr data-dojo-attach-point="fileNodeTr" style="display:none;padding-top:5px;">
+							<td style="text-align:right;"><label>附件:</label></td>
+							<td>
+								<div data-dojo-attach-point="fileNode" style="margin-left:10px"></div>
 							</td>
 						</tr>
 					</table>

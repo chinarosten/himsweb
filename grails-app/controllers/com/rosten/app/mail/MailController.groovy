@@ -163,6 +163,25 @@ class MailController {
 						//未读
 						sMap["emailStatus"] = "images/rosten/actionbar/mail_wd.png"
 					}
+					
+					//获取相关附件信息
+//					def attachList = []
+					def attachList=""
+					Attachment.findAllByBeUseId(item.id).each{att->
+//						def _smap =[:]
+//						_smap["fileId"] = att.id
+//						_smap["fileName"] = att.name 
+//						attachList << _smap
+						if("".equals(attachList)){
+							attachList = att.id + "&" + att.name
+						}else{
+							attachList += "," + att.id + "&" + att.name
+						}
+						
+					}
+					
+					sMap["attachList"] = attachList
+					
 					_json.items+=sMap
 				}
 			}
@@ -253,6 +272,16 @@ class MailController {
 		sendMail.mailUser = user
 		
 		if(sendMail.save(flush:true)){
+			//增加附件的处理
+			if(params.files){
+				params.files.split(",").each{
+					def attach = Attachment.get(it)
+					if(attach.beUseId==null){
+						attach.beUseId = sendMail.id
+						attach.save(flush:true)
+					}
+				}
+			}
 			json["result"] = "true"
 		}else{
 			sendMail.errors.each{
@@ -303,6 +332,23 @@ class MailController {
 			receiveMail.boxType = 1
 			receiveMail.mailUser = User.findByUsername(to)
 			receiveMail.save()
+			
+			//增加附件的处理
+			if(params.files){
+				params.files.split(",").each{
+					def oldAttach = Attachment.get(it)
+					
+					def attach = new Attachment()
+					attach.name = oldAttach.name
+					attach.type = oldAttach.type
+					attach.url = oldAttach.url
+					attach.realName = oldAttach.realName
+					attach.size = oldAttach.size
+					attach.upUser = User.findByUsername(to)
+					attach.beUseId = receiveMail.id
+					attach.save()
+				}
+			}
 		}
 		
 		//保存发件信息
@@ -321,6 +367,18 @@ class MailController {
 		sendMail.mailUser = user
 		
 		if(sendMail.save(flush:true)){
+			
+			//增加附件的处理
+			if(params.files){
+				params.files.split(",").each{
+					def attach = Attachment.get(it)
+					if(attach.beUseId==null){
+						attach.beUseId = sendMail.id
+						attach.save(flush:true)
+					}
+				}
+			}
+			
 			json["result"] = "true"
 		}else{
 			sendMail.errors.each{
