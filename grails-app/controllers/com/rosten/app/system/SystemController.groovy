@@ -924,6 +924,9 @@ class SystemController {
 		model["company"] = Company.get(params.companyId)
 		render(view:'/system/depart',model:model)
 	}
+	def sms_group ={
+		
+	}
 	def smsSave ={
 		def model=[:]
 		def sms = new Sms()
@@ -1001,7 +1004,15 @@ class SystemController {
 		if(params.id && !"".equals(params.id)){
 			question = Question.get(params.id)
 		}
+		if("否".equals(params.isAnswer)){
+			params.isAnswer = false
+		}else{
+			params.isAnswer = true
+		}
+		
 		question.properties = params
+		question.company = springSecurityService.getCurrentUser().company
+		
 		if(question.save(flush:true)){
 			model["result"] = "true"
 		}else{
@@ -1022,7 +1033,10 @@ class SystemController {
 			model["question"] = Question.get(params.id)
 		}else{
 			model["question"] = new Question()
+			println model["question"].id
 		}
+		
+		model["user"] = (User) springSecurityService.getCurrentUser()
 		
 		FieldAcl fa = new FieldAcl()
 		model["fieldAcl"] = fa
@@ -1635,7 +1649,11 @@ class SystemController {
 		}
 		logoSet.properties = params
 		logoSet.company = Company.get(params.companyId)
-		logoSet.model = Model.get(params.modelId)
+		
+		//默认为首页，不允许修改
+//		logoSet.model = Model.get(params.modelId)
+		logoSet.model = null
+		
 		if(logoSet.save(flush:true)){
 			json["result"] = true
 		}else{

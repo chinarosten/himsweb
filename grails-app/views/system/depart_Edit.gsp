@@ -103,9 +103,6 @@
 	                    		data-dojo-props='name:"departPhone",
 	                    			"class":"input",
 	                    			trim:true,
-	                    			regExp:"\d{11}",
-	                    			promptMessage:"移动电话必须11位数字",
-	                    			invalidMessage:"移动电话必须11位数字",
 	                    			value:"${depart?.departPhone }"
 	                    	'/>
                         </td>
@@ -119,7 +116,6 @@
 	                    		data-dojo-props='name:"departFax",
 	                    			"class":"input",
 	                    			trim:true,
-	                    			promptMessage:"移动电话必须11位数字",
 	                    			value:"${depart?.departFax }"
 	                    	'/>
                         </td>

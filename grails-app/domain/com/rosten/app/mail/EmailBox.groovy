@@ -38,7 +38,7 @@ class EmailBox {
 	
 	Integer boxType=0	//邮箱类型：0  草稿箱;1 收件箱;2 发件箱;3已删除;4垃圾邮件
 	
-	@GridColumn(name="标记",width="30px",colIdx=1)
+	@GridColumn(name="标记",width="40px",colIdx=1)
 	Integer emailStatus=0	//邮件类型：0 未读;1 已读;2 回复 ; 3 转发 ; 4 全部转发
 	
 	static belongsTo = [mailUser:User]

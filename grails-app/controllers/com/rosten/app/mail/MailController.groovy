@@ -159,10 +159,24 @@ class MailController {
 					sMap["sent"] = item.sent
 					sMap["content"] = item.content
 					
+					def imgStr = ""
 					if(item.emailStatus==0){
 						//未读
-						sMap["emailStatus"] = "images/rosten/actionbar/mail_wd.png"
+						imgStr = "images/rosten/actionbar/mail_wd.png"
 					}
+					
+					//判断是否有附件
+					def files = Attachment.findAllByBeUseId(item.id)
+					if(files && files.size()!=0){
+						if("".equals(imgStr)){
+							imgStr = "images/rosten/actionbar/attach.png"
+						}else{
+							imgStr += ",images/rosten/actionbar/attach.png"
+						}
+						
+					}
+					
+					sMap["emailStatus"] = imgStr
 					
 					//获取相关附件信息
 //					def attachList = []

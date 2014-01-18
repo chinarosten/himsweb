@@ -104,10 +104,16 @@ define(["dojo/_base/kernel"
         		rosten.kernel.navigationMenu = "";
         		break;
         	case "sms":
-        		
+        	    require(["rosten/app/SmsManage"],function(){
+        	        rosten.kernel.createRostenShowDialog(rosten.webPath + "/system/smsAdd");
+        	        
+        	    });
         		break;
 			case "question":
-        		
+			     require(["rosten/app/QuestionManage"],function(){
+                    rosten.kernel.createRostenShowDialog(rosten.webPath + "/system/questionAdd");
+                    
+                });
         		break;
         	}
         });

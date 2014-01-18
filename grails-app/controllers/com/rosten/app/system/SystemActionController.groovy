@@ -31,6 +31,17 @@ class SystemActionController {
 		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
 		render actionList as JSON
 	}
+	def questionForm ={
+		def webPath = request.getContextPath() + "/"
+		def actionList = []
+		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		
+		def user = User.get(params.userid)
+		if(!"normal".equals(user.getUserType())){
+			actionList << createAction("保存",webPath + imgPath + "Save.gif","question_add")
+		}
+		render actionList as JSON
+	}
 	def advertise ={
 		def actionList =[]
 		actionList << createAction("退出",imgPath + "quit.gif","returnToMain")

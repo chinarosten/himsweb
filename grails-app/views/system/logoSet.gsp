@@ -107,8 +107,9 @@
                                 		required:true,
                                 		promptMessage:"请输入logo图像资源附件名称...",
                                 		disabled:true,
-                                		value:"logo.png;header_logo.gif"'
+                                		value:"logo.png;header_logo.png"'
                                 />
+                                <button data-dojo-type="dijit/form/Button" style="display:none">上传图片</button>
                             </td>
                         </tr>
                          <tr>
@@ -122,7 +123,7 @@
                                 <div align="right" > 图像资源附件：</div>
                             </td>
                             <td>
-                                <div id="imgFilePath" name="imgFilePath" style="height:20px;margin-Top:2px">logo.png;header_logo.gif</div>
+                                <div id="imgFilePath" name="imgFilePath" style="height:20px;margin-Top:2px">logo.png;header_logo.png</div>
                             </td>
                         </tr>
                         <tr>
@@ -130,11 +131,11 @@
                                 <div align="right" > 图像对应默认大小：</div>
                             </td>
                             <td>
-                                <div style="height:20px;margin-Top:2px">logo.png【167×60】;header_logo.gif【533×87】</div> 
+                                <div style="height:20px;margin-Top:2px">logo.png【167×60】;header_logo.png【533×87】</div> 
                             </td>
                            
                         </tr>
-						<tr>
+						<tr style="display:none">
                             <td>
                                 <div align="right">
                                     <span style="color:red">*&nbsp;</span>默认页面打开模块：
@@ -142,7 +143,7 @@
                             </td>
                             <td>
                             	<select id="modelId" data-dojo-type="dijit/form/FilteringSelect"
-                                	data-dojo-props = 'name:"modelId",style:{width:"197px",fontFamily:"Courier"},trim:true,required:true'
+                                	data-dojo-props = 'name:"modelId",style:{width:"197px",fontFamily:"Courier"},trim:true,required:true,disabled:true'
                                 >
                                 	<g:each var="model" in="${modelList}">
                                 		<option value="${model.id }">${model.modelName }</option>
@@ -162,6 +163,7 @@
                                 		style:{width:"197px",fontFamily:"Courier"},
                                 		trim:true,
                                 		required:true,
+                                		disabled:true,
                                 		value:"${logoSet.cssStyle!=null?logoSet.cssStyle:"claro" }"
                             	'>
                             		<option value="claro">claro</option>

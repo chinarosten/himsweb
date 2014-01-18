@@ -357,9 +357,9 @@ define(["dojo/_base/kernel",
 			var _values=""
 			for(var i = 0; i < imgs.length; i ++){
 				if(_values==""){
-					_values = "<img src=\"" + rosten.webPath + "/" + imgs[i] + "\" />";
+					_values = "<img style=\"margin-left:4px\" src=\"" + rosten.webPath + "/" + imgs[i] + "\" />";
 				}else{
-					_values += "<img src=\"" + rosten.webPath + "/" + imgs[i] + "\" />";
+					_values += "<img style=\"margin-left:4px\" src=\"" + rosten.webPath + "/" + imgs[i] + "\" />";
 				}
 			}
 			return _values;
