@@ -1033,7 +1033,6 @@ class SystemController {
 			model["question"] = Question.get(params.id)
 		}else{
 			model["question"] = new Question()
-			println model["question"].id
 		}
 		
 		model["user"] = (User) springSecurityService.getCurrentUser()
