@@ -29,6 +29,12 @@ class SystemController {
 	def passwordChangeSubmit ={
 		def json =[:]
 		def user = User.get(params.id)
+		
+		println params.password
+		println user.getEncodedPassword(params.password)
+		println user.password
+		println user.getEncodedPassword("password")
+		
 		if(user.getEncodedPassword(params.password).equals(user.password)){
 			user.password = params.newpassword
 			if(user.save(flush:true)){
@@ -1001,17 +1007,22 @@ class SystemController {
 	def questionSave ={
 		def model=[:]
 		def question = new Question()
-		if(params.id && !"".equals(params.id)){
-			question = Question.get(params.id)
-		}
-		if("否".equals(params.isAnswer)){
-			params.isAnswer = false
+		if(params.unid && !"".equals(params.unid)){
+			question = Question.get(params.unid)
+			
+			if(params.isAnswer){
+				if("否".equals(params.isAnswer)){
+					params.isAnswer = false
+				}else{
+					params.isAnswer = true
+				}
+			}
+			
 		}else{
-			params.isAnswer = true
+			question.company = springSecurityService.getCurrentUser().company
 		}
 		
 		question.properties = params
-		question.company = springSecurityService.getCurrentUser().company
 		
 		if(question.save(flush:true)){
 			model["result"] = "true"
