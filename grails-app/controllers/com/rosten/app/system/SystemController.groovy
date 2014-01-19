@@ -1692,7 +1692,7 @@ class SystemController {
 					_indexList << indexValue
 					_index = indexValue + 1
 				}
-				model[item.id + "&" + indexValue] = item.modelName + "&" + item.modelUrl
+				model[item.id + "&" + Util.obj2str(indexValue).padLeft(2,"0")] = item.modelName + "&" + item.modelUrl
 				
 			}
 			if(defaultModel){
