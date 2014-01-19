@@ -6,6 +6,17 @@ class SystemActionController {
 	def systemService
 	def imgPath ="images/rosten/actionbar/"
 	
+	def smsGroupView ={
+		render createCommonAction(null,"smsGroup",true) as JSON
+	}
+	def smsGroupForm ={
+		def webPath = request.getContextPath() + "/"
+		def actionList = []
+		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("保存",webPath + imgPath + "Save.gif","smsGroup_add")
+		
+		render actionList as JSON
+	}
 	def skin ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []

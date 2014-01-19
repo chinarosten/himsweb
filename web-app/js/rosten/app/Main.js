@@ -92,6 +92,9 @@ define(["dojo/_base/kernel"
             } else if (oString == "收文管理") {
             	deleteMailNavigation();
 //                require(["./StockManage"]);
+            }else if(oString=="个人配置"){
+                deleteMailNavigation();
+                require(["rosten/app/SmsManage"]);
             }
         });
 		

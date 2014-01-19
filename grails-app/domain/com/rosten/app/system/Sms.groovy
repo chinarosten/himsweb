@@ -49,8 +49,6 @@ class Sms {
 	static belongsTo = [company:Company]
 	
 	static constraints = {
-//		question nullable:true,blank:true
-//		questionAnswer nullable:true,blank:true
 	}
 	
 	static mapping = {

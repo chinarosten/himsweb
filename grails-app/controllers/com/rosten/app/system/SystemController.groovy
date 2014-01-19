@@ -930,6 +930,82 @@ class SystemController {
 		model["company"] = Company.get(params.companyId)
 		render(view:'/system/depart',model:model)
 	}
+	def smsGroupAdd ={
+		redirect(action:"smsGroupShow",params:params)
+	}
+	def smsGroupShow ={
+		def model =[:]
+		
+		if(params.id){
+			model["smsgroup"] = SmsGroup.get(params.id)
+		}else{
+			model["smsgroup"] = new SmsGroup()
+		}
+		
+		FieldAcl fa = new FieldAcl()
+		model["fieldAcl"] = fa
+		render(view:'/system/smsGroup',model:model)
+	}
+	def smsGroupSave ={
+		def model=[:]
+		def smsGroup = new SmsGroup()
+		if(params.unid && !"".equals(params.unid)){
+			smsGroup = SmsGroup.get(params.unid)
+		}else{
+			smsGroup.user = springSecurityService.getCurrentUser()
+		}
+		
+		smsGroup.properties = params
+		
+		if(smsGroup.save(flush:true)){
+			model["result"] = "true"
+		}else{
+			smsGroup.errors.each{
+				println it
+			}
+			model["result"] = "false"
+		}
+		render model as JSON
+	}
+	def smsGroupDelete ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def smsgroup = SmsGroup.get(it)
+				if(smsgroup){
+					smsgroup.delete(flush: true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
+	}
+	def smsGroupGrid ={
+		def model=[:]
+		def user = User.get(params.userid)
+		if(params.refreshHeader){
+			model["gridHeader"] = systemService.getSmsGroupListLayout()
+		}
+		if(params.refreshData){
+			def args =[:]
+			int perPageNum = Util.str2int(params.perPageNum)
+			int nowPage =  Util.str2int(params.showPageNum)
+			
+			args["offset"] = (nowPage-1) * perPageNum
+			args["max"] = perPageNum
+			args["user"] = user
+			model["gridData"] = systemService.getSmsGroupListDataStore(args)
+			
+		}
+		if(params.refreshPageControl){
+			def total = systemService.getSmsGroupCount(user)
+			model["pageControl"] = ["total":total.toString()]
+		}
+		render model as JSON
+	}
 	def sms_group ={
 		
 	}

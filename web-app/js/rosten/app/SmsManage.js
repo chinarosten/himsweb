@@ -3,10 +3,43 @@
  */
 define(["dojo/dom",
         "dijit/registry",
+        "dojo/_base/connect",
         "rosten/widget/PickTreeDialog",
-        "rosten/kernel/behavior"], function(dom,registry,PickTreeDialog) {
+        "rosten/kernel/behavior"], function(dom,registry,connect,PickTreeDialog) {
     
-    
+    add_smsGroup = function() {
+        var unid = rosten.kernel.getUserInforByKey("idnumber");
+        rosten.openNewWindow("smsGroup", rosten.webPath + "/system/smsGroupAdd?userid=" + unid);
+    };
+    read_smsGroup = function() {
+        change_smsGroup();
+    };
+    change_smsGroup = function() {
+        var unid = rosten.getGridUnid("single");
+        if (unid == "")
+            return;
+
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        rosten.openNewWindow("smsGroup", rosten.webPath + "/system/smsGroupShow/" + unid + "?userid=" + userid);
+    };
+    delete_smsGroup = function() {
+        var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
+        _1.callback = function() {
+            var unids = rosten.getGridUnid("multi");
+            if (unids == "")
+                return;
+            var content = {};
+            content.id = unids;
+            rosten.readSync(rosten.webPath + "/system/smsGroupDelete", content, function(data){
+                if (data.result == "true" || data.result == true) {
+                    rosten.alert("成功删除!");
+                    rosten.kernel.refreshGrid();
+                } else {
+                    rosten.alert("删除失败!");
+                }
+            });
+        };
+    };
     selectSmsGroup = function(url) {
         var id = "sys_smsGroupDialog";
         var initValue = [];
@@ -65,5 +98,19 @@ define(["dojo/dom",
         });
         
     };
-
+    show_smsNaviEntity = function(oString) {
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        switch (oString) {
+            case "smsgroup":
+                var naviJson = {
+                    identifier : oString,
+                    actionBarSrc : rosten.webPath + "/systemAction/smsGroupView",
+                    gridSrc : rosten.webPath + "/system/smsGroupGrid?userid=" + userid
+                };
+                rosten.kernel.addRightContent(naviJson);
+                break;
+            
+        }    
+    };
+    connect.connect("show_naviEntity", show_smsNaviEntity);
 });

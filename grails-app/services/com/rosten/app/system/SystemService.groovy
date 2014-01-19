@@ -154,7 +154,34 @@ class SystemService {
 		def query = { eq("company",company) }
 		return c.count(query)
 	}
+	def getSmsGroupListDataStore = {params->
+		Integer offset = (params.offset)?params.offset.toInteger():0
+		Integer max = (params.max)?params.max.toInteger():15
+		def propertyList = getAllSmsGroup(offset,max,params.user)
 
+		def gridUtil = new GridUtil()
+		return gridUtil.buildDataList("id","title",propertyList,offset)
+	}
+	def getSmsGroupListLayout ={
+		def gridUtil = new GridUtil()
+		return gridUtil.buildLayoutJSON(new SmsGroup())
+	}
+	def getAllSmsGroup={offset,max,user->
+		def c = SmsGroup.createCriteria()
+		def pa=[max:max,offset:offset]
+		def query = {
+			eq("user",user)
+		}
+		return c.list(pa,query)
+	}
+	def getSmsGroupCount={user->
+		def c = SmsGroup.createCriteria()
+		def query = {
+			eq("user",user)
+		}
+		return c.count(query)
+	}
+	
 	def getSmsListDataStore = {params->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15
