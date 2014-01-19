@@ -36,7 +36,7 @@
 				  </tr>
 				  <tr>
 				    <td width="110">短信群组：
-				    	<a href="javascript:selectSmsGroup(\"${createLink(controller:'system',action:'sms_group')}\")">
+				    	<a href="javascript:selectSmsGroup('${createLink(controller:'system',action:'sms_group',params:[userid:user?.id])}')">
                            <img src="${resource(dir:'images/rosten/share',file:'group.gif')}" width="16" height="16" border="0" align="absbottom">
 						</a>
 					</td>

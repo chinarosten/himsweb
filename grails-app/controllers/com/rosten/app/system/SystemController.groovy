@@ -941,6 +941,7 @@ class SystemController {
 		}else{
 			model["smsgroup"] = new SmsGroup()
 		}
+		model["company"] = springSecurityService.getCurrentUser().company
 		
 		FieldAcl fa = new FieldAcl()
 		model["fieldAcl"] = fa
@@ -1007,7 +1008,15 @@ class SystemController {
 		render model as JSON
 	}
 	def sms_group ={
-		
+		def groupList =[]
+		def user = User.get(params.userid)
+		SmsGroup.findAllByUser(user).each{
+			def json=[:]
+			json["id"] = it.id
+			json["name"] = it.groupName
+			groupList << json
+		}
+		render groupList as JSON
 	}
 	def smsSave ={
 		def model=[:]
@@ -1015,7 +1024,12 @@ class SystemController {
 		if(params.id && !"".equals(params.id)){
 			sms = Sms.get(params.id)
 		}
-		sms.properties = params
+		User user = springSecurityService.getCurrentUser()
+		sms.sender = user.username
+		sms.sendto = params.telephone
+		sms.content = params.content
+		sms.company = user.company
+		
 		if(sms.save(flush:true)){
 			model["result"] = "true"
 		}else{
@@ -1037,6 +1051,7 @@ class SystemController {
 		}else{
 			model["sms"] = new Sms()
 		}
+		model["user"] = springSecurityService.getCurrentUser()
 		
 		FieldAcl fa = new FieldAcl()
 		model["fieldAcl"] = fa

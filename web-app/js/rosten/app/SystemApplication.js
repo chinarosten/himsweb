@@ -76,7 +76,7 @@ define(["dojo/dom",
             dom.byId("allowdepartsId").value = _data_1;
         };
     };
-    selectUser = function(url) {
+    selectUser = function(url,inputName) {
         var id = "sys_userDialog";
 
         if (rosten[id] && registry.byId(id)) {
@@ -107,8 +107,13 @@ define(["dojo/dom",
                     }
                 }
             }
-            registry.byId("allowusersName").attr("value", _data);
-            dom.byId("allowusersId").value = _data_1;
+            if( inputName ==undefined){
+                registry.byId("allowusersName").attr("value", _data);
+                dom.byId("allowusersId").value = _data_1;
+            }else{
+                registry.byId(inputName).attr("value", _data);
+            }
+            
         };
     };
     selectGroup = function(url) {

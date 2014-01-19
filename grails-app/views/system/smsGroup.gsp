@@ -83,8 +83,8 @@
 				  </tr>
 				  <tr>
 				    <td align="right"><span style="color:red">*&nbsp;</span>成员：
-				    	<a href="javascript:rosten.selectUser('members',false,'<%=path%>','/jsproot/hairdress/normal/Select_Consumer.jsp')">
-                           <img src="<%=path%>/jslib/rosten/src/share/group.gif" width="16" height="16" border="0" align="absbottom">
+				    	<a href="javascript:selectUser('${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}','members')">
+                           <img src="${resource(dir:'images/rosten/share',file:'group.gif')}" width="16" height="16" border="0" align="absbottom">
 						</a>
 				    <td ><textarea id="members" name="members" rows="10" data-dojo-type="dijit/form/SimpleTextarea" 
 				    	value="${smsgroup?.members }"

@@ -5,6 +5,7 @@ define(["dojo/dom",
         "dijit/registry",
         "dojo/_base/connect",
         "rosten/widget/PickTreeDialog",
+        "rosten/app/Application",
         "rosten/kernel/behavior"], function(dom,registry,connect,PickTreeDialog) {
     
     add_smsGroup = function() {
@@ -78,7 +79,7 @@ define(["dojo/dom",
             rosten.alert("手机号码,短信群组不能为空！");
             return;
         }
-        var contentNode = registry.byId("content");
+        var contentNode = registry.byId("sms_content");
         if(contentNode.attr("value")!=""){
             content.content = contentNode.attr("value");
         }else{
@@ -108,6 +109,9 @@ define(["dojo/dom",
                     gridSrc : rosten.webPath + "/system/smsGroupGrid?userid=" + userid
                 };
                 rosten.kernel.addRightContent(naviJson);
+                
+                var rostenGrid = rosten.kernel.getGrid();
+                rostenGrid.onRowDblClick = change_smsGroup;
                 break;
             
         }    
