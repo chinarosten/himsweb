@@ -438,6 +438,19 @@ class SystemService {
 			model.modelUrl = "js:question"
 			model.description ="你问我答模块"
 			model.save(flush:true)
+			
+			model = new Model(company:company)
+			model.modelName = "个人配置"
+			model.modelUrl = path + "/system/navigation"
+			model.description ="个人配置模块"
+			
+			resource = new Resource()
+			resource.resourceName = "短信群组"
+			resource.url = "smsgroup"
+			resource.imgUrl = "images/rosten/navigation/Group.gif"
+			model.addToResources(resource)
+			model.save(flush:true)
+			
 		}catch(Exception e){
 			print e.message
 			return false
