@@ -3,6 +3,7 @@ package com.rosten.app.system
 import grails.converters.JSON
 import com.rosten.app.util.FieldAcl
 import com.rosten.app.util.Util
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 
 class SystemController {
 	def springSecurityService
@@ -30,12 +31,8 @@ class SystemController {
 		def json =[:]
 		def user = User.get(params.id)
 		
-		println params.password
-		println user.getEncodedPassword(params.password)
-		println user.password
-		println user.getEncodedPassword("password")
-		
-		if(user.getEncodedPassword(params.password).equals(user.password)){
+		PasswordEncoder passwordEncoder = springSecurityService.passwordEncoder
+		if (passwordEncoder.isPasswordValid(user.password, params.password, null)){
 			user.password = params.newpassword
 			if(user.save(flush:true)){
 				json["result"] = "true"
