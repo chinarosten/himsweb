@@ -1,7 +1,7 @@
 /**
  * @author rosten
  */
-define(["dojo/dom"], function(dom) {
+define(function() {
 
 	var weboffice = {};
 
@@ -34,7 +34,30 @@ define(["dojo/dom"], function(dom) {
 			alert("异常\r\nError:" + e + "\r\nError Code:" + e.number + "\r\nError Des:" + e.description);
 		}
 	};
-
+	
+	/****************************************************
+	*
+	*					上传文档
+	*
+	/****************************************************/
+	weboffice_uploadDoc(content,url) {
+		/*
+		 * conent格式为：[{name:"id1",value:"value1"},{name:"id2",value:"value2"}]
+		 */
+		try{
+			webObj.HttpInit();			//初始化Http引擎
+			// 添加相应的Post元素 
+			for(var o in content){
+				webObj.HttpAddPostString(content[o].name, content[o].value);
+			}
+			webObj.HttpAddPostCurrFile("DocContent","");		// 上传文件
+			return webObj.HttpPost(url);	// 判断上传是否成功
+			
+		}catch(e){
+			alert("异常\r\nError:"+e+"\r\nError Code:"+e.number+"\r\nError Des:"+e.description);
+		}
+	};
+	
 	/****************************************************
 	 *
 	 *					打开本地文件
@@ -956,7 +979,7 @@ define(["dojo/dom"], function(dom) {
 		webObj.SetWindowText("Rosten科技公司", 0);
 		webObj.OptionFlag |= 128;
 		// 新建文档
-		// weboffice_newDoc();
+		 weboffice_newDoc();
 		//spnWebOfficeInfo.innerText = "----   您电脑上安装的WebOffice版本为:V" + document.all.WebOffice1.GetOcxVersion() + "\t\t\t本实例是根据版本V6046编写";
 	};
 
@@ -985,6 +1008,6 @@ define(["dojo/dom"], function(dom) {
 	weboffice_notifyToolBarClick = function(iIndex) {
 		alert(iIndex+"新加按钮触发的事件可在这里写自己的功能");
 	};
-
+	
 	return weboffice;
 });
