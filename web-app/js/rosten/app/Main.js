@@ -88,7 +88,7 @@ define(["dojo/_base/kernel"
 //                require(["./SystemManage"]);
             } else if (oString == "发文管理") {
             	deleteMailNavigation();
-//                require(["./StaticManage"]);
+                require(["rosten/app/SendFileManage"]);
             } else if (oString == "收文管理") {
             	deleteMailNavigation();
 //                require(["./StockManage"]);
@@ -265,7 +265,14 @@ define(["dojo/_base/kernel"
     freshGrid = function() {
         rosten.kernel.refreshGrid();
     };
-    
+    main.deleteCallback = function(data){
+    	if (data.result == "true" || data.result == true) {
+            rosten.alert("成功删除!");
+            rosten.kernel.refreshGrid();
+        } else {
+            rosten.alert("删除失败!");
+        }
+    };
     lang.mixin(rosten,main);
     return main;
 });

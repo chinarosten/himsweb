@@ -71,6 +71,7 @@ environments {
 rostenFileConfig {
 	fileUpload = "rostenFileUpload"
 	fileSize = 10 //单位为M
+	sizeLimit = false
 }
 // log4j configuration
 log4j = {

@@ -26,7 +26,7 @@ class SendFile {
 	String fileNo
 	
 	//文件种类
-	String fileType 
+	SendLable fileType 
 	
 	//文件题名
 	@GridColumn(name="文件题名")
