@@ -13,7 +13,31 @@ class SendFileController {
 	def sendFileService
 	
 	
-	
+	def sendFileAdd ={
+		redirect(action:"sendFileShow",params:params)
+	}
+	def sendFileShow ={
+		def model =[:]
+		
+		def user = User.get(params.userid)
+		def company = Company.get(params.companyId)
+		def sendFile = new SendFile()
+		if(params.id){
+			sendFile = SendFile.get(params.id)
+		}
+		model["user"]=user
+		model["company"] = company
+		model["sendFile"] = SendFile
+		
+		FieldAcl fa = new FieldAcl()
+		if("normal".equals(user.getUserType())){
+			//普通用户
+			fa.readOnly = []
+		}
+		model["fieldAcl"] = fa
+		
+		render(view:'/sendFile/sendFile',model:model)
+	}
 
 	def sendFileGrid ={
 		def json=[:]
