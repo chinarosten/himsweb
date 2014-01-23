@@ -8,12 +8,12 @@ define([ "dojo/_base/connect", "dijit/registry", "rosten/kernel/behavior" ], fun
 		
 	};
 	sendFile_addWord = function(){
-		
+		rosten.openNewWindow("sendFile_addWord", rosten.webPath + "/sendFile/addWord");
 	};
 	add_sendFile = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
-        rosten.kernel.setHref(rosten.webPath +"/sendFile/sendFileAdd?companyId=" + companyId + "&userid=" + userid);
+        rosten.kernel.setHref(rosten.webPath +"/sendFile/sendFileAdd?companyId=" + companyId + "&userid=" + userid,"addSendFile");
     };
 	change_sendFile = function() {
 		var unid = rosten.getGridUnid("single");

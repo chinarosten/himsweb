@@ -27,6 +27,7 @@ define(function() {
 	 ****************************************************/
 	weboffice_newDoc = function() {
 		try {
+		    alert("test");
 			//目前默认为word,doctype:doc,wps,xls
 			var doctype = "doc";
 			webObj.LoadOriginalFile("", doctype);
@@ -40,7 +41,7 @@ define(function() {
 	*					上传文档
 	*
 	/****************************************************/
-	weboffice_uploadDoc(content,url) {
+	weboffice_uploadDoc = function(content,url) {
 		/*
 		 * conent格式为：[{name:"id1",value:"value1"},{name:"id2",value:"value2"}]
 		 */

@@ -12,6 +12,10 @@ class SendFileController {
 	def springSecurityService
 	def sendFileService
 	
+	def addWord = {
+		def model =[:]
+		render(view:'/sendFile/word',model:model)
+	}
 	
 	def sendFileAdd ={
 		redirect(action:"sendFileShow",params:params)
