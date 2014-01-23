@@ -4,10 +4,16 @@
 define([ "dojo/_base/connect", "dijit/registry", "rosten/kernel/behavior" ], function(
 		connect, registry) {
 	
+	returnToView = function(){
+		
+	};
+	sendFile_addWord = function(){
+		
+	};
 	add_sendFile = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
-        rosten.openNewWindow("sendFile", rosten.webPath + "/sendFile/sendFileAdd?companyId=" + companyId + "&userid=" + userid);
+        rosten.kernel.setHref(rosten.webPath +"/sendFile/sendFileAdd?companyId=" + companyId + "&userid=" + userid);
     };
 	change_sendFile = function() {
 		var unid = rosten.getGridUnid("single");
@@ -36,10 +42,12 @@ define([ "dojo/_base/connect", "dijit/registry", "rosten/kernel/behavior" ], fun
 	 * 此功能默认必须存在
 	 */
 	show_sendFileNaviEntity = function(oString) {
+		
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		var userid = rosten.kernel.getUserInforByKey("idnumber");
+		
 		switch (oString) {
 		case "sendfile":
-			var companyId = rosten.kernel.getUserInforByKey("companyid");
-			var userid = rosten.kernel.getUserInforByKey("idnumber");
 			var naviJson = {
 				identifier : oString,
 				actionBarSrc : rosten.webPath + "/sendFileAction/sendFileView",
