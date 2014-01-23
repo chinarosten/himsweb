@@ -8,7 +8,7 @@ class Attachment {
 	//附件名称
 	String name
 	
-	//附件类型：nomal:普通附件;mail:邮件附件;logo:logo附件
+	//附件类型：nomal:普通附件;mail:邮件附件;logo:logo附件;wordOLE:word正文;other:其他
 	String type = "normal"
 	
 	//附件存放地址
