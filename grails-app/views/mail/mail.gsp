@@ -206,7 +206,8 @@
 						<tr>
 							<td style="text-align:right;"><label>附件:</label></td>
 							<td>
-								<div data-dojo-type="dijit/form/DropDownButton" data-dojo-props="dropDownPosition: ['below-centered', 'above-centered'],class:'tooltipLink'">
+								<div data-dojo-type="dijit/form/DropDownButton" >
+								<!--<div data-dojo-type="dijit/form/DropDownButton" data-dojo-props='dropDownPosition:["below-centered","above-centered"],class:"tooltipLink"' >  -->
 									<span>添加附件</span>
 									<div data-dojo-type="dijit/TooltipDialog" id="fileUpload_dialog_${'\${departid}'}" data-dojo-props="title: 'fileUpload'" style="width:380px">
 											<form data-dojo-type="dijit/form/Form" method="post" 
