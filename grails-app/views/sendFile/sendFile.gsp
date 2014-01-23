@@ -48,6 +48,11 @@
     </script>
 </head>
 <body>
+<div class="rosten_action">
+	<div data-dojo-type="rosten/widget/ActionBar" data-dojo-id="sendFile_actionBar" 
+		data-dojo-props='actionBarSrc:"${createLink(controller:'sendFileAction',action:'sendFileForm')}"'>
+	</div>
+</div>
 <g:form id="sendfile_form" name="sendfile_form" url='[controller:"sendFile",action:"sendFileSave"]' class="rosten_form" >
 	<table border="0" width="740" align="left">
 		<tr>
