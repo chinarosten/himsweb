@@ -27,7 +27,7 @@
 	     	"rosten/widget/TitlePane",
 	     	"rosten/app/Main"],
 		function(parser, kernel,JSON,lang,query,win,dom,domStyle,domClass,domConstruct,registry,ContentPane,Dialog) {
-			rosten.init({webpath : "${request.getContextPath()}",dojogridcss : true,rostencss : "normal"});
+			rosten.init({webpath : "${request.getContextPath()}",dojogridcss : true});
 			kernel.addOnLoad(function() {
 				var n = dom.byId("preLoader");
 		        kernel.fadeOut({
