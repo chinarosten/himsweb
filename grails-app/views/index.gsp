@@ -121,31 +121,30 @@
 		<div data-dojo-type="dijit/layout/BorderContainer" id="home"
 			data-dojo-props='region:"center",gutters:false,style:{padding:"1px 1px 0px 1px",height:"100%",width:"100%",display:"none"}'>
 			
-			<div data-dojo-type="dojox/layout/ContentPane" style="width:30%;padding:0px"
-				data-dojo-props='region:"left",executeScripts:true,renderStyles:true'>
-				
+			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"top",style:{height:"300px"},gutters:false' >
+			
 				<div data-dojo-type="rosten/widget/TitlePane"
-					data-dojo-props='title:"通知公告",toggleable:false,height:"200px"'>
+					data-dojo-props='title:"最新公告",toggleable:false,height:"250px",width:"50%",style:{marginRight:"1px"},region:"left"'>
 					通知公告内容......
 				</div>
-			</div>
-			<div data-dojo-type="dojox/layout/ContentPane" style="padding:0px;margin-left:2px;margin-right:2px"
-				data-dojo-props='region:"center",executeScripts:true,renderStyles:true'>
-				
 				<div data-dojo-type="rosten/widget/TitlePane"
-					data-dojo-props='title:"个人代办",toggleable:false,height:"200px"'>
-					个人代办内容......
+					data-dojo-props='title:"个人待办",toggleable:false,height:"250px",region:"center"'>
+					个人待办内容......
 				</div>
-			</div> 
-			<div data-dojo-type="dojox/layout/ContentPane" style="width:30%;padding:0px"
-				data-dojo-props='region:"right",executeScripts:true,renderStyles:true'>
 				
-				<div data-dojo-type="rosten/widget/TitlePane"
-					data-dojo-props='title:"个人信息",toggleable:false,height:"200px"'>
-					个人信息内容......
-				</div>
 			</div>
-				 
+			<div data-dojo-type="dijit/layout/BorderContainer" 
+				data-dojo-props='region:"center",gutters:false'>
+				<div data-dojo-type="dojox/layout/ContentPane" style="padding:0px"
+					data-dojo-props='region:"center",executeScripts:true,renderStyles:true'>
+					
+					<div data-dojo-type="rosten/widget/TitlePane"
+						data-dojo-props='title:"下载专区",toggleable:false'>
+						下载专区内容......
+					</div>
+				</div>
+				
+			</div>
 		</div>	
 		
 		<div data-dojo-type="dijit/layout/BorderContainer" id="modelMain"

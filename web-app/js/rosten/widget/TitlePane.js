@@ -13,7 +13,7 @@ define(["dojo/_base/declare",
         
         width: "",
         height: "",
-        marginBottom: "6px",
+        marginBottom: null,
 								
 		templateString: '<div class="dijitTitlePane">' +
 						'    <div class="dijitTitlePaneTitle" data-dojo-attach-point="titleBarNode" style="cursor: default;padding-top:5px">' +
@@ -35,9 +35,11 @@ define(["dojo/_base/declare",
     	
     	postCreate: function(){
             rosten.widget.TitlePane.superclass.postCreate.apply(this, arguments);
-            domStyle.set(this.domNode, {
-                "marginBottom": this.marginBottom
-            });
+            if(this.marginBottom!=null){
+	            domStyle.set(this.domNode, {
+	                "marginBottom": this.marginBottom
+	            });
+            }
 			if(!this.toggleable){
 				domStyle.set(this.arrowNode,"display","none");
 			}
