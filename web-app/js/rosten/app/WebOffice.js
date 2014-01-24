@@ -27,7 +27,6 @@ define(function() {
 	 ****************************************************/
 	weboffice_newDoc = function() {
 		try {
-		    alert("test");
 			//目前默认为word,doctype:doc,wps,xls
 			var doctype = "doc";
 			webObj.LoadOriginalFile("", doctype);
@@ -51,7 +50,7 @@ define(function() {
 			for(var o in content){
 				webObj.HttpAddPostString(content[o].name, content[o].value);
 			}
-			webObj.HttpAddPostCurrFile("DocContent","");		// 上传文件
+			webObj.HttpAddPostCurrFile("wordfile","");		// 上传文件
 			return webObj.HttpPost(url);	// 判断上传是否成功
 			
 		}catch(e){
@@ -981,7 +980,10 @@ define(function() {
 		webObj.OptionFlag |= 128;
 		// 新建文档
 		 weboffice_newDoc();
-		//spnWebOfficeInfo.innerText = "----   您电脑上安装的WebOffice版本为:V" + document.all.WebOffice1.GetOcxVersion() + "\t\t\t本实例是根据版本V6046编写";
+		 webObj.ShowToolBar = false;   //隐藏weboffice自带工具栏
+		 //默认隐藏office工具栏
+		 document.all.WebOffice1.HideMenuArea("hideall","","","");
+		 rosten.variable.wordMenu = false;
 	};
 
 	weboffice_saveBinaryFileFromBase64 = function() {
@@ -1007,7 +1009,7 @@ define(function() {
 	 *
 	 /*****************************************************/
 	weboffice_notifyToolBarClick = function(iIndex) {
-		alert(iIndex+"新加按钮触发的事件可在这里写自己的功能");
+		//alert(iIndex+"新加按钮触发的事件可在这里写自己的功能");
 	};
 	
 	return weboffice;

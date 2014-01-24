@@ -485,7 +485,7 @@ define(["dojo/_base/kernel",
 					onItem: function(node){
 						if(!node){
 							var parent = {parent: item,attribute: 'children'};
-							var newItem = {id: data[i].id,name: data[i].name,}; 
+							var newItem = {id: data[i].id,name: data[i].name}; 
 							if(data[i].parentId){
 							    newItem.parentId = data[i].parentId;
 							}
