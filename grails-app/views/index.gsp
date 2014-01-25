@@ -4,6 +4,29 @@
 <title>${logoname}</title>
 <meta name="layout" content="rosten" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+	.personSearch table.tab_css {
+		font-size:11px;
+		color:#333333;
+		border-width: 1px;
+		border-color: #666666;
+		border-collapse: collapse;
+	}
+	.personSearch table.tab_css th {
+		border-width: 1px;
+		padding: 4px;
+		border-style: solid;
+		border-color: #666666;
+		background-color: #cad9ea;
+	}
+	.personSearch table.tab_css td{
+		border-width: 1px;
+		padding: 4px;
+		border-style: solid;
+		border-color: #666666;
+		background-color: #ffffff;
+	}
+</style>
 <script type="text/javascript">
    	logout = function(){
     	var url = "${createLink(controller:'j_spring_security_logout')}";
@@ -24,6 +47,8 @@
 	     	"dijit/Dialog",
 	     	"dijit/layout/BorderContainer",
 	     	"dijit/layout/AccordionContainer",
+	     	"dijit/form/ValidationTextBox",
+	     	"dijit/form/Button",
 	     	"rosten/widget/TitlePane",
 	     	"rosten/app/Main"],
 		function(parser, kernel,JSON,lang,query,win,dom,domStyle,domClass,domConstruct,registry,ContentPane,Dialog) {
@@ -121,10 +146,10 @@
 		<div data-dojo-type="dijit/layout/BorderContainer" id="home"
 			data-dojo-props='region:"center",gutters:false,style:{padding:"1px 1px 0px 1px",height:"100%",width:"100%",display:"none"}'>
 			
-			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"top",style:{height:"350px"},gutters:false' >
+			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"top",style:{height:"293px"},gutters:false' >
 			
 				<div data-dojo-type="rosten/widget/TitlePane"
-					data-dojo-props='title:"最新公告",toggleable:false,height:"300px",width:"50%",style:{marginRight:"1px"},region:"left",moreText:"更多"'>
+					data-dojo-props='title:"最新公告",toggleable:false,height:"243px",width:"50%",style:{marginRight:"1px"},region:"left",moreText:"更多"'>
 					通知公告内容......
 				</div>
 				
@@ -132,12 +157,12 @@
 					data-dojo-props='region:"center",executeScripts:true,renderStyles:true'>
 					
 					<div data-dojo-type="rosten/widget/TitlePane"
-						data-dojo-props='title:"待办工作",toggleable:false,height:"126px",moreText:"更多"'>
+						data-dojo-props='title:"待办工作",toggleable:false,height:"25%",moreText:"更多",height:"98px"'>
 						待办工作内容......
 					</div>
 					
 					<div data-dojo-type="rosten/widget/TitlePane" style="margin-top:1px"
-						data-dojo-props='title:"个人邮件",toggleable:false,height:"125px",moreText:"更多"'>
+						data-dojo-props='title:"个人邮件",toggleable:false,height:"96px",moreText:"更多"'>
 						个人邮箱内容......
 					</div>
 					
@@ -146,17 +171,37 @@
 			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"center",gutters:false'>
 				
 				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%;"
-					data-dojo-props='title:"常用信息",toggleable:false,region:"left",moreText:""'>
+					data-dojo-props='title:"常用信息",toggleable:false,region:"left",moreText:"",height:"146px"'>
 					常用信息内容......
 				</div>
 				
 				<div data-dojo-type="rosten/widget/TitlePane" style="margin-left:1px;margin-right:1px"
-					data-dojo-props='title:"通讯服务",toggleable:false,region:"center",moreText:""'>
-					通讯录内容......
+					data-dojo-props='title:"通讯录",toggleable:false,region:"center",moreText:"",height:"146px"'>
+					<div style="text-align:center">
+                      <span>关键字：</span>
+                      <input id="personSearch" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-props='style:{width:"200px",marginLeft:"1px"}'/>
+                      <button data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){searchPerson()}'>查询</button>
+                    </div>
+                    <div class="personSearch">
+						<table width="98%" class="tab_css">
+							<tr>
+								<th width="15%">姓名</th>
+								<th width="20%">办公电话</th>
+								<th width="20%">移动电话</th>
+								<th>邮箱地址</th>
+							</tr>
+							<tr>
+								<td>张三</td>
+								<td>85178251</td>
+								<td>12345678901</td>
+								<td>luhangyu2000@163.com</td>
+							</tr>
+						</table>
+					</div>
 				</div>
 				
 				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%"
-					data-dojo-props='title:"下载专区",toggleable:false,region:"right",moreText:"更多"'>
+					data-dojo-props='title:"下载专区",toggleable:false,region:"right",moreText:"更多",height:"146px"'>
 					下载内容......
 				</div>
 				

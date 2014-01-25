@@ -31,8 +31,9 @@
 } 
 .rosten .headerTop .nav0Div {
 	float:left;
-	width:250px;
+	/*width:250px;*/
 	color:#fafafa;
+	margin-right:5px;
 }	
 .rosten .headerTop .nav1Icon {
 	float:left;
