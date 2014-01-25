@@ -75,24 +75,19 @@ define(["dojo/_base/kernel"
              * 用于加载对应的js文件,此方法在后续开发过程中需要修改
              */
             console.log("loadjs file is :" + oString);
-            if (oString == "系统管理" || oString == "平台管理") {
+            if (oString == "plat" || oString == "system") {
             	deleteMailNavigation();
              	require(["rosten/app/SystemManage"]);
-            } else if (oString == "系统配置") {
-            	deleteMailNavigation();
-                require(["./ConfigManage"]);
-            } else if (oString == "个人办公") {
+            }else if (oString == "person") {
             	addMailNavigation();
-            } else if (oString == "公告栏") {
+            } else if (oString == "bbs") {
             	deleteMailNavigation();
-//                require(["./SystemManage"]);
-            } else if (oString == "发文管理") {
+            } else if (oString == "sendfile") {
             	deleteMailNavigation();
                 require(["rosten/app/SendFileManage"]);
-            } else if (oString == "收文管理") {
+            } else if (oString == "receivefile") {
             	deleteMailNavigation();
-//                require(["./StockManage"]);
-            }else if(oString=="个人配置"){
+            }else if(oString=="personconfig"){
                 deleteMailNavigation();
                 require(["rosten/app/SmsManage"]);
             }

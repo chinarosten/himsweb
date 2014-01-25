@@ -121,27 +121,43 @@
 		<div data-dojo-type="dijit/layout/BorderContainer" id="home"
 			data-dojo-props='region:"center",gutters:false,style:{padding:"1px 1px 0px 1px",height:"100%",width:"100%",display:"none"}'>
 			
-			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"top",style:{height:"300px"},gutters:false' >
+			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"top",style:{height:"350px"},gutters:false' >
 			
 				<div data-dojo-type="rosten/widget/TitlePane"
-					data-dojo-props='title:"最新公告",toggleable:false,height:"250px",width:"50%",style:{marginRight:"1px"},region:"left"'>
+					data-dojo-props='title:"最新公告",toggleable:false,height:"300px",width:"50%",style:{marginRight:"1px"},region:"left",moreText:"更多"'>
 					通知公告内容......
 				</div>
-				<div data-dojo-type="rosten/widget/TitlePane"
-					data-dojo-props='title:"个人待办",toggleable:false,height:"250px",region:"center"'>
-					个人待办内容......
-				</div>
 				
-			</div>
-			<div data-dojo-type="dijit/layout/BorderContainer" 
-				data-dojo-props='region:"center",gutters:false'>
 				<div data-dojo-type="dojox/layout/ContentPane" style="padding:0px"
 					data-dojo-props='region:"center",executeScripts:true,renderStyles:true'>
 					
 					<div data-dojo-type="rosten/widget/TitlePane"
-						data-dojo-props='title:"下载专区",toggleable:false'>
-						下载专区内容......
+						data-dojo-props='title:"待办工作",toggleable:false,height:"126px",moreText:"更多"'>
+						待办工作内容......
 					</div>
+					
+					<div data-dojo-type="rosten/widget/TitlePane" style="margin-top:1px"
+						data-dojo-props='title:"个人邮件",toggleable:false,height:"125px",moreText:"更多"'>
+						个人邮箱内容......
+					</div>
+					
+				</div>
+			</div>
+			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"center",gutters:false'>
+				
+				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%;"
+					data-dojo-props='title:"常用信息",toggleable:false,region:"left",moreText:""'>
+					常用信息内容......
+				</div>
+				
+				<div data-dojo-type="rosten/widget/TitlePane" style="margin-left:1px;margin-right:1px"
+					data-dojo-props='title:"通讯服务",toggleable:false,region:"center",moreText:""'>
+					通讯录内容......
+				</div>
+				
+				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%"
+					data-dojo-props='title:"下载专区",toggleable:false,region:"right",moreText:"更多"'>
+					下载内容......
 				</div>
 				
 			</div>

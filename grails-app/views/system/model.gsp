@@ -69,6 +69,24 @@
                        <tr>
                             <td>
                                 <div align="right" >
+                                  <span style="color:red">*&nbsp;</span>模块代码：
+                                </div>
+                            </td>
+                            <td>
+                                <input id="modelCode" data-dojo-type="dijit.form.ValidationTextBox" 
+                                	data-dojo-props='name:"modelCode",${fieldAcl.isReadOnly("modelCode")},
+                                		"class":"input",
+                                		style:{width:"400px"},
+                                		trim:true,
+                                		required:true,
+                                		promptMessage:"请正确输入模块代码...",
+              							value:"${model?.modelCode}"
+                               '/>
+                            </td>
+                        </tr>
+                       <tr>
+                            <td>
+                                <div align="right" >
                                   <span style="color:red">*&nbsp;</span>模块名称：
                                 </div>
                             </td>
@@ -83,7 +101,7 @@
               							value:"${model?.modelName}"
                                '/>
                             </td>
-                            </tr>
+                        </tr>
 						<tr>
                         	<td>
                                 <div align="right" >

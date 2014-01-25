@@ -10,6 +10,9 @@ class Model {
 	@GridColumn(name="模块名称")
 	String modelName
 	
+	//模块代码
+	String modelCode
+	
 	//模块链接
 	@GridColumn(name="模块链接")
 	String modelUrl

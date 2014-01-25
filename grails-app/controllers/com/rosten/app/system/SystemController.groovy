@@ -810,9 +810,11 @@ class SystemController {
 		
 		if("normal".equals(user.getUserType())){
 			//普通用户
-			fa.readOnly += ["modelName","modelUrl","description"]
+			fa.readOnly += ["modelCode","modelName","modelUrl","description"]
 		}else if("admin".equals(user.getUserType())){
-			
+			if(params.id){
+				fa.readOnly << "modelCode"
+			}
 		}
 		json["fieldAcl"] = fa
 		
@@ -1625,8 +1627,8 @@ class SystemController {
 		
 		def modelList=[],defaultModel,userType
 		
-		defaultModel = Model.findByModelName("首页");
-		def personModel = Model.findByModelName("个人办公")
+		defaultModel = Model.findByModelCode("start");
+		def personModel = Model.findByModelCode("person")
 		userType = user.getUserType()
 		if("super".equals(userType)){
 			//超级管理员
@@ -1704,7 +1706,7 @@ class SystemController {
 					_indexList << indexValue
 					_index = indexValue + 1
 				}
-				model[item.id + "&" + Util.obj2str(indexValue).padLeft(2,"0")] = item.modelName + "&" + item.modelUrl
+				model[item.id + "&" + Util.obj2str(indexValue).padLeft(2,"0")] = item.modelCode + ":" + item.modelName + "&" + item.modelUrl
 				
 			}
 			if(defaultModel){

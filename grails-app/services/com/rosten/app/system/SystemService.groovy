@@ -323,17 +323,88 @@ class SystemService {
 		}
 		return true
 	}
+	
+	private def initData_bbs ={ path,company ->
+		def model = new Model(company:company)
+		model.modelName = "公告栏"
+		model.modelCode = "bbs"
+		model.modelUrl = path + "/system/navigation"
+		model.description ="公告栏模块"
+
+		def resource = new Resource()
+		resource.resourceName = "配置文档"
+		resource.url = "bbsConfigManage"
+		resource.imgUrl = "images/rosten/navigation/config.png"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "各人待办"
+		resource.url = "mybbsManage"
+		resource.imgUrl = "images/rosten/navigation/bbs_my.gif"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "最新公告"
+		resource.url = "newbbsManage"
+		resource.imgUrl = "images/rosten/navigation/bbs_new.gif"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "所有公告"
+		resource.url = "allbbsManage"
+		resource.imgUrl = "images/rosten/navigation/bbs_all.gif"
+		model.addToResources(resource)
+		
+		model.save(flush:true)
+	}
+	private def initData_sendfile ={path,company ->
+		def model = new Model(company:company)
+		model.modelName = "发文管理"
+		model.modelCode = "sendfile"
+		model.modelUrl = path + "/system/navigation"
+		model.description ="发文管理模块"
+		
+		def resource = new Resource()
+		resource.resourceName = "配置文档"
+		resource.url = "sendfileConfigManage"
+		resource.imgUrl = "images/rosten/navigation/config.png"
+		model.addToResources(resource)
+
+		resource = new Resource()
+		resource.resourceName = "各人待办"
+		resource.url = "mySendfileManage"
+		resource.imgUrl = "images/rosten/navigation/bbs.gif"
+		model.addToResources(resource)
+		model.save(flush:true)
+	}
+	private def initData_receivefile ={path,company ->
+		def model = new Model(company:company)
+		model.modelName = "收文管理"
+		model.modelCode = "receivefile"
+		model.modelUrl = path + "/system/navigation"
+		model.description ="收文管理模块"
+		
+		def resource = new Resource()
+		resource.resourceName = "配置文档"
+		resource.url = "receivefileConfigManage"
+		resource.imgUrl = "images/rosten/navigation/config.png"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "各人待办"
+		resource.url = "myReceivefileManage"
+		resource.imgUrl = "images/rosten/navigation/bbs.gif"
+		model.addToResources(resource)
+		model.save(flush:true)
+
+	}
 	def initData_first ={path,company->
 		try{
-//			def model = new Model(company:company)
-//			model.modelName = "首页"
-//			model.modelUrl = "js:home"
-//			model.description ="首页模块"
-//			model.save(flush:true)
 			
 			def model = new Model(company:company)
 			model.modelName = "系统管理"
 			model.modelUrl = path + "/system/navigation"
+			model.modelCode = "system"
 			model.description ="系统配置文件管理模块"
 
 			def resource = new Resource()
@@ -390,57 +461,33 @@ class SystemService {
 			resource.imgUrl = "images/rosten/navigation/Resource.gif"
 			model.addToResources(resource)
 			model.save(flush:true)
-
-			model = new Model(company:company)
-			model.modelName = "公告栏"
-			model.modelUrl = path + "/system/navigation"
-			model.description ="公告栏模块"
-
-			resource = new Resource()
-			resource.resourceName = "公告栏"
-			resource.url = "bbs"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_Stock.gif"
-			model.addToResources(resource)
-			model.save(flush:true)
-
-			model = new Model(company:company)
-			model.modelName = "发文管理"
-			model.modelUrl = path + "/system/navigation"
-			model.description ="发文管理模块"
-
-			resource = new Resource()
-			resource.resourceName = "发文管理"
-			resource.url = "sendfile"
-			resource.imgUrl = "images/rosten/navigation/Hairdress_ServiceType.gif"
-			model.addToResources(resource)
-			model.save(flush:true)
-
-			model = new Model(company:company)
-			model.modelName = "收文管理"
-			model.modelUrl = path + "/system/navigation"
-			model.description ="收文管理模块"
-
-			resource = new Resource()
-			resource.resourceName = "收文管理"
-			resource.url = "receivefile"
-			resource.imgUrl = "images/rosten/navigation/UserType.gif"
-			model.addToResources(resource)
-			model.save(flush:true)
+			
+			//公告栏
+			initData_bbs(path,company)
+			
+			//发文管理
+			initData_sendfile(path,company)
+			
+			//收文管理
+			initData_receivefile(path,company)
 
 			model = new Model(company:company)
 			model.modelName = "短信发送"
+			model.modelCode = "sms"
 			model.modelUrl = "js:sms"
 			model.description ="短信发送模块"
 			model.save(flush:true)
 
 			model = new Model(company:company)
 			model.modelName = "你问我答"
+			model.modelCode = "question"
 			model.modelUrl = "js:question"
 			model.description ="你问我答模块"
 			model.save(flush:true)
 			
 			model = new Model(company:company)
 			model.modelName = "个人配置"
+			model.modelCode = "personconfig"
 			model.modelUrl = path + "/system/navigation"
 			model.description ="个人配置模块"
 			
