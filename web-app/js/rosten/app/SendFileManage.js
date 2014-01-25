@@ -47,7 +47,7 @@ define([ "dojo/_base/connect", "dijit/registry", "rosten/kernel/behavior" ], fun
 		var userid = rosten.kernel.getUserInforByKey("idnumber");
 		
 		switch (oString) {
-		case "sendfile":
+		case "mySendfileManage":
 			var naviJson = {
 				identifier : oString,
 				actionBarSrc : rosten.webPath + "/sendFileAction/sendFileView",
