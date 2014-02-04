@@ -82,11 +82,13 @@ define(["dojo/_base/kernel"
             	addMailNavigation();
             } else if (oString == "bbs") {
             	deleteMailNavigation();
+            	require(["rosten/app/BbsManage"]);
             } else if (oString == "sendfile") {
             	deleteMailNavigation();
                 require(["rosten/app/SendFileManage"]);
             } else if (oString == "receivefile") {
             	deleteMailNavigation();
+            	require(["rosten/app/Receivefile"]);
             }else if(oString=="personconfig"){
                 deleteMailNavigation();
                 require(["rosten/app/SmsManage"]);
