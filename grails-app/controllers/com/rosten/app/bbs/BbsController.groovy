@@ -23,6 +23,7 @@ class BbsController {
 		def query = {
 			eq("company",company)
 			eq("currentUser",user)
+			eq("status","已发布")
 		}
 		
 		def bbsList = []
@@ -30,6 +31,7 @@ class BbsController {
 			def smap =[:]
 			smap["topic"] = it.topic
 			smap["id"] = it.id
+			smap["date"] = it.getFormattedPublishDate()
 			
 			bbsList << smap
 		}
@@ -115,7 +117,19 @@ class BbsController {
 		FieldAcl fa = new FieldAcl()
 		if("normal".equals(user.getUserType())){
 			//普通用户
-			fa.readOnly = ["resourceName","url","imgUrl","description"]
+			if(user.equals(bbs.currentUser)){
+				switch(bbs.status){
+					case "起草":
+						break
+					case "待发布":
+						break
+					case "已发布":
+						fa.readOnly = ["level","category","publishDate","topic","content","attach"]
+						break;
+				}
+			}else{
+				fa.readOnly = ["level","category","publishDate","topic","content","attach"]
+			}
 		}
 		model["fieldAcl"] = fa
 		

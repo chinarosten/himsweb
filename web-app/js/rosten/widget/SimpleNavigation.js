@@ -36,7 +36,7 @@ define(["dojo/_base/declare",
                 this.url = url;
             var args = {
                 url: this.url,
-//                sync: true,
+                sync: true,//同步
 				preventCache: true,
                 handleAs: "json",
                 load: lang.hitch(this, function(data){	

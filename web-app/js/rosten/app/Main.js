@@ -142,15 +142,20 @@ define(["dojo/_base/kernel"
     	var ul = document.createElement("ul");
     	for (var i = 0; i < data.length; i++) {
     		 var li = document.createElement("li");
-             var a = document.createElement("a");
+    		 ul.appendChild(li);
+    		 
+    		 
+    		 var a = document.createElement("a");
              var span = document.createElement("span");
-
              span.innerHTML = data[i].topic;
              a.appendChild(span);
              a.setAttribute("href", "javascript:" + functionName + "('" + data[i].id + "')");
              li.appendChild(a);
-             ul.appendChild(li);
-             console.log(li);
+    		 
+             var span_time = document.createElement("span");
+             span_time.innerHTML = data[i].date;
+             domStyle.set(span_time,"float","right");
+             li.appendChild(span_time);
     	}
     	node.appendChild(ul);
     };
@@ -158,6 +163,17 @@ define(["dojo/_base/kernel"
     	var userid = rosten.kernel.getUserInforByKey("idnumber");
 		var companyId = rosten.kernel.getUserInforByKey("companyid");
 		rosten.openNewWindow("bbs", rosten.webPath + "/bbs/bbsShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
+    };
+    more_bbs = function(){
+    	var key = rosten.kernel.getMenuKeyByCode("bbs");
+    	if(key!=null){
+    		rosten.kernel._naviMenuShow(key);
+    		require(["rosten/app/BbsManage"],function(){
+    			show_bbsNaviEntity("mybbsManage");
+    		});
+    	}else{
+    		rosten.alert("未找到相对应的模块,请通知管理员");
+    	}
     };
     addMailNavigation = function(){
     	if(registry.byId("mail_quick")==undefined){

@@ -258,8 +258,10 @@
 						    
 						    </td>    
 						</tr>
+						<g:if test="${fieldAcl.isReadOnly('attach')==true}">
+						
 						<tr>
-						    <td><div align="right">附件：</td>
+						    <td><div align="right">附件：</div></td>
 						    <td colspan=3>
 						    	<div data-dojo-type="dijit/form/DropDownButton" >
 									<span>添加附件</span>
@@ -299,10 +301,14 @@
 						    
 						    <td>    
 						</tr>
-						<tr><td></td>
-						<td>
-							<div id="fileShow" style="margin-top:5px;"></div>
-						</td>
+						</g:if>
+						<tr>
+							<td>
+								<div align="right">附件：</div>
+							</td>
+							<td>
+								<div id="fileShow" style="margin-top:5px;"></div>
+							</td>
 						</tr>
                     </tbody>
                 </table>
