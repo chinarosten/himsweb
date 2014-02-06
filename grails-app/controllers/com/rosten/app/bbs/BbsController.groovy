@@ -46,6 +46,7 @@ class BbsController {
 				break;
 			case "agrain":
 				bbs.status = "已发布"
+				bbs.publishDate = new Date()
 				break;
 			case "notAgrain":
 				bbs.status = "不同意"

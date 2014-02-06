@@ -82,8 +82,8 @@
 	   					if(nl.length>0){
 	   						dlg = registry.getEnclosingWidget(nl[0]);
 	   					}else{
-	   						dlg = new Dialog({title:"用户登录"},document.createElement("div"))
-	   						domConstruct.place(dlg.domNode,dojo.body());
+	   						dlg = new Dialog({title:"用户登录"},document.createElement("div"));
+	   						domConstruct.place(dlg.domNode,win.body());
 	   						domStyle.set(dlg.domNode,"height","185px");
 	   						domStyle.set(dlg.domNode,"width","280px");
 	   						domClass.add(dlg.domNode,"logindlg");
@@ -153,7 +153,9 @@
 			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"top",style:{height:"293px"},gutters:false' >
 			
 				<div data-dojo-type="rosten/widget/TitlePane" id="home_bbs"
-					data-dojo-props='title:"最新公告",toggleable:false,height:"243px",width:"50%",style:{marginRight:"1px"},region:"left",moreText:"更多"'>
+					data-dojo-props='title:"最新公告",toggleable:false,
+						_moreClick:more_bbs,
+						height:"243px",width:"50%",style:{marginRight:"1px"},region:"left",moreText:"更多"'>
 				</div>
 				
 				<div data-dojo-type="dojox/layout/ContentPane" style="padding:0px"

@@ -158,6 +158,10 @@
 				rosten.readSync(rosten.webPath + "/bbs/bbsFlowDeal",content,function(data){
 					if(data.result=="true" || data.result == true){
 						rosten.alert("成功！").queryDlgClose= function(){
+							if(type=="agrain"){
+								//刷新首页bbs内容
+								window.opener.showStartBbs("${user?.id}","${company?.id }");
+							}
 							rosten.pagequit();
 						}
 					}else{
