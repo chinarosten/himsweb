@@ -26,6 +26,9 @@
 		border-color: #666666;
 		background-color: #ffffff;
 	}
+	#home_bbs{overflow:auto;}
+	#home_bbs ul{list-style:none;padding:0px;overflow:auto;margin:0px}
+	#hom_bbs  li{height:20px;line-height:20px}
 </style>
 <script type="text/javascript">
    	logout = function(){
@@ -69,6 +72,7 @@
 		            type: "stand"
 		        };
 				initInstance(naviJson,data);
+				//获取bbs内容
 			});
 			lang.extend(ContentPane,{
 	   			onDownloadError:function(error){
@@ -148,20 +152,19 @@
 			
 			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"top",style:{height:"293px"},gutters:false' >
 			
-				<div data-dojo-type="rosten/widget/TitlePane"
+				<div data-dojo-type="rosten/widget/TitlePane" id="home_bbs"
 					data-dojo-props='title:"最新公告",toggleable:false,height:"243px",width:"50%",style:{marginRight:"1px"},region:"left",moreText:"更多"'>
-					通知公告内容......
 				</div>
 				
 				<div data-dojo-type="dojox/layout/ContentPane" style="padding:0px"
 					data-dojo-props='region:"center",executeScripts:true,renderStyles:true'>
 					
-					<div data-dojo-type="rosten/widget/TitlePane"
+					<div data-dojo-type="rosten/widget/TitlePane" id="home_personDeal"
 						data-dojo-props='title:"待办工作",toggleable:false,height:"25%",moreText:"更多",height:"98px"'>
 						待办工作内容......
 					</div>
 					
-					<div data-dojo-type="rosten/widget/TitlePane" style="margin-top:1px"
+					<div data-dojo-type="rosten/widget/TitlePane" style="margin-top:1px" id ="home_personMail"
 						data-dojo-props='title:"个人邮件",toggleable:false,height:"96px",moreText:"更多"'>
 						个人邮箱内容......
 					</div>
@@ -170,7 +173,7 @@
 			</div>
 			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"center",gutters:false'>
 				
-				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%;"
+				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%;" id="information"
 					data-dojo-props='title:"常用信息",toggleable:false,region:"left",moreText:"",height:"146px"'>
 					常用信息内容......
 				</div>
@@ -183,7 +186,7 @@
                       <button data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){searchPerson()}'>查询</button>
                     </div>
                     <div class="personSearch">
-						<table width="98%" class="tab_css">
+						<table width="98%" class="tab_css" id="personSearch">
 							<tr>
 								<th width="15%">姓名</th>
 								<th width="20%">办公电话</th>
@@ -200,7 +203,7 @@
 					</div>
 				</div>
 				
-				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%"
+				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%" id="download"
 					data-dojo-props='title:"下载专区",toggleable:false,region:"right",moreText:"更多",height:"146px"'>
 					下载内容......
 				</div>

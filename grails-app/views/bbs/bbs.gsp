@@ -151,7 +151,31 @@
 					}
 				});
 			}
+			bbs_deal = function(type){
+				var content = {};
+				content.id = registry.byId("id").attr("value");
+				content.deal = type;
+				rosten.readSync(rosten.webPath + "/bbs/bbsFlowDeal",content,function(data){
+					if(data.result=="true" || data.result == true){
+						rosten.alert("成功！").queryDlgClose= function(){
+							rosten.pagequit();
+						}
+					}else{
+						rosten.alert("失败!");
+					}	
+				});
+			};
+			bbs_submit = function(){
+				bbs_deal("submit");
+			};
+			bbs_agrain = function(){
+				bbs_deal("agrain");
+			};
+			bbs_notAgrain = function(){
+				bbs_deal("notAgrain");
+			};
 		});
+		
     </script>
 </head>
 <body>

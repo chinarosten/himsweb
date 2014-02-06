@@ -10,6 +10,57 @@ class BbsController {
 	def springSecurityService
 	def bbsService
 	
+	def publishBbs ={
+		
+		def user = User.get(params.userId)
+		def company = Company.get(params.companyId)
+		
+		def max = 15
+		def offset = 0
+		
+		def c = Bbs.createCriteria()
+		def pa=[max:max,offset:offset]
+		def query = {
+			eq("company",company)
+			eq("currentUser",user)
+		}
+		
+		def bbsList = []
+		c.list(pa,query).each{
+			def smap =[:]
+			smap["topic"] = it.topic
+			smap["id"] = it.id
+			
+			bbsList << smap
+		}
+		render bbsList as JSON
+	}
+	def bbsFlowDeal = {
+		def json=[:]
+		def bbs = Bbs.get(params.id)
+		switch (params.deal){
+			case "submit":
+				bbs.status="待发布"
+				break;
+			case "agrain":
+				bbs.status = "已发布"
+				break;
+			case "notAgrain":
+				bbs.status = "不同意"
+				break;
+		}
+		bbs.currentDealDate = new Date()
+		
+		if(bbs.save(flush:true)){
+			json["result"] = true
+		}else{
+			bbs.errors.each{
+				println it
+			}
+			json["result"] = false
+		}
+		render json as JSON
+	}
 	def bbsSave = {
 		def json=[:]
 		def bbs = new Bbs()

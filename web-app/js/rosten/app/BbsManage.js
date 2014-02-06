@@ -39,10 +39,11 @@ define([ "dojo/_base/connect", "dijit/registry","rosten/util/general", "rosten/k
 		return "<a href=\"javascript:bbs_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
 	};
 	bbs_onMessageOpen = function(rowIndex){
-		var grid = rosten.kernel.getGrid();
-		var item = grid.getItem(rowIndex);
-        var store = grid.getStore();
-        var id = store.getValue(item, "id");
+        var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("bbs", rosten.webPath + "/bbs/bbsShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
 	};
 	add_bbs = function() {
 		var userid = rosten.kernel.getUserInforByKey("idnumber");

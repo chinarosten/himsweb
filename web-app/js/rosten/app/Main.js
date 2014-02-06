@@ -119,7 +119,16 @@ define(["dojo/_base/kernel"
         });
         
 		rosten.kernel = new rostenKernel(naviJson);
-			rosten.kernel.addUserInfo(data);
+		rosten.kernel.addUserInfo(data);
+		
+		//获取前15条bbs信息
+        var userId = data["idnumber"];
+		var companyId = data["companyid"];
+		
+        rosten.read(rosten.webPath + "/bbs/publishBbs", {userId:userId,companyId:companyId}, function(_data) {
+        	addUlInformation("home_bbs","openBbs",_data);
+        });
+		
         if (rosten.kernel.getMenuName() == "") {
             return;
         } else {
@@ -127,6 +136,28 @@ define(["dojo/_base/kernel"
         }
         //增加时获取后台session功能
         //setInterval("session_checkTimeOut()",60000*120 + 2000);
+    };
+    addUlInformation = function(idname,functionName,data){
+    	var node = registry.byId(idname).containerNode;
+    	var ul = document.createElement("ul");
+    	for (var i = 0; i < data.length; i++) {
+    		 var li = document.createElement("li");
+             var a = document.createElement("a");
+             var span = document.createElement("span");
+
+             span.innerHTML = data[i].topic;
+             a.appendChild(span);
+             a.setAttribute("href", "javascript:" + functionName + "('" + data[i].id + "')");
+             li.appendChild(a);
+             ul.appendChild(li);
+             console.log(li);
+    	}
+    	node.appendChild(ul);
+    };
+    openBbs = function(id){
+    	var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("bbs", rosten.webPath + "/bbs/bbsShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
     };
     addMailNavigation = function(){
     	if(registry.byId("mail_quick")==undefined){

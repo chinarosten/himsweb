@@ -19,10 +19,10 @@ class BbsActionController {
 				//当前处理人
 				if("起草".equals(bbs.status)){
 					actionList << createAction("保存",webPath + imgPath + "Save.gif","bbs_add")
-					actionList << createAction("提交",webPath + imgPath + "Save.gif","bbs_add")
+					actionList << createAction("提交",webPath + imgPath + "Save.gif","bbs_submit")
 				}else if("待发布".equals(bbs.status)){
-					actionList << createAction("同意",webPath + imgPath + "Save.gif","bbs_add")
-					actionList << createAction("不同意",webPath + imgPath + "Save.gif","bbs_add")
+					actionList << createAction("发布",webPath + imgPath + "Save.gif","bbs_agrain")
+					actionList << createAction("不同意",webPath + imgPath + "Save.gif","bbs_notAgrain")
 				}
 			}
 		}else{
