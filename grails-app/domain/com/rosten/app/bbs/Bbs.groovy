@@ -118,7 +118,7 @@ class Bbs {
 	Attachment attachment
 
 	//缺省读者；*:允许所有人查看,[角色名称]:允许角色,user:普通人员查看
-	List defaultReaders=["[公告普通人员]"]
+	List defaultReaders=["[公告普通人员]","[公告管理员]"]
 	
 	//已阅读人员,读者
 	static hasMany=[hasReaders:User,readers:User]

@@ -22,7 +22,9 @@ class BbsController {
 		def pa=[max:max,offset:offset]
 		def query = {
 			eq("company",company)
-			eq("currentUser",user)
+			readers{
+				eq("id",user.id)
+			}
 			eq("status","已发布")
 		}
 		

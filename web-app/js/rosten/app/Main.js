@@ -172,7 +172,7 @@ define(["dojo/_base/kernel"
 				//更新首页中德已读信息
 				
 			}
-		};
+		});
     };
     more_bbs = function(){
     	var key = rosten.kernel.getMenuKeyByCode("bbs");

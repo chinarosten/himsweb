@@ -47,7 +47,9 @@ class BbsService {
 		def now = new Date()
 		def query = {
 			eq("company",company)
-			eq("currentUser",user)
+			readers{
+				eq("id",user.id)
+			}
 			between("publishDate",now-showDays,now)
 		}
 		return c.list(pa,query)
