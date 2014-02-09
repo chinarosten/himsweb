@@ -47,6 +47,14 @@
 					
 					return;
 				}
+				var showDays = registry.byId("showDays");
+				if(!showDays.isValid()){
+					rosten.alert("最新公告显示时间不正确！").queryDlgClose = function(){
+						showDays.focus();
+					};
+					
+					return;
+				}
 				var content = {};
 				
 				rosten.readSync("${createLink(controller:'bbs',action:'bbsConfigSave')}",content,function(data){
@@ -151,6 +159,22 @@
 		            '>
 					</textarea>
 			    </td>
+			</tr>
+			<tr>
+			    <td><div align="right">最新公告显示时间：</div></td>
+			    <td>
+			    	
+			    	<input id="showDays" data-dojo-type="dijit/form/ValidationTextBox" 
+	                 	data-dojo-props='name:"showDays",${fieldAcl.isReadOnly("showDays")},
+	                 		trim:true,
+	                 		required:true,
+	                 		class:"input",
+	                 		style:{width:"50px"},
+							value:"${bbsConfig?.showDays}"
+	                '/> 天
+			    </td>
+			    <td></td>
+			    <td></td>
 			</tr>
 		</table>
 		</fieldset>

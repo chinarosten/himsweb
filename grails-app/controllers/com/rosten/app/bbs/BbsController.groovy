@@ -53,6 +53,16 @@ class BbsController {
 				break;
 		}
 		bbs.currentDealDate = new Date()
+		if(params.dealUser){
+			def dealUsers = params.dealUser.split(",")
+			if(dealUsers.count >1){
+				//并发
+			}else{
+				//串行
+//				def _userId = params.dealUser
+			}
+			
+		}
 		
 		if(bbs.save(flush:true)){
 			json["result"] = true
@@ -140,6 +150,7 @@ class BbsController {
 		def json=[:]
 		def company = Company.get(params.companyId)
 		def user = User.get(params.userId)
+		def bbsConfig = BbsConfig.findByCompany(company)
 		
 		if(params.refreshHeader){
 			json["gridHeader"] = bbsService.getBbsListLayout()
@@ -165,6 +176,7 @@ class BbsController {
 			}else if("new".equals(params.type)){
 				//最新文档
 				args["user"] = user
+				args["showDays"] = bbsConfig.showDays;
 				gridData = bbsService.getBbsListDataStoreByNew(args)
 			}
 			
@@ -197,7 +209,7 @@ class BbsController {
 				total = bbsService.getBbsCount(company)
 			}else if("new".equals(params.type)){
 				//最新文档
-				total = bbsService.getBbsCountByNew(company,user)
+				total = bbsService.getBbsCountByNew(company,user,bbsConfig.showDays)
 			}
 			json["pageControl"] = ["total":total.toString()]
 		}

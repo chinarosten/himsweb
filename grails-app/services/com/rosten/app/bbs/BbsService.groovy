@@ -36,25 +36,29 @@ class BbsService {
 	def getBbsListDataStoreByNew ={params->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15
-		def propertyList = getAllBbsByUser(offset,max,params.company,params.user)
+		def propertyList = getAllBbsByNew(offset,max,params.company,params.user,params.showDays)
 
 		def gridUtil = new GridUtil()
 		return gridUtil.buildDataList("id","title",propertyList,offset)
 	}
-	private def getAllBbsByNew={offset,max,company,user->
+	private def getAllBbsByNew={offset,max,company,user,showDays->
 		def c = Bbs.createCriteria()
 		def pa=[max:max,offset:offset]
+		def now = new Date()
 		def query = {
 			eq("company",company)
 			eq("currentUser",user)
+			between("publishDate",now-showDays,now)
 		}
 		return c.list(pa,query)
 	}
-	def getBbsCountByNew ={company,user->
+	def getBbsCountByNew ={company,user,showDays->
 		def c = Bbs.createCriteria()
+		def now = new Date()
 		def query = {
 			eq("company",company)
 			eq("currentUser",user)
+			between("publishDate",now-showDays,now)
 		}
 		return c.count(query)
 	}

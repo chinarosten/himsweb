@@ -151,10 +151,13 @@
 					}
 				});
 			}
-			bbs_deal = function(type){
+			bbs_deal = function(type,readArray){
 				var content = {};
 				content.id = registry.byId("id").attr("value");
 				content.deal = type;
+				if(readArray){
+					content.dealUser = readArray.join(",");
+				}
 				rosten.readSync(rosten.webPath + "/bbs/bbsFlowDeal",content,function(data){
 					if(data.result=="true" || data.result == true){
 						rosten.alert("成功！").queryDlgClose= function(){
@@ -170,7 +173,12 @@
 				});
 			};
 			bbs_submit = function(){
-				bbs_deal("submit");
+				var o =[];
+				var userId = "${user?.id}";
+				var userDepart = "测试部门";
+				o.push(userId + "&" + userDepart);
+				
+				bbs_deal("submit",o);
 			};
 			bbs_agrain = function(){
 				bbs_deal("agrain");

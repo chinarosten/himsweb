@@ -166,6 +166,13 @@ define(["dojo/_base/kernel"
     	var userid = rosten.kernel.getUserInforByKey("idnumber");
 		var companyId = rosten.kernel.getUserInforByKey("companyid");
 		rosten.openNewWindow("bbs", rosten.webPath + "/bbs/bbsShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
+		//增加公告栏已读信息
+		rosten.read(rosten.webPath + "/bbs/bbsHasRead",{id:id,userId:userid,companyId:companyId},function(data){
+			if(data.result==true || data.result=="true"){
+				//更新首页中德已读信息
+				
+			}
+		};
     };
     more_bbs = function(){
     	var key = rosten.kernel.getMenuKeyByCode("bbs");

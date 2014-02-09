@@ -25,6 +25,9 @@ class BbsConfig {
 	//去年保留号或者废号
 	List frontCancel = []
 	
+	//最新公告保留时间
+	Integer showDays = 7
+	
 	static transients = ["addCancelSN","getCancelSN"]
 	
 	def addCancelSN ={type,sn->
