@@ -47,8 +47,12 @@ class BbsService {
 		def now = new Date()
 		def query = {
 			eq("company",company)
-			readers{
-				eq("id",user.id)
+			or{
+				//defaultReaders为：*或者【角色】或者readers中包含当前用户的均有权访问
+				readers{
+					eq("id",user.id)
+				}
+				like("defaultReaders", "%all%")
 			}
 			between("publishDate",now-showDays,now)
 		}
