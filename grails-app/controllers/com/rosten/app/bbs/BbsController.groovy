@@ -22,8 +22,12 @@ class BbsController {
 		def pa=[max:max,offset:offset]
 		def query = {
 			eq("company",company)
-			readers{
-				eq("id",user.id)
+			or{
+				//defaultReaders为：*或者【角色】或者readers中包含当前用户的均有权访问
+				readers{
+					eq("id",user.id)
+				}
+				like("defaultReaders", "%all%")
 			}
 			eq("status","已发布")
 		}
@@ -49,6 +53,7 @@ class BbsController {
 			case "agrain":
 				bbs.status = "已发布"
 				bbs.publishDate = new Date()
+				bbs.addDefaultReader("all")
 				break;
 			case "notAgrain":
 				bbs.status = "不同意"
@@ -57,7 +62,7 @@ class BbsController {
 		bbs.currentDealDate = new Date()
 		if(params.dealUser){
 			def dealUsers = params.dealUser.split(",")
-			if(dealUsers.count >1){
+			if(dealUsers.size() >1){
 				//并发
 			}else{
 				//串行
