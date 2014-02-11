@@ -414,7 +414,10 @@ define(["dojo/_base/kernel",
         }
         
         //标记邮件为已读状态
-        rosten.read(rosten.webPath + "/mail/mail_changeEmailStatus", {id:id});
+        rosten.read(rosten.webPath + "/mail/mail_changeEmailStatus", {id:id},function(){
+        	//刷新是侯爷信息
+        	showStartMail(rosten.kernel.getUserInforByKey("idnumber"));
+        });
     };
 	function genIndex(){
 		// summary:

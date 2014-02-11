@@ -15,6 +15,38 @@ import com.rosten.app.system.Attachment
 class MailController {
 	def springSecurityService
 	
+	def publishMail = {
+		def user = User.get(params.userId)
+		def max = 4
+		def offset = 0
+		
+		def c = EmailBox.createCriteria()
+		def pa=[max:max,offset:offset]
+		def query = {
+			mailUser{
+				eq("id",user.id)
+			}
+//			eq("receiver",user.username)
+			eq("boxType",1)
+			eq("emailStatus",0)
+		}
+		def bbsList = []
+		c.list(pa,query).unique().each{
+			def smap =[:]
+			smap["subject"] = it.subject
+			smap["id"] = it.id
+			smap["date"] = it.sent
+			
+			if(it.sendType==0){
+				smap["level"] = "【普通】"
+			}else{
+				smap["level"] = "【紧急】"
+			}
+			
+			bbsList << smap
+		}
+		render bbsList as JSON
+	}
 	def downloadFile = {
 		def attachmentInstance =  Attachment.get(params.id)
 		def filename = attachmentInstance.name

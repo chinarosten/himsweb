@@ -15,7 +15,7 @@ class BbsController {
 		def user = User.get(params.userId)
 		def company = Company.get(params.companyId)
 		
-		def max = 15
+		def max = 10
 		def offset = 0
 		
 		def c = Bbs.createCriteria()

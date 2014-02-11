@@ -136,10 +136,10 @@ define(["dojo/_base/kernel"
 		rosten.kernel = new rostenKernel(naviJson);
 		rosten.kernel.addUserInfo(data);
 		
-		//获取前15条bbs信息
+		//获取首页显示信息
 		var userId = data["idnumber"];
 		var companyId = data["companyid"];
-		showStartBbs(userId,companyId);
+		showStartInformation(userId,companyId);
 		
         if (rosten.kernel.getMenuName() == "") {
             return;
@@ -148,6 +148,74 @@ define(["dojo/_base/kernel"
         }
         //增加时获取后台session功能
         //setInterval("session_checkTimeOut()",60000*120 + 2000);
+        
+        //定时刷新首页相关没模块信息,每一分钟刷新一次
+        setInterval("showStartInformation()",60000);
+    };
+    showStartInformation = function(userId,companyId){
+    	showStartBbs(userId,companyId);
+    	showStartMail(userId,companyId);
+    }
+    showStartMail = function(userId,companyId){
+    	rosten.read(rosten.webPath + "/mail/publishMail", {userId:userId,companyId:companyId}, function(data) {
+    		var node = registry.byId("home_personMail").containerNode;
+        	node.innerHTML = "";
+        	
+        	var ul = document.createElement("ul");
+        	for (var i = 0; i < data.length; i++) {
+        		 var li = document.createElement("li");
+        		 ul.appendChild(li);
+        		 
+        		 var level = document.createElement("span");
+        		 level.innerHTML = data[i].level;
+                 domClass.add(level,"level");
+                 if(data[i].level=="【紧急】"){
+                	 domStyle.set(level,"color","red");
+                 }
+                 li.appendChild(level);
+        		 
+        		 var a = document.createElement("a");
+                 var span = document.createElement("span");
+                 span.innerHTML = data[i].subject;
+                 a.appendChild(span);
+                 a.setAttribute("href", "javascript:openMail('" + data[i].id + "')");
+                 li.appendChild(a);
+        		 
+                 var span_time = document.createElement("span");
+                 span_time.innerHTML = data[i].date;
+                 domClass.add(span_time,"time");
+                 li.appendChild(span_time);
+        	}
+        	node.appendChild(ul);
+        });
+    };
+    openMail = function(id){
+    	var key = rosten.kernel.getMenuKeyByCode("person");
+    	if(key!=null){
+    		rosten.kernel._naviMenuShow(key);
+    		require(["rosten/app/Mail"],function(){
+    			var tmpSbb = connect.subscribe("closeUnderlay", null, function(obj){
+    				var store = mail_grid.getStore();
+                	store.fetchItemByIdentity({
+                		identity:id,
+                		onItem:function(item){
+                			onMessageOpen(store.getValue(item, "rowIndex")-1)
+                		}
+                	});
+                connect.unsubscribe(tmpSbb);
+    			});
+    		});
+    	}else{
+    		rosten.alert("未找到相对应的模块,请通知管理员");
+    	}
+    };
+    more_mail = function(){
+    	var key = rosten.kernel.getMenuKeyByCode("person");
+    	if(key!=null){
+    		rosten.kernel._naviMenuShow(key);
+    	}else{
+    		rosten.alert("未找到相对应的模块,请通知管理员");
+    	}
     };
     showStartBbs = function(userId,companyId){
         rosten.read(rosten.webPath + "/bbs/publishBbs", {userId:userId,companyId:companyId}, function(_data) {
