@@ -6,13 +6,14 @@ define(["dojo/_base/kernel"
 		, "dojo/_base/lang"
 		, "dijit/registry"
 		, "dojo/dom-style"
+		, "dojo/dom-class"
 		, "dojo/dom-construct"
 		, "dojo/_base/connect"
 		, "dojox/layout/ContentPane"
 		,"rosten/kernel/kernel"
 		,"rosten/util/general"
 		, "rosten/app/Mail"
-		, "rosten/kernel/behavior"], function(kernel, lang, registry, domStyle,domConstruct,connect,ContentPane,rostenKernel,general) {
+		, "rosten/kernel/behavior"], function(kernel, lang, registry, domStyle,domClass,domConstruct,connect,ContentPane,rostenKernel,general) {
 	var main = {};
 	main._getGridUnid = function(rostenGrid,type){
 		/*
@@ -77,21 +78,35 @@ define(["dojo/_base/kernel"
             console.log("loadjs file is :" + oString);
             if (oString == "plat" || oString == "system") {
             	deleteMailNavigation();
-             	require(["rosten/app/SystemManage"]);
+             	require(["rosten/app/SystemManage"],function(){
+             		if(oString=="plat"){
+             			show_systemNaviEntity("companyManage");
+             		}else{
+             			show_systemNaviEntity("userManage");
+             		}
+             	});
             }else if (oString == "person") {
             	addMailNavigation();
             } else if (oString == "bbs") {
             	deleteMailNavigation();
-            	require(["rosten/app/BbsManage"]);
+            	require(["rosten/app/BbsManage"],function(){
+            		show_bbsNaviEntity("mybbsManage");
+            	});
             } else if (oString == "sendfile") {
             	deleteMailNavigation();
-                require(["rosten/app/SendFileManage"]);
+                require(["rosten/app/SendFileManage"],function(){
+                	returnToMain();
+                });
             } else if (oString == "receivefile") {
             	deleteMailNavigation();
-            	require(["rosten/app/Receivefile"]);
+            	require(["rosten/app/Receivefile"],function(){
+            		returnToMain();
+            	});
             }else if(oString=="personconfig"){
                 deleteMailNavigation();
-                require(["rosten/app/SmsManage"]);
+                require(["rosten/app/SmsManage"],function(){
+                	show_smsNaviEntity("smsgroup");
+                });
             }
         });
 		
@@ -154,10 +169,17 @@ define(["dojo/_base/kernel"
              a.appendChild(span);
              a.setAttribute("href", "javascript:" + functionName + "('" + data[i].id + "')");
              li.appendChild(a);
+             
+             if(data[i].isnew && (data[i].isnew=="true" || data[i].isnew == true)){
+            	 var newspan = document.createElement("span");
+            	 newspan.innerHTML = "&nbsp;";
+                 domClass.add(newspan,"new");
+                 li.appendChild(newspan);
+             }
     		 
              var span_time = document.createElement("span");
              span_time.innerHTML = data[i].date;
-             domStyle.set(span_time,"float","right");
+             domClass.add(span_time,"time");
              li.appendChild(span_time);
     	}
     	node.appendChild(ul);
@@ -166,12 +188,8 @@ define(["dojo/_base/kernel"
     	var userid = rosten.kernel.getUserInforByKey("idnumber");
 		var companyId = rosten.kernel.getUserInforByKey("companyid");
 		rosten.openNewWindow("bbs", rosten.webPath + "/bbs/bbsShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
-		//增加公告栏已读信息
-		rosten.read(rosten.webPath + "/bbs/bbsHasRead",{id:id,userId:userid,companyId:companyId},function(data){
-			if(data.result==true || data.result=="true"){
-				//更新首页中德已读信息
-				
-			}
+		rosten.read(rosten.webPath + "/bbs/hasReadBbs/" + id, {userId:userid,companyId:companyId}, function(_data) {
+			showStartBbs(userid,companyId);
 		});
     };
     more_bbs = function(){

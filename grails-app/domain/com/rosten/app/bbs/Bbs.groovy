@@ -41,8 +41,13 @@ class Bbs {
 	//发布时间
 	Date publishDate
 
-	def getFormattedPublishDate(){
+	def getFormattedPublishDate(String type){
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
+		if("time".equals(type)){
+			sd = new SimpleDateFormat("HH:mm")
+		}else if("date".equals(type)){
+			sd = new SimpleDateFormat("yyyy-MM-dd")
+		}
 		if(publishDate){
 			return sd.format(publishDate)
 		}else{
@@ -158,5 +163,13 @@ class Bbs {
 		id generator:'uuid.hex',params:[separator:'-']
 		table "ROSTEN_BBS_BBS"
 		content sqlType:"text"
+	}
+	def beforeDelete(){
+//		hasReaders.each{
+//			it.delete()
+//		}
+//		readers.each{
+//			it.delete()
+//		}
 	}
 }

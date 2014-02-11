@@ -80,6 +80,7 @@
 		require(["dojo/parser",
 		 		"dojo/_base/kernel",
 		 		"dijit/registry",
+		 		"dojo/date/stamp",
 		 		"dijit/form/ValidationTextBox",
 		 		"dijit/form/SimpleTextarea",
 		 		"dijit/form/Button",
@@ -92,7 +93,7 @@
 		     	"rosten/widget/ActionBar",
 		     	"rosten/app/BbsManage",
 		     	"rosten/app/Application"],
-			function(parser,kernel,registry){
+			function(parser,kernel,registry,datestamp){
 				kernel.addOnLoad(function(){
 					rosten.init({webpath:"${request.getContextPath()}"});
 					rosten.cssinit();
@@ -129,7 +130,7 @@
 				var content = {};
 				content.level = level.attr("value");
 				content.category = category.attr("value");
-				content.publishDate = publishDate.attr("value");
+				content.publishDate = datestamp.toISOString(publishDate.attr("value"),{selector: "date"});
 				content.topic = topic.attr("value");
 				content.content = registry.byId("content").attr("value");
 				content.companyId = "${company?.id }";
@@ -237,7 +238,7 @@
 				                	data-dojo-props='name:"publishDate",${fieldAcl.isReadOnly("publishDate")},
 				                	trim:true,
 				                 	required:true,
-				                	value:"${bbs?.getFormattedPublishDate()}"
+				                	value:"${bbs?.getFormattedPublishDate("date")}"
 				               '/>
 						    
 						   </td>

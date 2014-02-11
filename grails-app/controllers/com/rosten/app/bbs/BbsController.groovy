@@ -33,11 +33,17 @@ class BbsController {
 		}
 		
 		def bbsList = []
-		c.list(pa,query).each{
+		c.list(pa,query).unique().each{
 			def smap =[:]
 			smap["topic"] = it.topic
 			smap["id"] = it.id
-			smap["date"] = it.getFormattedPublishDate()
+			smap["date"] = it.getFormattedPublishDate("datetime")
+			
+			if(!it.hasReaders.find{item->
+				 item.id == user.id 
+			}){
+				smap["isnew"] = true
+			}
 			
 			bbsList << smap
 		}
@@ -81,6 +87,22 @@ class BbsController {
 		}
 		render json as JSON
 	}
+	def bbsDelete ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def bbs = Bbs.get(it)
+				if(bbs){
+					bbs.delete(flush: true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
+	}
 	def bbsSave = {
 		def json=[:]
 		def bbs = new Bbs()
@@ -98,7 +120,11 @@ class BbsController {
 		bbs.currentDealDate = new Date()
 		bbs.drafter = user
 		bbs.drafterDepart = user.getDepartName()
-		bbs.addToReaders(user)
+		bbs.publishDate = Util.convertToTimestamp(params.publishDate)
+		
+		if(!bbs.readers.find{ it.id == user.id }){
+			bbs.addToReaders(user)
+		}
 		
 		if(bbs.save(flush:true)){
 			json["result"] = true
@@ -114,6 +140,27 @@ class BbsController {
 	}
 	def uploadFile ={
 		
+	}
+	def hasReadBbs ={
+		def json=[:]
+		def user = User.get(params.userId)
+		def bbs = Bbs.get(params.id)
+		
+		//增加已读标记
+		if(!bbs.hasReaders.find{ it.id == user.id }){
+			bbs.addToHasReaders(user)
+			if(bbs.save(flush:true)){
+				json["result"] = true
+			}else{
+				bbs.errors.each{
+					println it
+				}
+				json["result"] = false
+			}
+		}else{
+			json["result"] = true
+		}
+		render json as JSON
 	}
 	def bbsAdd ={
 		redirect(action:"bbsShow",params:params)

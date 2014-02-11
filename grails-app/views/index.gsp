@@ -27,8 +27,30 @@
 		background-color: #ffffff;
 	}
 	#home_bbs{overflow:auto;}
-	#home_bbs ul{list-style:none;padding:0px;overflow:auto;margin:0px}
-	#hom_bbs  li{height:20px;line-height:20px}
+	#home_bbs ul{list-style:none;padding:0px;overflow:hidden;margin:0px}
+	#home_bbs li{list-style:none;height:25px;line-height:25px;border-bottom:1px dashed #c9c9c9}
+	#home_bbs ul li a{
+		margin-left:10px;
+		display:inline;
+		color:#404040!important;
+		float:left;
+		text-decoration:none;
+	}
+	#home_bbs ul li .new{
+		background:url(images/rosten/share/icon_new.gif) no-repeat left 5px;
+		width:18px;
+		height:25px;
+		display:block;
+		float:left;
+		padding-left:5px;
+		margin-right:10px;
+		margin-left:5px;
+	}
+	#home_bbs ul li .time{
+		float:right;
+		color:#404040!important;
+		padding-right:10px;
+	}
 </style>
 <script type="text/javascript">
    	logout = function(){

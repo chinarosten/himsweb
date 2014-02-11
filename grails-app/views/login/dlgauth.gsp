@@ -97,8 +97,10 @@
 						if(response.substring(0,1)=="{" && response.substring(response.length-1)=="}"){
 							var json = jsonTool.fromJson(response);
 							if(json.success){
-								dlg.hide();
-								dlg.cp.refresh();
+								//dlg.hide();
+								//dlg.cp.refresh();
+								//刷新整张页面
+								refreshSystem();
 							}else if(json.error){
 								var nd = dom.byId("loginMessage");
 								nd.innerHTML = json.error;

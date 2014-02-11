@@ -178,6 +178,7 @@ define(["dojo/_base/declare",
                 encoding:"utf-8",
                 load: lang.hitch(this, function(response, ioArgs){
                     this._parseData(response);
+                    connect.publish("closeUnderlay", [this]);
                 }),
                 error: lang.hitch(this, function(response, ioArgs){
 					this._closeLoading();
