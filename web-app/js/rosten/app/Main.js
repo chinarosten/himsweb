@@ -148,11 +148,12 @@ define(["dojo/_base/kernel"
         }
         //增加时获取后台session功能
         //setInterval("session_checkTimeOut()",60000*120 + 2000);
-        
-        //定时刷新首页相关没模块信息,每一分钟刷新一次
-        setInterval("showStartInformation()",60000);
     };
     showStartInformation = function(userId,companyId){
+    	if(userId==undefined){
+    		userId = rosten.kernel.getUserInforByKey("idnumber");
+    		companyId = rosten.kernel.getUserInforByKey("companyid");
+    	}
     	showStartBbs(userId,companyId);
     	showStartMail(userId,companyId);
     }
