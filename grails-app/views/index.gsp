@@ -219,23 +219,22 @@
 					data-dojo-props='title:"通讯录",toggleable:false,region:"center",moreText:"",height:"146px"'>
 					<div style="text-align:center">
                       <span>关键字：</span>
-                      <input id="personSearch" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-props='style:{width:"200px",marginLeft:"1px"}'/>
+                      <input id="personSearchInput" data-dojo-type="dijit/form/ValidationTextBox" 
+                      	data-dojo-props='style:{width:"200px",marginLeft:"1px"},placeHolder:"姓名/电话/邮箱"'/>
                       <button data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){searchPerson()}'>查询</button>
                     </div>
                     <div class="personSearch">
-						<table width="98%" class="tab_css" id="personSearch">
-							<tr>
-								<th width="15%">姓名</th>
-								<th width="20%">办公电话</th>
-								<th width="20%">移动电话</th>
-								<th>邮箱地址</th>
-							</tr>
-							<tr>
-								<td>张三</td>
-								<td>85178251</td>
-								<td>12345678901</td>
-								<td>luhangyu2000@163.com</td>
-							</tr>
+						<table width="98%" class="tab_css">
+							<THEAD> 
+								<tr>
+									<th width="15%">姓名</th>
+									<th width="20%">办公电话</th>
+									<th width="20%">移动电话</th>
+									<th>邮箱地址</th>
+								</tr>
+							</THEAD>
+							<tbody id="personSearch">
+							</tbody>
 						</table>
 					</div>
 				</div>

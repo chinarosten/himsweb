@@ -9,6 +9,31 @@ class SystemController {
 	def springSecurityService
 	def systemService
 	
+	def serachPerson ={
+		def company = Company.get(params.companyId)
+		
+		def c = User.createCriteria()
+		def query = {
+			eq("company",company)
+			or{
+				like("username","%" + params.serchInput +  "%")
+				like("chinaName","%" + params.serchInput +  "%")
+				like("telephone","%" + params.serchInput +  "%")
+			}
+		}
+		
+		def _list = []
+		c.list(query).unique().each{
+			def smap =[:]
+			smap["username"] = it.username
+			smap["phone"] = it.telephone
+			smap["mobile"] = it.telephone
+			smap["email"] = it.address
+			
+			_list << smap
+		}
+		render _list as JSON
+	}
 	def skinSave ={
 		def json =[:]
 		def user = User.get(params.id)

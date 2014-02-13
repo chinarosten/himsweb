@@ -5,6 +5,7 @@
 define(["dojo/_base/kernel"
 		, "dojo/_base/lang"
 		, "dijit/registry"
+		, "dojo/dom"
 		, "dojo/dom-style"
 		, "dojo/dom-class"
 		, "dojo/dom-construct"
@@ -13,7 +14,7 @@ define(["dojo/_base/kernel"
 		,"rosten/kernel/kernel"
 		,"rosten/util/general"
 		, "rosten/app/Mail"
-		, "rosten/kernel/behavior"], function(kernel, lang, registry, domStyle,domClass,domConstruct,connect,ContentPane,rostenKernel,general) {
+		, "rosten/kernel/behavior"], function(kernel, lang, registry, dom,domStyle,domClass,domConstruct,connect,ContentPane,rostenKernel,general) {
 	var main = {};
 	main._getGridUnid = function(rostenGrid,type){
 		/*
@@ -325,6 +326,41 @@ define(["dojo/_base/kernel"
     	}else{
     		rosten.alert("未找到相对应的模块,请通知管理员");
     	}
+    };
+    searchPerson = function(){
+    	var inputnode = registry.byId("personSearchInput");
+    	if(inputnode.attr("value")==""){
+    		rosten.alert("请输入查询关键字");
+    		return
+    	}
+    	var companyId = rosten.kernel.getUserInforByKey("companyid");
+    	rosten.read(rosten.webPath + "/system/serachPerson", {serchInput:inputnode.attr("value"),companyId:companyId}, function(data) {
+    		var personSearch = dom.byId("personSearch");
+    		personSearch.innerHTML = "";
+    		
+    		for (var i = 0; i < data.length; i++) {
+    			var tr = document.createElement("tr");
+    			
+    			var td1 = document.createElement("td");
+    			td1.innerHTML = data[i].username;
+    			tr.appendChild(td1);
+    			
+    			var td2 = document.createElement("td");
+    			td2.innerHTML = data[i].phone;
+    			tr.appendChild(td2);
+    			
+    			var td3 = document.createElement("td");
+    			td3.innerHTML = data[i].mobile;
+    			tr.appendChild(td3);
+    			
+    			var td4 = document.createElement("td");
+    			td4.innerHTML = data[i].email;
+    			tr.appendChild(td4);
+    			
+    			personSearch.appendChild(tr);
+    		}
+    		inputnode.attr("value","");
+		});
     };
     addMailNavigation = function(){
     	if(registry.byId("mail_quick")==undefined){
