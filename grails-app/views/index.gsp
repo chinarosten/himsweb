@@ -26,9 +26,9 @@
 		border-color: #666666;
 		background-color: #ffffff;
 	}
-	#home_bbs,#home_personMail{overflow:auto;}
-	#home_bbs ul,#home_personMail ul{list-style:none;padding:0px;overflow:hidden;margin:0px}
-	#home_bbs li,#home_personMail li{list-style:none;height:25px;line-height:25px;border-bottom:1px dashed #c9c9c9}
+	#home_bbs,#home_personMail,#home_gtask{overflow:auto;}
+	#home_bbs ul,#home_personMail ul,#home_gtask ul{list-style:none;padding:0px;overflow:hidden;margin:0px}
+	#home_bbs li,#home_personMail li,#home_gtask li{list-style:none;height:25px;line-height:25px;border-bottom:1px dashed #c9c9c9}
 	#home_bbs ul li a{
 		display:inline;
 		color:#404040!important;
@@ -45,19 +45,19 @@
 		margin-right:10px;
 		margin-left:5px;
 	}
-	#home_personMail ul li a{
+	#home_personMail ul li a,#home_gtask ul li a{
 		margin-left:5px;
 		display:inline;
 		color:#404040!important;
 		float:left;
 		text-decoration:none;
 	}
-	#home_bbs ul li .time,#home_personMail ul li .time{
+	#home_bbs ul li .time,#home_personMail ul li .time,#home_gtask ul li .time{
 		float:right;
 		color:#404040!important;
 		padding-right:10px;
 	}
-	#home_personMail ul li .level{
+	#home_personMail ul li .level,#home_gtask ul li .type{
 		float:left;
 		display:inline;
 	}
@@ -194,9 +194,9 @@
 				<div data-dojo-type="dojox/layout/ContentPane" style="padding:0px"
 					data-dojo-props='region:"center",executeScripts:true,renderStyles:true'>
 					
-					<div data-dojo-type="rosten/widget/TitlePane" id="home_personDeal" id="home_person"
+					<div data-dojo-type="rosten/widget/TitlePane" id="home_gtask"
 						data-dojo-props='title:"待办工作",toggleable:false,
-							
+							_moreClick:more_gtask,
 							height:"25%",moreText:"更多",height:"98px"'>
 					</div>
 					
