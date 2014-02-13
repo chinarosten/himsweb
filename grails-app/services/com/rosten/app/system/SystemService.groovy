@@ -496,6 +496,13 @@ class SystemService {
 			resource.url = "smsgroup"
 			resource.imgUrl = "images/rosten/navigation/Group.gif"
 			model.addToResources(resource)
+			
+			resource = new Resource()
+			resource.resourceName = "待办工作"
+			resource.url = "gtaskManage"
+			resource.imgUrl = "images/rosten/navigation/gtask.png"
+			model.addToResources(resource)
+			
 			model.save(flush:true)
 			
 		}catch(Exception e){
