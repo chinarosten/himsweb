@@ -276,7 +276,9 @@ class BbsController {
 		def bbsConfig = BbsConfig.findWhere(company:user.company)
 		if(bbsConfig==null) {
 			bbsConfig = new BbsConfig()
-			bbsConfig.nowYear = 2014
+			
+			Calendar cal = Calendar.getInstance();
+			bbsConfig.nowYear = cal.get(Calendar.YEAR)
 			bbsConfig.frontYear = bbsConfig.nowYear -1
 			
 			model.companyId = user.company.id
@@ -306,19 +308,8 @@ class BbsController {
 		bbsConfig.clearErrors()
 		bbsConfig.company = Company.get(params.companyId)
 		
-		//处理废弃号
-		def nowCancel = params.bbsConfig_nowCancel.split(",")
-		def frontCancel = params.bbsConfig_frontCancel.split(",")
-		
-		bbsConfig.nowCancel.removeAll()
-		bbsConfig.frontCancel.removeAll()
-		
-		nowCancel.each{
-			bbsConfig.nowCancel << it
-		}
-		frontCancel.each{
-			bbsConfig.frontCancel << it
-		}
+		bbsConfig.nowCancel = params.bbsConfig_nowCancel
+		bbsConfig.frontCancel = params.bbsConfig_frontCancel
 		
 		if(bbsConfig.save(flush:true)){
 			json["result"] = true

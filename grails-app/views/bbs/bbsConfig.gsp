@@ -120,7 +120,7 @@
 	            		"class":"input",
 	            		style:{width:"564px"},
 	            		trim:true,
-	            		value:"${bbsConfig?.getCancelSN("now") }"
+	            		value:"${bbsConfig?.nowCancel }"
 		            '>
 					</textarea>
 			    </td>
@@ -155,7 +155,7 @@
 	            		"class":"input",
 	            		trim:true,
 	            		style:{width:"564px"},
-	            		value:"${bbsConfig?.getCancelSN("front") }"
+	            		value:"${bbsConfig?.frontCancel }"
 		            '>
 					</textarea>
 			    </td>
