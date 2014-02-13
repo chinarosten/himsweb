@@ -251,6 +251,22 @@ public final class Util {
 		}
 		return strTarget;
 	}
+	public static String strLeft(String oStr,String splitStr){
+		int index =  oStr.indexOf(splitStr);
+		if(index !=-1){
+			return oStr.substring(0,index);
+		}else{
+			return oStr;
+		}
+	}
+	public static String strRight(String oStr,String splitStr){
+		int index =  oStr.indexOf(splitStr);
+		if(index !=-1){
+			return oStr.substring(index + 1);
+		}else{
+			return oStr;
+		}
+	}
 
 	/**
 	 *<br>

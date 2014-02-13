@@ -105,7 +105,7 @@ define(["dojo/_base/kernel"
             }else if(oString=="personconfig"){
                 deleteMailNavigation();
                 require(["rosten/app/SmsManage"],function(){
-                	show_smsNaviEntity("smsgroup");
+                	show_smsNaviEntity("gtaskManage");
                 });
             }
         });
@@ -155,8 +155,62 @@ define(["dojo/_base/kernel"
     		companyId = rosten.kernel.getUserInforByKey("companyid");
     	}
     	showStartBbs(userId,companyId);
+    	showStartGtask(userId,companyId);
     	showStartMail(userId,companyId);
-    }
+    };
+    showStartGtask = function(userId,companyId){
+    	rosten.read(rosten.webPath + "/start/getGtask", {userId:userId,companyId:companyId}, function(data) {
+    		var node = registry.byId("home_gtask").containerNode;
+        	node.innerHTML = "";
+        	
+        	var ul = document.createElement("ul");
+        	for (var i = 0; i < data.length; i++) {
+        		 var li = document.createElement("li");
+        		 ul.appendChild(li);
+        		 
+        		 var type = document.createElement("span");
+        		 type.innerHTML = data[i].type;
+                 domClass.add(type,"type");
+                 li.appendChild(type);
+        		 
+        		 var a = document.createElement("a");
+                 var span = document.createElement("span");
+                 span.innerHTML = data[i].content;
+                 a.appendChild(span);
+                 a.setAttribute("href", "javascript:openGtask('" + data[i].type + "','" + data[i].id +  "')");
+                 li.appendChild(a);
+        		 
+                 var span_time = document.createElement("span");
+                 span_time.innerHTML = data[i].date;
+                 domClass.add(span_time,"time");
+                 li.appendChild(span_time);
+        	}
+        	node.appendChild(ul);
+        });
+    };
+    more_gtask = function(){
+    	var key = rosten.kernel.getMenuKeyByCode("personconfig");
+    	if(key!=null){
+    		rosten.kernel._naviMenuShow(key);
+    		require(["rosten/app/SmsManage"],function(){
+    			//show_bbsNaviEntity("gtaskManage");
+    		});
+    	}else{
+    		rosten.alert("未找到相对应的模块,请通知管理员");
+    	}
+    };
+    openGtask = function(type,id){
+    	switch(type){
+    	case "【公告】":
+    		var userid = rosten.kernel.getUserInforByKey("idnumber");
+    		var companyId = rosten.kernel.getUserInforByKey("companyid");
+    		rosten.openNewWindow("bbs", rosten.webPath + "/bbs/bbsShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
+    		break;
+    	case "【发文】":
+    		
+    		break;
+    	}
+    };
     showStartMail = function(userId,companyId){
     	rosten.read(rosten.webPath + "/mail/publishMail", {userId:userId,companyId:companyId}, function(data) {
     		var node = registry.byId("home_personMail").containerNode;
@@ -266,7 +320,7 @@ define(["dojo/_base/kernel"
     	if(key!=null){
     		rosten.kernel._naviMenuShow(key);
     		require(["rosten/app/BbsManage"],function(){
-    			show_bbsNaviEntity("mybbsManage");
+    			//show_bbsNaviEntity("mybbsManage");
     		});
     	}else{
     		rosten.alert("未找到相对应的模块,请通知管理员");

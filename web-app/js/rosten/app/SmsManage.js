@@ -8,6 +8,24 @@ define(["dojo/dom",
         "rosten/app/Application",
         "rosten/kernel/behavior"], function(dom,registry,connect,PickTreeDialog) {
     
+	delete_gtask = function(){
+		var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
+        _1.callback = function() {
+            var unids = rosten.getGridUnid("multi");
+            if (unids == "")
+                return;
+            var content = {};
+            content.id = unids;
+            rosten.readSync(rosten.webPath + "/start/gtaskDelete", content, function(data){
+                if (data.result == "true" || data.result == true) {
+                    rosten.alert("成功删除!");
+                    rosten.kernel.refreshGrid();
+                } else {
+                    rosten.alert("删除失败!");
+                }
+            });
+        };
+	};
     add_smsGroup = function() {
         var unid = rosten.kernel.getUserInforByKey("idnumber");
         rosten.openNewWindow("smsGroup", rosten.webPath + "/system/smsGroupAdd?userid=" + unid);
@@ -101,12 +119,21 @@ define(["dojo/dom",
     };
     show_smsNaviEntity = function(oString) {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
+        var companyId = rosten.kernel.getUserInforByKey("companyid");
         switch (oString) {
+	        case "gtaskManage":
+	            var naviJson = {
+	                identifier : oString,
+	                actionBarSrc : rosten.webPath + "/startAction/gtaskView",
+	                gridSrc : rosten.webPath + "/start/gtaskGrid?userid=" + userid + "&companyId=" + companyId
+	            };
+	            rosten.kernel.addRightContent(naviJson);
+	            break;
             case "smsgroup":
                 var naviJson = {
                     identifier : oString,
                     actionBarSrc : rosten.webPath + "/systemAction/smsGroupView",
-                    gridSrc : rosten.webPath + "/system/smsGroupGrid?userid=" + userid
+                    gridSrc : rosten.webPath + "/system/smsGroupGrid?userid=" + userid + "&companyId=" + companyId
                 };
                 rosten.kernel.addRightContent(naviJson);
                 

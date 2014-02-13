@@ -5,10 +5,13 @@ import com.rosten.app.util.FieldAcl
 import com.rosten.app.system.Company
 import com.rosten.app.util.Util
 import com.rosten.app.system.User
+import com.rosten.app.start.StartService
+import com.rosten.app.gtask.Gtask
 
 class BbsController {
 	def springSecurityService
 	def bbsService
+	def startService
 	
 	def publishBbs ={
 		
@@ -49,9 +52,13 @@ class BbsController {
 		}
 		render bbsList as JSON
 	}
+	
 	def bbsFlowDeal = {
 		def json=[:]
 		def bbs = Bbs.get(params.id)
+		
+		def frontStatus = bbs.status
+		
 		switch (params.deal){
 			case "submit":
 				bbs.status="待发布"
@@ -65,17 +72,46 @@ class BbsController {
 				bbs.status = "不同意"
 				break;
 		}
-		bbs.currentDealDate = new Date()
+		
 		if(params.dealUser){
+			//下一步相关信息处理
 			def dealUsers = params.dealUser.split(",")
 			if(dealUsers.size() >1){
 				//并发
 			}else{
 				//串行
-//				def _userId = params.dealUser
+				def _user = User.get(Util.strLeft(params.dealUser,"&"))
+				def args = [:]
+				args["type"] = "【公告】"
+				args["content"] = "请您审核名称为 <<" + bbs.topic +  ">> 的公告"
+				args["contentStatus"] = bbs.status
+				args["contentId"] = bbs.id
+				args["user"] = _user
+				args["company"] = _user.company
+				
+				startService.addGtask(args)
+				
+				bbs.currentUser = _user
+				bbs.currentDepart = Util.strRight(params.dealUser, "&")
+				bbs.currentDealDate = new Date()
 			}
 			
 		}
+		
+		//处理当前人的待办事项
+		def currentUser = springSecurityService.getCurrentUser()
+		def gtask = Gtask.findWhere(
+			user:currentUser,
+			company:currentUser.company,
+			contentId:bbs.id,
+			contentStatus:frontStatus
+		)
+		if(gtask!=null){
+			gtask.dealDate = new Date()
+			gtask.status = "1"
+			gtask.save()
+		}
+		
 		
 		if(bbs.save(flush:true)){
 			json["result"] = true
