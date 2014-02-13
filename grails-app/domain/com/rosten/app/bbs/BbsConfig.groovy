@@ -14,7 +14,7 @@ class BbsConfig {
 	Integer nowSN = 1
 	
 	//今年保留号或者废号
-	List nowCancel = []
+	String nowCancel
 	
 	//去年年代
 	Integer frontYear
@@ -23,7 +23,7 @@ class BbsConfig {
 	Integer frontSN = 1
 	
 	//去年保留号或者废号
-	List frontCancel = []
+	String frontCancel
 	
 	//最新公告保留时间
 	Integer showDays = 7
@@ -33,21 +33,27 @@ class BbsConfig {
 	def addCancelSN ={type,sn->
 		if("now".equals(type)){
 			//今年
-			nowCancel << sn
+			if("".equals(nowCancel)){
+				nowCancel = sn
+			}else{
+				nowCancel += "," + sn 
+			}
 		}else{
 			//去年
-			frontCancel << sn
+			if("".equals(frontCancel)){
+				frontCancel = sn
+			}else{
+				frontCancel += "," + sn 
+			}
 		}
 	}
 	
 	//获取保留号或者废弃号
-	def getCancelSN ={type->
+	def removeCancelSN ={type,sn->
 		if("now".equals(type)){
-			if(nowCancel) return nowCancel.join(",")
-			else return ""
+			return nowCancel.split(",").remove(sn).join(",")
 		}else{
-			if(frontCancel) return frontCancel.join(",")
-			else return ""
+			return frontCancel.split(",").remove(sn).join(",")
 		}
 	}
 	
