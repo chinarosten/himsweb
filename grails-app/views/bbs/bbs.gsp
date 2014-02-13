@@ -264,14 +264,14 @@
 						    <td colspan=3>
 						    	<textarea id="content" data-dojo-type="dijit/form/SimpleTextarea" 
 								data-dojo-props='name:"content",
-				            		trim:true,
+				            		trim:true,${fieldAcl.isReadOnly("topic")},
 				            		value:"${bbs?.content }"
 					            '>
 								</textarea>
 						    
 						    </td>    
 						</tr>
-						<g:if test="${fieldAcl.isReadOnly('attach')==true}">
+						<g:if test="${!fieldAcl.readOnly.contains('attach')}">
 						
 						<tr>
 						    <td><div align="right">附件：</div></td>
@@ -317,7 +317,9 @@
 						</g:if>
 						<tr>
 							<td>
-								<div align="right">附件：</div>
+								<g:if test="${fieldAcl.readOnly.contains('attach')}">
+									<div align="right">附件：</div>
+								</g:if>
 							</td>
 							<td>
 								<div id="fileShow" style="margin-top:5px;"></div>
