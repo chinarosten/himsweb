@@ -1,5 +1,6 @@
 /* 页面布局 */
 @import url("rostenGrid.css");
+@import url("departUser.css");
 html, body, #container{
 	width: 100%;
 	height: 100%;
