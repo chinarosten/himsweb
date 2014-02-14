@@ -81,6 +81,7 @@
 		 		"dojo/_base/kernel",
 		 		"dijit/registry",
 		 		"dojo/date/stamp",
+		 		"rosten/widget/DepartUserDialog",
 		 		"dijit/form/ValidationTextBox",
 		 		"dijit/form/SimpleTextarea",
 		 		"dijit/form/Button",
@@ -93,7 +94,7 @@
 		     	"rosten/widget/ActionBar",
 		     	"rosten/app/BbsManage",
 		     	"rosten/app/Application"],
-			function(parser,kernel,registry,datestamp){
+			function(parser,kernel,registry,datestamp,DepartUserDialog){
 				kernel.addOnLoad(function(){
 					rosten.init({webpath:"${request.getContextPath()}"});
 					rosten.cssinit();
@@ -180,8 +181,20 @@
 				var userId = "${user?.id}";
 				var userDepart = "测试部门";
 				o.push(userId + "&" + userDepart);
+
+				var args ={};
+				var obj = {url:rosten.webPath + "/system/userTreeDataStore?companyId=${company?.id }"};
+	            if(args){
+	                if(args.callback)obj.callback = args.callback;
+	                if(args.callbackargs) obj.callbackargs = args.callbackargs;
+	                if(args.onLoadFunction) obj.onLoadFunction = args.onLoadFunction;
+	            }
+	            var rostenShowDialog = null;
+	            if(rostenShowDialog!=null) rostenShowDialog.destroy();
+	            rostenShowDialog = new DepartUserDialog(obj);
+	            rostenShowDialog.open();
 				
-				bbs_deal("submit",o);
+				//bbs_deal("submit",o);
 			};
 			bbs_agrain = function(){
 				bbs_deal("agrain");
