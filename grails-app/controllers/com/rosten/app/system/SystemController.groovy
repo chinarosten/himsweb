@@ -1322,30 +1322,161 @@ class SystemController {
 		}
 		render model as JSON
 	}
-	def userTreeDataStore ={
-		def company = Company.get(params.companyId)
-		def dataList = Depart.findAllByCompany(company)
-		def json = [identifier:'id',label:'name',items:[]]
-		dataList.each{
-			def sMap = ["id":it.id,"name":it.departName,"parentId":it.parent?.id,"children":[]]
-			def childMap
-			it.children.each{item->
-				childMap = ["_reference":item.id]
-				sMap.children += childMap
+	private def getFirstDepart ={depart->
+		if(depart.parent){
+			return getFirstDepart(depart.parent)
+		}else{
+			return depart
+		}
+	}
+	private def getAllDepart ={departList,depart->
+		departList << depart
+		if(depart.parent){
+			return getAllDepart(departList,depart.parent)
+		}else{
+			return departList
+		}
+	}
+	private def getAllDepartByChild ={departList,depart->
+		departList << depart
+		if(depart.children){
+			depart.children.each{
+				return getAllDepartByChild(departList,it)
 			}
-			it.getAllUser().each{user->
-				def userName = user.username
-				if(user.chinaName!=null){
-					userName = user.chinaName
+		}else{
+			return departList
+		}
+	}
+	def userTreeDataStore ={
+		def json = [identifier:'id',label:'name',items:[]]
+		def company = Company.get(params.companyId)
+		/*
+		 * 一个用户名只允许存在一个user，但可以允许有多个部门
+		 */
+		if(params.user && !"".equals(params.user)){
+			def user = User.findWhere(company:company,username:params.user)
+			if(user){
+				def departSmap =[]	//需要显示的所有部门列表
+				if(params.depart && !"".equals(params.depart)){
+					//查询用户与部门全匹配，默认只允许存在一个
+					def depart = Depart.findByCompanyAndDepartName(company,params.depart)
+					def userDepart = UserDepart.findByUserAndDepart(user,depart)
+					if(userDepart){
+						getAllDepart(departSmap,depart)
+						getAllDepartByChild(departSmap,depart)
+						
+						def lastDepartList = departSmap.unique()
+						lastDepartList.each{
+							def sMap = ["id":it.id,"name":it.departName,"parentId":it.parent?.id,"children":[]]
+							def childMap
+							it.children.each{item->
+								if(lastDepartList.find{_item->
+									_item.id.equals(item.id)
+								}){
+									childMap = ["_reference":item.id]
+									sMap.children += childMap
+								}
+							}
+							if(it.id.equals(depart.id)){
+								//增加当前用户
+								def userMap = ["id":user.id,"name":user.username,"type":"user","departId":it.id]
+								json.items+=userMap
+								
+								def userChildMap = ["_reference":user.id]
+								sMap.children += userChildMap
+							}
+							json.items+=sMap
+						}
+					}
+				}else{
+					//只查询用户匹配
+					def blongDeparts = user.getAllDepartEntity()
+					blongDeparts.each{
+						getAllDepart(departSmap,it)
+					}
+					def lastDepartList = departSmap.unique()
+					lastDepartList.each{
+						def sMap = ["id":it.id,"name":it.departName,"parentId":it.parent?.id,"children":[]]
+						def childMap
+						it.children.each{item->
+							if(departSmap.find{_item->
+								_item.id.equals(item.id)
+							}){
+								childMap = ["_reference":item.id]
+								sMap.children += childMap
+							}
+						}
+						if(blongDeparts.contains(it)){
+							//增加当前用户
+							def userMap = ["id":user.id,"name":user.username,"type":"user","departId":it.id]
+							json.items+=userMap
+							
+							def userChildMap = ["_reference":user.id]
+							sMap.children += userChildMap
+						}
+						json.items+=sMap
+					}
+					
 				}
-				def userMap = ["id":user.id,"name":userName,"type":"user"]
-				json.items+=userMap
-				
-				def userChildMap = ["_reference":user.id]
-				sMap.children += userChildMap
+			}
+		}else if(params.depart && !"".equals(params.depart)){
+			//只查询部门匹配,匹配部门只允许存在一个
+			def departSmap =[]	//需要显示的所有部门列表
+			def departEntity = Depart.findByCompanyAndDepartName(company,params.depart)
+			
+			getAllDepart(departSmap,departEntity)
+			getAllDepartByChild(departSmap,departEntity)
+			
+			def lastDepartList = departSmap.unique()
+			lastDepartList.each{
+				def sMap = ["id":it.id,"name":it.departName,"parentId":it.parent?.id,"children":[]]
+				def childMap
+				it.children.each{item->
+					if(lastDepartList.find{_item->
+						_item.id.equals(item.id)
+					}){
+						childMap = ["_reference":item.id]
+						sMap.children += childMap
+					}
+				}
+				it.getAllUser().each{user->
+					def userName = user.username
+					if(user.chinaName!=null){
+						userName = user.chinaName
+					}
+					def userMap = ["id":user.id,"name":userName,"type":"user","departId":it.id]
+					json.items+=userMap
+					
+					def userChildMap = ["_reference":user.id]
+					sMap.children += userChildMap
+				}
+				json.items+=sMap
 			}
 			
-			json.items+=sMap
+		}else{
+			//获取所有部门与用户
+			def dataList = Depart.findAllByCompany(company)
+			dataList.each{
+				def sMap = ["id":it.id,"name":it.departName,"parentId":it.parent?.id,"children":[]]
+				def childMap
+				it.children.each{item->
+					childMap = ["_reference":item.id]
+					sMap.children += childMap
+				}
+				it.getAllUser().each{user->
+					def userName = user.username
+					if(user.chinaName!=null){
+						userName = user.chinaName
+					}
+					def userMap = ["id":user.id,"name":userName,"type":"user","departId":it.id]
+					json.items+=userMap
+					
+					def userChildMap = ["_reference":user.id]
+					sMap.children += userChildMap
+				}
+				
+				json.items+=sMap
+			}
 		}
 		render json as JSON
 	}

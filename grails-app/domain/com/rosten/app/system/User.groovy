@@ -47,6 +47,13 @@ class User {
 		if(entitys) return entitys.depart
 		else return null
 	}
+	def getAllDepartEntity(){
+		def departsEntity =[]
+		UserDepart.findAllByUser(this,[sort:"user"]).each{
+			departsEntity << it.depart
+		}
+		return departsEntity
+	}
 	
 	//具有角色
 	@GridColumn(name="具有角色")

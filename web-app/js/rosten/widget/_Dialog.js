@@ -78,8 +78,8 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 				this._dialog.destroy();
 		},
 		doAction : function() {
+		    var data = this.getData();
 			this._dialog.hide();
-			var data = this.getData();
 			this.callback(data);
 		},
 		buildControl : function(node) {

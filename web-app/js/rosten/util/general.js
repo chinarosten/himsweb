@@ -4,6 +4,103 @@
  */
 define(["dojo/_base/declare"], function(declare) {
     return declare("rosten.util.general", null, {
+
+        /*
+         * select option 增删改，解决dojo不完善功能
+         */
+        selectObject : declare("rosten.util.select", null, {
+            
+            //get all value
+            getAllValue:function(objSelect){
+                var data =[];
+                for (var i = 0; i < objSelect.options.length; i++) {
+                    var map ={
+                        name:objSelect.options[i].text,
+                        value:objSelect.options[i].value,
+                        departId:objSelect.options[i].departId
+                    };
+                    data.push(map);
+                }
+                return data;
+            },
+            
+            // get the select text
+            getSelectText : function(objSelect) {
+                var index = objSelect.selectedIndex;
+                var value = objSelect.options[index].text;
+                return value;
+            },
+            //get the select value
+            getSelectValue : function(objSelect) {
+                var index = objSelect.selectedIndex;
+                var value = objSelect.options[index].value;
+                return value;
+            },
+            //set the first select is true
+            selectItemByDefault : function(objSelect) {
+                objSelect.options[0].selected = true;
+
+            },
+            //set the value select is true
+            selectItemByValue : function(objSelect, objItemText) {
+                for (var i = 0; i < objSelect.options.length; i++) {
+                    if (objSelect.options[i].value == objItemText) {
+                        objSelect.options[i].selected = true;
+                        break;
+                    }
+                }
+            },
+            //set the value select is true
+            selectItemByText : function(objSelect, objItemText) {
+                for (var i = 0; i < objSelect.options.length; i++) {
+                    if (objSelect.options[i].text == objItemText) {
+                        objSelect.options[i].selected = true;
+                        break;
+                    }
+                }
+            },
+            //delete option from select
+            removeItemFromSelect : function(objSelect, objItemValue) {
+                if (this.selectIsExitItem(objSelect, objItemValue)) {
+                    for (var i = 0; i < objSelect.options.length; i++) {
+                        if (objSelect.options[i].value == objItemValue) {
+                            objSelect.options.remove(i);
+                            break;
+                        }
+                    }
+                }
+            },
+            //add option
+            AddItemToSelect : function(objSelect, objItemText, objItemValue) {
+                //check the option is exist
+                if (this.selectIsExitItem(objSelect, objItemValue)) {
+                } else {
+                    var varItem = new Option(objItemText, objItemValue);
+                    objSelect.options.add(varItem);
+                }
+            },
+            //check the value is exist
+            selectIsExitItem : function(objSelect, objItemValue) {
+                var isExit = false;
+                for (var i = 0; i < objSelect.options.length; i++) {
+                    if (objSelect.options[i].value == objItemValue) {
+                        isExit = true;
+                        break;
+                    }
+                }
+                return isExit;
+            },
+            //add option
+            addSelectOption : function(oListbox, sName, sValue) {
+                var oOption = document.createElement("option");
+                oOption.appendChild(document.createTextNode(sName));
+                if (arguments.length == 3) {
+                    oOption.setAttribute("value", sValue);
+                }
+                oListbox.appendChild(oOption);
+            }
+        }),
+
         setSpace : function(num) {
             var oString = "";
             for (var i = 0; i < num; i++) {
@@ -104,7 +201,7 @@ define(["dojo/_base/declare"], function(declare) {
             return str.substr(index + 1);
         },
         // return the left string
-        stringLeft:function(/*String*/str, /*String*/parm) {
+        stringLeft : function(/*String*/str, /*String*/parm) {
             var index = str.indexOf(parm);
             if (index == -1)
                 return str;
@@ -125,7 +222,7 @@ define(["dojo/_base/declare"], function(declare) {
                 }
             }
         },
-        stringTrim:function(/*String*/str, /*String*/parm) {
+        stringTrim : function(/*String*/str, /*String*/parm) {
             if (!parm) {
                 var oStr = this.splitString(str, " ");
             } else {
@@ -136,7 +233,7 @@ define(["dojo/_base/declare"], function(declare) {
         splitString : function(/*String*/str, /*String*/parm) {
             var o = [];
             if (str.indexOf(parm) == -1) {
-            	o.push(str);
+                o.push(str);
                 return o;
             } else {
                 return o = str.split(parm);
@@ -197,8 +294,6 @@ define(["dojo/_base/declare"], function(declare) {
                     return obj;
             }
         }
-    
-    
     });
 
 });

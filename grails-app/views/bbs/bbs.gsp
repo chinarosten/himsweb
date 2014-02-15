@@ -177,13 +177,8 @@
 				});
 			};
 			bbs_submit = function(){
-				var o =[];
-				var userId = "${user?.id}";
-				var userDepart = "测试部门";
-				o.push(userId + "&" + userDepart);
-
 				var args ={};
-				var obj = {url:rosten.webPath + "/system/userTreeDataStore?companyId=${company?.id }"};
+				var obj = {url:rosten.webPath + "/system/userTreeDataStore?companyId=${company?.id }",type:"single"};
 	            if(args){
 	                if(args.callback)obj.callback = args.callback;
 	                if(args.callbackargs) obj.callbackargs = args.callbackargs;
@@ -193,8 +188,15 @@
 	            if(rostenShowDialog!=null) rostenShowDialog.destroy();
 	            rostenShowDialog = new DepartUserDialog(obj);
 	            rostenShowDialog.open();
-				
-				//bbs_deal("submit",o);
+
+	            rostenShowDialog.callback = function(data) {
+	            	var _data = [];
+	            	for (var k = 0; k < data.length; k++) {
+	            		var item = data[k];
+	            		_data.push(item.value + ":" + item.departId);
+	            	}
+	            	bbs_deal("submit",_data);	
+	            }    
 			};
 			bbs_agrain = function(){
 				bbs_deal("agrain");

@@ -16,17 +16,20 @@ define(["dojo/_base/declare",
 		"dijit/form/CheckBox",
 		"dijit/form/MultiSelect",
 		"rosten/widget/_Dialog",
-		"rosten/widget/CheckBoxTree"], 
-		function(declare,lang, ItemFileWriteStore,xhr,domStyle,domClass,connect,win,domConstruct,ComboBox,TextBox,Button,CheckBox,MultiSelect,_Dialog,CheckBoxTree) {
+		"rosten/widget/CheckBoxTree",
+		"rosten/util/general"], 
+		function(declare,lang, ItemFileWriteStore,xhr,domStyle,domClass,connect,win,domConstruct,ComboBox,TextBox,Button,CheckBox,MultiSelect,_Dialog,CheckBoxTree,General) {
 	return declare("rosten.widget.DepartUserDialog", [_Dialog], {
-		
-		title: "Depart_User_Dialog",
+		general:new General(),
+	
+		title: "人员选择",
         url: null,
         rootLabel: "Rosten",
         showCheckBox: true,
         showRoot: false,
         query:{parentId:null},
         folderClass:null,
+        type:"multile",	//type为:multile多选;single:单选
         
         height: "565px",
         width: "600px",
@@ -36,6 +39,14 @@ define(["dojo/_base/declare",
         
         buildContent: function(node){
         	domClass.add(node,"departUser");
+        	
+        	if(this.type!="multile"){
+        		this.showCheckBox = false;
+        		this.height="530px";
+        		domStyle.set(this._dialog.domNode, "height", this.height);
+        	}
+        	
+        	this.selectUtil = new this.general.selectObject();
             this.treeStore = new ItemFileWriteStore({url: this.url});
             this._buildSearchTable(node);
             this._buildTreeTable(node);
@@ -88,10 +99,19 @@ define(["dojo/_base/declare",
         	var user = this.searchUser.attr("value");
         	
         	//从后台重新获取相关数据
-        	var url = this.url + "?depart=" + depart + "&user=" + user;
+        	var url;
+        	if(depart!="" || user!=""){
+        		url = this.url + "&depart=" + depart + "&user=" + user;
+        	}else{
+        		url = this.url;
+        	}
         	this.treeStore = new ItemFileWriteStore({url: url});
         	this.treenode.innerHTML = "";
             this._buildTree(this.treenode);
+            
+            if(depart!="" || user!=""){
+            	this.tree.expandAll();
+            }
 			
 			this.searchDepart.attr("value","");
 			this.searchUser.attr("value","");        	
@@ -134,43 +154,48 @@ define(["dojo/_base/declare",
         	var buttonChoose = document.createElement("div");
         	domClass.add(buttonChoose,"btn_choose");
         	
-        	var allRightBtn = document.createElement("button");
-        	domClass.add(allRightBtn,"allRight");
-        	buttonChoose.appendChild(allRightBtn);
-        	connect.connect(allRightBtn, "onclick", this, function(){
-				 this._getStoreItem(this.treeStore,{},function(items){
-				 	for (var i = 0; i < items.length; i++) {
-                        var item = items[i];
-						var c = win.doc.createElement('option');
-				        c.innerHTML = item.name;
-				        c.value = item.id;
-				        this.searchResult.domNode.appendChild(c);
-				        
-				        //清空选择信息
-                    	this.tree.model.updateCheckbox(item,false);
-                    }
-				 });	
-        	});
-        	buttonChoose.appendChild(document.createElement("br"));
+        	if(this.type=="multile"){
+        		var allRightBtn = document.createElement("button");
+            	domClass.add(allRightBtn,"allRight");
+            	buttonChoose.appendChild(allRightBtn);
+            	connect.connect(allRightBtn, "onclick", this, function(){
+    				 this._getStoreItem(this.treeStore,{},function(items){
+    				 	for (var i = 0; i < items.length; i++) {
+                            var item = items[i];
+                            if(item.type=="user" && !this.selectUtil.selectIsExitItem(this.searchResult.domNode,item.id)){
+                            	this._addOption(this.searchResult.domNode,item);
+                            }
+    				        //清空选择信息
+                        	this.tree.model.updateCheckbox(item,false);
+                        }
+    				 });	
+            	});
+            	buttonChoose.appendChild(document.createElement("br"));
+        	}
         	
         	var rightBtn = document.createElement("button");
         	domClass.add(rightBtn,"right");
         	buttonChoose.appendChild(rightBtn);
         	connect.connect(rightBtn, "onclick", this, function(){
-				this._getStoreItem(this.treeStore,{checkbox: true},function(items){
-					for (var i = 0; i < items.length; i++) {
-                        var item = items[i];
-						var c = win.doc.createElement('option');
-				        c.innerHTML = item.name;
-				        c.value = item.id;
-				        this.searchResult.domNode.appendChild(c);
-				        
-				        //清空选择信息
-                    	this.tree.model.updateCheckbox(item,false);
-                    }
-                    
-                    
-				});        		
+        		if(this.type=="multile"){
+        			this._getStoreItem(this.treeStore,{checkbox: true},function(items){
+    					for (var i = 0; i < items.length; i++) {
+                            var item = items[i];
+                            if(item.type=="user" && !this.selectUtil.selectIsExitItem(this.searchResult.domNode,item.id)){
+                            	this._addOption(this.searchResult.domNode,item);
+                            }
+    				        //清空选择信息
+                        	this.tree.model.updateCheckbox(item,false);
+                        }
+                        
+    				});
+        		}else{
+        			if(this.returnData.length>0){
+        				domConstruct.empty(this.searchResult.domNode);
+                    	this._addOption(this.searchResult.domNode,this.returnData[0]);
+        			}
+        		}
+				        		
         	});
         	buttonChoose.appendChild(document.createElement("br")); 
         	
@@ -187,14 +212,16 @@ define(["dojo/_base/declare",
 				      		
         	});
         	buttonChoose.appendChild(document.createElement("br")); 
-        	 	
-        	var allLeftBtn = document.createElement("button");
-        	domClass.add(allLeftBtn,"allLeft");
-        	buttonChoose.appendChild(allLeftBtn);
-        	connect.connect(allLeftBtn, "onclick", this, function(){
-				 domConstruct.empty(this.searchResult.domNode);
-        	});
-        	buttonChoose.appendChild(document.createElement("br")); 
+        	
+        	if(this.type=="multile"){
+        		var allLeftBtn = document.createElement("button");
+            	domClass.add(allLeftBtn,"allLeft");
+            	buttonChoose.appendChild(allLeftBtn);
+            	connect.connect(allLeftBtn, "onclick", this, function(){
+    				 domConstruct.empty(this.searchResult.domNode);
+            	});
+            	buttonChoose.appendChild(document.createElement("br")); 
+        	}
         	
         	td2.appendChild(buttonChoose);
         	
@@ -219,32 +246,57 @@ define(["dojo/_base/declare",
         	tbody.appendChild(tr);
         	table.appendChild(tbody);
         	
-        	var tfoot = document.createElement("tfoot");
-        	var footTr = document.createElement("tr");
-        	var footTd = document.createElement("td");
-        	footTd.setAttribute("colspan","3");
+        	if(this.type=="multile"){
+        		var tfoot = document.createElement("tfoot");
+            	var footTr = document.createElement("tr");
+            	var footTd = document.createElement("td");
+            	footTd.setAttribute("colspan","3");
+            	
+            	//全选
+            	this.allselectnode = new CheckBox({},document.createElement("div"));
+            	footTd.appendChild(this.allselectnode.domNode);
+            	
+            	var allSelectSpan = document.createElement("span");
+            	allSelectSpan.innerHTML = "全选";
+            	footTd.appendChild(allSelectSpan);
+            	
+            	//反选
+            	this.noselectnode = new CheckBox({},document.createElement("div"));
+            	footTd.appendChild(this.noselectnode.domNode);
+            	
+            	var noSelectSpan = document.createElement("span");
+            	noSelectSpan.innerHTML = "反选";
+            	footTd.appendChild(noSelectSpan);
+            	
+            	connect.connect(this.allselectnode, "onClick", this, function(){
+            		this.allselectnode.set("checked",true);
+            		this.noselectnode.set("checked",false);
+            		//选中所有结点
+            		this._getStoreItem(this.treeStore,this.query,function(items){
+    				 	for (var i = 0; i < items.length; i++) {
+                            var item = items[i];
+                        	this.tree.model.updateCheckbox(item,true);
+                        }
+    				 });	
+    	       	});
+            	
+            	connect.connect(this.noselectnode, "onClick", this, function(){
+            		this.noselectnode.set("checked",true);
+            		this.allselectnode.set("checked",false);
+            		//清空所有结点
+            		this._getStoreItem(this.treeStore,this.query,function(items){
+    				 	for (var i = 0; i < items.length; i++) {
+                            var item = items[i];
+                        	this.tree.model.updateCheckbox(item,false);
+                        }
+    				 });
+    	       	});
+            	
+            	footTr.appendChild(footTd);
+            	tfoot.appendChild(footTr);
+            	table.appendChild(tfoot);
+        	}
         	
-        	var allselectnode = new CheckBox({
-        		
-        	},document.createElement("div"));
-        	footTd.appendChild(allselectnode.domNode);
-        	
-        	var allSelectSpan = document.createElement("span");
-        	allSelectSpan.innerHTML = "全选";
-        	footTd.appendChild(allSelectSpan);
-        	
-        	var noselectnode = new CheckBox({
-        		
-        	},document.createElement("div"));
-        	footTd.appendChild(noselectnode.domNode);
-        	
-        	var noSelectSpan = document.createElement("span");
-        	noSelectSpan.innerHTML = "反选";
-        	footTd.appendChild(noSelectSpan);
-        	
-        	footTr.appendChild(footTd);
-        	tfoot.appendChild(footTr);
-        	table.appendChild(tfoot);
         	
         	node.appendChild(table);
         },
@@ -285,31 +337,25 @@ define(["dojo/_base/declare",
             this.buildContent(this.contentPane);
         },
         onclick: function(item, node){
-            this.returnData.length = 0;
-            this.returnData.push(item);
+        	if(item.type=="user"){
+        		domConstruct.empty(this.searchResult.domNode);
+            	this._addOption(this.searchResult.domNode,item);
+            	
+            	this.returnData.length = 0;
+            	this.returnData.push(item);
+        	}else{
+        		this.returnData.length = 0;
+        	}
+        },
+        _addOption:function(node,item){
+        	var c = win.doc.createElement('option');
+	        c.innerHTML = item.name;
+	        c.value = item.id;
+	        c.departId = item.departId;
+	        node.appendChild(c);
         },
         getData: function(){
-            if (!this.showCheckBox) 
-                return this.returnData;
-            var data = [];
-            var treeStore = this.tree.model.store;
-            var _this = this;
-            treeStore.fetch({
-                query: {
-                    checkbox: true
-                },
-                queryOptions: {
-                    deep: true
-                },
-                onComplete: function(items, request){
-                    for (var i = 0; i < items.length; i++) {
-                        var item = items[i];
-							data.push(item);
-                    }
-                }
-                
-                
-            });
+        	var data = this.selectUtil.getAllValue(this.searchResult.domNode);
             return data;
         },
         _getStoreItem : function(store,args,callback){

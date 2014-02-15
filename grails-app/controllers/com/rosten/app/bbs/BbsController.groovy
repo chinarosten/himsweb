@@ -7,6 +7,7 @@ import com.rosten.app.util.Util
 import com.rosten.app.system.User
 import com.rosten.app.start.StartService
 import com.rosten.app.gtask.Gtask
+import com.rosten.app.system.Depart
 
 class BbsController {
 	def springSecurityService
@@ -80,7 +81,7 @@ class BbsController {
 				//并发
 			}else{
 				//串行
-				def _user = User.get(Util.strLeft(params.dealUser,"&"))
+				def _user = User.get(Util.strLeft(params.dealUser,":"))
 				def args = [:]
 				args["type"] = "【公告】"
 				args["content"] = "请您审核名称为  &lt;&lt;" + bbs.topic +  "&gt;&gt; 的公告"
@@ -92,7 +93,8 @@ class BbsController {
 				startService.addGtask(args)
 				
 				bbs.currentUser = _user
-				bbs.currentDepart = Util.strRight(params.dealUser, "&")
+				def departEntity = Depart.get(Util.strRight(params.dealUser, ":"))
+				bbs.currentDepart = departEntity.departName
 				bbs.currentDealDate = new Date()
 			}
 			

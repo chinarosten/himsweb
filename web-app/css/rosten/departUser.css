@@ -46,3 +46,6 @@
 .rosten .departUser .allLeft{
 	background:url('../../images/rosten/share/btn_allleft.gif') left top no-repeat;
 }
+.rosten .departUser .dijitLeaf {
+	background:url('../../images/rosten/share/user_tree_leaf.gif') no-repeat;
+}
