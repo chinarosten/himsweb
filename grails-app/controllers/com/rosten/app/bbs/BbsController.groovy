@@ -155,22 +155,28 @@ class BbsController {
 	}
 	def bbsSave = {
 		def json=[:]
-		def bbs = new Bbs()
-		if(params.id && !"".equals(params.id)){
-			bbs = Bbs.get(params.id)
-		}
-		bbs.properties = params
-		bbs.clearErrors()
 		
 		def user = springSecurityService.getCurrentUser()
 		
-		bbs.company = Company.get(params.companyId)
-		bbs.currentUser = user
-		bbs.currentDepart = user.getDepartName()
-		bbs.currentDealDate = new Date()
-		bbs.drafter = user
-		bbs.drafterDepart = user.getDepartName()
-		bbs.publishDate = Util.convertToTimestamp(params.publishDate)
+		def bbs
+		if(params.id && !"".equals(params.id)){
+			bbs = Bbs.get(params.id)
+			bbs.properties = params
+			bbs.clearErrors()
+		}else{
+			bbs = new Bbs()
+			bbs.properties = params
+			bbs.clearErrors()
+			
+			bbs.company = Company.get(params.companyId)
+			bbs.currentUser = user
+			bbs.currentDepart = user.getDepartName()
+			bbs.currentDealDate = new Date()
+			
+			bbs.drafter = user
+			bbs.drafterDepart = user.getDepartName()
+			bbs.publishDate = Util.convertToTimestamp(params.publishDate)
+		}
 		
 		if(!bbs.readers.find{ it.id.equals(user.id) }){
 			bbs.addToReaders(user)

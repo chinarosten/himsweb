@@ -146,7 +146,11 @@
 						rosten.alert("保存成功！").queryDlgClose= function(){
 							//刷新当前操作条信息以及表单隐藏字段信息
 							var actionBar = registry.byId("rosten_actionBar");
-							actionBar.refresh(actionBar.actionBarSrc + "&id=" + data.id);
+							if(actionBar.actionBarSrc.indexOf(data.id)!=-1){
+								actionBar.refresh(actionBar.actionBarSrc);
+							}else{
+								actionBar.refresh(actionBar.actionBarSrc + "&id=" + data.id);
+							}
 
 							registry.byId("id").attr("value",data.id);
 							registry.byId("companyId").attr("value",data.companyId);							
