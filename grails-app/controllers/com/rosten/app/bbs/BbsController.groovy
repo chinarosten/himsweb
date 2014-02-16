@@ -227,6 +227,11 @@ class BbsController {
 			bbs.currentUser = user
 		}
 		
+		if(!bbs){
+			render "此公告已过期或删除，请联系管理员！"
+			return
+		}
+		
 		model["bbs"] = bbs
 		model["user"]=user
 		model["company"] = company

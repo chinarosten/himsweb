@@ -189,7 +189,7 @@ class MailController {
 					sMap["sender"] = item.sender
 					sMap["to"] = item.receiver
 					sMap["subject"] = item.subject
-					sMap["sent"] = item.sent
+					sMap["sent"] = item.getFormattedDate()
 					sMap["content"] = item.content
 					
 					def imgStr = ""

@@ -38,7 +38,7 @@ class EmailBox {
 	
 	Integer boxType=0	//邮箱类型：0  草稿箱;1 收件箱;2 发件箱;3已删除;4垃圾邮件
 	
-	@GridColumn(name="标记",width="40px",colIdx=1)
+	@GridColumn(name="标记",width="45px",colIdx=1)
 	Integer emailStatus=0	//邮件类型：0 未读;1 已读;2 回复 ; 3 转发 ; 4 全部转发
 	
 	static belongsTo = [mailUser:User]
@@ -55,15 +55,16 @@ class EmailBox {
 	def getFormattedDate(){
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		def showDate
-		if(boxType==0){
-			showDate = createdDate
-		}else if(boxType==1){
-			showDate = readDate
-		}else if(boxType==2){
-			showDate = sendDate
-		}else if(boxType==3){
-			showDate = sendDate || readDate || createdDate
-		}
+//		if(boxType==0){
+//			showDate = createdDate
+//		}else if(boxType==1){
+//			showDate = readDate
+//		}else if(boxType==2){
+//			showDate = sendDate
+//		}else if(boxType==3){
+//			showDate = sendDate || readDate || createdDate
+//		}
+		showDate = createdDate
 		return sd.format(showDate)
 	}
 	static transients = ["formattedDate","sent"]
