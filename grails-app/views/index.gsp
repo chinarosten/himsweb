@@ -66,12 +66,13 @@
    	logout = function(){
     	var url = "${createLink(controller:'j_spring_security_logout')}";
 		window.location = url;
-	}
+	};
 	require(["dojo/parser", 
 	     	"dojo/_base/kernel", 
 	     	"dojo/json",
 	     	"dojo/_base/lang",
 	     	"dojo/query",
+	     	"dojo/_base/connect",
 	     	"dojo/_base/window",
 	     	"dojo/dom",
 	     	"dojo/dom-style",
@@ -86,7 +87,7 @@
 	     	"dijit/form/Button",
 	     	"rosten/widget/TitlePane",
 	     	"rosten/app/Main"],
-		function(parser, kernel,JSON,lang,query,win,dom,domStyle,domClass,domConstruct,registry,ContentPane,Dialog) {
+		function(parser, kernel,JSON,lang,query,connect,win,dom,domStyle,domClass,domConstruct,registry,ContentPane,Dialog) {
 			rosten.init({webpath : "${request.getContextPath()}",dojogridcss : true});
 			kernel.addOnLoad(function() {
 				var n = dom.byId("preLoader");
@@ -104,7 +105,7 @@
 		            type: "stand"
 		        };
 				initInstance(naviJson,data);
-				//获取bbs内容
+				connect.connect(registry.byId("personSearchInput"),"onKeyPress",searchPersonByKeyPress);
 			});
 			lang.extend(ContentPane,{
 	   			onDownloadError:function(error){
@@ -221,7 +222,7 @@
                       <span>关键字：</span>
                       <input id="personSearchInput" data-dojo-type="dijit/form/ValidationTextBox" 
                       	data-dojo-props='style:{width:"200px",marginLeft:"1px"},placeHolder:"姓名/电话/邮箱"'/>
-                      <button data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){searchPerson()}'>查询</button>
+                      <button id="personSearchButton" data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){searchPerson()}'>查询</button>
                     </div>
                     <div class="personSearch">
 						<table width="98%" class="tab_css">
