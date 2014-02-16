@@ -91,6 +91,8 @@
 		 		"dijit/form/Form",
 		 		"dojox/form/Uploader",
 		 		"dojox/form/uploader/FileList",
+		 		"dijit/Editor",
+				"dijit/_editor/plugins/FontChoice",
 		     	"rosten/widget/ActionBar",
 		     	"rosten/app/BbsManage",
 		     	"rosten/app/Application"],
@@ -98,6 +100,8 @@
 				kernel.addOnLoad(function(){
 					rosten.init({webpath:"${request.getContextPath()}"});
 					rosten.cssinit();
+
+					registry.byId("content").attr("value",'${bbs?.content }');
 				});
 			bbs_add = function(){
 				var level = registry.byId("level");
@@ -279,13 +283,15 @@
 						<tr>
 						    <td><div align="right">内容：</td>
 						    <td colspan=3>
-						    	<textarea id="content" data-dojo-type="dijit/form/SimpleTextarea" 
-								data-dojo-props='name:"content",
-				            		trim:true,${fieldAcl.isReadOnly("topic")},
-				            		value:"${bbs?.content }"
+						    	
+						    	<div data-dojo-type="dijit/Editor" style="overflow:hidden" id="content"
+									extraPlugins="[{name:'dijit/_editor/plugins/FontChoice', command: 'fontName', generic: true},'fontSize']"
+									data-dojo-props='name:"content",
+				            		trim:true,<g:if test="${fieldAcl.readOnly.contains('content')}">disabled:true</g:if>
 					            '>
-								</textarea>
-						    
+									
+								</div>
+						    						    
 						    </td>    
 						</tr>
 						<g:if test="${!fieldAcl.readOnly.contains('attach')}">

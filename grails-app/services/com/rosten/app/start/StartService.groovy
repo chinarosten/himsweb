@@ -30,6 +30,7 @@ class StartService {
 		def query = {
 			eq("company",company)
 			eq("user",user)
+			order("createDate", "desc")
 		}
 		return c.list(pa,query)
 	}
@@ -38,6 +39,7 @@ class StartService {
 		def query = { 
 			eq("company",company)
 			eq("user",user)
+			order("createDate", "desc")
 		}
 		return c.count(query)
 	}

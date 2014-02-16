@@ -29,6 +29,7 @@ class MailController {
 //			eq("receiver",user.username)
 			eq("boxType",1)
 			eq("emailStatus",0)
+			order("createdDate", "desc")
 		}
 		def bbsList = []
 		c.list(pa,query).unique().each{
@@ -177,7 +178,7 @@ class MailController {
 			}
 			
 			def user = (User) springSecurityService.getCurrentUser()
-			def _dataList = EmailBox.findAllByMailUserAndBoxType(user,boxType)
+			def _dataList = EmailBox.findAllByMailUserAndBoxType(user,boxType,[ sort:"createdDate", order:"desc"])
 			totalNum = _dataList.size()
 			
 			_dataList.eachWithIndex{ item,idx->

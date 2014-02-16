@@ -61,5 +61,6 @@ class Gtask {
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']
 		table "ROSTEN_GTASK"
+		content sqlType:"text"
 	}
 }

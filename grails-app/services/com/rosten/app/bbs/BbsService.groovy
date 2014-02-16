@@ -22,6 +22,7 @@ class BbsService {
 		def query = { 
 			eq("company",company) 
 			eq("currentUser",user)
+			order("createDate", "desc")
 		}
 		return c.list(pa,query)
 	}
@@ -30,6 +31,7 @@ class BbsService {
 		def query = { 
 			eq("company",company) 
 			eq("currentUser",user)
+			order("createDate", "desc")
 		}
 		return c.count(query)
 	}
@@ -55,16 +57,24 @@ class BbsService {
 				like("defaultReaders", "%all%")
 			}
 			between("publishDate",now-showDays,now)
+			order("createDate", "desc")
 		}
-		return c.list(pa,query)
+		return c.list(pa,query).unique()
 	}
 	def getBbsCountByNew ={company,user,showDays->
 		def c = Bbs.createCriteria()
 		def now = new Date()
 		def query = {
 			eq("company",company)
-			eq("currentUser",user)
+			or{
+				//defaultReaders为：*或者【角色】或者readers中包含当前用户的均有权访问
+				readers{
+					eq("id",user.id)
+				}
+				like("defaultReaders", "%all%")
+			}
 			between("publishDate",now-showDays,now)
+			order("createDate", "desc")
 		}
 		return c.count(query)
 	}
@@ -79,12 +89,18 @@ class BbsService {
 	private def getAllBbs={offset,max,company->
 		def c = Bbs.createCriteria()
 		def pa=[max:max,offset:offset]
-		def query = { eq("company",company) }
+		def query = { 
+			eq("company",company)
+			order("createDate", "desc")
+		}
 		return c.list(pa,query)
 	}
 	def getBbsCount ={company->
 		def c = Bbs.createCriteria()
-		def query = { eq("company",company) }
+		def query = {
+			eq("company",company)
+			order("createDate", "desc")
+		}
 		return c.count(query)
 	}
     def serviceMethod() {

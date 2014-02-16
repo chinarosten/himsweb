@@ -255,7 +255,7 @@ define(["dojo/_base/kernel"
                 	store.fetchItemByIdentity({
                 		identity:id,
                 		onItem:function(item){
-                			onMessageOpen(store.getValue(item, "rowIndex")-1)
+                			onMessageOpen(store.getValue(item, "rowIndex")-1);
                 		}
                 	});
                 connect.unsubscribe(tmpSbb);
@@ -327,11 +327,16 @@ define(["dojo/_base/kernel"
     		rosten.alert("未找到相对应的模块,请通知管理员");
     	}
     };
+    searchPersonByKeyPress = function(evt){
+        if(evt.keyCode == 13){
+            searchPerson();
+        }
+    };
     searchPerson = function(){
     	var inputnode = registry.byId("personSearchInput");
     	if(inputnode.attr("value")==""){
     		rosten.alert("请输入查询关键字");
-    		return
+    		return;
     	}
     	var companyId = rosten.kernel.getUserInforByKey("companyid");
     	rosten.read(rosten.webPath + "/system/serachPerson", {serchInput:inputnode.attr("value"),companyId:companyId}, function(data) {

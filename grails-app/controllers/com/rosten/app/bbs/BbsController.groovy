@@ -19,7 +19,7 @@ class BbsController {
 		def user = User.get(params.userId)
 		def company = Company.get(params.companyId)
 		
-		def max = 10
+		def max = 18
 		def offset = 0
 		
 		def c = Bbs.createCriteria()
@@ -27,17 +27,23 @@ class BbsController {
 		def query = {
 			eq("company",company)
 			or{
-				//defaultReaders为：*或者【角色】或者readers中包含当前用户的均有权访问
+				//defaultReaders为：all或者【角色】或者readers中包含当前用户的均有权访问
+				like("defaultReaders", "%all%")
 				readers{
 					eq("id",user.id)
 				}
-				like("defaultReaders", "%all%")
 			}
 			eq("status","已发布")
+			order("publishDate", "desc")
 		}
 		
+		//取最前面9条数据
 		def bbsList = []
-		c.list(pa,query).unique().each{
+		def cResult =c.list(pa,query).unique()
+		if(cResult.size() > 9){
+			cResult = cResult[0..8]
+		}
+		cResult.each{
 			def smap =[:]
 			smap["topic"] = it.topic
 			smap["id"] = it.id
@@ -96,6 +102,12 @@ class BbsController {
 				def departEntity = Depart.get(Util.strRight(params.dealUser, ":"))
 				bbs.currentDepart = departEntity.departName
 				bbs.currentDealDate = new Date()
+				
+				if(!bbs.readers.find{ item-> 
+					item.id.equals(_user.id) 
+				}){
+					bbs.addToReaders(_user)
+				}
 			}
 			
 		}
@@ -160,7 +172,7 @@ class BbsController {
 		bbs.drafterDepart = user.getDepartName()
 		bbs.publishDate = Util.convertToTimestamp(params.publishDate)
 		
-		if(!bbs.readers.find{ it.id == user.id }){
+		if(!bbs.readers.find{ it.id.equals(user.id) }){
 			bbs.addToReaders(user)
 		}
 		
@@ -211,6 +223,8 @@ class BbsController {
 		def bbs = new Bbs()
 		if(params.id){
 			bbs = Bbs.get(params.id)
+		}else{
+			bbs.currentUser = user
 		}
 		
 		model["bbs"] = bbs
