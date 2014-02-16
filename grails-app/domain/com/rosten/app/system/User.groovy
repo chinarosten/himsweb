@@ -102,6 +102,10 @@ class User {
 	@GridColumn(name="用户地址")
 	String address
 	
+	//email
+	@GridColumn(name="邮箱")
+	String email
+	
 	//描述
 	@GridColumn(name="描述")
 	String description
@@ -124,6 +128,7 @@ class User {
 		chinaName nullable:true,blank:true
 		idCard nullable:true,blank:true
 		address nullable:true,blank:true
+		email nullable:true,blank:true
 		description nullable:true,blank:true
 		userTypeEntity nullable:true,blank:true
 	}

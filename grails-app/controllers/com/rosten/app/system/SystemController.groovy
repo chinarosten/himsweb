@@ -28,7 +28,7 @@ class SystemController {
 			smap["username"] = it.username
 			smap["phone"] = it.telephone
 			smap["mobile"] = it.telephone
-			smap["email"] = it.address
+			smap["email"] = it.email
 			
 			_list << smap
 		}

@@ -332,11 +332,24 @@
                         </tr>
                         <tr>
                            <td>
+                                <div align="right" >邮箱地址：</div>
+                            </td>
+                            <td>
+                            	<input id="email" data-dojo-type="dijit/form/ValidationTextBox" 
+                                	data-dojo-props='name:"email",${fieldAcl.isReadOnly("email")},
+                                		"class":"input",
+                                		trim:true,
+              							value:"${user?.email}"
+                                '/>
+                            </td>
+                        </tr>
+                        <tr>
+                           <td>
                                 <div align="right" >联系地址：</div>
                             </td>
                             <td>
                             	<input id="address" data-dojo-type="dijit/form/ValidationTextBox" 
-                                	data-dojo-props='name:"address",${fieldAcl.isReadOnly("idCard")},
+                                	data-dojo-props='name:"address",${fieldAcl.isReadOnly("address")},
                                 		"class":"input",
                                 		trim:true,
                                 		style:{width:"400px"},
