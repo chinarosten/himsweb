@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="layout" content="rosten" />
+<title>公告栏</title>
+<script type="text/javascript">
+	require(["dojo/parser",
+	 		"dojo/_base/kernel",
+	     	"rosten/app/Application"],
+		function(parser,kernel,registry){
+			kernel.addOnLoad(function(){
+				rosten.init({webpath:"${request.getContextPath()}"});
+				rosten.cssinit();
+			});
+	});
+</script>
+</head>
+<body>
+	<div class="bbs">
+		<div class="newspage">
+		 	<div class="newspagebg">
+				<div class="title">
+					<h3>${bbs?.topic}</h3>
+					<h4>
+						<span>发布人：${bbs?.publisher?.username}</span> 
+						<span>发布日期：${bbs?.getFormattedPublishDate()}</span> 
+						<span>浏览次数：100</span>
+					</h4>
+				</div>
+	
+				<div class="newcont">
+					<p>${bbs?.content}</p>
+				</div>
+	
+				<div class="download">
+					<font color="black"> 附件： </font> <span id="127674667972031269">
+						<a style="color: blue" href="#"><b>附件.doc</b></a>；
+					</span>
+				</div>
+	
+				<div class="newsbar">
+					<button onclick="javascript:window.window.close();" name="关闭"
+						class="button">关 闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

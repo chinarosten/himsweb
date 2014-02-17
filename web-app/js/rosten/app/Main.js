@@ -311,7 +311,7 @@ define(["dojo/_base/kernel"
     openBbs = function(id){
     	var userid = rosten.kernel.getUserInforByKey("idnumber");
 		var companyId = rosten.kernel.getUserInforByKey("companyid");
-		rosten.openNewWindow("bbs", rosten.webPath + "/bbs/bbsShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.openNewWindow("bbs", rosten.webPath + "/bbs/bbsShowStart/" + id + "?userid=" + userid + "&companyId=" + companyId);
 		rosten.read(rosten.webPath + "/bbs/hasReadBbs/" + id, {userId:userid,companyId:companyId}, function(_data) {
 			showStartBbs(userid,companyId);
 		});

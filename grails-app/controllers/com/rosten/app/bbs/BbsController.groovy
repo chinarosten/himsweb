@@ -225,6 +225,12 @@ class BbsController {
 		def bbs = Bbs.get(params.id)
 		render bbs.content
 	}
+	def bbsShowStart ={
+		def model =[:]
+		def bbs = Bbs.get(params.id)
+		model["bbs"] = bbs
+		render(view:'/bbs/bbsShow',model:model)
+	}
 	def bbsShow ={
 		def model =[:]
 		
