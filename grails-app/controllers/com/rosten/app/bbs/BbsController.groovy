@@ -90,7 +90,7 @@ class BbsController {
 				def _user = User.get(Util.strLeft(params.dealUser,":"))
 				def args = [:]
 				args["type"] = "【公告】"
-				args["content"] = "请您审核名称为  &lt;&lt;" + bbs.topic +  "&gt;&gt; 的公告"
+				args["content"] = "请您审核名称为  <<" + bbs.topic +  ">> 的公告"
 				args["contentStatus"] = bbs.status
 				args["contentId"] = bbs.id
 				args["user"] = _user
