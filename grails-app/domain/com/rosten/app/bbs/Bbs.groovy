@@ -162,7 +162,7 @@ class Bbs {
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']
 		table "ROSTEN_BBS_BBS"
-		content sqlType:"text"
+		content sqlType:"longtext"
 	}
 	def beforeDelete(){
 //		hasReaders.each{

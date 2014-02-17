@@ -221,6 +221,10 @@ class BbsController {
 	def bbsAdd ={
 		redirect(action:"bbsShow",params:params)
 	}
+	def bbsGetContent ={
+		def bbs = Bbs.get(params.id)
+		render bbs.content
+	}
 	def bbsShow ={
 		def model =[:]
 		

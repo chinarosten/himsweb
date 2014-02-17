@@ -80,6 +80,7 @@
 		require(["dojo/parser",
 		 		"dojo/_base/kernel",
 		 		"dijit/registry",
+		 		"dojo/_base/xhr",
 		 		"dojo/date/stamp",
 		 		"rosten/widget/DepartUserDialog",
 		 		"dijit/form/ValidationTextBox",
@@ -96,13 +97,27 @@
 		     	"rosten/widget/ActionBar",
 		     	"rosten/app/BbsManage",
 		     	"rosten/app/Application"],
-			function(parser,kernel,registry,datestamp,DepartUserDialog){
+			function(parser,kernel,registry,xhr,datestamp,DepartUserDialog){
 				kernel.addOnLoad(function(){
 					rosten.init({webpath:"${request.getContextPath()}"});
 					rosten.cssinit();
 
-					registry.byId("content").attr("value",'${bbs?.content }');
+					<g:if test="${bbs.id && bbs.id!=null && !"".equals(bbs.id)}">
+					
+						var ioArgs = {
+							url : rosten.webPath + "/bbs/bbsGetContent/${bbs?.id}",
+							sync : true,
+							handleAs : "text",
+							preventCache : true,
+							encoding : "utf-8",
+							load : function(data) {
+								registry.byId("content").set("value",data);
+							}
+						};
+						xhr.get(ioArgs);
+					</g:if>
 				});
+				
 			bbs_add = function(){
 				var level = registry.byId("level");
 				if(!level.isValid()){
@@ -202,7 +217,7 @@
 	            	for (var k = 0; k < data.length; k++) {
 	            		var item = data[k];
 	            		_data.push(item.value + ":" + item.departId);
-	            	}
+	            	};
 	            	bbs_deal("submit",_data);	
 	            }    
 			};
@@ -213,7 +228,32 @@
 				bbs_deal("notAgrain");
 			};
 		});
-		
+		function obj2string(o) {
+
+			var r = [];
+			if ( typeof o == "string") {
+				return "\"" + o.replace(/([\'\"\\])/g, "\\$1").replace(/(\n)/g, "\\n").replace(/(\r)/g, "\\r").replace(/(\t)/g, "\\t") + "\"";
+
+			}
+			if ( typeof o == "object") {
+				if (!o.sort) {
+					for (var i in o) {
+						r.push(i + ":" + obj2string(o[i]));
+					}
+					if (!!document.all && !/^\n?function\s*toString\(\)\s*\{\n?\s*\[native code\]\n?\s*\}\n?\s*$/.test(o.toString)) {
+						r.push("toString:" + o.toString.toString());
+					}
+					r = "{" + r.join() + "}";
+				} else {
+					for (var i = 0; i < o.length; i++) {
+						r.push(obj2string(o[i]));
+					}
+					r = "[" + r.join() + "]";
+				}
+				return r;
+			}
+			return o.toString();
+		};
     </script>
 </head>
 <body>
@@ -290,8 +330,8 @@
 						    	
 						    	<div data-dojo-type="dijit/Editor" style="overflow:hidden" id="content"
 									extraPlugins="[{name:'dijit/_editor/plugins/FontChoice', command: 'fontName', generic: true},'fontSize']"
-									data-dojo-props='name:"content",
-				            		trim:true,<g:if test="${fieldAcl.readOnly.contains('content')}">disabled:true</g:if>
+									data-dojo-props='name:"content"
+				            		<g:if test="${fieldAcl.readOnly.contains('content')}">,disabled:true</g:if>
 					            '>
 									
 								</div>
