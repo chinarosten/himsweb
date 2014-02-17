@@ -95,13 +95,14 @@
 .rosten .bbs  .newspage .newsbar {
 	width: 97%;
 	margin: 0 auto;
-	height: 35px;
+	height: 20px;
 	border-top: 1px solid #911C11;
 	/*background: #EDEEF1;*/
+	text-align:center;
+	padding-top:5px;
 }
 
 .rosten .bbs  .newspage .newsbar button {
-	float: right;
 	margin-right: 40px;
 	margin-top: 7px;
 	display: inline;

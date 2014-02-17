@@ -7,8 +7,9 @@
 <script type="text/javascript">
 	require(["dojo/parser",
 	 		"dojo/_base/kernel",
+	 		"dijit/form/Button",
 	     	"rosten/app/Application"],
-		function(parser,kernel,registry){
+		function(parser,kernel){
 			kernel.addOnLoad(function(){
 				rosten.init({webpath:"${request.getContextPath()}"});
 				rosten.cssinit();
@@ -40,7 +41,7 @@
 				</div>
 	
 				<div class="newsbar">
-					<button onclick="javascript:window.window.close();" name="关闭"
+					<button data-dojo-type="dijit/form/Button" onclick="javascript:window.window.close();" name="关闭"
 						class="button">关 闭</button>
 				</div>
 			</div>
