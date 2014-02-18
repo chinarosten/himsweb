@@ -235,13 +235,11 @@
 	<div class="rosten_action">
 		<div data-dojo-type="rosten/widget/ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'bbsAction',action:'bbsForm',id:bbs?.id,params:[userid:user?.id])}"'></div>
 	</div>
-		<div style="text-Align:center">
-        <form class="rosten_form" id="rosten_form" onsubmit="return false;" style="text-align:left;">
-			
-        	<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${bbs?.id }"' />
-        	<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
-            <fieldset class="fieldset-form">
-                <legend class="tableHeader">公告栏</legend>
+	<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
+	  	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props=''>
+        	<form class="rosten_form" id="rosten_form" onsubmit="return false;" style="text-align:left;">
+        		<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${bbs?.id }"' />
+        		<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
                 <table class="tableData" style="width:740px">
                     <tbody>
                        <tr>
@@ -369,8 +367,11 @@
 						</tr>
                     </tbody>
                 </table>
-            </fieldset>
-	</form>
+		</form>
 	</div>
+	<div data-dojo-type="dijit/layout/ContentPane" title="流程跟踪" data-dojo-props=''>
+		hahaha
+	</div>
+</div>
 </body>
 </html>
