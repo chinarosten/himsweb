@@ -91,7 +91,9 @@ define(["dojo/_base/kernel"
             } else if (oString == "bbs") {
             	deleteMailNavigation();
             	require(["rosten/app/BbsManage"],function(){
-            		show_bbsNaviEntity("mybbsManage");
+            		if(rosten.variable.showStartBbs==undefined || rosten.variable.showStartBbs!=true){
+            			show_bbsNaviEntity("mybbsManage");
+            		}
             	});
             } else if (oString == "sendfile") {
             	deleteMailNavigation();
@@ -319,9 +321,11 @@ define(["dojo/_base/kernel"
     more_bbs = function(){
     	var key = rosten.kernel.getMenuKeyByCode("bbs");
     	if(key!=null){
+    		rosten.variable.showStartBbs = true;
     		rosten.kernel._naviMenuShow(key);
     		require(["rosten/app/BbsManage"],function(){
-    			//show_bbsNaviEntity("mybbsManage");
+    			show_bbsNaviEntity("newbbsManage");
+    			rosten.variable.showStartBbs = false;
     		});
     	}else{
     		rosten.alert("未找到相对应的模块,请通知管理员");
