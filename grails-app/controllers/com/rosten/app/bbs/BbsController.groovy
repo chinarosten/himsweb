@@ -14,12 +14,38 @@ class BbsController {
 	def bbsService
 	def startService
 	
+	def bbsAddComment ={
+		def json=[:]
+		def bbs = Bbs.get(params.id)
+		def user = User.get(params.userId)
+		if(bbs){
+			def bbsComment = new BbsComment()
+			bbsComment.user = user
+			bbsComment.status = bbs.status
+			bbsComment.content = params.dataStr
+			bbsComment.bbs = bbs
+			
+			if(bbsComment.save(flush:true)){
+				json["result"] = true
+			}else{
+				bbsComment.errors.each{
+					println it
+				}
+				json["result"] = false
+			}
+			
+		}else{
+			json["result"] = false
+		}
+		
+		render json as JSON
+	}
 	def getBbsCommentLog ={
 		def model =[:]
 		def bbs = Bbs.get(params.id)
 		if(bbs){
-//			def bbsLogs = BbsLog.findAllByBbs(bbs,[ sort: "createDate", order: "desc"])
-//			model["log"] = bbsLogs
+			def logs = BbsComment.findAllByBbs(bbs,[ sort: "createDate", order: "desc"])
+			model["log"] = logs
 		}
 		
 		render(view:'/bbs/bbsCommentLog',model:model)

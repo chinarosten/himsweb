@@ -146,7 +146,7 @@
 .rosten .commentLog .rz-list { border-bottom:1px dotted #ccc; margin:2px 0 13px; }
 .rosten .commentLog .rz-list-cur { background:#f3f7fe; }
 .rosten .commentLog .rz-list h3 { font-weight:bold; }
-.rosten .commentLog .rz-list .rz-list-con { line-height:1.6; color:#555; padding-left:2em; min-height:70px; _height:70px; }
+.rosten .commentLog .rz-list .rz-list-con { line-height:1.6; color:#555; padding-left:2em; min-height:60px; _height:60px; margin-top:5px;}
 .rosten .commentLog .rz-list h5 { height:15px; line-height:15px; text-align:right; }
 .rosten .commentLog .rz-list h5 a { margin:0 .6em; color:#06F; display:none; }
 .rosten .commentLog .rz-list-cur h5 a { display:inline; font-weight:normal; }

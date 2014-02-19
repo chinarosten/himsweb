@@ -12,9 +12,25 @@ define([
 	"rosten/widget/AlertDialog", 
 	"rosten/widget/ActionBar",
 	"rosten/widget/RostenDialog",
-	"rosten/widget/ShowDialog"], function(kernel, domStyle, domClass , lang,registry,_kernel,ConfirmDialog, AlertDialog, ActionBar, RostenDialog,ShowDialog) {
+	"rosten/widget/ShowDialog",
+	"rosten/widget/CommentDialog"], function(kernel, domStyle, domClass , lang,registry,_kernel,ConfirmDialog, AlertDialog, ActionBar, RostenDialog,ShowDialog,CommentDialog) {
 	
 	var behavior = {};
+	
+	behavior.addCommentDialog = function(obj){
+		if (!_kernel.sys_commentDialog || !registry.byId("sys_commentDialog")) {
+            _kernel.sys_commentDialog = new CommentDialog({
+                title : "Rosten_填写意见",
+                id : "CommentDialog"
+            });
+        }
+        _kernel.sys_commentDialog.queryDlgClose = function() {
+        };
+        _kernel.sys_commentDialog.open();
+
+        _kernel.sys_commentDialog.refresh(obj);
+        return _kernel.sys_commentDialog;
+	};
 	
     behavior.addRostenBar = function(parentNode, barUrl) {
         var barNode = kernel.create("div", null, parentNode, "first");

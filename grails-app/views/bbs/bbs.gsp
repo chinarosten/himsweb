@@ -238,7 +238,17 @@
 				bbs_deal("notAgrain");
 			};
 			bbs_addComment = function(){
-
+				var bbsId = registry.byId("id").get("value");
+				var commentDialog = rosten.addCommentDialog({type:"bbs"});
+				commentDialog.callback = function(_data){
+					rosten.readSync(rosten.webPath + "/bbs/bbsAddComment/" + bbsId,{dataStr:_data.content,userId:"${user?.id}"},function(data){
+						if(data.result=="true" || data.result == true){
+							rosten.alert("成功！");
+						}else{
+							rosten.alert("失败!");
+						}	
+					});
+				};
 			};
 		});
 		

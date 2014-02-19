@@ -102,6 +102,7 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 				domStyle.set(node, "marginRight", "auto");
 				domStyle.set(node, "marginLeft", "auto");
 				domStyle.set(node, "textAlign", "center");
+				domStyle.set(node, "marginTop", "5px");
 			} else if (this.mode == "CLOSE") {
 				var btn1 = new Button({
 					label : "关闭",
