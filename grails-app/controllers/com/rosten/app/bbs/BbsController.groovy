@@ -14,6 +14,27 @@ class BbsController {
 	def bbsService
 	def startService
 	
+	def getBbsCommentLog ={
+		def model =[:]
+		def bbs = Bbs.get(params.id)
+		if(bbs){
+//			def bbsLogs = BbsLog.findAllByBbs(bbs,[ sort: "createDate", order: "desc"])
+//			model["log"] = bbsLogs
+		}
+		
+		render(view:'/bbs/bbsCommentLog',model:model)
+	}
+	def getBbsFlowLog={
+		def model =[:]
+		def bbs = Bbs.get(params.id)
+		if(bbs){
+			def bbsLogs = BbsLog.findAllByBbs(bbs,[ sort: "createDate", order: "asc"])
+			model["log"] = bbsLogs
+		}
+		
+		render(view:'/bbs/bbsFlowLog',model:model)
+	}
+	
 	def publishBbs ={
 		
 		def user = User.get(params.userId)
@@ -80,6 +101,7 @@ class BbsController {
 				break;
 		}
 		
+		def nextUser=""
 		if(params.dealUser){
 			//下一步相关信息处理
 			def dealUsers = params.dealUser.split(",")
@@ -108,6 +130,7 @@ class BbsController {
 				}){
 					bbs.addToReaders(_user)
 				}
+				nextUser = _user.username
 			}
 			
 		}
@@ -128,6 +151,24 @@ class BbsController {
 		
 		
 		if(bbs.save(flush:true)){
+			//添加日志
+			def bbsLog = new BbsLog()
+			bbsLog.user = currentUser
+			bbsLog.bbs = bbs
+			
+			switch (bbs.status){
+				case "待发布":
+					bbsLog.content = "提交公告【" + nextUser + "】"
+					break
+				case "已发布":
+					bbsLog.content = "发布公告"
+					break
+				case "不同意":
+					bbsLog.content = "不同意发布公告"
+					break
+			}
+			bbsLog.save(flush:true)
+			
 			json["result"] = true
 		}else{
 			bbs.errors.each{
@@ -158,11 +199,13 @@ class BbsController {
 		
 		def user = springSecurityService.getCurrentUser()
 		
+		def bbsStatus = "new"
 		def bbs
 		if(params.id && !"".equals(params.id)){
 			bbs = Bbs.get(params.id)
 			bbs.properties = params
 			bbs.clearErrors()
+			bbsStatus = "old"
 		}else{
 			bbs = new Bbs()
 			bbs.properties = params
@@ -186,6 +229,15 @@ class BbsController {
 			json["result"] = true
 			json["id"] = bbs.id
 			json["companyId"] = bbs.company.id
+			
+			if("new".equals(bbsStatus)){
+				//添加日志
+				def bbsLog = new BbsLog()
+				bbsLog.user = user
+				bbsLog.bbs = bbs
+				bbsLog.content = "起草公告"
+				bbsLog.save(flush:true)
+			}
 		}else{
 			bbs.errors.each{
 				println it

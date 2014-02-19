@@ -21,6 +21,7 @@ class BbsActionController {
 					actionList << createAction("保存",webPath + imgPath + "Save.gif","bbs_add")
 					actionList << createAction("提交",webPath + imgPath + "submit.png","bbs_submit")
 				}else if("待发布".equals(bbs.status)){
+					actionList << createAction("填写意见",webPath + imgPath + "sign.png","bbs_addComment")
 					actionList << createAction("发布",webPath + imgPath + "ok.png","bbs_agrain")
 					actionList << createAction("不同意",webPath + imgPath + "back.png","bbs_notAgrain")
 				}

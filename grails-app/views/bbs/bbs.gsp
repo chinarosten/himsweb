@@ -165,8 +165,18 @@
 								actionBar.refresh(actionBar.actionBarSrc);
 							}else{
 								actionBar.refresh(actionBar.actionBarSrc + "&id=" + data.id);
+								
+							}
+							var bbsFlowLog = registry.byId("bbsFlowLog");
+							if(bbsFlowLog.get("href").indexOf(data.id)==-1){
+								bbsFlowLog.set("href",bbsFlowLog.get("href") + "/" + data.id)
 							}
 
+							var bbsComment = registry.byId("bbsComment");
+							if(bbsComment.get("href").indexOf(data.id)==-1){
+								bbsComment.set("href",bbsComment.get("href") + "/" + data.id)
+							}
+							
 							registry.byId("id").attr("value",data.id);
 							registry.byId("companyId").attr("value",data.companyId);							
 
@@ -227,6 +237,9 @@
 			bbs_notAgrain = function(){
 				bbs_deal("notAgrain");
 			};
+			bbs_addComment = function(){
+
+			};
 		});
 		
     </script>
@@ -237,10 +250,10 @@
 	</div>
 	<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
 	  	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props=''>
-        	<form class="rosten_form" id="rosten_form" onsubmit="return false;" style="text-align:left;">
+        	<form class="rosten_form" id="rosten_form" onsubmit="return false;" style="text-align:left;margin 0px">
         		<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${bbs?.id }"' />
         		<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
-                <table class="tableData" style="width:740px">
+                <table class="tableData" style="width:740px;margin:0px">
                     <tbody>
                        <tr>
 						    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>紧急程度：</div></td>
@@ -369,8 +382,13 @@
                 </table>
 		</form>
 	</div>
-	<div data-dojo-type="dijit/layout/ContentPane" title="流程跟踪" data-dojo-props=''>
-		hahaha
+	<div data-dojo-type="dijit/layout/ContentPane" id="bbsComment" title="流转意见" data-dojo-props='refreshOnShow:true,
+		href:"${createLink(controller:'bbs',action:'getBbsCommentLog',id:bbs?.id)}"
+	'>	
+	</div>
+	<div data-dojo-type="dijit/layout/ContentPane" id="bbsFlowLog" title="流程跟踪" data-dojo-props='refreshOnShow:true,
+		href:"${createLink(controller:'bbs',action:'getBbsFlowLog',id:bbs?.id)}"
+	'>	
 	</div>
 </div>
 </body>

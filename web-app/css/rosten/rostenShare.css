@@ -24,7 +24,7 @@
 	border-left: 1px solid #D8D7D7;
 	border-right: 1px solid #D8D7D7;
 	border-bottom: 1px solid #D8D7D7;
-	border-top:1px solid #D8D7D7;
+	border-top: 1px solid #D8D7D7;
 }
 
 .rosten .bbs  .newspage .title {
@@ -39,8 +39,8 @@
 	text-align: center;
 	margin: 0 auto;
 	color: #2F2727;
-	background: url(../../images/rosten/share/newscont_titlebg.gif) no-repeat left
-		bottom;
+	background: url(../../images/rosten/share/newscont_titlebg.gif)
+		no-repeat left bottom;
 }
 
 .rosten .bbs  .newspage .title h4 {
@@ -97,12 +97,33 @@
 	height: 20px;
 	border-top: 1px solid #911C11;
 	/*background: #EDEEF1;*/
-	text-align:center;
-	padding-top:5px;
+	text-align: center;
+	padding-top: 5px;
 }
 
 .rosten .bbs  .newspage .newsbar button {
 	margin-right: 40px;
 	margin-top: 7px;
 	display: inline;
+}
+
+.rosten .flowLog table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.rosten .flowLog table th,.rosten .flowLog table td {
+	border: 1px dotted #828282;
+	border-width: 1px 0;
+	text-align: left;
+	padding: .5em .4em;
+	line-height: 1.6;
+	color: #222;
+}
+
+.rosten .flowLog table th {
+	border-right: 1px dotted #828282;
+	width: 100px;
+	text-align: center;
+	color: #777;
 }
