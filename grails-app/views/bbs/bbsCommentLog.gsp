@@ -8,7 +8,22 @@
 </style>
 
 <body>
-	<div class="flowLog">
+	<div class="commentLog">
+		<g:each in="${log}">
+			<div class="title-nav">
+				<h3>
+					<span>${it.user.username + "【" + it.status + "】" }</span>
+				</h3>
+			</div>
+	
+			<div class="rz-list">
+				<h3>${it.getFormattedCreatedDate() }</h3>
+				<div class="rz-list-con">
+					${it.content }
+				</div>
+				
+			</div>
+		</g:each>
 		
 	</div>
 </body>
