@@ -1360,10 +1360,24 @@ class SystemController {
 				if(params.depart && !"".equals(params.depart)){
 					//查询用户与部门全匹配，默认只允许存在一个
 					def depart = Depart.findByCompanyAndDepartName(company,params.depart)
-					def userDepart = UserDepart.findByUserAndDepart(user,depart)
-					if(userDepart){
-						getAllDepart(departSmap,depart)
-						getAllDepartByChild(departSmap,depart)
+					
+					def resultDepart = null
+					
+					//首先获取所有的相关查询部门
+					def searchDepart =[]
+					getAllDepartByChild(searchDepart,depart)
+					searchDepart.unique()
+					for(def index=0;searchDepart.size();index++){
+						def _UserDept = UserDepart.findByUserAndDepart(user,searchDepart[index])
+						if(_UserDept){
+							resultDepart = searchDepart[index]
+							break;
+						}
+					}
+					
+					if(resultDepart!=null){
+						getAllDepart(departSmap,resultDepart)
+						getAllDepartByChild(departSmap,resultDepart)
 						
 						def lastDepartList = departSmap.unique()
 						lastDepartList.each{
