@@ -92,7 +92,7 @@ class BbsController {
 		}
 		cResult.each{
 			def smap =[:]
-			smap["topic"] = it.topic
+			smap["topic"] = Util.getLimitLengthString(it.topic,68,"...")
 			smap["id"] = it.id
 			smap["date"] = it.getFormattedPublishDate("datetime")
 			

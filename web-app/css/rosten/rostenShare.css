@@ -25,6 +25,7 @@
 	border-right: 1px solid #D8D7D7;
 	border-bottom: 1px solid #D8D7D7;
 	border-top: 1px solid #D8D7D7;
+	word-break:break-all;
 }
 
 .rosten .bbs  .newspage .title {
