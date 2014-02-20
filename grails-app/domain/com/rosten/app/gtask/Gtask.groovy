@@ -11,14 +11,23 @@ class Gtask {
 	String id
 	
 	//类型
-	@GridColumn(name="类型",width="80px")
+	@GridColumn(name="类型",width="50px")
 	String type
+	
+	@GridColumn(name="处理状态",width="60px",colIdx=2)
+	def getGtaskStatus(){
+		if("0".equals(status)){
+			return "未处理"
+		}else{
+			return "已处理"
+		}
+	}
 	
 	@GridColumn(name="内容")
 	String content
 	
 	//内容状态
-	@GridColumn(name="状态",width="60px")
+	@GridColumn(name="内容状态",width="60px")
 	String contentStatus
 	
 	//内容链接id

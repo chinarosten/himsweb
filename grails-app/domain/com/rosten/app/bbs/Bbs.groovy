@@ -165,11 +165,14 @@ class Bbs {
 		content sqlType:"longtext"
 	}
 	def beforeDelete(){
-//		hasReaders.each{
-//			it.delete()
-//		}
-//		readers.each{
-//			it.delete()
-//		}
+		Bbs.withNewSession{
+			BbsComment.findAllByBbs(this).each{item->
+				item.delete(flush:true)
+			}
+			BbsLog.findAllByBbs(this).each{item->
+				item.delete(flush:true)
+			}
+		}
+		
 	}
 }
