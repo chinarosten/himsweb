@@ -31,7 +31,7 @@
 					<h4>
 						<span>发布人：${bbs?.publisher?.username}</span> 
 						<span>发布日期：${bbs?.getFormattedPublishDate()}</span> 
-						<span>浏览次数：100</span>
+						<span>浏览人数：${bbs?.hasReaders?.size()}</span>
 					</h4>
 				</div>
 	

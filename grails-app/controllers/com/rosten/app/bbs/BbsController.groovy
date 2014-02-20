@@ -111,6 +111,8 @@ class BbsController {
 		def json=[:]
 		def bbs = Bbs.get(params.id)
 		
+		//处理当前人的待办事项
+		def currentUser = springSecurityService.getCurrentUser()
 		def frontStatus = bbs.status
 		
 		switch (params.deal){
@@ -119,6 +121,9 @@ class BbsController {
 				break;
 			case "agrain":
 				bbs.status = "已发布"
+				bbs.publisher = currentUser
+				bbs.publisherDepart = currentUser.getDepartName()
+				
 				bbs.publishDate = new Date()
 				bbs.addDefaultReader("all")
 				break;
@@ -161,8 +166,7 @@ class BbsController {
 			
 		}
 		
-		//处理当前人的待办事项
-		def currentUser = springSecurityService.getCurrentUser()
+		
 		def gtask = Gtask.findWhere(
 			user:currentUser,
 			company:currentUser.company,
