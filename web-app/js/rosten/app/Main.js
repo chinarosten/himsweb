@@ -102,7 +102,7 @@ define(["dojo/_base/kernel"
                 });
             } else if (oString == "receivefile") {
             	deleteMailNavigation();
-            	require(["rosten/app/Receivefile"],function(){
+            	require(["rosten/app/ReceiveFileManage"],function(){
             		returnToMain();
             	});
             }else if(oString=="personconfig"){

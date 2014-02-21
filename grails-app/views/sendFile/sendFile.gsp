@@ -53,33 +53,36 @@
 		data-dojo-props='actionBarSrc:"${createLink(controller:'sendFileAction',action:'sendFileForm')}"'>
 	</div>
 </div>
-<g:form id="sendfile_form" name="sendfile_form" url='[controller:"sendFile",action:"sendFileSave"]' class="rosten_form" >
-	<table border="0" width="740" align="left">
-		<tr>
-		    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>标题：</div></td>
-		    <td width="250">
-		    	<input id="cardcode" data-dojo-type="dijit.form.ValidationTextBox" 
-                 	data-dojo-props='name:"cardcode",${fieldAcl.isReadOnly("cardcode")},
-                 		trim:true,
-                 		required:true,
-                 		promptMessage:"请正确输入客户卡号...",
-						value:"${cardCode?.cardcode}"
-                '/>
-		    </td>
-		    <td width="120"><div align="right">卡类型：</div></td>
-		    <td width="250">
-		    	<div data-dojo-type="dojo.data.ItemFileReadStore" data-dojo-id="rosten.storeData.cardType"
-					data-dojo-props='url:"${createLink(controller:'config',action:'cardType_GetInforAll',params:[companyId:companyId]) }"'></div>
-					
-				<select id="cardtype" data-dojo-type="dijit.form.FilteringSelect" 
-					data-dojo-props='name:"cardtype",${fieldAcl.isReadOnly("cardtype")},
-						store:rosten.storeData.cardType,
-						trim:true,
-						required:true,
-						searchAttr:"cardTypeName",
-						value:"${cardCode?.cardtype?.id}"
-					'>	
-					<script type="dojo/method" event="onChange">
+
+<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
+	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props=''>
+		<g:form id="sendfile_form" name="sendfile_form" url='[controller:"sendFile",action:"sendFileSave"]' class="rosten_form" >
+			<table border="0" width="740" align="left">
+				<tr>
+				    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>标题：</div></td>
+				    <td width="250">
+				    	<input id="cardcode" data-dojo-type="dijit.form.ValidationTextBox" 
+		                 	data-dojo-props='name:"cardcode",${fieldAcl.isReadOnly("cardcode")},
+		                 		trim:true,
+		                 		required:true,
+		                 		promptMessage:"请正确输入客户卡号...",
+								value:"${cardCode?.cardcode}"
+		                '/>
+				    </td>
+				    <td width="120"><div align="right">卡类型：</div></td>
+				    <td width="250">
+				    	<div data-dojo-type="dojo.data.ItemFileReadStore" data-dojo-id="rosten.storeData.cardType"
+							data-dojo-props='url:"${createLink(controller:'config',action:'cardType_GetInforAll',params:[companyId:companyId]) }"'></div>
+							
+						<select id="cardtype" data-dojo-type="dijit.form.FilteringSelect" 
+							data-dojo-props='name:"cardtype",${fieldAcl.isReadOnly("cardtype")},
+								store:rosten.storeData.cardType,
+								trim:true,
+								required:true,
+								searchAttr:"cardTypeName",
+								value:"${cardCode?.cardtype?.id}"
+							'>	
+							<script type="dojo/method" event="onChange">
 						if(this.item){
 							dijit.byId("discount").attr("value",this.item.discount);
 							dijit.byId("productDiscount").attr("value",this.item.productDiscount);
@@ -90,30 +93,39 @@
 							dijit.byId("grade").attr("value",this.item.grade);		
 						}
 					</script>
-				</select>	
-           </td>
-		</tr>
-		<tr>
-		    <td><div align="right"><span style="color:red">*&nbsp;</span>客户密码：</div></td>
-		    <td>
-		    	<input id="password" data-dojo-type="dijit.form.ValidationTextBox" 
-                 	data-dojo-props='name:"password",${fieldAcl.isReadOnly("password")},
-                 		type:"password",
-                 		trim:true,
-                 		required:true,
-						value:"${cardCode?.password}"
-                '/>
-		    
-		    <td><div align="right">享受折扣：</div></td>
-		    <td>
-		    	<input id="discount" data-dojo-type="dijit.form.ValidationTextBox" 
-                 	data-dojo-props='name:"discount",${fieldAcl.isReadOnly("discount")},
-                 		trim:true,
-						value:"${cardCode?.discount}"
-                '/>
-            </td>    
-		</tr>
-		
-	</table>
-</g:form>
+						</select>	
+		           </td>
+				</tr>
+				<tr>
+				    <td><div align="right"><span style="color:red">*&nbsp;</span>客户密码：</div></td>
+				    <td>
+				    	<input id="password" data-dojo-type="dijit.form.ValidationTextBox" 
+		                 	data-dojo-props='name:"password",${fieldAcl.isReadOnly("password")},
+		                 		type:"password",
+		                 		trim:true,
+		                 		required:true,
+								value:"${cardCode?.password}"
+		                '/>
+				    
+				    <td><div align="right">享受折扣：</div></td>
+				    <td>
+				    	<input id="discount" data-dojo-type="dijit.form.ValidationTextBox" 
+		                 	data-dojo-props='name:"discount",${fieldAcl.isReadOnly("discount")},
+		                 		trim:true,
+								value:"${cardCode?.discount}"
+		                '/>
+		            </td>    
+				</tr>
+				
+			</table>
+		</g:form>
+	
+	</div>
+	<div data-dojo-type="dijit/layout/ContentPane" id="sendfileComment" title="流转意见" data-dojo-props='refreshOnShow:true
+	'>	
+	</div>
+	<div data-dojo-type="dijit/layout/ContentPane" id="sendfileFlowLog" title="流程跟踪" data-dojo-props='refreshOnShow:true
+	'>	
+	</div>
+</div>
 </body>
