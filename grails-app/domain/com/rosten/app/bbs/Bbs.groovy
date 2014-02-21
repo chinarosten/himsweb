@@ -10,7 +10,11 @@ import java.text.SimpleDateFormat
 
 class Bbs {
 	String id
-
+	
+	//流水号
+	@GridColumn(name="流水号",width="60px")
+	String serialNo
+	
 	//紧急层度:普通,紧急,特急
 	@GridColumn(name="紧急程度",width="50px",formatter="formatBbsLevel")
 	String level = "普通"
@@ -146,6 +150,7 @@ class Bbs {
 	]
 
 	static constraints = {
+		serialNo nullable:true,blank:true
 		publisher nullable:true,blank:true
 		publisherDepart nullable:true,blank:true
 		publishDate nullable:true,blank:true

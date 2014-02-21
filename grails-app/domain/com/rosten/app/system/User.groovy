@@ -80,6 +80,14 @@ class User {
 		return _array.unique()
 	}
 	
+	//是否领导
+	boolean leaderFlag = false
+	@GridColumn(name="领导",width="40px",colIdx=6)
+	def getleaderFlagValue(){
+		if(leaderFlag)return "是"
+		else return "否"
+	}
+	
 	//是否管理员
 	boolean sysFlag = false
 	//@GridColumn(name="是否管理员")
@@ -107,7 +115,7 @@ class User {
 	String email
 	
 	//描述
-	@GridColumn(name="描述")
+	//@GridColumn(name="描述")
 	String description
 	
 	//创建日期

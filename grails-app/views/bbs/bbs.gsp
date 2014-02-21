@@ -159,7 +159,10 @@
 				rosten.readSync(rosten.webPath + "/bbs/bbsSave",content,function(data){
 					if(data.result=="true" || data.result == true){
 						rosten.alert("保存成功！").queryDlgClose= function(){
-							//刷新当前操作条信息以及表单隐藏字段信息
+							//刷新当前操作条信息以及表单隐藏字段信息以及流水号信息
+							if(data.serialNo){
+								registry.byId("serialNo").set("value",data.serialNo);
+							}
 							var actionBar = registry.byId("rosten_actionBar");
 							if(actionBar.actionBarSrc.indexOf(data.id)!=-1){
 								actionBar.refresh(actionBar.actionBarSrc);
@@ -181,6 +184,8 @@
 							registry.byId("companyId").attr("value",data.companyId);							
 
 						};
+					}else if(data.result=="noConfig"){
+						rosten.alert("系统不存在配置文档，请通知管理员！");
 					}else{
 						rosten.alert("保存失败!");
 					}
@@ -266,18 +271,13 @@
                 <table class="tableData" style="width:740px;margin:0px">
                     <tbody>
                        <tr>
-						    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>紧急程度：</div></td>
+						    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>流水号：</div></td>
 						    <td width="250">
-						    	<select id="level" data-dojo-type="dijit/form/FilteringSelect"
-					                data-dojo-props='name:"level",${fieldAcl.isReadOnly("level")},
-					               	trim:true,
-				                 	required:true,
-					      			value:"${bbs?.level}"
-					            '>
-								<option value="普通">普通</option>
-								<option value="紧急">紧急</option>
-								<option value="特急">特急</option>
-					    	</select>
+						    	<input id="serialNo" data-dojo-type="dijit/form/ValidationTextBox" 
+				                 	data-dojo-props='name:"serialNo",readOnly:true,
+				                 		trim:true,placeHolder:"领导发布后自动生成",
+										value:"${bbs?.serialNo}"
+				                '/>
 						    </td>
 						    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>类别：</div></td>
 						    <td width="250">
@@ -293,6 +293,21 @@
 				           </td>
 						</tr>
 						<tr>
+							<td>
+						    	<div align="right"><span style="color:red">*&nbsp;</span>紧急程度：</div>
+				            </td>
+				            <td>
+				            	<select id="level" data-dojo-type="dijit/form/FilteringSelect"
+					                data-dojo-props='name:"level",${fieldAcl.isReadOnly("level")},
+					               	trim:true,
+				                 	required:true,
+					      			value:"${bbs?.level}"
+					            '>
+									<option value="普通">普通</option>
+									<option value="紧急">紧急</option>
+									<option value="特急">特急</option>
+					    		</select>
+				            </td>
 						    <td><div align="right"><span style="color:red">*&nbsp;</span>发布时间：</div></td>
 						    <td>
 						    	<input id="publishDate" data-dojo-type="dijit/form/DateTextBox" 
@@ -303,9 +318,7 @@
 				               '/>
 						    
 						   </td>
-						    <td>
-						    	
-				            </td>    
+						        
 						</tr>
 						<tr>
 						    <td><div align="right"><span style="color:red">*&nbsp;</span>标题：</div></td>
@@ -314,7 +327,7 @@
 				                 	data-dojo-props='name:"topic",${fieldAcl.isReadOnly("topic")},
 				                 		trim:true,
 				                 		required:true,
-				                 		style:{width:"400px"},
+				                 		style:{width:"490px"},
 										value:"${bbs?.topic}"
 				                '/>
 						    

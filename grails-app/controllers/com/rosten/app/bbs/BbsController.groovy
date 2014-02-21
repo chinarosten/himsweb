@@ -109,6 +109,10 @@ class BbsController {
 	
 	def bbsFlowDeal = {
 		def json=[:]
+		
+		//获取配置文档
+		def bbsConfig = BbsConfig.first()
+		
 		def bbs = Bbs.get(params.id)
 		
 		//处理当前人的待办事项
@@ -126,6 +130,9 @@ class BbsController {
 				
 				bbs.publishDate = new Date()
 				bbs.addDefaultReader("all")
+				
+				bbs.serialNo = bbsConfig.nowYear + bbsConfig.nowSN.toString().padLeft(4,"0")
+				
 				break;
 			case "notAgrain":
 				bbs.status = "不同意"
@@ -143,7 +150,7 @@ class BbsController {
 				def _user = User.get(Util.strLeft(params.dealUser,":"))
 				def args = [:]
 				args["type"] = "【公告】"
-				args["content"] = "请您审核名称为  <<" + bbs.topic +  ">> 的公告"
+				args["content"] = "请您审核名称为  【" + bbs.topic +  "】 的公告"
 				args["contentStatus"] = bbs.status
 				args["contentId"] = bbs.id
 				args["user"] = _user
@@ -192,6 +199,11 @@ class BbsController {
 					break
 				case "已发布":
 					bbsLog.content = "发布公告"
+					
+					//修改配置文档中的流水号
+					bbsConfig.nowSN += 1
+					bbsConfig.save(flush:true)
+					
 					break
 				case "不同意":
 					bbsLog.content = "不同意发布公告"
@@ -227,6 +239,14 @@ class BbsController {
 	def bbsSave = {
 		def json=[:]
 		
+		//获取配置文档
+		def bbsConfig = BbsConfig.first()
+		if(!bbsConfig){
+			json["result"] = "noConfig"
+			render json as JSON
+			return
+		}
+		
 		def user = springSecurityService.getCurrentUser()
 		
 		def bbsStatus = "new"
@@ -249,6 +269,9 @@ class BbsController {
 			bbs.drafter = user
 			bbs.drafterDepart = user.getDepartName()
 			bbs.publishDate = Util.convertToTimestamp(params.publishDate)
+			
+			//发布后才产生流水号
+//			bbs.serialNo = bbsConfig.nowYear + bbsConfig.nowSN.toString().padLeft(4,"0")
 		}
 		
 		if(!bbs.readers.find{ it.id.equals(user.id) }){
@@ -267,6 +290,10 @@ class BbsController {
 				bbsLog.bbs = bbs
 				bbsLog.content = "起草公告"
 				bbsLog.save(flush:true)
+				
+				//修改配置文档中的流水号，改为发布后产生流水号
+//				bbsConfig.nowSN += 1
+//				bbsConfig.save(flush:true) 
 			}
 		}else{
 			bbs.errors.each{

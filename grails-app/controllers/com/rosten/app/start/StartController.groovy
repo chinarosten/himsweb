@@ -77,12 +77,12 @@ class StartController {
 			smap["type"] = it.type
 			smap["id"] = it.contentId
 			
-			def leftStr = Util.strLeft(it.content,"<")
-			def rightStr = Util.strRight(it.content,">")
-			def contentStr = Util.strLeft(Util.strRight(it.content,"<"),">")
+			def leftStr = Util.strLeft(it.content,"【")
+			def rightStr = Util.strRight(it.content,"【")
+			def contentStr = Util.strLeft(rightStr,"】")
 			
 			
-			smap["content"] = leftStr + "&lt;&lt;" + Util.getLimitLengthString(contentStr,38,"...") + "&gt;&gt;" + rightStr
+			smap["content"] = leftStr + "【" + Util.getLimitLengthString(contentStr,38,"...") + "】" + Util.strRight(rightStr,"】")
 			smap["date"] = it.getFormattedCreatedDate()
 			
 			_list << smap
