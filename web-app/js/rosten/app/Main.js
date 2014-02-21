@@ -98,7 +98,7 @@ define(["dojo/_base/kernel"
             } else if (oString == "sendfile") {
             	deleteMailNavigation();
                 require(["rosten/app/SendFileManage"],function(){
-                	returnToMain();
+                	show_sendFileNaviEntity("mySendfileManage");
                 });
             } else if (oString == "receivefile") {
             	deleteMailNavigation();

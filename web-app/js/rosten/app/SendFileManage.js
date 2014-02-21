@@ -1,14 +1,31 @@
 /**
  * @author rosten
  */
-define([ "dojo/_base/connect", "dijit/registry", "rosten/kernel/behavior" ], function(
-		connect, registry) {
+define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
+		connect, lang,registry,kernel) {
 	
-	returnToView = function(){
+	returnToView = function(e){
+		var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
+		switch(rosten.kernel.navigationEntity){
+		case "addSendFile":
+			show_sendFileNaviEntity("mySendfileManage");
+			break;
+		
+		}
+		
+	};
+	sendfile_add = function(){
+		
+	};
+	sendfile_submit = function(){
 		
 	};
 	sendFile_addWord = function(){
-		rosten.openNewWindow("sendFile_addWord", rosten.webPath + "/sendFile/addWord");
+		if(kernel.isIE){
+			rosten.openNewWindow("sendFile_addWord", rosten.webPath + "/sendFile/addWord");
+		}else{
+			rosten.alert("当前版本正文只支持IE浏览器！");
+		}
 	};
 	add_sendFile = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");

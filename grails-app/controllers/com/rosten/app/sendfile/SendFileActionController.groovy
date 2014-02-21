@@ -20,7 +20,9 @@ class SendFileActionController {
 	def sendFileForm ={
 		def actionList =[]
 		actionList << createAction("返回",imgPath + "quit_1.gif","returnToView")
+		actionList << createAction("保存",imgPath + "Save.gif","sendfile_add")
 		actionList << createAction("创建正文",imgPath + "word_new.png","sendFile_addWord")
+		actionList << createAction("提交",imgPath + "submit.png","sendfile_submit")
 		render actionList as JSON
 	}
 	
@@ -30,7 +32,6 @@ class SendFileActionController {
 		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
 		actionList << createAction("新建发文",imgPath + "add.png","add_"+ strname)
 		actionList << createAction("查看发文",imgPath + "read.gif","read_" + strname)
-		
 		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
 		
 		render actionList as JSON
