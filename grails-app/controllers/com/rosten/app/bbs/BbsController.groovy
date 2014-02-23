@@ -2,18 +2,60 @@ package com.rosten.app.bbs
 
 import grails.converters.JSON
 import com.rosten.app.util.FieldAcl
+import com.rosten.app.util.SystemUtil
 import com.rosten.app.system.Company
 import com.rosten.app.util.Util
 import com.rosten.app.system.User
 import com.rosten.app.start.StartService
 import com.rosten.app.gtask.Gtask
 import com.rosten.app.system.Depart
+import com.rosten.app.system.Attachment
 
 class BbsController {
 	def springSecurityService
 	def bbsService
 	def startService
 	
+	def uploadFile = {
+		def json=[:]
+		SystemUtil sysUtil = new SystemUtil()
+		
+		def uploadPath = sysUtil.getUploadPath("bbs")
+		def f = request.getFile("uploadedfile")
+		if (f.empty) {
+			json["result"] = "blank"
+			render json as JSON
+			return
+		}
+		
+		def uploadSize = sysUtil.getUploadSize()
+		if(uploadSize!=null){
+			//控制附件上传大小
+			def maxSize = uploadSize * 1024 * 1024
+			if(f.size>=maxSize){
+				json["result"] = "big"
+				render json as JSON
+				return
+			}
+		}
+		String name = f.getOriginalFilename()//获得文件原始的名称
+		def realName = getRandName(name)
+		f.transferTo(new File(uploadPath,realName))
+		
+		def attachment = new Attachment()
+		attachment.name = name
+		attachment.realName = realName
+		attachment.type = "bbs"
+		attachment.url = uploadPath
+		attachment.size = f.size
+		attachment.upUser = (User) springSecurityService.getCurrentUser()
+		attachment.save(flush:true)
+		
+		json["result"] = "true"
+		json["fileId"] = attachment.id
+		json["fileName"] = name
+		render json as JSON
+	}
 	def bbsAddComment ={
 		def json=[:]
 		def bbs = Bbs.get(params.id)
@@ -302,9 +344,6 @@ class BbsController {
 			json["result"] = false
 		}
 		render json as JSON
-	}
-	def uploadFile ={
-		
 	}
 	def hasReadBbs ={
 		def json=[:]

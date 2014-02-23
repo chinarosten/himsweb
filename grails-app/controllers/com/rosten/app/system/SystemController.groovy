@@ -9,6 +9,26 @@ class SystemController {
 	def springSecurityService
 	def systemService
 	
+	def downloadFile = {
+		def attachmentInstance =  Attachment.get(params.id)
+		def filename = attachmentInstance.name
+		
+		response.setHeader("Content-disposition", "attachment; filename=" + new String(filename.getBytes("GB2312"), "ISO_8859_1"))
+		response.contentType = ""
+		
+		def filepath = new File(attachmentInstance.url, attachmentInstance.realName)
+		def out = response.outputStream
+		def inputStream = new FileInputStream(filepath)
+		byte[] buffer = new byte[1024]
+		int i = -1
+		while ((i = inputStream.read(buffer)) != -1) {
+			out.write(buffer, 0, i)
+		}
+		out.flush()
+		out.close()
+		inputStream.close()
+	}
+	
 	def serachPerson ={
 		def company = Company.get(params.companyId)
 		

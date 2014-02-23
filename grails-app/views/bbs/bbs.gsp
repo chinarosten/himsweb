@@ -255,7 +255,16 @@
 					});
 				};
 			};
+			bbs_addAttachShow = function(node,jsonObj){
+				var a = document.createElement("a");
+				a.setAttribute("href", rosten.webPath + "/system/downloadFile/" + jsonObj.fileId);
+				a.setAttribute("style","margin-right:20px");
+				a.setAttribute("dealId",jsonObj.fileId);
+				a.innerHTML = jsonObj.fileName;
+				node.appendChild(a);
+			};
 		});
+		
 		
     </script>
 </head>
@@ -347,7 +356,11 @@
 						    						    
 						    </td>    
 						</tr>
-						<g:if test="${!fieldAcl.readOnly.contains('attach')}">
+						
+                    </tbody>
+                </table>
+                <table>
+                	<g:if test="${!fieldAcl.readOnly.contains('attach')}">
 						
 						<tr>
 						    <td><div align="right">附件：</div></td>
@@ -364,7 +377,7 @@
 														if(dataArray.result=="true"){
 															dijit.byId("fileUpload_dialog").reset();
 															dijit.byId("fileUpload_dialog").onCancel();
-															mail_addAttachShow(dojo.byId("fileShow"),dataArray);
+															bbs_addAttachShow(dojo.byId("fileShow"),dataArray);
 														}else if(dataArray.result=="big"){
 															alert("上传文件过大，请重新上传！");
 														}else{rosten.alert("上传失败");}
@@ -376,7 +389,13 @@
 												
 												<div class="dijitDialogPaneActionBar">
 													<button data-dojo-type="dijit/form/Button" type="reset">重置</button>
-													<button data-dojo-type="dijit/form/Button" type="submit">上传</button>
+													<button data-dojo-type="dijit/form/Button" type="button">上传
+														<script type="dojo/method" data-dojo-event="onClick">
+															console.log(dojo.byId("fileUploader"));
+															console.log(dojo.byId("fileUpload_form"));
+															dijit.byId("fileUpload_form").submit();
+														</script>
+													</button>
 													<button data-dojo-type="dijit/form/Button" type="button">取消
 														<script type="dojo/method" data-dojo-event="onClick">
 															dijit.byId("fileUpload_dialog").onCancel();
@@ -401,7 +420,6 @@
 								<div id="fileShow" style="margin-top:5px;"></div>
 							</td>
 						</tr>
-                    </tbody>
                 </table>
 		</form>
 	</div>
