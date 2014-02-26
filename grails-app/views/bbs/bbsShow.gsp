@@ -40,8 +40,10 @@
 				</div>
 	
 				<div class="download">
-					<font color="black"> 附件： </font> <span id="127674667972031269">
-						<a style="color: blue" href="#"><b>附件.doc</b></a>；
+					<font color="black"> 附件： </font>
+						<g:each in="${attachFiles}">
+							<a href="${createLink(controller:'system',action:'downloadFile',id:it.id)}" style="color: blue;margin-right:20px" dealId="${it.id }"><b>${it.name }</b></a>
+						</g:each>
 					</span>
 				</div>
 	

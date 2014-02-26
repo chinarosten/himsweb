@@ -159,6 +159,8 @@
 				rosten.readSync(rosten.webPath + "/bbs/bbsSave",content,function(data){
 					if(data.result=="true" || data.result == true){
 						rosten.alert("保存成功！").queryDlgClose= function(){
+							window.location.replace(window.location.href + "&id=" + data.id);
+							/*
 							//刷新当前操作条信息以及表单隐藏字段信息以及流水号信息
 							if(data.serialNo){
 								registry.byId("serialNo").set("value",data.serialNo);
@@ -181,7 +183,9 @@
 							}
 							
 							registry.byId("id").attr("value",data.id);
-							registry.byId("companyId").attr("value",data.companyId);							
+							registry.byId("companyId").attr("value",data.companyId);	
+
+							*/						
 
 						};
 					}else if(data.result=="noConfig"){
@@ -359,21 +363,23 @@
 						
                     </tbody>
                 </table>
-                <table>
-                	<g:if test="${!fieldAcl.readOnly.contains('attach')}">
-						
-						<tr>
-						    <td><div align="right">附件：</div></td>
-						    <td colspan=3>
-						    	<div data-dojo-type="dijit/form/DropDownButton" >
-									<span>添加附件</span>
-									<div data-dojo-type="dijit/TooltipDialog" id="fileUpload_dialog" data-dojo-props="title: 'fileUpload'" style="width:380px">
-											<form data-dojo-type="dijit/form/Form" method="post" 
-												action="${createLink(controller:'bbs',action:'uploadFile')}" id="fileUpload_form" enctype="multipart/form-data">
-												
-												<div data-dojo-type="dojox/form/Uploader"  type="file" 
-													id="fileUploader"  data-dojo-props="name:'uploadedfile'">添加
-													<script type="dojo/method" data-dojo-event="onComplete" data-dojo-args="dataArray">
+                
+		</form>
+		<table class="tableData" style="width:740px;margin:0px">
+               	<g:if test="${!fieldAcl.readOnly.contains('attach') && bbs.id!=null}">
+					
+					<tr>
+					    <td width="120"><div align="right">附件：</div></td>
+					    <td colspan=3>
+					    	<div data-dojo-type="dijit/form/DropDownButton" >
+								<span>添加附件</span>
+								<div data-dojo-type="dijit/TooltipDialog" id="fileUpload_dialog" data-dojo-props="title: 'fileUpload'" style="width:380px">
+										<form data-dojo-type="dijit/form/Form" method="post" 
+											action="${createLink(controller:'bbs',action:'uploadFile',id:bbs?.id)}" id="fileUpload_form" enctype="multipart/form-data">
+											
+											<div data-dojo-type="dojox/form/Uploader"  type="file" 
+												id="fileUploader"  data-dojo-props="name:'uploadedfile'">添加
+												<script type="dojo/method" data-dojo-event="onComplete" data-dojo-args="dataArray">
 														if(dataArray.result=="true"){
 															dijit.byId("fileUpload_dialog").reset();
 															dijit.byId("fileUpload_dialog").onCancel();
@@ -382,46 +388,44 @@
 															alert("上传文件过大，请重新上传！");
 														}else{rosten.alert("上传失败");}
 													</script>
-												</div>
-												
-												<div id="fileUpload_fileList" data-dojo-type="dojox/form/uploader/FileList" 
-													data-dojo-props='uploaderId:"fileUploader",headerIndex:"#",headerType:"类型",headerFilename:"文件名",headerFilesize:"大小"'></div>
-												
-												<div class="dijitDialogPaneActionBar">
-													<button data-dojo-type="dijit/form/Button" type="reset">重置</button>
-													<button data-dojo-type="dijit/form/Button" type="button">上传
-														<script type="dojo/method" data-dojo-event="onClick">
-															console.log(dojo.byId("fileUploader"));
-															console.log(dojo.byId("fileUpload_form"));
-															dijit.byId("fileUpload_form").submit();
-														</script>
-													</button>
-													<button data-dojo-type="dijit/form/Button" type="button">取消
-														<script type="dojo/method" data-dojo-event="onClick">
+											</div>
+											
+											<div id="fileUpload_fileList" data-dojo-type="dojox/form/uploader/FileList" 
+												data-dojo-props='uploaderId:"fileUploader",headerIndex:"#",headerType:"类型",headerFilename:"文件名",headerFilesize:"大小"'></div>
+											
+											<div class="dijitDialogPaneActionBar">
+												<button data-dojo-type="dijit/form/Button" type="reset">重置</button>
+												<button data-dojo-type="dijit/form/Button" type="submit">上传
+												</button>
+												<button data-dojo-type="dijit/form/Button" type="button">取消
+													<script type="dojo/method" data-dojo-event="onClick">
 															dijit.byId("fileUpload_dialog").onCancel();
 														</script>
-													</button>
-												</div>
-											</form>
-										
-									</div>
+												</button>
+											</div>
+										</form>
+									
 								</div>
-						    
-						    <td>    
-						</tr>
-						</g:if>
-						<tr>
-							<td>
-								<g:if test="${fieldAcl.readOnly.contains('attach')}">
-									<div align="right">附件：</div>
-								</g:if>
-							</td>
-							<td>
-								<div id="fileShow" style="margin-top:5px;"></div>
-							</td>
-						</tr>
-                </table>
-		</form>
+							</div>
+					    
+					    <td>    
+					</tr>
+					</g:if>
+					<tr>
+						<td width="120">
+							<g:if test="${fieldAcl.readOnly.contains('attach')}">
+								<div align="right">附件：</div>
+							</g:if>
+						</td>
+						<td colspan=3>
+							<div id="fileShow" style="margin-top:5px;">
+								<g:each in="${attachFiles}">
+									<a href="${createLink(controller:'system',action:'downloadFile',id:it.id)}" style="margin-right:20px" dealId="${it.id }">${it.name }</a>
+								</g:each>
+							</div>
+						</td>
+					</tr>
+               </table>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" id="bbsComment" title="流转意见" data-dojo-props='refreshOnShow:true,
 		href:"${createLink(controller:'bbs',action:'getBbsCommentLog',id:bbs?.id)}"

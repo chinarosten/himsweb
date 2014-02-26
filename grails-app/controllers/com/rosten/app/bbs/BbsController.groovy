@@ -39,7 +39,7 @@ class BbsController {
 			}
 		}
 		String name = f.getOriginalFilename()//获得文件原始的名称
-		def realName = getRandName(name)
+		def realName = sysUtil.getRandName(name)
 		f.transferTo(new File(uploadPath,realName))
 		
 		def attachment = new Attachment()
@@ -48,6 +48,7 @@ class BbsController {
 		attachment.type = "bbs"
 		attachment.url = uploadPath
 		attachment.size = f.size
+		attachment.beUseId = params.id
 		attachment.upUser = (User) springSecurityService.getCurrentUser()
 		attachment.save(flush:true)
 		
@@ -377,6 +378,9 @@ class BbsController {
 		def model =[:]
 		def bbs = Bbs.get(params.id)
 		model["bbs"] = bbs
+		
+		model["attachFiles"] = Attachment.findAllByBeUseId(bbs.id)
+		
 		render(view:'/bbs/bbsShow',model:model)
 	}
 	def bbsShow ={
@@ -418,6 +422,8 @@ class BbsController {
 			}
 		}
 		model["fieldAcl"] = fa
+		
+		model["attachFiles"] = Attachment.findAllByBeUseId(bbs.id)
 		
 		render(view:'/bbs/bbs',model:model)
 	}
