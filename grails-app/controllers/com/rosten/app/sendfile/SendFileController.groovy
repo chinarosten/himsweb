@@ -31,7 +31,7 @@ class SendFileController {
 		}
 		model["user"]=user
 		model["company"] = company
-		model["sendFile"] = SendFile
+		model["sendFile"] = sendFile
 		
 		FieldAcl fa = new FieldAcl()
 		if("normal".equals(user.getUserType())){

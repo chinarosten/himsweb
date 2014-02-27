@@ -45,10 +45,10 @@ class SendFile {
 	String insideCopy
 	
 	//缓急
-	String emergency
+	String emergency = "缺省"
 	
 	//印发纷数
-	Integer printCopy
+	Integer printCopy = 1
 	
 	//档案种类
 	String archiveType
@@ -57,7 +57,7 @@ class SendFile {
 	String archiveDbName
 	
 	//份数
-	Integer copys
+	Integer copys = 1
 	
 	//页数
 	Integer pages
