@@ -5,6 +5,16 @@ import grails.converters.JSON
 class SendFileActionController {
 	def imgPath ="images/rosten/actionbar/"
 	
+	def sendFileLabelView ={
+		def actionList =[]
+		def strname = "sendFileLabel"
+		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
+		actionList << createAction("新建发文代字",imgPath + "add.png","add_"+ strname)
+		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
+		
+		render actionList as JSON
+	}
+	
 	def sendFileWord ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []

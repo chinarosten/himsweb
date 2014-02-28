@@ -12,6 +12,31 @@ class SendFileController {
 	def springSecurityService
 	def sendFileService
 	
+	
+	def sendFileLabelGrid ={
+		def json=[:]
+		def company = Company.get(params.companyId)
+		if(params.refreshHeader){
+			json["gridHeader"] = sendFileService.getSendFileLabelListLayout()
+		}
+		if(params.refreshData){
+			def args =[:]
+			int perPageNum = Util.str2int(params.perPageNum)
+			int nowPage =  Util.str2int(params.showPageNum)
+			
+			args["offset"] = (nowPage-1) * perPageNum
+			args["max"] = perPageNum
+			args["company"] = company
+			json["gridData"] = sendFileService.getSendFileLabelListDataStore(args)
+			
+		}
+		if(params.refreshPageControl){
+			def total = sendFileService.getSendFileLabelCount(company)
+			json["pageControl"] = ["total":total.toString()]
+		}
+		render json as JSON
+	}
+	
 	def addWord = {
 		def model =[:]
 		render(view:'/sendFile/word',model:model)

@@ -4,11 +4,20 @@
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
 	
+	add_sendFileLabel = function() {
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        var companyId = rosten.kernel.getUserInforByKey("companyid");
+        rosten.kernel.setHref(rosten.webPath +"/sendFile/sendFileLabelAdd?companyId=" + companyId + "&userid=" + userid,"addSendFile");
+    };
+	
 	returnToView = function(e){
 		var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
 		switch(rosten.kernel.navigationEntity){
 		case "addSendFile":
 			show_sendFileNaviEntity("mySendfileManage");
+			break;
+		case "addSendFileLabel":
+			show_sendFileNaviEntity("sendfileLabelManage");
 			break;
 		
 		}
@@ -64,6 +73,14 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 		var userid = rosten.kernel.getUserInforByKey("idnumber");
 		
 		switch (oString) {
+		case "sendfileLabelManage":
+			var naviJson = {
+				identifier : oString,
+				actionBarSrc : rosten.webPath + "/sendFileAction/sendFileLabelView",
+				gridSrc : rosten.webPath + "/sendFile/sendFileLabelGrid?companyId=" + companyId + "&userId=" + userid
+			};
+			rosten.kernel.addRightContent(naviJson);
+			break;
 		case "mySendfileManage":
 			var naviJson = {
 				identifier : oString,
