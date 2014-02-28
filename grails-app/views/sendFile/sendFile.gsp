@@ -85,17 +85,17 @@
 				    	<input id="fileDate" data-dojo-type="dijit/form/ValidationTextBox" 
 		                 	data-dojo-props='name:"fileDate",readOnly:true,
 		                 		trim:true,
-								value:"${}"
+								value:"${sendFile?.getFormattedDate()}"
 		                '/>	
 		           </td>
 				</tr>
 				<tr>
 				    <td><div align="right">主办部门：</div></td>
 				    <td>
-				    	<input id="departName" data-dojo-type="dijit/form/ValidationTextBox" 
-		                 	data-dojo-props='name:"departName",readOnly:true,
+				    	<input id="dealDepart" data-dojo-type="dijit/form/ValidationTextBox" 
+		                 	data-dojo-props='name:"dealDepart",
 		                 		trim:true,
-								value:"${}"
+								value:"${sendFile?.dealDepart}"
 		                '/>
 				    
 				    <td><div align="right">拟稿人：</div></td>

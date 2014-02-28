@@ -128,7 +128,7 @@ class Bbs {
 
 	//缺省读者；*:允许所有人查看,[角色名称]:允许角色,user:普通人员查看
 	String defaultReaders="[公告普通人员],[公告管理员]"
-	def addDefaultReader(userRole){
+	def addDefaultReader(String userRole){
 		if(defaultReaders==null || "".equals(defaultReaders)){
 			defaultReaders = userRole
 		}else{

@@ -28,7 +28,7 @@ class BbsConfig {
 	//最新公告保留时间
 	Integer showDays = 7
 	
-	static transients = ["addCancelSN","getCancelSN"]
+	static transients = ["addCancelSN","removeCancelSN"]
 	
 	def addCancelSN ={type,sn->
 		if("now".equals(type)){

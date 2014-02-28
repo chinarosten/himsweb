@@ -28,7 +28,7 @@ class SendLable {
 	Integer nowSN = 1
 	
 	//今年保留号或者废号
-	List nowCancel
+	String nowCancel
 	
 	//去年年代
 	@GridColumn(name="去年",width="60px")
@@ -39,7 +39,34 @@ class SendLable {
 	Integer frontSN = 1
 	
 	//去年保留号或者废号
-	List frontCancel
+	String frontCancel
+	
+	def addCancelSN ={type,sn->
+		if("now".equals(type)){
+			//今年
+			if("".equals(nowCancel)){
+				nowCancel = sn
+			}else{
+				nowCancel += "," + sn
+			}
+		}else{
+			//去年
+			if("".equals(frontCancel)){
+				frontCancel = sn
+			}else{
+				frontCancel += "," + sn
+			}
+		}
+	}
+	
+	//获取保留号或者废弃号
+	def removeCancelSN ={type,sn->
+		if("now".equals(type)){
+			return nowCancel.split(",").remove(sn).join(",")
+		}else{
+			return frontCancel.split(",").remove(sn).join(",")
+		}
+	}
 	
 	static belongsTo = [company:Company]
 

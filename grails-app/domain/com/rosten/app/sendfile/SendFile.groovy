@@ -35,6 +35,9 @@ class SendFile {
 	//主题词
 	String subject
 	
+	//主办部门
+	String dealDepart
+	
 	//主送单位
 	String mainSend
 	
@@ -87,11 +90,17 @@ class SendFile {
 	String unitNo
 	
 	//附件
-	List attachments
-	static hasMany=[attachments:Attachment]
+	static hasMany=[attachments:Attachment,readers:User]
 	
-	//缺省读者，读者
-	List defaultReaders,readers
+	//缺省读者；*:允许所有人查看,[角色名称]:允许角色
+	String defaultReaders="[发文普通人员],[发文管理员]"
+	def addDefaultReader(String userRole){
+		if(defaultReaders==null || "".equals(defaultReaders)){
+			defaultReaders = userRole
+		}else{
+			defaultReaders += "," + userRole
+		}
+	}
 	
 	//拟稿人
 	@GridColumn(name="拟稿人",colIdx=7)
@@ -103,7 +112,7 @@ class SendFile {
 	
 	//状态
 	@GridColumn(name="状态",colIdx=5)
-	String status
+	String status = "拟稿"
 	
 	//拟稿时间
 	@GridColumn(name="拟稿时间",width="150px")
@@ -115,7 +124,8 @@ class SendFile {
 	}
 	
 	static transients = [
-		"formattedDate"
+		"formattedDate",
+		"addDefaultReader"
 	]
 	
 	static belongsTo = [company:Company]
@@ -146,5 +156,16 @@ class SendFile {
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']
 		table "ROSTEN_SENDFILE_SENDFILE"
+	}
+	def beforeDelete(){
+		SendFile.withNewSession{_session->
+			SendFileComment.findAllBySendFile(this).each{item->
+				item.delete()
+			}
+			SendFileLog.findAllBySendFile(this).each{item->
+				item.delete()
+			}
+			_session.flush()
+		}
 	}
 }
