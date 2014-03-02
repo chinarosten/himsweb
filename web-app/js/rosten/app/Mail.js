@@ -4,6 +4,7 @@
 define(["dojo/_base/kernel",
 		"dojo/_base/connect",
 		"dojo/dom",
+		"dojo/_base/xhr",
 		"dojo/dom-style",
 		"dojo/dom-class",
 		"dojo/date/locale",
@@ -22,6 +23,7 @@ define(["dojo/_base/kernel",
 			kernel,
 			connect,
 			dom, 
+			xhr,
 			domStyle,
 			domClass,
 			dateLocale,
@@ -211,6 +213,21 @@ define(["dojo/_base/kernel",
     cancel_mail = function(){
     	mail_tabs.closeChild(mail_tabs.selectedChildWidget);
     };
+    _getMailBodyInfo = function(mailid,node,str){
+        var ioArgs = {
+            url : rosten.webPath + "/mail/getMailBody/" + mailid,
+            sync : true,
+            handleAs : "text",
+            preventCache : true,
+            encoding : "utf-8",
+            load : function(data) {
+                node.attr("value","<br>" + str + data);
+            },
+            error:function(response, args){
+            }
+        };
+        xhr.get(ioArgs);
+    };
     receive_mail = function(e){
         //回复
     	var actionBar = registry.getEnclosingWidget(e.target).getParent().getParent();
@@ -221,7 +238,7 @@ define(["dojo/_base/kernel",
     		to = messageNode.to.innerHTML,
     		subject = messageNode.subject.innerHTML,
     		sent = messageNode.sent.innerHTML,
-    		content = messageNode.content.innerHTML,
+    		// content = messageNode.content.innerHTML,
     		files = messageNode.fileNode.innerHTML;
     	
     	//新增内容
@@ -249,7 +266,10 @@ define(["dojo/_base/kernel",
     	
     	_Message.subject.attr("value","回复：" + subject);
     	var addContent = "<hr noshade size=\"1\">在" + sent + ", \" " + sender + " \"写道：<br>" ;
-    	_Message.content.attr("value","<br><br><br><br><br><br>" + addContent + content);
+    	
+    	_getMailBodyInfo(id,_Message.content,addContent);
+    	
+    	// _Message.content.attr("value","<br><br><br><br><br><br>" + addContent + content);
     	
     	mail_tabs.addChild(newTab);
     	mail_tabs.selectChild(newTab);
@@ -267,7 +287,7 @@ define(["dojo/_base/kernel",
     		to = messageNode.to.innerHTML,
     		subject = messageNode.subject.innerHTML,
     		sent = messageNode.sent.innerHTML,
-    		content = messageNode.content.innerHTML,
+    		// content = messageNode.content.innerHTML,
     		files = messageNode.fileNode.innerHTML;
     	
     	//新增内容
@@ -294,7 +314,8 @@ define(["dojo/_base/kernel",
     	_Message.attachFile.innerHTML = files;
     	
     	var addContent = "<hr noshade size=\"1\">在" + sent + ", \" " + sender + " \"写道：<br>" ;
-    	_Message.content.attr("value","<br><br><br><br><br><br>" + addContent + content);
+    	// _Message.content.attr("value","<br><br><br><br><br><br>" + addContent + content);
+    	_getMailBodyInfo(id,_Message.content,addContent);
     	
     	mail_tabs.addChild(newTab);
     	mail_tabs.selectChild(newTab);
@@ -311,7 +332,7 @@ define(["dojo/_base/kernel",
     		to = messageNode.to.innerHTML,
     		subject = messageNode.subject.innerHTML,
     		sent = messageNode.sent.innerHTML,
-    		content = messageNode.content.innerHTML,
+    		// content = messageNode.content.innerHTML,
     		files = messageNode.fileNode.innerHTML;
     	
     	//摧毁当前内容
@@ -339,7 +360,9 @@ define(["dojo/_base/kernel",
     	
     	_Message.to.attr("value",to);
     	_Message.subject.attr("value",subject);
-    	_Message.content.attr("value",content);
+    	// _Message.content.attr("value",content);
+    	_getMailBodyInfo(id,_Message.content,"");
+    	
     	_Message.attachFile.innerHTML = files;
     	
     	mail_tabs.addChild(newTab);
@@ -354,7 +377,7 @@ define(["dojo/_base/kernel",
 	formatEmailStatus = function(value){
 		if(value && value!=""){
 			var imgs = general.splitString(value,",");
-			var _values=""
+			var _values="";
 			for(var i = 0; i < imgs.length; i ++){
 				if(_values==""){
 					_values = "<img style=\"margin-left:4px\" src=\"" + rosten.webPath + "/" + imgs[i] + "\" />";

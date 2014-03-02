@@ -15,6 +15,10 @@ import com.rosten.app.system.Attachment
 class MailController {
 	def springSecurityService
 	
+	def getMailBody ={
+		def mail = EmailBox.get(params.id)
+		render mail.content
+	}
 	def publishMail = {
 		def user = User.get(params.userId)
 		def max = 4
