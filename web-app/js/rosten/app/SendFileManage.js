@@ -23,23 +23,12 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 		}
 		
 	};
-	sendfile_add = function(){
-		
-	};
-	sendfile_submit = function(){
-		
-	};
-	sendFile_addWord = function(){
-		if(kernel.isIE){
-			rosten.openNewWindow("sendFile_addWord", rosten.webPath + "/sendFile/addWord");
-		}else{
-			rosten.alert("当前版本正文只支持IE浏览器！");
-		}
-	};
+	
 	add_sendFile = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
-        rosten.kernel.setHref(rosten.webPath +"/sendFile/sendFileAdd?companyId=" + companyId + "&userid=" + userid,"addSendFile");
+//        rosten.kernel.setHref(rosten.webPath +"/sendFile/sendFileAdd?companyId=" + companyId + "&userid=" + userid,"addSendFile");
+        rosten.openNewWindow("sendfile", rosten.webPath + "/sendFile/sendFileAdd?companyId=" + companyId + "&userid=" + userid);
     };
 	change_sendFile = function() {
 		var unid = rosten.getGridUnid("single");
