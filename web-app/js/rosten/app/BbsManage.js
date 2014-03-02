@@ -16,9 +16,6 @@ define([ "dojo/_base/connect", "dijit/registry","rosten/util/general", "rosten/k
 	bbs_changeUser = {
 			
 	};
-	returnToView = function(){
-		
-	};
 	formatBbsLevel = function(value){
 		if(value && value!=""){
 			var imgs = general.splitString(value,",");

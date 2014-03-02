@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="layout" content="rosten" />
     <title>发文管理</title>
     <style type="text/css">
     	.rosten .sendfile_form table tr{
@@ -27,9 +28,29 @@
 		 		"dojox/form/Uploader",
 		 		"dojox/form/uploader/FileList",
 		     	"rosten/widget/ActionBar",
-		     	"rosten/app/SendFileManage"],
+		     	"rosten/app/Application",
+		     	"rosten/kernel/behavior"],
 			function(parser,kernel,registry,xhr,datestamp,DepartUserDialog){
-				
+				kernel.addOnLoad(function(){
+					rosten.init({webpath:"${request.getContextPath()}"});
+					rosten.cssinit();
+				});
+				sendfile_add = function(){
+					
+				};
+				sendfile_submit = function(){
+					
+				};
+				sendFile_addWord = function(){
+					if(kernel.isIE){
+						rosten.openNewWindow("sendFile_addWord", rosten.webPath + "/sendFile/addWord");
+					}else{
+						rosten.alert("当前版本正文只支持IE浏览器！");
+					}
+				};
+				page_quit = function(){
+					rosten.pagequit();
+				};
 			
 		});
     </script>

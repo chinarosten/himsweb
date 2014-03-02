@@ -213,7 +213,7 @@ define(["dojo/_base/kernel",
     cancel_mail = function(){
     	mail_tabs.closeChild(mail_tabs.selectedChildWidget);
     };
-    _getMailBodyInfo = function(mailid,node,str){
+    _getMailBodyInfo = function(mailid,node,str,number){
         var ioArgs = {
             url : rosten.webPath + "/mail/getMailBody/" + mailid,
             sync : true,
@@ -221,7 +221,15 @@ define(["dojo/_base/kernel",
             preventCache : true,
             encoding : "utf-8",
             load : function(data) {
-                node.attr("value","<br>" + str + data);
+                if(number){
+                    var _blank = "";
+                    for(var i = 0; i < number; i ++){
+                        _blank += "<br>"; 
+                    }
+                    node.attr("value",_blank + str + data);
+                }else{
+                    node.attr("value","<br>" + str + data);
+                }
             },
             error:function(response, args){
             }
@@ -267,7 +275,7 @@ define(["dojo/_base/kernel",
     	_Message.subject.attr("value","回复：" + subject);
     	var addContent = "<hr noshade size=\"1\">在" + sent + ", \" " + sender + " \"写道：<br>" ;
     	
-    	_getMailBodyInfo(id,_Message.content,addContent);
+    	_getMailBodyInfo(id,_Message.content,addContent,6);
     	
     	// _Message.content.attr("value","<br><br><br><br><br><br>" + addContent + content);
     	
@@ -315,7 +323,7 @@ define(["dojo/_base/kernel",
     	
     	var addContent = "<hr noshade size=\"1\">在" + sent + ", \" " + sender + " \"写道：<br>" ;
     	// _Message.content.attr("value","<br><br><br><br><br><br>" + addContent + content);
-    	_getMailBodyInfo(id,_Message.content,addContent);
+    	_getMailBodyInfo(id,_Message.content,addContent,6);
     	
     	mail_tabs.addChild(newTab);
     	mail_tabs.selectChild(newTab);

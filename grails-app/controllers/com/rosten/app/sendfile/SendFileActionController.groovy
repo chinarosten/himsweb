@@ -28,11 +28,12 @@ class SendFileActionController {
 		render actionList as JSON
 	}
 	def sendFileForm ={
+		def webPath = request.getContextPath() + "/"
 		def actionList =[]
-		actionList << createAction("返回",imgPath + "quit_1.gif","returnToView")
-		actionList << createAction("保存",imgPath + "Save.gif","sendfile_add")
-		actionList << createAction("创建正文",imgPath + "word_new.png","sendFile_addWord")
-		actionList << createAction("提交",imgPath + "submit.png","sendfile_submit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
+		actionList << createAction("创建正文",webPath +imgPath + "word_new.png","sendFile_addWord")
+		actionList << createAction("提交",webPath +imgPath + "submit.png","sendfile_submit")
 		render actionList as JSON
 	}
 	
