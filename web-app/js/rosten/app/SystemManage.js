@@ -607,6 +607,11 @@ define(["dojo/_base/connect",
      */
     show_systemNaviEntity = function(oString) {
         switch (oString) {
+        	case "personInformation":
+        		var userid = rosten.kernel.getUserInforByKey("idnumber");
+                var companyId = rosten.kernel.getUserInforByKey("companyid");
+                rosten.kernel.setHref(rosten.webPath +"/system/personInformation?companyId=" + companyId + "&userid=" + userid,oString);
+	            break;
             case "smsManage":
                 var naviJson = {
                     identifier : oString,

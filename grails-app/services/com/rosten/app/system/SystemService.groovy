@@ -568,6 +568,12 @@ class SystemService {
 			model.description ="个人配置模块"
 			
 			resource = new Resource()
+			resource.resourceName = "个人资料"
+			resource.url = "personInformation"
+			resource.imgUrl = "images/rosten/navigation/User.gif"
+			model.addToResources(resource)
+			
+			resource = new Resource()
 			resource.resourceName = "短信群组"
 			resource.url = "smsgroup"
 			resource.imgUrl = "images/rosten/navigation/Group.gif"

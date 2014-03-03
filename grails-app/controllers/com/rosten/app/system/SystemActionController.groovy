@@ -123,6 +123,13 @@ class SystemActionController {
 		render actionList as JSON
 	}
 	
+	def userSimpleView ={
+		def actionList =[]
+		actionList << createAction("退出", imgPath + "quit_1.gif","returnToMain")
+		actionList << createAction("保存",imgPath + "Save.gif","userSimple_save")
+		render actionList as JSON
+	}
+	
 	def userView ={
 		def actionList = createCommonAction(null,"user",true)
 		actionList << createAction("搜索",imgPath + "search.gif","searchGrid")

@@ -1595,6 +1595,37 @@ class SystemController {
 	def userAdd ={
 		redirect(action:"userShow",params:params)
 	}
+	def userSimpleSave ={
+		def model=[:]
+		
+		def user = User.get(params.id)
+		user.properties = params
+		user.clearErrors()
+		if(user.save(flush:true)){
+			model["result"] = "true"
+		}else{
+			user.errors.each{
+				println it
+			}
+			model["result"] = "false"
+		}
+		render model as JSON
+	}
+	def personInformation ={
+		def model =[:]
+		
+		def user = User.get(params.userid)
+		model["user"]= user
+		
+		def allowrolesName=[]
+		UserRole.findAllByUser(user).each{
+			allowrolesName << it.role.authority
+		}
+		model["allowrolesName"] = allowrolesName.join(',')
+		
+		model["companyId"] = params.companyId
+		render(view:'/system/userSimple',model:model)
+	}
 	def userShow ={
 		def model =[:]
 		
