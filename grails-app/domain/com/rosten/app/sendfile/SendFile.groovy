@@ -54,22 +54,22 @@ class SendFile {
 	Integer printCopy = 1
 	
 	//档案种类
-	String archiveType
+	String archiveType = "文档"
 	
 	//归档到
-	String archiveDbName
+	String archiveDbName = "文档数据库"
 	
 	//份数
 	Integer copys = 1
 	
 	//页数
-	Integer pages
+	Integer pages = 1
 	
 	//密级
-	String secretLevel
+	String secretLevel = "普通"
 	
 	//期限
-	String term
+	String term = "长期"
 	
 	//类目号
 	String archiveCategory

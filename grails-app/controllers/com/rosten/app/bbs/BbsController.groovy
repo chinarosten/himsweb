@@ -120,7 +120,7 @@ class BbsController {
 				//defaultReaders为：all或者【角色】或者readers中包含当前用户的均有权访问
 				like("defaultReaders", "%all%")
 				readers{
-					eq("id",user.id)
+					eq("id",user?.id)
 				}
 			}
 			eq("status","已发布")

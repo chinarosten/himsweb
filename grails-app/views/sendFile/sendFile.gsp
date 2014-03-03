@@ -8,6 +8,9 @@
     	.rosten .sendfile_form table tr{
     		height:30px;
     	}
+    	body{
+			overflow:auto;
+		}
     </style>
 	<script type="text/javascript">
 	require(["dojo/parser",
@@ -28,6 +31,7 @@
 		 		"dojox/form/Uploader",
 		 		"dojox/form/uploader/FileList",
 		     	"rosten/widget/ActionBar",
+		     	"rosten/widget/TitlePane",
 		     	"rosten/app/Application",
 		     	"rosten/kernel/behavior"],
 			function(parser,kernel,registry,xhr,datestamp,DepartUserDialog){
@@ -64,7 +68,8 @@
 
 <div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
 	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props=''>
-		<g:form id="sendfile_form" name="sendfile_form" url='[controller:"sendFile",action:"sendFileSave"]' class="rosten_form" >
+		<form id="sendfile_form" name="sendfile_form" url='[controller:"sendFile",action:"sendFileSave"]' class="rosten_form" style="padding:0px">
+			<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"基本信息",toggleable:false,moreText:"",height:"300px",marginBottom:"2px"'>
 			<table border="0" width="740" align="left">
 				<tr>
 				    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>流水号：</div></td>
@@ -200,18 +205,92 @@
 				    
 				    <td><div align="right">印发份数：</div></td>
 				    <td>
-				    	<input id="copys" data-dojo-type="dijit/form/ValidationTextBox" 
-		                 	data-dojo-props='name:"copys",
+				    	<input id="printCopy" data-dojo-type="dijit/form/ValidationTextBox" 
+		                 	data-dojo-props='name:"printCopy",
 		                 		trim:true,
-								value:"${sendFile?.copys}"
+								value:"${sendFile?.printCopy}"
 		                '/>
 		            </td>    
 				</tr>
 			</table>
-		</g:form>
+			</div>
+			<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"档案信息",toggleable:false,moreText:"",marginBottom:"2px",height:"100px"'>
+				<table border="0" width="740" align="left">
+					<tr>
+					    <td width="120"><div align="right">档案种类：</div></td>
+					    <td width="250">
+					    	<select id="archiveType" data-dojo-type="dijit/form/FilteringSelect"
+				                data-dojo-props='name:"archiveType",${fieldAcl.isReadOnly("archiveType")},
+				               	trim:true,
+				      			value:"${sendFile?.archiveType}"
+				            '>
+								<option value="文档">文档</option>
+								<option value="科档">科档</option>
+								<option value="会档">会档</option>
+								<option value="音像">音像</option>
+				    		</select>
+					    </td>
+					    <td width="120"><div align="right">归档到：</div></td>
+					    <td width="250">
+					    	<input id="archiveDbName" data-dojo-type="dijit/form/ValidationTextBox" 
+			                 	data-dojo-props='name:"archiveDbName",readOnly:true,
+			                 		trim:true,placeHolder:"归档时自动生成",
+									value:"${sendFile?.archiveDbName}"
+			                '/>
+			           </td>
+					</tr>
+					<tr>
+					    <td><div align="right">份数：</div></td>
+					    <td>
+					    	<input id="copys" data-dojo-type="dijit/form/ValidationTextBox" 
+			                 	data-dojo-props='name:"copys",
+			                 		trim:true,
+									value:"${sendFile?.copys}"
+			                '/>
+					    
+					    <td><div align="right">页数：</div></td>
+					    <td>
+					    	<input id="pages" data-dojo-type="dijit/form/ValidationTextBox" 
+			                 	data-dojo-props='name:"pages",
+			                 		trim:true,
+									value:"${sendFile?.pages}"
+			                '/>
+			            </td>    
+					</tr>
+					<tr>
+					    <td><div align="right">密级：</div></td>
+					    <td>
+			                <select id="secretLevel" data-dojo-type="dijit/form/FilteringSelect"
+				                data-dojo-props='name:"secretLevel",${fieldAcl.isReadOnly("secretLevel")},
+				               	trim:true,
+				      			value:"${sendFile?.secretLevel}"
+				            '>
+								<option value="普通">普通</option>
+								<option value="机密">机密</option>
+				    		</select>
+					    
+					    <td><div align="right">期限：</div></td>
+					    <td>
+			                <select id="term" data-dojo-type="dijit/form/FilteringSelect"
+				                data-dojo-props='name:"term",${fieldAcl.isReadOnly("term")},
+				               	trim:true,
+				      			value:"${sendFile?.term}"
+				            '>
+								<option value="暂存">暂存</option>
+								<option value="短期">短期</option>
+								<option value="长期">长期</option>
+								<option value="永久">永久</option>
+				    		</select>
+			            </td>    
+					</tr>
+				</table>
+			</div>
+		</form>
+	
+	
+	<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"附件信息",toggleable:false,moreText:"",height:"100px"'>
 		<table class="tableData" style="width:740px;margin:0px">
-	      <g:if test="${!fieldAcl.readOnly.contains('attach')}">
-			
+	      <g:if test="${!fieldAcl.readOnly.contains('attach') && sendFile?.id!=null}">
 			<tr>
 			    <td width="120"><div align="right">附件：</div></td>
 			    <td colspan=3>
@@ -248,7 +327,6 @@
 										</button>
 									</div>
 								</form>
-							
 						</div>
 					</div>
 			    
@@ -270,6 +348,7 @@
 				</td>
 			</tr>
 	    </table>
+	   </div>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" id="sendfileComment" title="流转意见" data-dojo-props='refreshOnShow:true
 	'>	

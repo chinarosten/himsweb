@@ -111,8 +111,8 @@
 			                trim:true,required:true,style:{width:"195px"},
 			      			value:"${sendFileLabel?.category}"
 			            '>
-							<option value="上行文">上行文</option>
-							<option value="下行文">下行文</option>
+							<option value="单位发文">单位发文</option>
+							<option value="部门发文">部门发文</option>
 			    		</select>
 				    </td>
 				    <td width="130">&nbsp;</td>
@@ -120,11 +120,10 @@
 				</tr>
 				<tr>
 				    <td><div align="right"><span style="color:red">*&nbsp;</span>代字名称：</div></td>
-				    <td  colspan=3>
+				    <td colspan=3>
 				    	<input id="subCategory" data-dojo-type="dijit/form/ValidationTextBox" 
 		                 	data-dojo-props='name:"subCategory",${fieldAcl.isReadOnly("subCategory")},
-		                 		trim:true,required:true,
-		                 		class:"input",
+		                 		trim:true,required:true,"class":"input",
 								value:"${sendFileLabel?.subCategory}"
 		                '/>
 				    </td>
@@ -135,7 +134,7 @@
 				    	<input id="nowYear" data-dojo-type="dijit/form/ValidationTextBox" 
 		                 	data-dojo-props='name:"nowYear",${fieldAcl.isReadOnly("nowYear")},
 		                 		trim:true,required:true,
-		                 		class:"input",
+		                 		"class":"input",
 								value:"${sendFileLabel?.nowYear}"
 		                '/>
 				    </td>
@@ -144,7 +143,7 @@
 				    	<input id="nowSN" data-dojo-type="dijit/form/ValidationTextBox" 
 		                 	data-dojo-props='name:"nowSN",${fieldAcl.isReadOnly("nowSN")},
 		                 		trim:true,required:true,
-		                 		class:"input",
+		                 		"class":"input",
 								value:"${sendFileLabel?.nowSN}"
 		                '/>
 		           </td>
@@ -169,7 +168,7 @@
 		                 	data-dojo-props='name:"frontYear",${fieldAcl.isReadOnly("frontYear")},
 		                 		trim:true,
 		                 		required:true,
-		                 		class:"input",
+		                 		"class":"input",
 								value:"${sendFileLabel?.frontYear}"
 		                '/>
 				    </td>
@@ -178,7 +177,7 @@
 				    	<input id="frontSN" data-dojo-type="dijit/form/ValidationTextBox" 
 		                 	data-dojo-props='name:"frontSN",${fieldAcl.isReadOnly("frontSN")},
 		                 		trim:true,required:true,
-		                 		class:"input",
+		                 		"class":"input",
 								value:"${sendFileLabel?.frontSN}"
 		                '/>
 		           </td>
