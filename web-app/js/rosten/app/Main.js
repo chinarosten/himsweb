@@ -110,6 +110,16 @@ define(["dojo/_base/kernel"
                 require(["rosten/app/SmsManage"],function(){
                 	show_smsNaviEntity("gtaskManage");
                 });
+            }else if (oString == "meeting") {
+            	deleteMailNavigation();
+            	require(["rosten/app/MeetingManage"],function(){
+            		returnToMain();
+            	});
+            }else if (oString == "dsj") {
+            	deleteMailNavigation();
+            	require(["rosten/app/DsjManage"],function(){
+            		returnToMain();
+            	});
             }
         });
 		
