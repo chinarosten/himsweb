@@ -102,6 +102,21 @@
                                '/>
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <div align="right" >显示顺序：
+                                </div>
+                            </td>
+                            <td>
+                                <input id="serialNo" data-dojo-type="dijit.form.ValidationTextBox" 
+                                	data-dojo-props='name:"serialNo",${fieldAcl.isReadOnly("serialNo")},
+                                		"class":"input",
+                                		style:{width:"400px"},
+                                		trim:true,
+              							value:"${model?.serialNo}"
+                               '/>
+                            </td>
+                        </tr>
 						<tr>
                         	<td>
                                 <div align="right" >

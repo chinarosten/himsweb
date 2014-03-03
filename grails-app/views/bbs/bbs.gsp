@@ -5,76 +5,7 @@
     <meta name="layout" content="rosten" />
     <title>公告栏</title>
     <style type="text/css">
-		.dojoxUploaderFileList{
-			border:1px solid #ccc;
-			min-height:50px;
-		}
-		.dojoxUploaderFileListTable{
-			width:100%;
-			border-collapse:collapse;
-			margin-top:5px;
-		}
-		.dojoxUploaderFileListHeader th{
-			background-color:#eee;
-			padding:3px;
-		}
-		.dojoxUploaderFileListRow{
 		
-		}
-		.dojoxUploaderIndex{
-			width:20px;
-		}
-		.dojoxUploaderIcon{
-			width:50px;
-		}
-		.dojoxUploaderFileName{
-		
-		}
-		.dojoxUploaderSize{
-			width:70px;
-		}
-		.dojoxUploaderFileListContent{
-			width:100%;
-		}
-		.dojoxUploaderFileListProgress{
-			border:1px solid #666;
-			height:15px;
-			position:relative;
-			background:#fff;
-			overflow:hidden;
-		}
-		.dojoxUploaderFileListPercentText{
-			position:absolute;
-			right:3px;
-			top:3px;
-			font-size:10px;
-			text-align:right;
-		}
-		.dojoxUploaderFileListProgressBar{
-			position:absolute;
-			top:0px;
-			left:0px;
-			height:15px;
-			width:0%;
-			background:#bfe1fd;
-		}
-		.rosten .tooltipLink .dijitButtonNode,
-		.rosten .tooltipLink .dijitButtonNode .dijitDropDownButtonHover,
-		.rosten .buttonLink .dijitButtonNode,
-		.rosten .buttonLink .dijitButtonHover .dijitButtonNode {
-			background: none !important;
-			border:none;
-		}
-		.rosten .tooltipLink .dijitArrowButtonInner {
-			display:none;
-		}
-		.rosten .tooltipLink button,
-		.rosten .tooltipLink button .dijitButtonText,
-		.rosten .buttonLink button .dijitButtonText {
-			text-decoration:underline !important;
-			color:blue;
-			display:inline;
-		}
     </style>
 	<script type="text/javascript">
 		require(["dojo/parser",

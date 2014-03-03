@@ -373,8 +373,15 @@ class SystemService {
 		resource = new Resource()
 		resource.resourceName = "各人待办"
 		resource.url = "mySendfileManage"
-		resource.imgUrl = "images/rosten/navigation/bbs.gif"
+		resource.imgUrl = "images/rosten/navigation/bbs_my.gif"
 		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "所有发文"
+		resource.url = "allSendfileManage"
+		resource.imgUrl = "images/rosten/navigation/bbs_all.gif"
+		model.addToResources(resource)
+		
 		model.save(flush:true)
 	}
 	private def initData_receivefile ={path,company ->
@@ -393,8 +400,71 @@ class SystemService {
 		resource = new Resource()
 		resource.resourceName = "各人待办"
 		resource.url = "myReceivefileManage"
-		resource.imgUrl = "images/rosten/navigation/bbs.gif"
+		resource.imgUrl = "images/rosten/navigation/bbs_my.gif"
 		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "所有收文"
+		resource.url = "allReceivefileManage"
+		resource.imgUrl = "images/rosten/navigation/bbs_all.gif"
+		model.addToResources(resource)
+		
+		model.save(flush:true)
+
+	}
+	private def initData_meeting ={path,company ->
+		def model = new Model(company:company)
+		model.modelName = "会议通知"
+		model.modelCode = "meeting"
+		model.modelUrl = path + "/system/navigation"
+		model.description ="会议通知模块"
+		
+		def resource = new Resource()
+		resource.resourceName = "配置文档"
+		resource.url = "meetingConfigManage"
+		resource.imgUrl = "images/rosten/navigation/config.png"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "各人待办"
+		resource.url = "myMeetingManage"
+		resource.imgUrl = "images/rosten/navigation/bbs_my.gif"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "所有会议"
+		resource.url = "allMeetingManage"
+		resource.imgUrl = "images/rosten/navigation/bbs_all.gif"
+		model.addToResources(resource)
+		
+		model.save(flush:true)
+
+	}
+	private def initData_dsj ={path,company ->
+		def model = new Model(company:company)
+		model.modelName = "大事记"
+		model.modelCode = "dsj"
+		model.modelUrl = path + "/system/navigation"
+		model.description ="大事记模块"
+		
+		def resource = new Resource()
+		resource.resourceName = "配置文档"
+		resource.url = "dsjConfigManage"
+		resource.imgUrl = "images/rosten/navigation/config.png"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "各人待办"
+		resource.url = "dsjManage"
+		resource.imgUrl = "images/rosten/navigation/bbs_my.gif"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "所有大事记"
+		resource.url = "allDsjManage"
+		resource.imgUrl = "images/rosten/navigation/bbs_all.gif"
+		model.addToResources(resource)
+		
 		model.save(flush:true)
 
 	}
@@ -470,6 +540,12 @@ class SystemService {
 			
 			//收文管理
 			initData_receivefile(path,company)
+			
+			//会议通知
+			initData_meeting(path,company)
+			
+			//大事记
+			initData_dsj(path,company)
 
 			model = new Model(company:company)
 			model.modelName = "短信发送"

@@ -6,6 +6,15 @@ import com.rosten.app.annotation.GridColumn
 class Resource {
 	String id
 	
+	//模块名称
+	@GridColumn(name="模块名称",colIdx=1)
+	def getModelName(){
+		if(model){
+			return model.modelName
+		}
+		return "无模块"
+	}
+	
 	//资源名称
 	@GridColumn(name="资源名称")
 	String resourceName

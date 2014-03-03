@@ -25,7 +25,7 @@
 	border-right: 1px solid #D8D7D7;
 	border-bottom: 1px solid #D8D7D7;
 	border-top: 1px solid #D8D7D7;
-	word-break:break-all;
+	word-break: break-all;
 }
 
 .rosten .bbs  .newspage .title {
@@ -129,30 +129,226 @@
 	color: #777;
 }
 /*意见显示 */
-.rosten .commentLog .title-nav { margin:1em auto; height:26px; line-height:26px; border-bottom:1px solid #b0cadf; }
-.rosten .commentLog .title-nav h3 { float:left; width:45%;margin:0px }
-.rosten .commentLog .title-nav h3 span { font-weight:bold; color:#2b92ec; font-size:14px; padding-left:5px; }
-.rosten .commentLog .title-nav h3 em { margin:0 0px 0 14px; font-weight:normal; color:#555; }
-.rosten .commentLog .title-nav h3 em cite { display:inline-block; width:12px; height:12px; border:1px solid #ccc; font-size:0; background:#eee; margin-right:3px; }
-.rosten .commentLog .title-nav h3 em.bg-ysb { color:#3684f9; }
-.rosten .commentLog .title-nav h3 em.bg-kbj { color:#23be09; }
-.rosten .commentLog .title-nav h3 em.bg-ysb cite { background:#d9e9ff; border-color:#b2cbee; }
-.rosten .commentLog .title-nav h3 em.bg-kbj cite { background:#92e190; border-color:#6ecb6b; }
-.rosten .commentLog .title-nav h3 em.bg-wkf cite { background:#eee; }
-.rosten .commentLog .title-nav h4 { float:right; width:45%; text-align:right; margin:0px}
-.rosten .commentLog .title-nav h4 a { height:22px; line-height:22px; padding:0 .5em; color:#fff; background:#4786dd; display:inline-block; margin:0 3px; }
-.rosten .commentLog .title-nav h4 a:hover { background:#165cbe; color:#fff; }
+.rosten .commentLog .title-nav {
+	margin: 1em auto;
+	height: 26px;
+	line-height: 26px;
+	border-bottom: 1px solid #b0cadf;
+}
+
+.rosten .commentLog .title-nav h3 {
+	float: left;
+	width: 45%;
+	margin: 0px
+}
+
+.rosten .commentLog .title-nav h3 span {
+	font-weight: bold;
+	color: #2b92ec;
+	font-size: 14px;
+	padding-left: 5px;
+}
+
+.rosten .commentLog .title-nav h3 em {
+	margin: 0 0px 0 14px;
+	font-weight: normal;
+	color: #555;
+}
+
+.rosten .commentLog .title-nav h3 em cite {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	border: 1px solid #ccc;
+	font-size: 0;
+	background: #eee;
+	margin-right: 3px;
+}
+
+.rosten .commentLog .title-nav h3 em.bg-ysb {
+	color: #3684f9;
+}
+
+.rosten .commentLog .title-nav h3 em.bg-kbj {
+	color: #23be09;
+}
+
+.rosten .commentLog .title-nav h3 em.bg-ysb cite {
+	background: #d9e9ff;
+	border-color: #b2cbee;
+}
+
+.rosten .commentLog .title-nav h3 em.bg-kbj cite {
+	background: #92e190;
+	border-color: #6ecb6b;
+}
+
+.rosten .commentLog .title-nav h3 em.bg-wkf cite {
+	background: #eee;
+}
+
+.rosten .commentLog .title-nav h4 {
+	float: right;
+	width: 45%;
+	text-align: right;
+	margin: 0px
+}
+
+.rosten .commentLog .title-nav h4 a {
+	height: 22px;
+	line-height: 22px;
+	padding: 0 .5em;
+	color: #fff;
+	background: #4786dd;
+	display: inline-block;
+	margin: 0 3px;
+}
+
+.rosten .commentLog .title-nav h4 a:hover {
+	background: #165cbe;
+	color: #fff;
+}
 
 /*意见列表*/
-.rosten .commentLog .rz-list { border-bottom:1px dotted #ccc; margin:2px 0 13px; }
-.rosten .commentLog .rz-list-cur { background:#f3f7fe; }
-.rosten .commentLog .rz-list h3 { font-weight:bold; }
-.rosten .commentLog .rz-list .rz-list-con { line-height:1.6; color:#555; padding-left:2em; min-height:60px; _height:60px; margin-top:5px;}
-.rosten .commentLog .rz-list h5 { height:15px; line-height:15px; text-align:right; }
-.rosten .commentLog .rz-list h5 a { margin:0 .6em; color:#06F; display:none; }
-.rosten .commentLog .rz-list-cur h5 a { display:inline; font-weight:normal; }
-.rosten .commentLog .rz-list-edit { padding:.2em; display:none; }
-.rosten .commentLog .rz-list-edit textarea { width:99%; overflow:auto; border:1px solid #ccc; height:70px; padding:2px; font-size:12px; }
-.rosten .commentLog .rz-list-edit-tool { padding:.3em .12em .2em 0; text-align:right; }
+.rosten .commentLog .rz-list {
+	border-bottom: 1px dotted #ccc;
+	margin: 2px 0 13px;
+}
 
+.rosten .commentLog .rz-list-cur {
+	background: #f3f7fe;
+}
 
+.rosten .commentLog .rz-list h3 {
+	font-weight: bold;
+}
+
+.rosten .commentLog .rz-list .rz-list-con {
+	line-height: 1.6;
+	color: #555;
+	padding-left: 2em;
+	min-height: 60px;
+	_height: 60px;
+	margin-top: 5px;
+}
+
+.rosten .commentLog .rz-list h5 {
+	height: 15px;
+	line-height: 15px;
+	text-align: right;
+}
+
+.rosten .commentLog .rz-list h5 a {
+	margin: 0 .6em;
+	color: #06F;
+	display: none;
+}
+
+.rosten .commentLog .rz-list-cur h5 a {
+	display: inline;
+	font-weight: normal;
+}
+
+.rosten .commentLog .rz-list-edit {
+	padding: .2em;
+	display: none;
+}
+
+.rosten .commentLog .rz-list-edit textarea {
+	width: 99%;
+	overflow: auto;
+	border: 1px solid #ccc;
+	height: 70px;
+	padding: 2px;
+	font-size: 12px;
+}
+
+.rosten .commentLog .rz-list-edit-tool {
+	padding: .3em .12em .2em 0;
+	text-align: right;
+}
+
+/*
+* 附件上传css样式
+*/
+.dojoxUploaderFileList {
+	border: 1px solid #ccc;
+	min-height: 50px;
+}
+
+.dojoxUploaderFileListTable {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 5px;
+}
+
+.dojoxUploaderFileListHeader th {
+	background-color: #eee;
+	padding: 3px;
+}
+
+.dojoxUploaderFileListRow {
+	
+}
+
+.dojoxUploaderIndex {
+	width: 20px;
+}
+
+.dojoxUploaderIcon {
+	width: 50px;
+}
+
+.dojoxUploaderFileName {
+	
+}
+
+.dojoxUploaderSize {
+	width: 70px;
+}
+
+.dojoxUploaderFileListContent {
+	width: 100%;
+}
+
+.dojoxUploaderFileListProgress {
+	border: 1px solid #666;
+	height: 15px;
+	position: relative;
+	background: #fff;
+	overflow: hidden;
+}
+
+.dojoxUploaderFileListPercentText {
+	position: absolute;
+	right: 3px;
+	top: 3px;
+	font-size: 10px;
+	text-align: right;
+}
+
+.dojoxUploaderFileListProgressBar {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 15px;
+	width: 0%;
+	background: #bfe1fd;
+}
+
+.rosten .tooltipLink .dijitButtonNode,.rosten .tooltipLink .dijitButtonNode .dijitDropDownButtonHover,.rosten .buttonLink .dijitButtonNode,.rosten .buttonLink .dijitButtonHover .dijitButtonNode
+	{
+	background: none !important;
+	border: none;
+}
+
+.rosten .tooltipLink .dijitArrowButtonInner {
+	display: none;
+}
+
+.rosten .tooltipLink button,.rosten .tooltipLink button .dijitButtonText,.rosten .buttonLink button .dijitButtonText
+	{
+	text-decoration: underline !important;
+	color: blue;
+	display: inline;
+}

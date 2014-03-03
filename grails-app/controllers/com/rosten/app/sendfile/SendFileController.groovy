@@ -12,6 +12,16 @@ class SendFileController {
 	def springSecurityService
 	def sendFileService
 	
+	def getAllSendFileLabel ={
+		def json = [identifier:'id',label:'name',items:[]]
+		def company = Company.get(params.companyId)
+		def sendFileLabelList = SendLable.findAllByCompany(company)
+		sendFileLabelList.each{
+			def sMap = ["id":it.id,"category":it.category,"org2Name":it.org2Name,"subCategory":it.subCategory]
+			json.items+=sMap
+		}
+		render json as JSON
+	}
 	def sendFileLabelDelete ={
 		def ids = params.id.split(",")
 		def json
@@ -122,6 +132,8 @@ class SendFileController {
 		def sendFile = new SendFile()
 		if(params.id){
 			sendFile = SendFile.get(params.id)
+		}else{
+			model.companyId = params.companyId
 		}
 		model["user"]=user
 		model["company"] = company

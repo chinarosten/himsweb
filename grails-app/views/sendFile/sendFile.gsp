@@ -87,16 +87,15 @@
 				<tr>
 				    <td><div align="right"><span style="color:red">*&nbsp;</span>发文种类：</div></td>
 				    <td>
-				    	<div data-dojo-type="dojo/data/ItemFileReadStore" data-dojo-id="rosten.storeData.cardType"
-							data-dojo-props='url:"${createLink(controller:'sendFile',action:'getAllFileType',params:[companyId:companyId]) }"'></div>
+				    	<div data-dojo-type="dojo/data/ItemFileReadStore" data-dojo-id="rosten.storeData.fileType"
+							data-dojo-props='url:"${createLink(controller:'sendFile',action:'getAllSendFileLabel',params:[companyId:companyId]) }"'></div>
 							
 						<select id="fileType" data-dojo-type="dijit/form/FilteringSelect" 
-							data-dojo-props='name:"cardtype",${fieldAcl.isReadOnly("fileType")},
-								store:rosten.storeData.cardType,
-								trim:true,
-								required:true,
-								searchAttr:"fileTypeName",
-								value:"${sendFile?.fileType?.id}"
+							data-dojo-props='name:"fileType",${fieldAcl.isReadOnly("fileType")},
+								store:rosten.storeData.fileType,
+								trim:true,required:true,
+								searchAttr:"subCategory",
+								value:"${sendFile?.fileType?.subCategory}"
 							'>	
 							
 						</select>
@@ -211,7 +210,7 @@
 			</table>
 		</g:form>
 		<table class="tableData" style="width:740px;margin:0px">
-	      <g:if test="${!fieldAcl.readOnly.contains('attach') && sendFile?.id!=null}">
+	      <g:if test="${!fieldAcl.readOnly.contains('attach')}">
 			
 			<tr>
 			    <td width="120"><div align="right">附件：</div></td>

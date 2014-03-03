@@ -230,6 +230,7 @@ class SystemController {
 					sMap["url"] = item.url
 					sMap["imgUrl"] = item.imgUrl
 					sMap["description"] = item.description
+					sMap["getModelName"] = item.getModelName()
 			
 					datajson.items+=sMap
 				}
@@ -1886,19 +1887,28 @@ class SystemController {
 		}
 		if(modelList && modelList.size()>0){
 			def _indexList =[]
-			def _index = 4
-			modelList.eachWithIndex{item,i->
-				def indexValue
-				if(item.serialNo!=null){
-					indexValue = item.serialNo
-				}else{
-					indexValue = getIndexValue(_index,_indexList)
-					_indexList << indexValue
-					_index = indexValue + 1
-				}
-				model[item.id + "&" + Util.obj2str(indexValue).padLeft(2,"0")] = item.modelCode + ":" + item.modelName + "&" + item.modelUrl
-				
+			
+			//首先获取serialNo不为空的数据
+			def serialNoList = modelList.findAll{elem->
+				elem.serialNo!=null
 			}
+			
+			serialNoList.each{item->
+				model[item.id + "&" + Util.obj2str(item.serialNo).padLeft(2,"0")] = item.modelCode + ":" + item.modelName + "&" + item.modelUrl
+				_indexList << item.serialNo
+			}
+			
+			//剩余数据
+			def _index = 1
+			def otherList = modelList - serialNoList
+			otherList.each{item->
+				def indexValue = getIndexValue(_index,_indexList)
+				_indexList << indexValue
+				_index = indexValue + 1
+				
+				model[item.id + "&" + Util.obj2str(indexValue).padLeft(2,"0")] = item.modelCode + ":" + item.modelName + "&" + item.modelUrl
+			}
+			
 			if(defaultModel){
 				model["default"] = defaultModel.id
 			}else{
