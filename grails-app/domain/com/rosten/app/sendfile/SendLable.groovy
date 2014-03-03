@@ -9,18 +9,18 @@ class SendLable {
 	String id
 	
 	//代字类型
-	@GridColumn(name="类型",width="60px")
+	@GridColumn(name="类型")
 	String category
 	
 	//二级单位名称
 	String org2Name
 	
 	//发文代字
-	@GridColumn(name="发文代字",width="60px")
+	@GridColumn(name="发文代字",formatter="sendFileLabel_formatTopic")
 	String subCategory
 	
 	//今年年代
-	@GridColumn(name="今年",width="60px")
+	@GridColumn(name="今年")
 	Integer nowYear
 	
 	//今年文号
@@ -31,7 +31,7 @@ class SendLable {
 	String nowCancel
 	
 	//去年年代
-	@GridColumn(name="去年",width="60px")
+	@GridColumn(name="去年")
 	Integer frontYear
 	
 	//去年文号

@@ -9,8 +9,6 @@
 				"dijit/registry",
 				"dijit/form/SimpleTextarea",
 		 		"dijit/form/ValidationTextBox",
-		 		"dijit/form/DateTextBox",
-		 		"dijit/form/FilteringSelect",
 		 		"rosten/widget/ActionBar"
 		     	],function(registry){
 	     	

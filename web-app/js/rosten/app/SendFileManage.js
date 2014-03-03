@@ -4,10 +4,32 @@
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
 	
+	sendFileLabel_formatTopic = function(value,rowIndex){
+		return "<a href=\"javascript:sendFileLabel_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+	};
+	sendFileLabel_onMessageOpen = function(rowIndex){
+        var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("sendfileLabel", rosten.webPath + "/sendFile/sendFileLabelShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
+	};
+	delete_sendFileLabel = function(){
+		var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
+		_1.callback = function() {
+			var unids = rosten.getGridUnid("multi");
+			if (unids == "")
+				return;
+			var content = {};
+			content.id = unids;
+			rosten.read(rosten.webPath + "/sendFile/sendFileLabelDelete", content,rosten.deleteCallback);
+		};
+	};
 	add_sendFileLabel = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
-        rosten.kernel.setHref(rosten.webPath +"/sendFile/sendFileLabelAdd?companyId=" + companyId + "&userid=" + userid,"addSendFile");
+//        rosten.kernel.setHref(rosten.webPath +"/sendFile/sendFileLabelAdd?companyId=" + companyId + "&userid=" + userid,"addSendFile");
+        rosten.openNewWindow("sendfileLabel", rosten.webPath + "/sendFile/sendFileLabelAdd?companyId=" + companyId + "&userid=" + userid);
     };
 	
 	returnToView = function(e){
