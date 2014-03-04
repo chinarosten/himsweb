@@ -2,7 +2,9 @@ package com.rosten.app.sendfile
 
 import grails.converters.JSON
 import com.rosten.app.util.FieldAcl
+import com.rosten.app.util.SystemUtil
 import com.rosten.app.util.Util
+import com.rosten.app.system.Attachment
 import com.rosten.app.system.Company
 import com.rosten.app.system.User
 
@@ -11,6 +13,112 @@ class SendFileController {
 	
 	def springSecurityService
 	def sendFileService
+	
+	def getFileUpload ={
+		def model =[:]
+		model["docEntity"] = "sendFile"
+		model["isShowFile"] = false
+		if(params.id){
+			//已经保存过
+			def sendFile = SendFile.get(params.id)
+			model["sendFile"] = sendFile
+			//获取附件信息
+			model["attachFiles"] = Attachment.findAllByBeUseId(params.id)
+		}else{
+			//尚未保存
+		}
+		render(view:'/share/fileUpload',model:model)
+	}
+	
+	def uploadFile = {
+		def json=[:]
+		SystemUtil sysUtil = new SystemUtil()
+		
+		def uploadPath = sysUtil.getUploadPath("sendfile")
+		def f = request.getFile("uploadedfile")
+		if (f.empty) {
+			json["result"] = "blank"
+			render json as JSON
+			return
+		}
+		
+		def uploadSize = sysUtil.getUploadSize()
+		if(uploadSize!=null){
+			//控制附件上传大小
+			def maxSize = uploadSize * 1024 * 1024
+			if(f.size>=maxSize){
+				json["result"] = "big"
+				render json as JSON
+				return
+			}
+		}
+		String name = f.getOriginalFilename()//获得文件原始的名称
+		def realName = sysUtil.getRandName(name)
+		f.transferTo(new File(uploadPath,realName))
+		
+		def attachment = new Attachment()
+		attachment.name = name
+		attachment.realName = realName
+		attachment.type = "sendfile"
+		attachment.url = uploadPath
+		attachment.size = f.size
+		attachment.beUseId = params.id
+		attachment.upUser = (User) springSecurityService.getCurrentUser()
+		attachment.save(flush:true)
+		
+		json["result"] = "true"
+		json["fileId"] = attachment.id
+		json["fileName"] = name
+		render json as JSON
+	}
+	
+	def addComment ={
+		def json=[:]
+		def sendFile = SendFile.get(params.id)
+		def user = User.get(params.userId)
+		if(sendFile){
+			def comment = new SendFileComment()
+			comment.user = user
+			comment.status = sendFile.status
+			comment.content = params.dataStr
+			comment.sendFile = sendFile
+			
+			if(comment.save(flush:true)){
+				json["result"] = true
+			}else{
+				comment.errors.each{
+					println it
+				}
+				json["result"] = false
+			}
+			
+		}else{
+			json["result"] = false
+		}
+		
+		render json as JSON
+	}
+	
+	def getCommentLog ={
+		def model =[:]
+		def sendFile = SendFile.get(params.id)
+		if(sendFile){
+			def logs = sendFileComment.findAllBySendFile(sendFile,[ sort: "createDate", order: "desc"])
+			model["log"] = logs
+		}
+		
+		render(view:'/share/commentLog',model:model)
+	}
+	def getFlowLog={
+		def model =[:]
+		def sendFile = SendFile.get(params.id)
+		if(sendFile){
+			def logs = SendFileLog.findAllBySendFile(sendFile,[ sort: "createDate", order: "asc"])
+			model["log"] = logs
+		}
+		
+		render(view:'/share/flowLog',model:model)
+	}
 	
 	def getAllSendFileLabel ={
 		def json = [identifier:'id',label:'name',items:[]]

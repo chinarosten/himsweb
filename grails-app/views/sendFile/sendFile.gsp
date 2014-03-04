@@ -288,72 +288,16 @@
 		</form>
 	
 	
-	<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"附件信息",toggleable:false,moreText:"",height:"100px"'>
-		<table class="tableData" style="width:740px;margin:0px">
-	      <g:if test="${!fieldAcl.readOnly.contains('attach') && sendFile?.id!=null}">
-			<tr>
-			    <td width="120"><div align="right">附件：</div></td>
-			    <td colspan=3>
-			    	<div data-dojo-type="dijit/form/DropDownButton" >
-						<span>添加附件</span>
-						<div data-dojo-type="dijit/TooltipDialog" id="fileUpload_dialog" data-dojo-props="title: 'fileUpload'" style="width:380px">
-								<form data-dojo-type="dijit/form/Form" method="post" 
-									action="${createLink(controller:'sendFile',action:'uploadFile',id:bbs?.id)}" id="fileUpload_form" enctype="multipart/form-data">
-									
-									<div data-dojo-type="dojox/form/Uploader"  type="file" 
-										id="fileUploader"  data-dojo-props="name:'uploadedfile'">添加
-										<script type="dojo/method" data-dojo-event="onComplete" data-dojo-args="dataArray">
-														if(dataArray.result=="true"){
-															dijit.byId("fileUpload_dialog").reset();
-															dijit.byId("fileUpload_dialog").onCancel();
-															bbs_addAttachShow(dojo.byId("fileShow"),dataArray);
-														}else if(dataArray.result=="big"){
-															alert("上传文件过大，请重新上传！");
-														}else{rosten.alert("上传失败");}
-													</script>
-									</div>
-									
-									<div id="fileUpload_fileList" data-dojo-type="dojox/form/uploader/FileList" 
-										data-dojo-props='uploaderId:"fileUploader",headerIndex:"#",headerType:"类型",headerFilename:"文件名",headerFilesize:"大小"'></div>
-									
-									<div class="dijitDialogPaneActionBar">
-										<button data-dojo-type="dijit/form/Button" type="reset">重置</button>
-										<button data-dojo-type="dijit/form/Button" type="submit">上传
-										</button>
-										<button data-dojo-type="dijit/form/Button" type="button">取消
-											<script type="dojo/method" data-dojo-event="onClick">
-															dijit.byId("fileUpload_dialog").onCancel();
-														</script>
-										</button>
-									</div>
-								</form>
-						</div>
-					</div>
-			    
-			    <td>    
-			</tr>
-			</g:if>
-			<tr>
-				<td width="120">
-					<g:if test="${fieldAcl.readOnly.contains('attach')}">
-						<div align="right">附件：</div>
-					</g:if>
-				</td>
-				<td colspan=3>
-					<div id="fileShow" style="margin-top:5px;">
-						<g:each in="${attachFiles}">
-							<a href="${createLink(controller:'system',action:'downloadFile',id:it.id)}" style="margin-right:20px" dealId="${it.id }">${it.name }</a>
-						</g:each>
-					</div>
-				</td>
-			</tr>
-	    </table>
-	   </div>
+		<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"附件信息",toggleable:false,moreText:"",
+			height:"100px",href:"${createLink(controller:'sendFile',action:'getFileUpload',id:sendFile?.id)}"'>
+		</div>
 	</div>
-	<div data-dojo-type="dijit/layout/ContentPane" id="sendfileComment" title="流转意见" data-dojo-props='refreshOnShow:true
+	<div data-dojo-type="dijit/layout/ContentPane" id="sendfileComment" title="流转意见" data-dojo-props='refreshOnShow:true,
+		href:"${createLink(controller:'sendFile',action:'getCommentLog',id:sendFile?.id)}"
 	'>	
 	</div>
-	<div data-dojo-type="dijit/layout/ContentPane" id="sendfileFlowLog" title="流程跟踪" data-dojo-props='refreshOnShow:true
+	<div data-dojo-type="dijit/layout/ContentPane" id="sendfileFlowLog" title="流程跟踪" data-dojo-props='refreshOnShow:true,
+		href:"${createLink(controller:'sendFile',action:'getFlowLog',id:sendFile?.id)}"
 	'>	
 	</div>
 </div>
