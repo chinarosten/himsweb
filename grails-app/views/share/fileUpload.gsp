@@ -69,11 +69,16 @@
 				</g:if>
 			</td>
 			<td colspan=3>
-				<div id="fileShow" style="margin-top:5px;">
-					<g:each in="${attachFiles}">
-						<a href="${createLink(controller:'system',action:'downloadFile',id:it.id)}" style="margin-right:20px" dealId="${it.id }">${it.name }</a>
-					</g:each>
-				</div>
+				<g:if test="${newDoc}">
+					<div style="color:red">请保存后再添加附件！</div>
+				</g:if>
+				<g:else>
+					<div id="fileShow" style="margin-top:5px;">
+						<g:each in="${attachFiles}">
+							<a href="${createLink(controller:'system',action:'downloadFile',id:it.id)}" style="margin-right:20px" dealId="${it.id }">${it.name }</a>
+						</g:each>
+					</div>
+				</g:else>
 			</td>
 		</tr>
     </table>

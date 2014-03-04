@@ -168,6 +168,9 @@
 		                 		style:{width:"480px"},
 								value:"${sendFile?.mainSend}"
 		                '/>
+		                <button data-dojo-type="dijit/form/Button" 
+							data-dojo-props = 'onClick:function(){}'
+						>选择</button>
 				    </td>    
 				</tr>
 				<tr>
@@ -179,6 +182,9 @@
 		                 		style:{width:"480px"},
 								value:"${sendFile?.copyTo}"
 		                '/>
+		                <button data-dojo-type="dijit/form/Button" 
+							data-dojo-props = 'onClick:function(){}'
+						>选择</button>
 				    </td>    
 				</tr>
 				<tr>
@@ -190,6 +196,9 @@
 		                 		style:{width:"480px"},
 								value:"${sendFile?.insideCopy}"
 		                '/>
+		                <button data-dojo-type="dijit/form/Button" 
+							data-dojo-props = 'onClick:function(){}'
+						>选择</button>
 				    </td>    
 				</tr>
 				<tr>
@@ -292,7 +301,7 @@
 	
 	
 		<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"附件信息",toggleable:false,moreText:"",
-			height:"100px",href:"${createLink(controller:'sendFile',action:'getFileUpload',id:sendFile?.id)}"'>
+			height:"80px",href:"${createLink(controller:'sendFile',action:'getFileUpload',id:sendFile?.id)}"'>
 		</div>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" id="sendfileComment" title="流转意见" data-dojo-props='refreshOnShow:true,

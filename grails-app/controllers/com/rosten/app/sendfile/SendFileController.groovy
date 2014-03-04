@@ -26,6 +26,7 @@ class SendFileController {
 			model["attachFiles"] = Attachment.findAllByBeUseId(params.id)
 		}else{
 			//尚未保存
+			model["newDoc"] = true
 		}
 		render(view:'/share/fileUpload',model:model)
 	}
