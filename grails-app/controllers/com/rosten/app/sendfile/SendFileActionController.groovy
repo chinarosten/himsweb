@@ -1,6 +1,7 @@
 package com.rosten.app.sendfile
 
 import grails.converters.JSON
+import com.rosten.app.system.User
 
 class SendFileActionController {
 	def imgPath ="images/rosten/actionbar/"
@@ -40,9 +41,30 @@ class SendFileActionController {
 		def webPath = request.getContextPath() + "/"
 		def actionList =[]
 		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
-		actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
-		actionList << createAction("创建正文",webPath +imgPath + "word_new.png","sendFile_addWord")
-		actionList << createAction("提交",webPath +imgPath + "submit.png","sendfile_submit")
+		
+		def user = User.get(params.userid)
+		if(params.id){
+			def sendFile = SendFile.get(params.id)
+			if(user.equals(sendFile.currentUser)){
+				//当前处理人
+				switch (sendFile.status){
+					case "起草":
+						actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
+						actionList << createAction("创建正文",webPath +imgPath + "word_new.png","sendFile_addWord")
+						actionList << createAction("提交",webPath +imgPath + "submit.png","sendfile_submit")
+						break;
+					case "审核":
+						actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
+						actionList << createAction("提交",webPath +imgPath + "submit.png","sendfile_submit")
+						break;
+				}
+			}
+		}else{
+			//新建
+			actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
+		}
+		
 		render actionList as JSON
 	}
 	

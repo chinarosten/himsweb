@@ -55,6 +55,9 @@
 				page_quit = function(){
 					rosten.pagequit();
 				};
+				addComment = function(){
+
+				};
 			
 		});
     </script>
