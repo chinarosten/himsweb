@@ -155,7 +155,7 @@ class SendFile {
 	
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']
-		table "ROSTEN_SENDFILE_SENDFILE"
+		table "ROSTEN_SENDFILE"
 	}
 	def beforeDelete(){
 		SendFile.withNewSession{_session->

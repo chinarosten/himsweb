@@ -147,6 +147,12 @@ class MeetingController {
 			meeting = Meeting.get(params.id)
 		}else{
 			model.companyId = params.companyId
+			
+			meeting.drafter = user
+			meeting.drafterDepart = user.getDepartName()
+			meeting.currentUser = user
+			meeting.currentDepart = user.getDepartName()
+			
 		}
 		model["user"]=user
 		model["company"] = company
@@ -185,6 +191,59 @@ class MeetingController {
 		}
 		render json as JSON
 	}
-	
+	def meetingConfig = {
+		def model = [:]
+		def user = springSecurityService.getCurrentUser()
+		
+		def meetingConfig = MeetingConfig.findWhere(company:user.company)
+		if(meetingConfig==null) {
+			meetingConfig = new MeetingConfig()
+			
+			Calendar cal = Calendar.getInstance();
+			meetingConfig.nowYear = cal.get(Calendar.YEAR)
+			meetingConfig.frontYear = meetingConfig.nowYear -1
+			
+			model.companyId = user.company.id
+		}else{
+			model.companyId = meetingConfig.company.id
+		}
+		model.meetingConfig = meetingConfig
+		
+		FieldAcl fa = new FieldAcl()
+		if("normal".equals(user.getUserType())){
+			//普通用户
+			fa.readOnly = ["nowYear","nowSN","nowCancel","frontYear","frontSN","frontCancel"]
+		}else{
+//			fa.readOnly = ["nowCancel","frontCancel"]
+		}
+		model["fieldAcl"] = fa
+		
+		render(view:'/meeting/meetingConfig',model:model)
+	}
+	def meetingConfigSave ={
+		def json=[:]
+		def meetingConfig = new MeetingConfig()
+		if(params.id && !"".equals(params.id)){
+			meetingConfig = MeetingConfig.get(params.id)
+		}
+		meetingConfig.properties = params
+		meetingConfig.clearErrors()
+		meetingConfig.company = Company.get(params.companyId)
+		
+		meetingConfig.nowCancel = params.meetingConfig_nowCancel
+		meetingConfig.frontCancel = params.meetingConfig_frontCancel
+		
+		if(meetingConfig.save(flush:true)){
+			json["result"] = true
+			json["meetingConfigId"] = meetingConfig.id
+			json["companyId"] = meetingConfig.company.id
+		}else{
+			meetingConfig.errors.each{
+				println it
+			}
+			json["result"] = false
+		}
+		render json as JSON
+	}
     def index() { }
 }

@@ -6,7 +6,29 @@ import com.rosten.app.system.User
 class DsjActionController {
 	def imgPath ="images/rosten/actionbar/"
 	
-	def meetingForm ={
+	def allDsjView ={
+		def actionList =[]
+		def strname = "dsj"
+		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
+		actionList << createAction("查看公告",imgPath + "read.gif","read_" + strname)
+		actionList << createAction("删除公告",imgPath + "delete.png","delete_" + strname)
+		actionList << createAction("状态迁移",imgPath + "changeStatus.gif",strname + "_changeStatus")
+		actionList << createAction("用户迁移",imgPath + "changeUser.gif",strname + "_changeUser")
+		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
+		
+		render actionList as JSON
+	}
+	
+	def dsjConfigView = {
+		def actionList =[]
+		def strname = "dsjConfig"
+		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
+		actionList << createAction("保存",imgPath + "Save.gif",strname + "_save")
+		
+		render actionList as JSON
+	}
+	
+	def dsjForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList =[]
 		def strname = "dsj"
@@ -38,7 +60,7 @@ class DsjActionController {
 		render actionList as JSON
 	}
 	
-	def meetingView = {
+	def dsjView = {
 		def actionList =[]
 		def strname = "dsj"
 		

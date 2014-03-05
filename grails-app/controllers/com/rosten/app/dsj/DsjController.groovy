@@ -185,5 +185,59 @@ class DsjController {
 		}
 		render json as JSON
 	}
+	def dsjConfig = {
+		def model = [:]
+		def user = springSecurityService.getCurrentUser()
+		
+		def dsjConfig = DsjConfig.findWhere(company:user.company)
+		if(dsjConfig==null) {
+			dsjConfig = new DsjConfig()
+			
+			Calendar cal = Calendar.getInstance();
+			dsjConfig.nowYear = cal.get(Calendar.YEAR)
+			dsjConfig.frontYear = dsjConfig.nowYear -1
+			
+			model.companyId = user.company.id
+		}else{
+			model.companyId = dsjConfig.company.id
+		}
+		model.dsjConfig = dsjConfig
+		
+		FieldAcl fa = new FieldAcl()
+		if("normal".equals(user.getUserType())){
+			//普通用户
+			fa.readOnly = ["nowYear","nowSN","nowCancel","frontYear","frontSN","frontCancel"]
+		}else{
+//			fa.readOnly = ["nowCancel","frontCancel"]
+		}
+		model["fieldAcl"] = fa
+		
+		render(view:'/dsj/dsjConfig',model:model)
+	}
+	def dsjConfigSave ={
+		def json=[:]
+		def dsjConfig = new DsjConfig()
+		if(params.id && !"".equals(params.id)){
+			dsjConfig = DsjConfig.get(params.id)
+		}
+		dsjConfig.properties = params
+		dsjConfig.clearErrors()
+		dsjConfig.company = Company.get(params.companyId)
+		
+		dsjConfig.nowCancel = params.dsjConfig_nowCancel
+		dsjConfig.frontCancel = params.dsjConfig_frontCancel
+		
+		if(dsjConfig.save(flush:true)){
+			json["result"] = true
+			json["dsjConfigId"] = dsjConfig.id
+			json["companyId"] = dsjConfig.company.id
+		}else{
+			dsjConfig.errors.each{
+				println it
+			}
+			json["result"] = false
+		}
+		render json as JSON
+	}
     def index() { }
 }

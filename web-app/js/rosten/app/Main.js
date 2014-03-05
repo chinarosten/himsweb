@@ -113,12 +113,12 @@ define(["dojo/_base/kernel"
             }else if (oString == "meeting") {
             	deleteMailNavigation();
             	require(["rosten/app/MeetingManage"],function(){
-            		returnToMain();
+            		show_meetingNaviEntity("myMeetingManage");
             	});
             }else if (oString == "dsj") {
             	deleteMailNavigation();
             	require(["rosten/app/DsjManage"],function(){
-            		returnToMain();
+            		show_dsjNaviEntity("myDsjManage");
             	});
             }
         });

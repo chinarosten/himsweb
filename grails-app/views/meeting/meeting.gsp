@@ -30,6 +30,8 @@
 		 		"dijit/form/Form",
 		 		"dojox/form/Uploader",
 		 		"dojox/form/uploader/FileList",
+		 		"dijit/Editor",
+				"dijit/_editor/plugins/FontChoice",
 		     	"rosten/widget/ActionBar",
 		     	"rosten/widget/TitlePane",
 		     	"rosten/app/Application",
@@ -65,7 +67,10 @@
 <div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
 	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props=''>
 		<form id="meeting_form" name="meeting_form" url='[controller:"meeting",action:"meetingSave"]' class="rosten_form" style="padding:0px">
-			<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"基本信息",toggleable:false,moreText:"",height:"300px",marginBottom:"2px"'>
+			<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${meeting?.id }"' />
+        	<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
+        		
+			<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"基本信息",toggleable:false,moreText:"",height:"700px",marginBottom:"2px"'>
 				<table border="0" width="740" align="left">
 					<tr>
 					    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>流水号：</div></td>
@@ -76,41 +81,140 @@
 									value:"${meeting?.serialNo}"
 			                '/>
 					    </td>
-					    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>文件编号：</div></td>
+					    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>会议类别：</div></td>
 					    <td width="250">
-					    	<input id="fileNo" data-dojo-type="dijit/form/ValidationTextBox" 
-			                 	data-dojo-props='name:"fileNo",readOnly:true,
-			                 		trim:true,placeHolder:"领导签发后自动生成",
-									value:"${meeting?.fileNo}"
-			                '/>
+					    	<select id="category" data-dojo-type="dijit/form/FilteringSelect"
+				                data-dojo-props='name:"category",${fieldAcl.isReadOnly("category")},
+				               	trim:true,
+				      			value:"${meeting?.category}"
+				            '>
+								<option value="部门会议">部门 会议</option>
+								<option value="全体大会">全体大会</option>
+								<option value="网络会议">网络会议</option>
+								<option value="研讨会">研讨会</option>
+				    		</select>
 			           </td>
 					</tr>
 					<tr>
-					    <td><div align="right"><span style="color:red">*&nbsp;</span>发文种类：</div></td>
+					    <td><div align="right"><span style="color:red">*&nbsp;</span>拟稿人：</div></td>
 					    <td>
-					    	<div data-dojo-type="dojo/data/ItemFileReadStore" data-dojo-id="rosten.storeData.fileType"
-								data-dojo-props='url:"${createLink(controller:'meeting',action:'getAllMeetingLabel',params:[companyId:companyId]) }"'></div>
-								
-							<select id="fileType" data-dojo-type="dijit/form/FilteringSelect" 
-								data-dojo-props='name:"fileType",${fieldAcl.isReadOnly("fileType")},
-									store:rosten.storeData.fileType,
-									trim:true,required:true,
-									searchAttr:"subCategory",
-									value:"${meeting?.fileType?.subCategory}"
-								'>	
-								
-							</select>
-					    </td>
-					    <td><div align="right">成文日期：</div></td>
+					    	<input id="drafter" data-dojo-type="dijit/form/ValidationTextBox" 
+			                 	data-dojo-props='trim:true,readOnly:true,
+									value:"${meeting?.drafter?.username}"
+			                '/>
+			            </td>
+					    <td><div align="right"><span style="color:red">*&nbsp;</span>拟稿部门：</div></td>
 					    <td>
-					    	<input id="fileDate" data-dojo-type="dijit/form/ValidationTextBox" 
-			                 	data-dojo-props='name:"fileDate",readOnly:true,
-			                 		trim:true,
-									value:"${meeting?.getFormattedDate()}"
+					    	<input id="drafterDepart" data-dojo-type="dijit/form/ValidationTextBox" 
+			                 	data-dojo-props='trim:true,readOnly:true,
+									value:"${meeting?.drafterDepart}"
+			                '/>
+			            </td>    
+					</tr>
+					<tr>
+					    <td><div align="right"><span style="color:red">*&nbsp;</span>标题：</div></td>
+					    <td colspan=3>
+					    	<input id="subject" data-dojo-type="dijit/form/ValidationTextBox" 
+			                 	data-dojo-props='name:"subject",readOnly:true,
+			                 		trim:true,style:{width:"551px"},
+									value:"${meeting?.subject}"
 			                '/>	
 			           </td>
 					</tr>
-					
+					<tr>
+					    <td><div align="right"><span style="color:red">*&nbsp;</span>开始时间：</div></td>
+					    <td>
+					    	<input id="startDate" data-dojo-type="dijit/form/ValidationTextBox" 
+			                 	data-dojo-props='name:"startDate",
+			                 		trim:true,
+									value:"${meeting?.startDate}"
+			                '/>
+			            </td>
+					    <td><div align="right"><span style="color:red">*&nbsp;</span>结束时间：</div></td>
+					    <td>
+					    	<input id="endDate" data-dojo-type="dijit/form/ValidationTextBox" 
+			                 	data-dojo-props='name:"endDate",
+			                 		trim:true,
+									value:"${meeting?.endDate}"
+			                '/>
+			            </td>    
+					</tr>
+					<tr>
+					    <td><div align="right"><span style="color:red">*&nbsp;</span>会议地点：</div></td>
+					    <td>
+					    	<input id="address" data-dojo-type="dijit/form/ValidationTextBox" 
+			                 	data-dojo-props='name:"address",
+			                 		trim:true,
+									value:"${meeting?.address}"
+			                '/>
+			            </td>
+					    <td><div align="right"><span style="color:red">*&nbsp;</span>主持人：</div></td>
+					    <td>
+					    	<input id="presider" data-dojo-type="dijit/form/ValidationTextBox" 
+			                 	data-dojo-props='name:"presider",
+			                 		trim:true,
+									value:"${meeting?.presider}"
+			                '/>
+			                <button data-dojo-type="dijit/form/Button" 
+								data-dojo-props = 'onClick:function(){}'
+							>选择</button>
+			            </td>    
+					</tr>
+					<tr>
+					    <td><div align="right">参会人员：</div></td>
+					    <td colspan=3>
+					    	<textarea id="joiner" data-dojo-type="dijit/form/SimpleTextarea" 
+    							data-dojo-props='name:"joiner",
+                                		"class":"input",
+                                		style:{width:"550px"},
+                                		trim:true,
+                                		value:"${meeting?.joiner }"
+                           '>
+    						</textarea>
+    						<button data-dojo-type="dijit/form/Button" 
+								data-dojo-props = 'onClick:function(){}'
+							>选择</button>
+			            </td>    
+					</tr>
+					<tr>
+					    <td><div align="right">列席人员：</div></td>
+					    <td colspan=3>
+					    	<textarea id="guesters" data-dojo-type="dijit/form/SimpleTextarea" 
+    							data-dojo-props='name:"guesters",
+                                		"class":"input",
+                                		style:{width:"550px"},
+                                		trim:true,
+                                		value:"${meeting?.guesters }"
+                           '>
+    						</textarea>
+    						<button data-dojo-type="dijit/form/Button" 
+								data-dojo-props = 'onClick:function(){}'
+							>选择</button>
+			            </td>    
+					</tr>
+					<tr>
+					    <td><div align="right">会议内容：</div></td>
+					    <td colspan=3>
+					    	<div data-dojo-type="dijit/Editor" style="overflow:hidden" id="content"
+								extraPlugins="[{name:'dijit/_editor/plugins/FontChoice', command: 'fontName', generic: true},'fontSize']"
+								data-dojo-props='name:"content"
+			            		<g:if test="${fieldAcl.readOnly.contains('content')}">,disabled:true</g:if>
+				            '></div>
+			            </td>    
+					</tr>
+					<tr>
+					    <td><div align="right">备注：</div></td>
+					    <td colspan=3>
+					    	<textarea id="description" data-dojo-type="dijit/form/SimpleTextarea" 
+    							data-dojo-props='name:"description",
+                              		"class":"input",
+                              		style:{width:"550px"},
+                              		trim:true,
+                              		value:"${meeting?.description }"
+                           '>
+    						</textarea>
+			            </td>    
+					</tr>
 				</table>
 			</div>
 			

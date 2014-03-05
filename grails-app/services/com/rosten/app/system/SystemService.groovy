@@ -455,7 +455,7 @@ class SystemService {
 		
 		resource = new Resource()
 		resource.resourceName = "各人待办"
-		resource.url = "dsjManage"
+		resource.url = "myDsjManage"
 		resource.imgUrl = "images/rosten/navigation/bbs_my.gif"
 		model.addToResources(resource)
 		

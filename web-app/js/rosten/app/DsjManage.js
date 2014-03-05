@@ -4,6 +4,14 @@
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
 	
+	dsj_changeStatus = {
+			
+			
+	};
+	dsj_changeUser = {
+			
+	};
+	
 	add_dsj = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
@@ -38,11 +46,22 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 		var userid = rosten.kernel.getUserInforByKey("idnumber");
 		
 		switch (oString) {
+		case "dsjConfigManage":
+			rosten.kernel.setHref(rosten.webPath + "/dsj/dsjConfig", oString);
+            break;
 		case "myDsjManage":
 			var naviJson = {
 				identifier : oString,
 				actionBarSrc : rosten.webPath + "/dsjAction/dsjView",
 				gridSrc : rosten.webPath + "/dsj/dsjGrid?companyId=" + companyId + "&userId=" + userid
+			};
+			rosten.kernel.addRightContent(naviJson);
+			break;
+		case "allDsjManage":
+			var naviJson = {
+				identifier : oString,
+				actionBarSrc : rosten.webPath + "/dsjAction/allDsjView",
+				gridSrc : rosten.webPath + "/dsj/dsjGrid?companyId=" + companyId + "&userId=" + userid + "&type=all"
 			};
 			rosten.kernel.addRightContent(naviJson);
 			break;

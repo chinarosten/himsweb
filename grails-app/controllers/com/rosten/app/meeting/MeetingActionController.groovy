@@ -6,6 +6,14 @@ import com.rosten.app.system.User
 class MeetingActionController {
 	def imgPath ="images/rosten/actionbar/"
 	
+	def meetingConfigView = {
+		def actionList =[]
+		def strname = "meetingConfig"
+		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
+		actionList << createAction("保存",imgPath + "Save.gif",strname + "_save")
+		
+		render actionList as JSON
+	}
 	
 	def meetingForm ={
 		def webPath = request.getContextPath() + "/"
@@ -35,6 +43,19 @@ class MeetingActionController {
 			//新建
 			actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 		}
+		
+		render actionList as JSON
+	}
+	
+	def allMeetingView ={
+		def actionList =[]
+		def strname = "meeting"
+		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
+		actionList << createAction("查看公告",imgPath + "read.gif","read_" + strname)
+		actionList << createAction("删除公告",imgPath + "delete.png","delete_" + strname)
+		actionList << createAction("状态迁移",imgPath + "changeStatus.gif",strname + "_changeStatus")
+		actionList << createAction("用户迁移",imgPath + "changeUser.gif",strname + "_changeUser")
+		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
 		
 		render actionList as JSON
 	}

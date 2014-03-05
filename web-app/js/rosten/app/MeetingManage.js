@@ -4,6 +4,14 @@
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
 	
+	meeting_changeStatus = {
+			
+			
+	};
+	meeting_changeUser = {
+			
+	};
+	
 	add_meeting = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
@@ -38,11 +46,22 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 		var userid = rosten.kernel.getUserInforByKey("idnumber");
 		
 		switch (oString) {
+		case "meetingConfigManage":
+			rosten.kernel.setHref(rosten.webPath + "/meeting/meetingConfig", oString);
+            break;
 		case "myMeetingManage":
 			var naviJson = {
 				identifier : oString,
 				actionBarSrc : rosten.webPath + "/meetingAction/meetingView",
 				gridSrc : rosten.webPath + "/meeting/meetingGrid?companyId=" + companyId + "&userId=" + userid
+			};
+			rosten.kernel.addRightContent(naviJson);
+			break;
+		case "allMeetingManage":
+			var naviJson = {
+				identifier : oString,
+				actionBarSrc : rosten.webPath + "/meetingAction/allMeetingView",
+				gridSrc : rosten.webPath + "/meeting/meetingGrid?companyId=" + companyId + "&userId=" + userid + "&type=all"
 			};
 			rosten.kernel.addRightContent(naviJson);
 			break;
