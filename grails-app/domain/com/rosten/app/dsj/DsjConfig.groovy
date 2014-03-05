@@ -1,10 +1,8 @@
-package com.rosten.app.bbs
-
-import java.util.List;
+package com.rosten.app.dsj
 
 import com.rosten.app.system.Company
 
-class BbsConfig {
+class DsjConfig {
 	String id
 	
 	//今年年代
@@ -24,10 +22,6 @@ class BbsConfig {
 	
 	//去年保留号或者废号
 	String frontCancel
-	
-	//最新公告保留时间
-	Integer showDays = 7
-	
 	static transients = ["addCancelSN","removeCancelSN"]
 	
 	def addCancelSN ={type,sn->
@@ -36,14 +30,14 @@ class BbsConfig {
 			if("".equals(nowCancel)){
 				nowCancel = sn
 			}else{
-				nowCancel += "," + sn 
+				nowCancel += "," + sn
 			}
 		}else{
 			//去年
 			if("".equals(frontCancel)){
 				frontCancel = sn
 			}else{
-				frontCancel += "," + sn 
+				frontCancel += "," + sn
 			}
 		}
 	}
@@ -58,14 +52,12 @@ class BbsConfig {
 	}
 	
 	static belongsTo = [company:Company]
-	
-    static constraints = {
+	static constraints = {
 		nowCancel nullable:true,blank:true
 		frontCancel nullable:true,blank:true
-    }
-	
+	}
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']
-		table "ROSTEN_BBS_CONFIG"
+		table "ROSTEN_DSJ_CONFIG"
 	}
 }
