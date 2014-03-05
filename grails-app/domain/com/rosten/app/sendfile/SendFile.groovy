@@ -18,8 +18,17 @@ class SendFile {
 	String serialNo
 	
 	//成文日期
-	@GridColumn(name="成文日期")
 	Date fileDate
+	
+	@GridColumn(name="成文日期",width="150px")
+	def getFormattedFileDate(){
+		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
+		if(fileDate){
+			return sd.format(fileDate)
+		}else{
+			return ""
+		}
+	}
 	
 	//文件编号
 	@GridColumn(name="文件编号")
@@ -89,7 +98,7 @@ class SendFile {
 	//件号
 	String unitNo
 	
-	//附件
+	//附件、读者
 	static hasMany=[attachments:Attachment,readers:User]
 	
 	//缺省读者；*:允许所有人查看,[角色名称]:允许角色
@@ -106,18 +115,24 @@ class SendFile {
 	@GridColumn(name="拟稿人",colIdx=7)
 	User drafter
 	
+	//拟稿部门
+	String drafterDepart
+	
 	//当前处理人
 	@GridColumn(name="处理者",colIdx=6)
 	User currentUser
+	
+	//处理人部门
+	String currentDepart
 	
 	//状态
 	@GridColumn(name="状态",colIdx=5)
 	String status = "拟稿"
 	
 	//拟稿时间
-	@GridColumn(name="拟稿时间",width="150px")
 	Date createDate = new Date()
 	
+	@GridColumn(name="拟稿时间",width="150px")
 	def getFormattedDate(){
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		return sd.format(createDate)

@@ -40,7 +40,39 @@
 					rosten.cssinit();
 				});
 				sendfile_add = function(){
-					
+					var fileType = registry.byId("fileType");
+					if(!fileType.isValid()){
+						rosten.alert("发文种类不正确！").queryDlgClose = function(){
+							fileType.focus();
+						};
+						return;
+					}
+					var title = registry.byId("title");
+					if(!title.isValid()){
+						rosten.alert("文件题名不正确！").queryDlgClose = function(){
+							title.focus();
+						};
+						return;
+					}
+					var mainSend = registry.byId("mainSend");
+					if(!mainSend.isValid()){
+						rosten.alert("主送单位不正确！").queryDlgClose = function(){
+							mainSend.focus();
+						};
+						return;
+					}
+					var content = {};
+					rosten.readSync(rosten.webPath + "/sendFile/sendFileSave",content,function(data){
+						if(data.result=="true" || data.result == true){
+							rosten.alert("保存成功！").queryDlgClose= function(){
+								window.location.replace(window.location.href + "&id=" + data.id);
+							};
+						}else if(data.result=="noConfig"){
+							rosten.alert("系统不存在配置文档，请通知管理员！");
+						}else{
+							rosten.alert("保存失败!");
+						}
+					},null,"sendfile_form");
 				};
 				sendfile_submit = function(){
 					
@@ -108,25 +140,25 @@
 							
 						</select>
 				    </td>
-				    <td><div align="right">成文日期：</div></td>
+				    <td><div align="right"><span style="color:red">*&nbsp;</span>成文日期：</div></td>
 				    <td>
 				    	<input id="fileDate" data-dojo-type="dijit/form/ValidationTextBox" 
 		                 	data-dojo-props='name:"fileDate",readOnly:true,
-		                 		trim:true,
-								value:"${sendFile?.getFormattedDate()}"
+		                 		trim:true,placeHolder:"领导签发后自动生成",
+								value:"${sendFile?.getFormattedFileDate()}"
 		                '/>	
 		           </td>
 				</tr>
 				<tr>
-				    <td><div align="right">主办部门：</div></td>
+				    <td><div align="right"><span style="color:red">*&nbsp;</span>主办部门：</div></td>
 				    <td>
 				    	<input id="dealDepart" data-dojo-type="dijit/form/ValidationTextBox" 
 		                 	data-dojo-props='name:"dealDepart",
-		                 		trim:true,
+		                 		trim:true,readOnly:true,
 								value:"${sendFile?.dealDepart}"
 		                '/>
 				    
-				    <td><div align="right">拟稿人：</div></td>
+				    <td><div align="right"><span style="color:red">*&nbsp;</span>拟稿人：</div></td>
 				    <td>
 				    	<input id="drafter" data-dojo-type="dijit/form/ValidationTextBox" 
 		                 	data-dojo-props='name:"drafter",

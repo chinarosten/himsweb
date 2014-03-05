@@ -243,6 +243,10 @@ class SendFileController {
 			sendFile = SendFile.get(params.id)
 		}else{
 			model.companyId = params.companyId
+			sendFile.drafter = user
+			sendFile.drafterDepart = user.getDepartName()
+			sendFile.currentUser = user
+			sendFile.currentDepart = user.getDepartName()
 		}
 		model["user"]=user
 		model["company"] = company
