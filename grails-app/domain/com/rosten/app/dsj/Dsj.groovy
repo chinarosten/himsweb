@@ -15,6 +15,25 @@ class Dsj {
 	@GridColumn(name="流水号",width="60px")
 	String serialNo
 	
+	//条目
+	@GridColumn(name="条目")
+	String subject
+	
+	//备注
+	String description
+	
+	//时间
+	Date time
+	@GridColumn(name="日期")
+	def getFormattedTimeDate(){
+		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
+		if(time){
+			return sd.format(time)
+		}else{
+			return ""
+		}
+	}
+	
 	//读者、附件
 	static hasMany=[readers:User,attachments:Attachment]
 	
@@ -61,6 +80,8 @@ class Dsj {
 		"addDefaultReader"
 	]
 	static constraints = {
+		serialNo nullable:true,blank:true
+		description nullable:true,blank:true
 	}
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']

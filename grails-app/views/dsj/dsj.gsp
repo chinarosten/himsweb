@@ -65,6 +65,9 @@
 <div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
 	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props=''>
 		<form id="dsj_form" name="dsj_form" url='[controller:"dsj",action:"dsjSave"]' class="rosten_form" style="padding:0px">
+			<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${meeting?.id }"' />
+        	<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
+        	
 			<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"基本信息",toggleable:false,moreText:"",height:"300px",marginBottom:"2px"'>
 				<table border="0" width="740" align="left">
 					<tr>
@@ -76,39 +79,54 @@
 									value:"${dsj?.serialNo}"
 			                '/>
 					    </td>
-					    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>文件编号：</div></td>
+					    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>日期：</div></td>
 					    <td width="250">
-					    	<input id="fileNo" data-dojo-type="dijit/form/ValidationTextBox" 
-			                 	data-dojo-props='name:"fileNo",readOnly:true,
-			                 		trim:true,placeHolder:"领导签发后自动生成",
-									value:"${dsj?.fileNo}"
-			                '/>
+					    	<input id="time" data-dojo-type="dijit/form/DateTextBox" 
+			                	data-dojo-props='name:"time",${fieldAcl.isReadOnly("time")},
+			                	trim:true,required:true,
+			                	value:"${dsj?.getFormattedTimeDate()}"
+			               '/>
 			           </td>
 					</tr>
 					<tr>
-					    <td><div align="right"><span style="color:red">*&nbsp;</span>发文种类：</div></td>
+					    <td><div align="right"><span style="color:red">*&nbsp;</span>拟稿人：</div></td>
 					    <td>
-					    	<div data-dojo-type="dojo/data/ItemFileReadStore" data-dojo-id="rosten.storeData.fileType"
-								data-dojo-props='url:"${createLink(controller:'dsj',action:'getAllMeetingLabel',params:[companyId:companyId]) }"'></div>
-								
-							<select id="fileType" data-dojo-type="dijit/form/FilteringSelect" 
-								data-dojo-props='name:"fileType",${fieldAcl.isReadOnly("fileType")},
-									store:rosten.storeData.fileType,
-									trim:true,required:true,
-									searchAttr:"subCategory",
-									value:"${dsj?.fileType?.subCategory}"
-								'>	
-								
-							</select>
+					    	<input id="drafter" data-dojo-type="dijit/form/ValidationTextBox" 
+			                 	data-dojo-props='trim:true,readOnly:true,
+									value:"${dsj?.drafter?.username}"
+			                '/>
+			            </td>
+					    <td><div align="right"><span style="color:red">*&nbsp;</span>拟稿部门：</div></td>
+					    <td>
+					    	<input id="drafterDepart" data-dojo-type="dijit/form/ValidationTextBox" 
+			                 	data-dojo-props='trim:true,readOnly:true,
+									value:"${dsj?.drafterDepart}"
+			                '/>
+			            </td>    
+					</tr>
+					<tr>
+					    <td><div align="right"><span style="color:red">*&nbsp;</span>条目：</div></td>
+					    <td  colspan=3>
+					    	<textarea id="subject" data-dojo-type="dijit/form/SimpleTextarea" 
+    							data-dojo-props='name:"subject","class":"input",
+                                		style:{width:"550px"},
+                                		trim:true,
+                                		value:"${dsj?.subject }"
+                           '>
+    						</textarea>
 					    </td>
-					    <td><div align="right">成文日期：</div></td>
-					    <td>
-					    	<input id="fileDate" data-dojo-type="dijit/form/ValidationTextBox" 
-			                 	data-dojo-props='name:"fileDate",readOnly:true,
-			                 		trim:true,
-									value:"${dsj?.getFormattedDate()}"
-			                '/>	
-			           </td>
+					</tr>
+					<tr>
+					    <td><div align="right">备注：</div></td>
+					    <td  colspan=3>
+					    	<textarea id="description" data-dojo-type="dijit/form/SimpleTextarea" 
+    							data-dojo-props='name:"description","class":"input",
+                               		style:{width:"550px"},
+                               		trim:true,
+                               		value:"${dsj?.description }"
+                           '>
+    						</textarea>
+					    </td>
 					</tr>
 					
 				</table>
