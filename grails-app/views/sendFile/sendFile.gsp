@@ -90,14 +90,54 @@
 					});
 					
 				};
+				sendfile_deal = function(type,readArray){
+					var content = {};
+					content.id = registry.byId("id").attr("value");
+					content.deal = type;
+					if(readArray){
+						content.dealUser = readArray.join(",");
+					}
+					rosten.readSync(rosten.webPath + "/sendFile/sendFileFlowDeal",content,function(data){
+						if(data.result=="true" || data.result == true){
+							rosten.alert("成功！").queryDlgClose= function(){
+								if(type=="agrain"){
+									//刷新待办事项内容
+									window.opener.showStartGtask("${user?.id}","${company?.id }");
+								}
+								rosten.pagequit();
+							}
+						}else{
+							rosten.alert("失败!");
+						}	
+					});
+				};
 				sendfile_submit = function(){
-					
+					var args ={};
+					var obj = {url:rosten.webPath + "/system/userTreeDataStore?companyId=${company?.id }",type:"single"};
+		            if(args){
+		                if(args.callback)obj.callback = args.callback;
+		                if(args.callbackargs) obj.callbackargs = args.callbackargs;
+		                if(args.onLoadFunction) obj.onLoadFunction = args.onLoadFunction;
+		            }
+		            var rostenShowDialog = null;
+		            if(rostenShowDialog!=null) rostenShowDialog.destroy();
+		            rostenShowDialog = new DepartUserDialog(obj);
+		            rostenShowDialog.open();
+
+		            rostenShowDialog.callback = function(data) {
+		            	var _data = [];
+		            	for (var k = 0; k < data.length; k++) {
+		            		var item = data[k];
+		            		_data.push(item.value + ":" + item.departId);
+		            	};
+		            	sendfile_deal("submit",_data);	
+		            }  
 				};
 				sendfile_agrain = function(){
-
+					sendfile_deal("agrain");
 				};
 				sendfile_notAgrain = function(){
-
+					sendfile_deal("notAgrain");
 				};
 				sendFile_addWord = function(){
 					if(kernel.isIE){

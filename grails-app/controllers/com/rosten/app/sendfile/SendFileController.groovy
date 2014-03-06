@@ -7,6 +7,7 @@ import com.rosten.app.util.Util
 import com.rosten.app.system.Attachment
 import com.rosten.app.system.Company
 import com.rosten.app.system.User
+import com.rosten.app.system.Depart
 
 
 class SendFileController {
@@ -14,6 +15,116 @@ class SendFileController {
 	def springSecurityService
 	def sendFileService
 	
+	def sendFileFlowDeal = {
+		def json=[:]
+		
+		//获取配置文档
+		def sendFileLabel = SendLable.get(params.fileTypeId)
+		if(!sendFileLabel){
+			json["result"] = "noConfig"
+			render json as JSON
+			return
+		}
+		
+		def sendFile = SendFile.get(params.id)
+		
+		//处理当前人的待办事项
+		def currentUser = springSecurityService.getCurrentUser()
+		def frontStatus = sendFile.status
+		
+		switch (params.deal){
+			case "submit":
+				sendFile.status="审核"
+				break;
+			case "agrain":
+				sendFile.status = "已签发"
+				sendFile.fileNo = sendFileLabel.nowYear + sendFileLabel.nowSN.toString().padLeft(4,"0")
+				
+				break;
+			case "notAgrain":
+				sendFile.status = "不同意"
+				break;
+		}
+		
+		def nextUser=""
+		if(params.dealUser){
+			//下一步相关信息处理
+			def dealUsers = params.dealUser.split(",")
+			if(dealUsers.size() >1){
+				//并发
+			}else{
+				//串行
+				def _user = User.get(Util.strLeft(params.dealUser,":"))
+				def args = [:]
+				args["type"] = "【发文】"
+				args["content"] = "请您审核名称为  【" + sendFile.title +  "】 的发文"
+				args["contentStatus"] = sendFile.status
+				args["contentId"] = sendFile.id
+				args["user"] = _user
+				args["company"] = _user.company
+				
+				startService.addGtask(args)
+				
+				sendFile.currentUser = _user
+				def departEntity = Depart.get(Util.strRight(params.dealUser, ":"))
+				sendFile.currentDepart = departEntity.departName
+				sendFile.currentDealDate = new Date()
+				
+				if(!sendFile.readers.find{ item->
+					item.id.equals(_user.id)
+				}){
+					sendFile.addToReaders(_user)
+				}
+				nextUser = _user.username
+			}
+			
+		}
+		
+		def gtask = Gtask.findWhere(
+			user:currentUser,
+			company:currentUser.company,
+			contentId:sendFile.id,
+			contentStatus:frontStatus
+		)
+		if(gtask!=null){
+			gtask.dealDate = new Date()
+			gtask.status = "1"
+			gtask.save()
+		}
+		
+		if(sendFile.save(flush:true)){
+			//添加日志
+			def sendFileLog = new SendFileLog()
+			sendFileLog.user = currentUser
+			sendFileLog.sendFile = sendFile
+			
+			switch (sendFile.status){
+				case "审核":
+					sendFileLog.content = "提交【" + nextUser + "】" + sendFile.status
+					break
+				case "已签发":
+					sendFileLog.content = sendFile.status
+					
+					//修改配置文档中的流水号
+					sendFileLabel.nowSN += 1
+					sendFileLabel.save(flush:true)
+					
+					break
+				case "不同意":
+					sendFileLog.content = sendFile.status
+					break
+			}
+			sendFileLog.save(flush:true)
+			
+			json["result"] = true
+		}else{
+			sendFile.errors.each{
+				println it
+			}
+			json["result"] = false
+		}
+		render json as JSON
+	}
 	def getFileUpload ={
 		def model =[:]
 		model["docEntity"] = "sendFile"
@@ -235,6 +346,22 @@ class SendFileController {
 	def addWord = {
 		def model =[:]
 		render(view:'/sendFile/word',model:model)
+	}
+	def sendFileDelete ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def sendFile = SendFile.get(it)
+				if(sendFile){
+					sendFile.delete(flush: true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
 	}
 	def sendFileSave = {
 		def json=[:]
