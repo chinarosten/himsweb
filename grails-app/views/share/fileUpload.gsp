@@ -7,14 +7,7 @@
 <style type="text/css">
 </style>
 <script type="text/javascript">
-	addAttachShow = function(node,jsonObj){
-		var a = document.createElement("a");
-		a.setAttribute("href", rosten.webPath + "/system/downloadFile/" + jsonObj.fileId);
-		a.setAttribute("style","margin-right:20px");
-		a.setAttribute("dealId",jsonObj.fileId);
-		a.innerHTML = jsonObj.fileName;
-		node.appendChild(a);
-	};
+	
 </script>
 
 <body>
@@ -27,7 +20,7 @@
 					<span>添加附件</span>
 					<div data-dojo-type="dijit/TooltipDialog" id="fileUpload_dialog" data-dojo-props="title: 'fileUpload'" style="width:380px">
 							<form data-dojo-type="dijit/form/Form" method="post" 
-								action="${createLink(controller:docEntity,action:'uploadFile',id:dealEntity?.id)}" id="fileUpload_form" enctype="multipart/form-data">
+								action="${createLink(controller:docEntity,action:'uploadFile',id:docEntityId)}" id="fileUpload_form" enctype="multipart/form-data">
 								
 								<div data-dojo-type="dojox/form/Uploader"  type="file" 
 									id="fileUploader"  data-dojo-props="name:'uploadedfile'">添加
@@ -73,7 +66,7 @@
 					<div style="color:red">请保存后再添加附件！</div>
 				</g:if>
 				<g:else>
-					<div id="fileShow" style="margin-top:5px;">
+					<div id="fileShow">
 						<g:each in="${attachFiles}">
 							<a href="${createLink(controller:'system',action:'downloadFile',id:it.id)}" style="margin-right:20px" dealId="${it.id }">${it.name }</a>
 						</g:each>

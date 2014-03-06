@@ -16,6 +16,30 @@ class BbsController {
 	def bbsService
 	def startService
 	
+	def getFileUpload ={
+		def model =[:]
+		model["docEntity"] = "bbs"
+		model["isShowFile"] = false
+		if(params.id){
+			//已经保存过
+			def bbs = Bbs.get(params.id)
+			model["docEntityId"] = params.id
+			//获取附件信息
+			model["attachFiles"] = Attachment.findAllByBeUseId(params.id)
+			
+			def user = springSecurityService.getCurrentUser()
+			if("admin".equals(user.getUserType())){
+				model["isShowFile"] = true
+			}else if(user.equals(bbs.currentUser) && !"已发布".equals(bbs.status) ){
+				model["isShowFile"] = true
+			}
+		}else{
+			//尚未保存
+			model["newDoc"] = true
+		}
+		render(view:'/share/fileUpload',model:model)
+	}
+	
 	def uploadFile = {
 		def json=[:]
 		SystemUtil sysUtil = new SystemUtil()
@@ -83,7 +107,7 @@ class BbsController {
 		
 		render json as JSON
 	}
-	def getBbsCommentLog ={
+	def getCommentLog ={
 		def model =[:]
 		def bbs = Bbs.get(params.id)
 		if(bbs){
@@ -91,9 +115,9 @@ class BbsController {
 			model["log"] = logs
 		}
 		
-		render(view:'/bbs/bbsCommentLog',model:model)
+		render(view:'/share/commentLog',model:model)
 	}
-	def getBbsFlowLog={
+	def getFlowLog={
 		def model =[:]
 		def bbs = Bbs.get(params.id)
 		if(bbs){
@@ -101,7 +125,7 @@ class BbsController {
 			model["log"] = bbsLogs
 		}
 		
-		render(view:'/bbs/bbsFlowLog',model:model)
+		render(view:'/share/flowLog',model:model)
 	}
 	
 	def publishBbs ={
@@ -414,16 +438,14 @@ class BbsController {
 					case "待发布":
 						break
 					case "已发布":
-						fa.readOnly = ["level","category","publishDate","topic","content","attach"]
+						fa.readOnly = ["level","category","publishDate","topic","content"]
 						break;
 				}
 			}else{
-				fa.readOnly = ["level","category","publishDate","topic","content","attach"]
+				fa.readOnly = ["level","category","publishDate","topic","content"]
 			}
 		}
 		model["fieldAcl"] = fa
-		
-		model["attachFiles"] = Attachment.findAllByBeUseId(bbs.id)
 		
 		render(view:'/bbs/bbs',model:model)
 	}

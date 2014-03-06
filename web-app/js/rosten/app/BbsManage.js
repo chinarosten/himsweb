@@ -6,9 +6,6 @@ define([ "dojo/_base/connect", "dijit/registry","rosten/util/general", "rosten/k
 	
 	var general = new General();
 	
-	page_quit = function(){
-		rosten.pagequit();
-	};
 	bbs_changeStatus = {
 			
 			
