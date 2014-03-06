@@ -24,6 +24,13 @@ class SendFileController {
 			model["sendFile"] = sendFile
 			//获取附件信息
 			model["attachFiles"] = Attachment.findAllByBeUseId(params.id)
+			
+			def user = springSecurityService.getCurrentUser()
+			if("admin".equals(user.getUserType())){
+				model["isShowFile"] = true
+			}else if(user.equals(sendFile.currentUser) && !"已结束".equals(sendFile.status) ){
+				model["isShowFile"] = true
+			}
 		}else{
 			//尚未保存
 			model["newDoc"] = true
@@ -104,7 +111,7 @@ class SendFileController {
 		def model =[:]
 		def sendFile = SendFile.get(params.id)
 		if(sendFile){
-			def logs = sendFileComment.findAllBySendFile(sendFile,[ sort: "createDate", order: "desc"])
+			def logs = SendFileComment.findAllBySendFile(sendFile,[ sort: "createDate", order: "desc"])
 			model["log"] = logs
 		}
 		
@@ -229,7 +236,70 @@ class SendFileController {
 		def model =[:]
 		render(view:'/sendFile/word',model:model)
 	}
-	
+	def sendFileSave = {
+		def json=[:]
+		
+		//获取配置文档
+		def sendFileLabel = SendLable.get(params.fileTypeId)
+		if(!sendFileLabel){
+			json["result"] = "noConfig"
+			render json as JSON
+			return
+		}
+		
+		def user = springSecurityService.getCurrentUser()
+		
+		def sendFileStatus = "new"
+		def sendFile
+		if(params.id && !"".equals(params.id)){
+			sendFile = SendFile.get(params.id)
+			sendFile.properties = params
+			sendFile.clearErrors()
+			sendFileStatus = "old"
+		}else{
+			sendFile = new SendFile()
+			sendFile.properties = params
+			sendFile.clearErrors()
+			
+			sendFile.company = Company.get(params.companyId)
+			sendFile.currentUser = user
+			sendFile.currentDepart = params.dealDepart
+			sendFile.currentDealDate = new Date()
+			
+			sendFile.drafter = user
+			sendFile.drafterDepart = params.dealDepart
+			
+		}
+		
+		if(!sendFile.readers.find{ it.id.equals(user.id) }){
+			sendFile.addToReaders(user)
+		}
+		
+		if(sendFile.save(flush:true)){
+			json["result"] = true
+			json["id"] = sendFile.id
+			json["companyId"] = sendFile.company.id
+			
+			if("new".equals(sendFileStatus)){
+				//添加日志
+				def sendFileLog = new SendFileLog()
+				sendFileLog.user = user
+				sendFileLog.sendFile = sendFile
+				sendFileLog.content = "拟稿"
+				sendFileLog.save(flush:true)
+				
+				//修改配置文档中的流水号
+				sendFileLabel.nowSN += 1
+				sendFileLabel.save(flush:true)
+			}
+		}else{
+			sendFile.errors.each{
+				println it
+			}
+			json["result"] = false
+		}
+		render json as JSON
+	}
 	def sendFileAdd ={
 		redirect(action:"sendFileShow",params:params)
 	}

@@ -16,7 +16,14 @@ define([
 	"rosten/widget/CommentDialog"], function(kernel, domStyle, domClass , lang,registry,_kernel,ConfirmDialog, AlertDialog, ActionBar, RostenDialog,ShowDialog,CommentDialog) {
 	
 	var behavior = {};
-	
+	behavior.addAttachShow = function(node,jsonObj){
+		var a = document.createElement("a");
+		a.setAttribute("href", rosten.webPath + "/system/downloadFile/" + jsonObj.fileId);
+		a.setAttribute("style","margin-right:20px");
+		a.setAttribute("dealId",jsonObj.fileId);
+		a.innerHTML = jsonObj.fileName;
+		node.appendChild(a);
+	};
 	behavior.addCommentDialog = function(obj){
 		if (!_kernel.sys_commentDialog || !registry.byId("sys_commentDialog")) {
             _kernel.sys_commentDialog = new CommentDialog({

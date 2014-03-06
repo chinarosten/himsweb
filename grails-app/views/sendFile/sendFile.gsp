@@ -69,18 +69,26 @@
 						};
 						return;
 					}
-					var content = {};
-					rosten.readSync(rosten.webPath + "/sendFile/sendFileSave",content,function(data){
-						if(data.result=="true" || data.result == true){
-							rosten.alert("保存成功！").queryDlgClose= function(){
-								window.location.replace(window.location.href + "&id=" + data.id);
-							};
-						}else if(data.result=="noConfig"){
-							rosten.alert("系统不存在配置文档，请通知管理员！");
-						}else{
-							rosten.alert("保存失败!");
-						}
-					},null,"sendfile_form");
+					//获取发文代字id
+					var subCategory = registry.byId("fileType");
+					rosten.getStoreItem(rosten.storeData.fileType,{subCategory:subCategory.attr("value")},function(items){
+						//默认取第一个
+						var fileTypeId = items[0].id;
+						var content = {fileTypeId:fileTypeId};
+						
+						rosten.readSync(rosten.webPath + "/sendFile/sendFileSave",content,function(data){
+							if(data.result=="true" || data.result == true){
+								rosten.alert("保存成功！").queryDlgClose= function(){
+									window.location.replace(window.location.href + "&id=" + data.id);
+								};
+							}else if(data.result=="noConfig"){
+								rosten.alert("系统不存在配置文档，请通知管理员！");
+							}else{
+								rosten.alert("保存失败!");
+							}
+						},null,"sendfile_form");
+					});
+					
 				};
 				sendfile_submit = function(){
 					
