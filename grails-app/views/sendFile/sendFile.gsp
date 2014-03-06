@@ -25,6 +25,7 @@
 		 		"dijit/form/SimpleTextarea",
 		 		"dijit/form/Button",
 		 		"dijit/form/DateTextBox",
+		 		"dijit/form/NumberTextBox",
 		 		"dijit/form/FilteringSelect",
 		 		"dijit/form/DropDownButton",
 		 		"dijit/form/Form",
@@ -44,6 +45,13 @@
 					if(!fileType.isValid()){
 						rosten.alert("发文种类不正确！").queryDlgClose = function(){
 							fileType.focus();
+						};
+						return;
+					}
+					var dealDepart = registry.byId("dealDepart");
+					if(!dealDepart.isValid()){
+						rosten.alert("主办部门不正确！").queryDlgClose = function(){
+							dealDepart.focus();
 						};
 						return;
 					}
@@ -77,6 +85,12 @@
 				sendfile_submit = function(){
 					
 				};
+				sendfile_agrain = function(){
+
+				};
+				sendfile_notAgrain = function(){
+
+				};
 				sendFile_addWord = function(){
 					if(kernel.isIE){
 						rosten.openNewWindow("sendFile_addWord", rosten.webPath + "/sendFile/addWord");
@@ -88,7 +102,17 @@
 					rosten.pagequit();
 				};
 				addComment = function(){
-
+					var id = registry.byId("id").get("value");
+					var commentDialog = rosten.addCommentDialog({type:"sendFile"});
+					commentDialog.callback = function(_data){
+						rosten.readSync(rosten.webPath + "/sendFile/addComment/" + id,{dataStr:_data.content,userId:"${user?.id}"},function(data){
+							if(data.result=="true" || data.result == true){
+								rosten.alert("成功！");
+							}else{
+								rosten.alert("失败!");
+							}	
+						});
+					};
 				};
 			
 		});
@@ -104,6 +128,9 @@
 <div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
 	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props=''>
 		<form id="sendfile_form" name="sendfile_form" url='[controller:"sendFile",action:"sendFileSave"]' class="rosten_form" style="padding:0px">
+			<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${sendFile?.id }"' />
+        	<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
+        		
 			<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"基本信息",toggleable:false,moreText:"",height:"300px",marginBottom:"2px"'>
 			<table border="0" width="740" align="left">
 				<tr>
@@ -153,8 +180,8 @@
 				    <td><div align="right"><span style="color:red">*&nbsp;</span>主办部门：</div></td>
 				    <td>
 				    	<input id="dealDepart" data-dojo-type="dijit/form/ValidationTextBox" 
-		                 	data-dojo-props='name:"dealDepart",
-		                 		trim:true,readOnly:true,
+		                 	data-dojo-props='name:"dealDepart",required:true,
+		                 		trim:true,${fieldAcl.isReadOnly("dealDepart")},
 								value:"${sendFile?.dealDepart}"
 		                '/>
 				    
@@ -172,8 +199,7 @@
 				    <td colspan=3>
 				    	<input id="title" data-dojo-type="dijit/form/ValidationTextBox" 
 		                 	data-dojo-props='name:"title",${fieldAcl.isReadOnly("title")},
-		                 		trim:true,
-		                 		required:true,
+		                 		trim:true,required:true,
 		                 		style:{width:"551px"},
 								value:"${sendFile?.title}"
 		                '/>
@@ -195,13 +221,12 @@
 				    <td colspan=3>
 				    	<input id="mainSend" data-dojo-type="dijit/form/ValidationTextBox" 
 		                 	data-dojo-props='name:"mainSend",${fieldAcl.isReadOnly("mainSend")},
-		                 		trim:true,
-		                 		required:true,
+		                 		trim:true,required:true,
 		                 		style:{width:"480px"},
 								value:"${sendFile?.mainSend}"
 		                '/>
 		                <button data-dojo-type="dijit/form/Button" 
-							data-dojo-props = 'onClick:function(){}'
+							data-dojo-props = 'onClick:function(){rosten.selectDepart("${createLink(controller:'system',action:'departTreeDataStore',params:[companyId:company?.id])}",false,"mainSend")}'
 						>选择</button>
 				    </td>    
 				</tr>
@@ -215,7 +240,7 @@
 								value:"${sendFile?.copyTo}"
 		                '/>
 		                <button data-dojo-type="dijit/form/Button" 
-							data-dojo-props = 'onClick:function(){}'
+							data-dojo-props = 'onClick:function(){rosten.selectDepart("${createLink(controller:'system',action:'departTreeDataStore',params:[companyId:company?.id])}",true,"copyTo")}'
 						>选择</button>
 				    </td>    
 				</tr>
@@ -229,7 +254,7 @@
 								value:"${sendFile?.insideCopy}"
 		                '/>
 		                <button data-dojo-type="dijit/form/Button" 
-							data-dojo-props = 'onClick:function(){}'
+							data-dojo-props = 'onClick:function(){rosten.selectDepart("${createLink(controller:'system',action:'departTreeDataStore',params:[companyId:company?.id])}",true,"insideCopy")}'
 						>选择</button>
 				    </td>    
 				</tr>
@@ -249,7 +274,7 @@
 				    
 				    <td><div align="right">印发份数：</div></td>
 				    <td>
-				    	<input id="printCopy" data-dojo-type="dijit/form/ValidationTextBox" 
+				    	<input id="printCopy" data-dojo-type="dijit/form/NumberTextBox" 
 		                 	data-dojo-props='name:"printCopy",
 		                 		trim:true,
 								value:"${sendFile?.printCopy}"
@@ -286,7 +311,7 @@
 					<tr>
 					    <td><div align="right">份数：</div></td>
 					    <td>
-					    	<input id="copys" data-dojo-type="dijit/form/ValidationTextBox" 
+					    	<input id="copys" data-dojo-type="dijit/form/NumberTextBox" 
 			                 	data-dojo-props='name:"copys",
 			                 		trim:true,
 									value:"${sendFile?.copys}"
@@ -294,7 +319,7 @@
 					    
 					    <td><div align="right">页数：</div></td>
 					    <td>
-					    	<input id="pages" data-dojo-type="dijit/form/ValidationTextBox" 
+					    	<input id="pages" data-dojo-type="dijit/form/NumberTextBox" 
 			                 	data-dojo-props='name:"pages",
 			                 		trim:true,
 									value:"${sendFile?.pages}"

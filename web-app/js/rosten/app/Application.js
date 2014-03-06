@@ -4,7 +4,8 @@
 define(["dojo/_base/lang",
 		"dijit/registry",
 		"rosten/widget/MultiSelectDialog",
-		"rosten/kernel/_kernel"], function(lang,registry,MultiSelectDialog) {
+		"rosten/widget/PickTreeDialog",
+		"rosten/kernel/_kernel"], function(lang,registry,MultiSelectDialog,PickTreeDialog) {
 			
 	var application = {};
     application.cssinitcommon = function() {
@@ -67,6 +68,44 @@ define(["dojo/_base/lang",
 		
 	};
     
+	application.selectDepart = function(url,type,inputName,inputId) {
+        var id = "sys_departDialog";
+
+        if (rosten[id] && registry.byId(id)) {
+            rosten[id].open();
+            rosten[id].refresh();
+        } else {
+            var args = {
+                url : url,
+                rootLabel : "部门层级",
+                showCheckBox : type,
+                folderClass : "departTree"
+            };
+            rosten[id] = new PickTreeDialog(args);
+            rosten[id].open();
+        }
+        rosten[id].callback = function(data) {
+            var _data = "";
+            var _data_1 = "";
+            for (var k = 0; k < data.length; k++) {
+                var item = data[k];
+                if (_data == "") {
+                    _data += item.name;
+                    _data_1 += item.id;
+                } else {
+                    _data += "," + item.name;
+                    _data_1 += "," + item.id;
+                }
+
+            }
+            if( inputName !=undefined){
+            	registry.byId(inputName).attr("value", _data);
+            }
+            if( inputId !=undefined){
+            	dom.byId(inputId).value = _data_1;
+            }
+        };
+    };
     
     lang.mixin(rosten,application);
     

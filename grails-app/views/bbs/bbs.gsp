@@ -5,7 +5,9 @@
     <meta name="layout" content="rosten" />
     <title>公告栏</title>
     <style type="text/css">
-		
+		body{
+			overflow:auto;
+		}
     </style>
 	<script type="text/javascript">
 		require(["dojo/parser",
@@ -189,14 +191,6 @@
 						}	
 					});
 				};
-			};
-			addAttachShow = function(node,jsonObj){
-				var a = document.createElement("a");
-				a.setAttribute("href", rosten.webPath + "/system/downloadFile/" + jsonObj.fileId);
-				a.setAttribute("style","margin-right:20px");
-				a.setAttribute("dealId",jsonObj.fileId);
-				a.innerHTML = jsonObj.fileName;
-				node.appendChild(a);
 			};
 			page_quit = function(){
 				rosten.pagequit();

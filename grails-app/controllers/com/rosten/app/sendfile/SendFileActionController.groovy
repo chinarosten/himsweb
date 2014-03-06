@@ -48,7 +48,7 @@ class SendFileActionController {
 			if(user.equals(sendFile.currentUser)){
 				//当前处理人
 				switch (sendFile.status){
-					case "起草":
+					case "拟稿":
 						actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
 						actionList << createAction("创建正文",webPath +imgPath + "word_new.png","sendFile_addWord")
 						actionList << createAction("提交",webPath +imgPath + "submit.png","sendfile_submit")
@@ -56,7 +56,8 @@ class SendFileActionController {
 					case "审核":
 						actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
 						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
-						actionList << createAction("提交",webPath +imgPath + "submit.png","sendfile_submit")
+						actionList << createAction("发布",webPath +imgPath + "ok.png","sendfile_agrain")
+						actionList << createAction("不同意",webPath +imgPath + "back.png","sendfile_notAgrain")
 						break;
 				}
 			}

@@ -28,7 +28,7 @@
 										if(dataArray.result=="true"){
 											dijit.byId("fileUpload_dialog").reset();
 											dijit.byId("fileUpload_dialog").onCancel();
-											addAttachShow(dojo.byId("fileShow"),dataArray);
+											rosten.addAttachShow(dojo.byId("fileShow"),dataArray);
 										}else if(dataArray.result=="big"){
 											rosten.alert("上传文件过大，请重新上传！");
 										}else{rosten.alert("上传失败");}

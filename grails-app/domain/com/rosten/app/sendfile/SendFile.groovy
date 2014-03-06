@@ -66,7 +66,7 @@ class SendFile {
 	String archiveType = "文档"
 	
 	//归档到
-	String archiveDbName = "文档数据库"
+	String archiveDbName
 	
 	//份数
 	Integer copys = 1
