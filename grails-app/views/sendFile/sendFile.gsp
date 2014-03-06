@@ -69,25 +69,24 @@
 						};
 						return;
 					}
-					//获取发文代字id
-					var subCategory = registry.byId("fileType");
-					rosten.getStoreItem(rosten.storeData.fileType,{subCategory:subCategory.attr("value")},function(items){
-						//默认取第一个
-						var fileTypeId = items[0].id;
-						var content = {fileTypeId:fileTypeId};
-						
-						rosten.readSync(rosten.webPath + "/sendFile/sendFileSave",content,function(data){
-							if(data.result=="true" || data.result == true){
-								rosten.alert("保存成功！").queryDlgClose= function(){
+					
+					rosten.readSync(rosten.webPath + "/sendFile/sendFileSave",{},function(data){
+						if(data.result=="true" || data.result == true){
+							rosten.alert("保存成功！").queryDlgClose= function(){
+								if(window.location.href.indexOf(data.id)==-1){
 									window.location.replace(window.location.href + "&id=" + data.id);
-								};
-							}else if(data.result=="noConfig"){
-								rosten.alert("系统不存在配置文档，请通知管理员！");
-							}else{
-								rosten.alert("保存失败!");
-							}
-						},null,"sendfile_form");
-					});
+								}else{
+									window.location.reload();
+								}
+							};
+						}else if(data.result=="noConfig"){
+							rosten.alert("系统不存在配置文档，请通知管理员！");
+						}else if(data.result=="noSendFileLabel"){
+							rosten.alert("系统不存在对应的发文代字，请通知管理员！");
+						}else{
+							rosten.alert("保存失败!");
+						}
+					},null,"sendfile_form");
 					
 				};
 				sendfile_deal = function(type,readArray){
@@ -97,6 +96,7 @@
 					if(readArray){
 						content.dealUser = readArray.join(",");
 					}
+					content.fileTypeId = registry.byId("fileType").attr("value");
 					rosten.readSync(rosten.webPath + "/sendFile/sendFileFlowDeal",content,function(data){
 						if(data.result=="true" || data.result == true){
 							rosten.alert("成功！").queryDlgClose= function(){
@@ -169,7 +169,7 @@
 <body>
 <div class="rosten_action">
 	<div data-dojo-type="rosten/widget/ActionBar" data-dojo-id="sendFile_actionBar" 
-		data-dojo-props='actionBarSrc:"${createLink(controller:'sendFileAction',action:'sendFileForm')}"'>
+		data-dojo-props='actionBarSrc:"${createLink(controller:'sendFileAction',action:'sendFileForm',id:sendFile?.id,params:[userid:user?.id])}"'>
 	</div>
 </div>
 
@@ -185,7 +185,7 @@
 				    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>流水号：</div></td>
 				    <td width="250">
 				    	<input id="serialNo" data-dojo-type="dijit/form/ValidationTextBox" 
-		                 	data-dojo-props='name:"serialNo",readOnly:true,
+		                 	data-dojo-props='readOnly:true,
 		                 		trim:true,placeHolder:"保存后自动生成",
 								value:"${sendFile?.serialNo}"
 		                '/>
@@ -193,7 +193,7 @@
 				    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>文件编号：</div></td>
 				    <td width="250">
 				    	<input id="fileNo" data-dojo-type="dijit/form/ValidationTextBox" 
-		                 	data-dojo-props='name:"fileNo",readOnly:true,
+		                 	data-dojo-props='readOnly:true,
 		                 		trim:true,placeHolder:"领导签发后自动生成",
 								value:"${sendFile?.fileNo}"
 		                '/>
@@ -203,14 +203,14 @@
 				    <td><div align="right"><span style="color:red">*&nbsp;</span>发文种类：</div></td>
 				    <td>
 				    	<div data-dojo-type="dojo/data/ItemFileReadStore" data-dojo-id="rosten.storeData.fileType"
-							data-dojo-props='url:"${createLink(controller:'sendFile',action:'getAllSendFileLabel',params:[companyId:companyId]) }"'></div>
+							data-dojo-props='url:"${createLink(controller:'sendFile',action:'getAllSendFileLabel',params:[companyId:company?.id]) }"'></div>
 							
 						<select id="fileType" data-dojo-type="dijit/form/FilteringSelect" 
-							data-dojo-props='name:"fileType",${fieldAcl.isReadOnly("fileType")},
+							data-dojo-props='name:"fileTypeId",${fieldAcl.isReadOnly("fileType")},
 								store:rosten.storeData.fileType,
 								trim:true,required:true,
 								searchAttr:"subCategory",
-								value:"${sendFile?.fileType?.subCategory}"
+								value:"${sendFile?.fileType?.id}"
 							'>	
 							
 						</select>
@@ -218,7 +218,7 @@
 				    <td><div align="right"><span style="color:red">*&nbsp;</span>成文日期：</div></td>
 				    <td>
 				    	<input id="fileDate" data-dojo-type="dijit/form/ValidationTextBox" 
-		                 	data-dojo-props='name:"fileDate",readOnly:true,
+		                 	data-dojo-props='readOnly:true,
 		                 		trim:true,placeHolder:"领导签发后自动生成",
 								value:"${sendFile?.getFormattedFileDate()}"
 		                '/>	

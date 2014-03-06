@@ -10,7 +10,7 @@ class BbsActionController {
 	def bbsForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userid)
 		if(params.id){

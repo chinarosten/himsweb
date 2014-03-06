@@ -21,7 +21,7 @@ class SendFileController {
 		//获取配置文档
 		def sendFileLabel = SendLable.get(params.fileTypeId)
 		if(!sendFileLabel){
-			json["result"] = "noConfig"
+			json["result"] = "noSendFileLabel"
 			render json as JSON
 			return
 		}
@@ -367,9 +367,17 @@ class SendFileController {
 		def json=[:]
 		
 		//获取配置文档
+		def sendFileConfig = SendFileConfig.first()
+		if(!sendFileConfig){
+			json["result"] = "noConfig"
+			render json as JSON
+			return
+		}
+		
+		//获取发文代字
 		def sendFileLabel = SendLable.get(params.fileTypeId)
 		if(!sendFileLabel){
-			json["result"] = "noConfig"
+			json["result"] = "noSendFileLabel"
 			render json as JSON
 			return
 		}
@@ -388,6 +396,8 @@ class SendFileController {
 			sendFile.properties = params
 			sendFile.clearErrors()
 			
+			sendFile.fileType = sendFileLabel
+			
 			sendFile.company = Company.get(params.companyId)
 			sendFile.currentUser = user
 			sendFile.currentDepart = params.dealDepart
@@ -395,6 +405,8 @@ class SendFileController {
 			
 			sendFile.drafter = user
 			sendFile.drafterDepart = params.dealDepart
+			
+			sendFile.serialNo = sendFileConfig.nowYear + sendFileConfig.nowSN.toString().padLeft(4,"0")
 			
 		}
 		
@@ -416,8 +428,8 @@ class SendFileController {
 				sendFileLog.save(flush:true)
 				
 				//修改配置文档中的流水号
-				sendFileLabel.nowSN += 1
-				sendFileLabel.save(flush:true)
+				sendFileConfig.nowSN += 1
+				sendFileConfig.save(flush:true)
 			}
 		}else{
 			sendFile.errors.each{
@@ -479,6 +491,55 @@ class SendFileController {
 		if(params.refreshPageControl){
 			def total = sendFileService.getSendFileCount(company)
 			json["pageControl"] = ["total":total.toString()]
+		}
+		render json as JSON
+	}
+	def sendFileConfigView = {
+		def model = [:]
+		def user = springSecurityService.getCurrentUser()
+		
+		def sendFileConfig = SendFileConfig.findWhere(company:user.company)
+		if(sendFileConfig==null) {
+			sendFileConfig = new SendFileConfig()
+			
+			Calendar cal = Calendar.getInstance();
+			sendFileConfig.nowYear = cal.get(Calendar.YEAR)
+			sendFileConfig.frontYear = sendFileConfig.nowYear -1
+			
+			model.companyId = user.company.id
+		}else{
+			model.companyId = sendFileConfig.company.id
+		}
+		model.sendFileConfig = sendFileConfig
+		
+		FieldAcl fa = new FieldAcl()
+		if("normal".equals(user.getUserType())){
+			//普通用户
+			fa.readOnly = ["nowYear","nowSN","nowCancel","frontYear","frontSN","frontCancel"]
+		}
+		model["fieldAcl"] = fa
+		
+		render(view:'/sendFile/sendFileConfig',model:model)
+	}
+	def sendFileConfigSave ={
+		def json=[:]
+		def sendFileConfig = new SendFileConfig()
+		if(params.id && !"".equals(params.id)){
+			sendFileConfig = SendFileConfig.get(params.id)
+		}
+		sendFileConfig.properties = params
+		sendFileConfig.clearErrors()
+		sendFileConfig.company = Company.get(params.companyId)
+		
+		if(sendFileConfig.save(flush:true)){
+			json["result"] = true
+			json["sendFileConfigId"] = sendFileConfig.id
+			json["companyId"] = sendFileConfig.company.id
+		}else{
+			sendFileConfig.errors.each{
+				println it
+			}
+			json["result"] = false
 		}
 		render json as JSON
 	}

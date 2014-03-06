@@ -92,7 +92,12 @@
 				rosten.readSync(rosten.webPath + "/bbs/bbsSave",content,function(data){
 					if(data.result=="true" || data.result == true){
 						rosten.alert("保存成功！").queryDlgClose= function(){
-							window.location.replace(window.location.href + "&id=" + data.id);
+							if(window.location.href.indexOf(data.id)==-1){
+								window.location.replace(window.location.href + "&id=" + data.id);
+							}else{
+								window.location.reload();
+							}
+							
 							/*
 							//刷新当前操作条信息以及表单隐藏字段信息以及流水号信息
 							if(data.serialNo){
@@ -206,7 +211,7 @@
 	</div>
 	<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
 	  	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props=''>
-        	<form class="rosten_form" id="rosten_form" onsubmit="return false;" style="text-align:left;margin 0px">
+        	<form class="rosten_form" id="rosten_form" onsubmit="return false;" style="padding:0px">
         		<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${bbs?.id }"' />
         		<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
         	  	<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"基本信息",toggleable:false,moreText:"",height:"460px",marginBottom:"2px"'>

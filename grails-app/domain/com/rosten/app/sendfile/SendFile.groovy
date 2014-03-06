@@ -20,7 +20,7 @@ class SendFile {
 	//成文日期
 	Date fileDate
 	
-	@GridColumn(name="成文日期",width="150px")
+	@GridColumn(name="成文日期",width="150px",colIdx=3)
 	def getFormattedFileDate(){
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		if(fileDate){
@@ -31,14 +31,14 @@ class SendFile {
 	}
 	
 	//文件编号
-	@GridColumn(name="文件编号")
+	@GridColumn(name="文件编号",width="80px")
 	String fileNo
 	
 	//文件种类
 	SendLable fileType 
 	
 	//文件题名
-	@GridColumn(name="文件题名")
+	@GridColumn(name="文件题名",formatter="sendFile_formatTitle")
 	String title
 	
 	//主题词
@@ -112,15 +112,31 @@ class SendFile {
 	}
 	
 	//拟稿人
-	@GridColumn(name="拟稿人",colIdx=7)
 	User drafter
+	
+	@GridColumn(name="拟稿人",colIdx=7,width="60px")
+	def getDrafterName(){
+		if(drafter!=null){
+			return drafter.username
+		}else{
+			return ""
+		}
+	}
 	
 	//拟稿部门
 	String drafterDepart
 	
 	//当前处理人
-	@GridColumn(name="处理者",colIdx=6)
 	User currentUser
+	
+	@GridColumn(name="当前处理者",colIdx=6,width="60px")
+	def getCurrentUserName(){
+		if(currentUser!=null){
+			return currentUser.username
+		}else{
+			return ""
+		}
+	}
 	
 	//处理人部门
 	String currentDepart
@@ -129,7 +145,7 @@ class SendFile {
 	Date currentDealDate
 	
 	//状态
-	@GridColumn(name="状态",colIdx=5)
+	@GridColumn(name="状态",width="80px",colIdx=5)
 	String status = "拟稿"
 	
 	//拟稿时间

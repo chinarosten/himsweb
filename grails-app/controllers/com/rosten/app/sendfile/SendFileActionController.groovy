@@ -79,6 +79,14 @@ class SendFileActionController {
 		
 		render actionList as JSON
 	}
+	def sendFileConfigView ={
+		def actionList =[]
+		def strname = "sendFileConfig"
+		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
+		actionList << createAction("保存",imgPath + "Save.gif",strname + "_save")
+		
+		render actionList as JSON
+	}
 	private def createAction={name,img,action->
 		def model =[:]
 		model["name"] = name

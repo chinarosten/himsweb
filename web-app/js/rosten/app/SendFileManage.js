@@ -4,6 +4,16 @@
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
 	
+	sendFile_formatTitle = function(value,rowIndex){
+		return "<a href=\"javascript:sendFile_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+	}
+	sendFile_onMessageOpen = function(rowIndex){
+        var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("sendfile", rosten.webPath + "/sendFile/sendFileShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
+	};
 	sendFileLabel_formatTopic = function(value,rowIndex){
 		return "<a href=\"javascript:sendFileLabel_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
 	};
@@ -84,6 +94,9 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 		var userid = rosten.kernel.getUserInforByKey("idnumber");
 		
 		switch (oString) {
+		case "sendFileConfigManage":
+			rosten.kernel.setHref(rosten.webPath + "/sendFile/sendFileConfigView", oString);
+            break;
 		case "sendfileLabelManage":
 			var naviJson = {
 				identifier : oString,
@@ -97,6 +110,14 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 				identifier : oString,
 				actionBarSrc : rosten.webPath + "/sendFileAction/sendFileView",
 				gridSrc : rosten.webPath + "/sendFile/sendFileGrid?companyId=" + companyId + "&userId=" + userid
+			};
+			rosten.kernel.addRightContent(naviJson);
+			break;
+		case "allSendFileManage":
+			var naviJson = {
+				identifier : oString,
+				actionBarSrc : rosten.webPath + "/sendFileAction/allSendFileView",
+				gridSrc : rosten.webPath + "/sendFile/sendFileGrid?companyId=" + companyId + "&userId=" + userid + "&type=all"
 			};
 			rosten.kernel.addRightContent(naviJson);
 			break;
