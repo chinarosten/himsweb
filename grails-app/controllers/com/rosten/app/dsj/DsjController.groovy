@@ -7,11 +7,110 @@ import com.rosten.app.util.Util
 import com.rosten.app.system.Attachment
 import com.rosten.app.system.Company
 import com.rosten.app.system.User
+import com.rosten.app.start.StartService
+import com.rosten.app.system.Depart
+import com.rosten.app.gtask.Gtask
 
 class DsjController {
 	def springSecurityService
 	def dsjService
+	def startService
+	
+	def dsjFlowDeal = {
+		def json=[:]
+		def dsj = Dsj.get(params.id)
 		
+		//处理当前人的待办事项
+		def currentUser = springSecurityService.getCurrentUser()
+		def frontStatus = dsj.status
+		
+		switch (params.deal){
+			case "submit":
+				dsj.status="审核"
+				break;
+			case "agrain":
+				dsj.status = "已签发"
+				break;
+			case "notAgrain":
+				dsj.status = "不同意"
+				break;
+		}
+		
+		def nextUser=""
+		if(params.dealUser){
+			//下一步相关信息处理
+			def dealUsers = params.dealUser.split(",")
+			if(dealUsers.size() >1){
+				//并发
+			}else{
+				//串行
+				def _user = User.get(Util.strLeft(params.dealUser,":"))
+				def args = [:]
+				args["type"] = "【大事记】"
+				args["content"] = "请您审核名称为  【" + dsj.subject +  "】 的大事记"
+				args["contentStatus"] = dsj.status
+				args["contentId"] = dsj.id
+				args["user"] = _user
+				args["company"] = _user.company
+				
+				startService.addGtask(args)
+				
+				dsj.currentUser = _user
+				def departEntity = Depart.get(Util.strRight(params.dealUser, ":"))
+				dsj.currentDepart = departEntity.departName
+				dsj.currentDealDate = new Date()
+				
+				if(!dsj.readers.find{ item->
+					item.id.equals(_user.id)
+				}){
+					dsj.addToReaders(_user)
+				}
+				nextUser = _user.username
+			}
+			
+		}
+		
+		def gtask = Gtask.findWhere(
+			user:currentUser,
+			company:currentUser.company,
+			contentId:dsj.id,
+			contentStatus:frontStatus
+		)
+		if(gtask!=null){
+			gtask.dealDate = new Date()
+			gtask.status = "1"
+			gtask.save()
+		}
+		
+		if(dsj.save(flush:true)){
+			//添加日志
+			def dsjLog = new DsjLog()
+			dsjLog.user = currentUser
+			dsjLog.dsj = dsj
+			
+			switch (dsj.status){
+				case "审核":
+					dsjLog.content = "提交【" + nextUser + "】" + dsj.status
+					break
+				case "已签发":
+					dsjLog.content = dsj.status
+					break
+				case "不同意":
+					dsjLog.content = dsj.status
+					break
+			}
+			dsjLog.save(flush:true)
+			
+			json["result"] = true
+		}else{
+			dsj.errors.each{
+				println it
+			}
+			json["result"] = false
+		}
+		render json as JSON
+	}
+	
 	def getFileUpload ={
 		def model =[:]
 		model["docEntity"] = "dsj"
@@ -19,9 +118,16 @@ class DsjController {
 		if(params.id){
 			//已经保存过
 			def dsj = Dsj.get(params.id)
-			model["dsj"] = dsj
+			model["docEntityId"] = params.id
 			//获取附件信息
 			model["attachFiles"] = Attachment.findAllByBeUseId(params.id)
+			
+			def user = springSecurityService.getCurrentUser()
+			if("admin".equals(user.getUserType())){
+				model["isShowFile"] = true
+			}else if(user.equals(dsj.currentUser) && !"已归档".equals(dsj.status) ){
+				model["isShowFile"] = true
+			}
 		}else{
 			//尚未保存
 			model["newDoc"] = true
@@ -63,7 +169,12 @@ class DsjController {
 		attachment.size = f.size
 		attachment.beUseId = params.id
 		attachment.upUser = (User) springSecurityService.getCurrentUser()
-		attachment.save(flush:true)
+		
+		//保存附件
+		def dsj = Dsj.get(params.id)
+		dsj.addToAttachments(attachment)
+		dsj.save(flush:true)
+//		attachment.save(flush:true)
 		
 		json["result"] = "true"
 		json["fileId"] = attachment.id
@@ -134,6 +245,72 @@ class DsjController {
 		}
 		render json as JSON
 	}
+	def dsjSave = {
+		def json=[:]
+		
+		//获取配置文档
+		def dsjConfig = DsjConfig.first()
+		if(!dsjConfig){
+			json["result"] = "noConfig"
+			render json as JSON
+			return
+		}
+		
+		def user = springSecurityService.getCurrentUser()
+		
+		def dsjStatus = "new"
+		def dsj
+		if(params.id && !"".equals(params.id)){
+			dsj = Dsj.get(params.id)
+			dsj.properties = params
+			dsj.clearErrors()
+			dsjStatus = "old"
+		}else{
+			dsj = new Dsj()
+			dsj.properties = params
+			dsj.clearErrors()
+			
+			dsj.company = Company.get(params.companyId)
+			dsj.currentUser = user
+			dsj.currentDepart = params.dealDepart
+			dsj.currentDealDate = new Date()
+			
+			dsj.drafter = user
+			dsj.drafterDepart = params.dealDepart
+			
+			dsj.serialNo = dsjConfig.nowYear + dsjConfig.nowSN.toString().padLeft(4,"0")
+			
+		}
+		
+		if(!dsj.readers.find{ it.id.equals(user.id) }){
+			dsj.addToReaders(user)
+		}
+		
+		if(dsj.save(flush:true)){
+			json["result"] = true
+			json["id"] = dsj.id
+			json["companyId"] = dsj.company.id
+			
+			if("new".equals(dsjStatus)){
+				//添加日志
+				def dsjLog = new DsjLog()
+				dsjLog.user = user
+				dsjLog.dsj = dsj
+				dsjLog.content = "拟稿"
+				dsjLog.save(flush:true)
+				
+				//修改配置文档中的流水号
+				dsjConfig.nowSN += 1
+				dsjConfig.save(flush:true)
+			}
+		}else{
+			dsj.errors.each{
+				println it
+			}
+			json["result"] = false
+		}
+		render json as JSON
+	}
 	def dsjAdd ={
 		redirect(action:"dsjShow",params:params)
 	}
@@ -147,6 +324,12 @@ class DsjController {
 			dsj = Dsj.get(params.id)
 		}else{
 			model.companyId = params.companyId
+			
+			dsj.drafter = user
+			dsj.drafterDepart = user.getDepartName()
+			dsj.currentUser = user
+			dsj.currentDepart = user.getDepartName()
+			
 		}
 		model["user"]=user
 		model["company"] = company
@@ -164,6 +347,7 @@ class DsjController {
 
 	def dsjGrid ={
 		def json=[:]
+		def user = User.get(params.userId)
 		def company = Company.get(params.companyId)
 		if(params.refreshHeader){
 			json["gridHeader"] = dsjService.getDsjListLayout()
@@ -176,11 +360,30 @@ class DsjController {
 			args["offset"] = (nowPage-1) * perPageNum
 			args["max"] = perPageNum
 			args["company"] = company
-			json["gridData"] = dsjService.getDsjListDataStore(args)
+			
+			def gridData
+			if("person".equals(params.type)){
+				//个人待办
+				args["user"] = user
+				gridData = dsjService.getDsjListDataStoreByUser(args)
+			}else if("all".equals(params.type)){
+				//所有文档
+				gridData = dsjService.getDsjListDataStore(args)
+			}
+			
+			json["gridData"] = gridData
 			
 		}
 		if(params.refreshPageControl){
-			def total = dsjService.getDsjCount(company)
+			def total
+			if("person".equals(params.type)){
+				//个人待办
+				total = dsjService.getDsjCountByUser(company,user)
+			}else if("all".equals(params.type)){
+				//所有文档
+				total = dsjService.getDsjCount(company)
+			}
+			
 			json["pageControl"] = ["total":total.toString()]
 		}
 		render json as JSON

@@ -8,6 +8,8 @@ import com.rosten.app.system.Attachment
 import com.rosten.app.system.Company
 import com.rosten.app.system.User
 import com.rosten.app.system.Depart
+import com.rosten.app.start.StartService
+import com.rosten.app.gtask.Gtask
 
 
 class SendFileController {
@@ -132,14 +134,14 @@ class SendFileController {
 		if(params.id){
 			//已经保存过
 			def sendFile = SendFile.get(params.id)
-			model["sendFile"] = sendFile
+			model["docEntityId"] = sendFile
 			//获取附件信息
 			model["attachFiles"] = Attachment.findAllByBeUseId(params.id)
 			
 			def user = springSecurityService.getCurrentUser()
 			if("admin".equals(user.getUserType())){
 				model["isShowFile"] = true
-			}else if(user.equals(sendFile.currentUser) && !"已结束".equals(sendFile.status) ){
+			}else if(user.equals(sendFile.currentUser) && !"已归档".equals(sendFile.status) ){
 				model["isShowFile"] = true
 			}
 		}else{
@@ -473,6 +475,7 @@ class SendFileController {
 
 	def sendFileGrid ={
 		def json=[:]
+		def user = User.get(params.userId)
 		def company = Company.get(params.companyId)
 		if(params.refreshHeader){
 			json["gridHeader"] = sendFileService.getSendFileListLayout()
@@ -485,11 +488,30 @@ class SendFileController {
 			args["offset"] = (nowPage-1) * perPageNum
 			args["max"] = perPageNum
 			args["company"] = company
-			json["gridData"] = sendFileService.getSendFileListDataStore(args)
+			
+			def gridData
+			if("person".equals(params.type)){
+				//个人待办
+				args["user"] = user
+				gridData = sendFileService.getSendFileListDataStoreByUser(args)
+			}else if("all".equals(params.type)){
+				//所有文档
+				gridData = sendFileService.getSendFileListDataStore(args)
+			}
+			
+			json["gridData"] = gridData
 			
 		}
 		if(params.refreshPageControl){
-			def total = sendFileService.getSendFileCount(company)
+			def total
+			if("person".equals(params.type)){
+				//个人待办
+				total = sendFileService.getSendFileCountByUser(company,user)
+			}else if("all".equals(params.type)){
+				//所有文档
+				total = sendFileService.getSendFileCount(company)
+			}
+			
 			json["pageControl"] = ["total":total.toString()]
 		}
 		render json as JSON

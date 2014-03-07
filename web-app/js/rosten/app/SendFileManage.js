@@ -109,7 +109,7 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 			var naviJson = {
 				identifier : oString,
 				actionBarSrc : rosten.webPath + "/sendFileAction/sendFileView",
-				gridSrc : rosten.webPath + "/sendFile/sendFileGrid?companyId=" + companyId + "&userId=" + userid
+				gridSrc : rosten.webPath + "/sendFile/sendFileGrid?companyId=" + companyId + "&userId=" + userid+ "&type=person"
 			};
 			rosten.kernel.addRightContent(naviJson);
 			break;

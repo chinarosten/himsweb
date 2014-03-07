@@ -6,6 +6,19 @@ import com.rosten.app.system.User
 class SendFileActionController {
 	def imgPath ="images/rosten/actionbar/"
 	
+	def allSendFileView ={
+		def actionList =[]
+		def strname = "sendFile"
+		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
+		actionList << createAction("查看发文",imgPath + "read.gif","read_" + strname)
+		actionList << createAction("删除发文",imgPath + "delete.png","delete_" + strname)
+		actionList << createAction("状态迁移",imgPath + "changeStatus.gif",strname + "_changeStatus")
+		actionList << createAction("用户迁移",imgPath + "changeUser.gif",strname + "_changeUser")
+		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
+		
+		render actionList as JSON
+	}
+	
 	def sendFileLabelForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList =[]

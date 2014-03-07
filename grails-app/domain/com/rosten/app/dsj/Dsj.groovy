@@ -16,14 +16,14 @@ class Dsj {
 	String serialNo
 	
 	//条目
-	@GridColumn(name="条目")
+	@GridColumn(name="条目",formatter="dsj_formatTitle")
 	String subject
 	
 	//备注
 	String description
 	
 	//时间
-	Date time
+	Date time = new Date()
 	@GridColumn(name="日期")
 	def getFormattedTimeDate(){
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
@@ -38,7 +38,7 @@ class Dsj {
 	static hasMany=[readers:User,attachments:Attachment]
 	
 	//缺省读者；*:允许所有人查看,[角色名称]:允许角色
-	String defaultReaders="[会议通知普通人员],[会议通知管理员]"
+	String defaultReaders="[大事记普通人员],[大事记管理员]"
 	def addDefaultReader(String userRole){
 		if(defaultReaders==null || "".equals(defaultReaders)){
 			defaultReaders = userRole
@@ -48,18 +48,36 @@ class Dsj {
 	}
 	
 	//拟稿人
-	@GridColumn(name="拟稿人")
 	User drafter
+	
+	@GridColumn(name="拟稿人")
+	def getDrafterName(){
+		if(drafter!=null){
+			return drafter.username
+		}else{
+			return ""
+		}
+	}
 	
 	//拟稿部门
 	String drafterDepart
 	
 	//当前处理人
-	@GridColumn(name="处理者")
 	User currentUser
 	
+	@GridColumn(name="当前处理者")
+	def getCurrentUserName(){
+		if(currentUser!=null){
+			return currentUser.username
+		}else{
+			return ""
+		}
+	}
 	//当前处理人部门
 	String currentDepart
+	
+	//处理时间
+	Date currentDealDate
 	
 	//状态
 	@GridColumn(name="状态")
@@ -82,17 +100,21 @@ class Dsj {
 	static constraints = {
 		serialNo nullable:true,blank:true
 		description nullable:true,blank:true
+		drafterDepart nullable:true,blank:true
+		currentUser nullable:true,blank:true
+		currentDepart nullable:true,blank:true
 	}
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']
 		table "ROSTEN_DSJ"
+		description sqlType:"longtext"
 	}
 	def beforeDelete(){
 		Dsj.withNewSession{_session->
 			DsjComment.findAllByDsj(this).each{item->
 				item.delete()
 			}
-			DsjingLog.findAllByDsj(this).each{item->
+			DsjLog.findAllByDsj(this).each{item->
 				item.delete()
 			}
 			_session.flush()

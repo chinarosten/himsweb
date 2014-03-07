@@ -11,6 +11,16 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 	dsj_changeUser = {
 			
 	};
+	dsj_formatTitle = function(value,rowIndex){
+		return "<a href=\"javascript:dsj_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+	}
+	dsj_onMessageOpen = function(rowIndex){
+        var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("dsj", rosten.webPath + "/dsj/dsjShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
+	};
 	
 	add_dsj = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
@@ -53,7 +63,7 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 			var naviJson = {
 				identifier : oString,
 				actionBarSrc : rosten.webPath + "/dsjAction/dsjView",
-				gridSrc : rosten.webPath + "/dsj/dsjGrid?companyId=" + companyId + "&userId=" + userid
+				gridSrc : rosten.webPath + "/dsj/dsjGrid?companyId=" + companyId + "&userId=" + userid + "&type=person"
 			};
 			rosten.kernel.addRightContent(naviJson);
 			break;

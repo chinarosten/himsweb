@@ -4,6 +4,34 @@ import com.rosten.app.util.GridUtil
 
 class SendFileService {
 	
+	def getSendFileCountByUser ={company,user->
+		def c = SendFile.createCriteria()
+		def query = {
+			eq("company",company)
+			eq("currentUser",user)
+			order("createDate", "desc")
+		}
+		return c.count(query)
+	}
+	def getSendFileListDataStoreByUser ={params->
+		Integer offset = (params.offset)?params.offset.toInteger():0
+		Integer max = (params.max)?params.max.toInteger():15
+		def propertyList = getAllSendFileByUser(offset,max,params.company,params.user)
+
+		def gridUtil = new GridUtil()
+		return gridUtil.buildDataList("id","title",propertyList,offset)
+	}
+	def getAllSendFileByUser ={offset,max,company,user->
+		def c = SendFile.createCriteria()
+		def pa=[max:max,offset:offset]
+		def query = {
+			eq("company",company)
+			eq("currentUser",user)
+			order("createDate", "desc")
+		}
+		return c.list(pa,query)
+	}
+	
 	def getSendFileLabelListLayout ={
 		def gridUtil = new GridUtil()
 		return gridUtil.buildLayoutJSON(new SendLable())

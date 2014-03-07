@@ -4,6 +4,34 @@ import com.rosten.app.util.GridUtil
 
 class DsjService {
 	
+	def getDsjCountByUser ={company,user->
+		def c = Dsj.createCriteria()
+		def query = {
+			eq("company",company)
+			eq("currentUser",user)
+			order("createDate", "desc")
+		}
+		return c.count(query)
+	}
+	def getDsjListDataStoreByUser ={params->
+		Integer offset = (params.offset)?params.offset.toInteger():0
+		Integer max = (params.max)?params.max.toInteger():15
+		def propertyList = getAllDsjByUser(offset,max,params.company,params.user)
+
+		def gridUtil = new GridUtil()
+		return gridUtil.buildDataList("id","title",propertyList,offset)
+	}
+	def getAllDsjByUser ={offset,max,company,user->
+		def c = Dsj.createCriteria()
+		def pa=[max:max,offset:offset]
+		def query = {
+			eq("company",company)
+			eq("currentUser",user)
+			order("createDate", "desc")
+		}
+		return c.list(pa,query)
+	}
+	
 	def getDsjListLayout ={
 		def gridUtil = new GridUtil()
 		return gridUtil.buildLayoutJSON(new Dsj())
