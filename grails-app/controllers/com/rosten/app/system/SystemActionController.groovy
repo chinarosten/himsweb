@@ -12,7 +12,7 @@ class SystemActionController {
 	def smsGroupForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		actionList << createAction("保存",webPath + imgPath + "Save.gif","smsGroup_add")
 		
 		render actionList as JSON
@@ -20,7 +20,7 @@ class SystemActionController {
 	def skin ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		actionList << createAction("保存",webPath + imgPath + "Save.gif","user_uiconfig_add")
 		render actionList as JSON
 	}
@@ -45,7 +45,7 @@ class SystemActionController {
 	def questionForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userid)
 		if(!"normal".equals(user.getUserType())){
@@ -82,7 +82,7 @@ class SystemActionController {
 	def modelForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userid)
 		if(!"normal".equals(user.getUserType())){
@@ -100,7 +100,7 @@ class SystemActionController {
 	def groupForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userid)
 		if(!"normal".equals(user.getUserType())){
@@ -114,7 +114,7 @@ class SystemActionController {
 	def userTypeForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userid)
 		if(!"normal".equals(user.getUserType())){
@@ -143,7 +143,7 @@ class SystemActionController {
 	def roleForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userid)
 		if(!"normal".equals(user.getUserType())){
@@ -158,7 +158,7 @@ class SystemActionController {
 	def permissionForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userid)
 		if(!"normal".equals(user.getUserType())){
@@ -173,7 +173,7 @@ class SystemActionController {
 	def resourceForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userid)
 		if(!"normal".equals(user.getUserType())){
@@ -185,7 +185,7 @@ class SystemActionController {
 	def administratorForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userId)
 		if(user && (systemService.checkIsRosten(user.username) || user.sysFlag)){
@@ -206,7 +206,7 @@ class SystemActionController {
 	def companyForm={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
-		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userid)
 		if(user && (systemService.checkIsRosten(user.username) || user.sysFlag)){
