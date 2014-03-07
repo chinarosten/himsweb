@@ -176,7 +176,7 @@
 					    	<input id="time" data-dojo-type="dijit/form/DateTextBox" 
 			                	data-dojo-props='name:"time",${fieldAcl.isReadOnly("time")},
 			                	trim:true,required:true,
-			                	value:"${dsj?.getFormattedTimeDate()}"
+			                	value:"${dsj?.getShowTimeDate()}"
 			               '/>
 			           </td>
 					</tr>
@@ -212,7 +212,7 @@
 					    <td  colspan=3>
 					    	<textarea id="description" data-dojo-type="dijit/form/SimpleTextarea" 
     							data-dojo-props='name:"description","class":"input",
-                               		style:{width:"550px"},
+                               		style:{width:"550px"},rows:"10",
                                		trim:true,value:"${dsj?.description }"
                            '>
     						</textarea>

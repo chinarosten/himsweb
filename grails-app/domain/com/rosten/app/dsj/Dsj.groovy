@@ -34,6 +34,15 @@ class Dsj {
 		}
 	}
 	
+	def getShowTimeDate(){
+		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd")
+		if(time){
+			return sd.format(time)
+		}else{
+			return ""
+		}
+	}
+	
 	//读者、附件
 	static hasMany=[readers:User,attachments:Attachment]
 	
