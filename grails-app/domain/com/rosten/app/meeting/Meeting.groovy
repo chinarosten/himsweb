@@ -24,10 +24,10 @@ class Meeting {
 	String subject
 	
 	//开始时间
-	Date startDate
+	Date startDate = new Date()
 	
 	//结束时间
-	Date endDate
+	Date endDate = new Date()
 	
 	//会议室
 	String address
@@ -100,6 +100,15 @@ class Meeting {
 	def getFormattedDate(){
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		return sd.format(createDate)
+	}
+	
+	def getShowDate(String type){
+		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd")
+		if("start".equals(type)){
+			return sd.format(startDate)
+		}else{
+			return sd.format(endDate)
+		}
 	}
 	
 	static belongsTo = [company:Company]

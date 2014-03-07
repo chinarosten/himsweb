@@ -124,18 +124,18 @@
 					<tr>
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>开始时间：</div></td>
 					    <td>
-					    	<input id="startDate" data-dojo-type="dijit/form/ValidationTextBox" 
+					    	<input id="startDate" data-dojo-type="dijit/form/DateTextBox" 
 			                 	data-dojo-props='name:"startDate",
 			                 		trim:true,
-									value:"${meeting?.startDate}"
+									value:"${meeting?.getShowDate("start")}"
 			                '/>
 			            </td>
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>结束时间：</div></td>
 					    <td>
-					    	<input id="endDate" data-dojo-type="dijit/form/ValidationTextBox" 
+					    	<input id="endDate" data-dojo-type="dijit/form/DateTextBox" 
 			                 	data-dojo-props='name:"endDate",
 			                 		trim:true,
-									value:"${meeting?.endDate}"
+									value:"${meeting?.getShowDate("end")}"
 			                '/>
 			            </td>    
 					</tr>
@@ -208,7 +208,7 @@
 					    	<textarea id="description" data-dojo-type="dijit/form/SimpleTextarea" 
     							data-dojo-props='name:"description",
                               		"class":"input",
-                              		style:{width:"550px"},
+                              		style:{width:"620px"},
                               		trim:true,
                               		value:"${meeting?.description }"
                            '>
