@@ -420,7 +420,7 @@ class BbsController {
 		}
 		
 		if(!bbs){
-			render "此公告已过期或删除，请联系管理员！"
+			render '<h2 style="color:red;width:500px;margin:0 auto">此公告已过期或删除，请联系管理员！</h2>'
 			return
 		}
 		
