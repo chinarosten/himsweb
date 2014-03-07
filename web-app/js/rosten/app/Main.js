@@ -220,7 +220,14 @@ define(["dojo/_base/kernel"
     		rosten.openNewWindow("bbs", rosten.webPath + "/bbs/bbsShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
     		break;
     	case "【发文】":
-    		
+    		var userid = rosten.kernel.getUserInforByKey("idnumber");
+    		var companyId = rosten.kernel.getUserInforByKey("companyid");
+    		rosten.openNewWindow("sendFile", rosten.webPath + "/sendFile/sendFileShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
+    		break;
+    	case "【大事记】":
+    		var userid = rosten.kernel.getUserInforByKey("idnumber");
+    		var companyId = rosten.kernel.getUserInforByKey("companyid");
+    		rosten.openNewWindow("dsj", rosten.webPath + "/dsj/dsjShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
     		break;
     	}
     };

@@ -3,7 +3,13 @@
  */
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
-	
+	sendFile_changeStatus = {
+			
+			
+	};
+	sendFile_changeUser = {
+			
+	};
 	sendFile_formatTitle = function(value,rowIndex){
 		return "<a href=\"javascript:sendFile_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
 	}
