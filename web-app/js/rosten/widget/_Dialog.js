@@ -2,7 +2,7 @@
  * @author rosten
  * @created 2013-12-01
  */
-define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base/connect", "dojo/query!css3", "dijit/registry", "dijit/form/Button", "rosten/widget/RostenDialog"], function(declare, kernel, domStyle, connect, query, registry, Button, RostenDialog) {
+define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base/connect", "dojo/_base/lang", "dojo/query!css3", "dijit/registry", "dijit/form/Button", "rosten/widget/RostenDialog"], function(declare, kernel, domStyle, connect, lang,query, registry, Button, RostenDialog) {
 
 	return declare("rosten.widget._Dialog", null, {
 		_dialog : null,
@@ -68,6 +68,9 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 				this.initialized = true;
 			}
 			this._dialog.show();
+			if (this.mode == "CLOSE"){
+                setTimeout(lang.hitch(this, "close"), 800);
+            }
 		},
 		close : function() {
 			this._dialog.hide();
