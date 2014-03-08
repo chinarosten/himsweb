@@ -75,8 +75,13 @@ class SendFileActionController {
 					case "已签发":
 						actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
 						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
-						actionList << createAction("归档",webPath +imgPath + "gd.png","sendfile_achive")
 						actionList << createAction("分发",webPath +imgPath + "send.png","sendfile_send")
+						actionList << createAction("归档",webPath +imgPath + "gd.png","sendfile_achive")
+						break;
+					case "已归档":
+						if("admin".equals(user.getUserType())){
+							actionList << createAction("重新分发",webPath +imgPath + "send.png","sendfile_send")
+						}
 						break;
 				}
 			}

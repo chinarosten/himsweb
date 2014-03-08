@@ -103,6 +103,9 @@
 								if(type=="agrain"){
 									//刷新待办事项内容
 									window.opener.showStartGtask("${user?.id}","${company?.id }");
+								}else if(type=="send"){
+									window.opener.showStartGtask("${user?.id}","${company?.id }");
+									return;
 								}
 								rosten.pagequit();
 							}
@@ -134,10 +137,33 @@
 		            }  
 				};
 				sendfile_achive = function(){
+					if(!${sendFile?.isSend}){
+						rosten.alert("当前发文尚未分发，请先分发！");
+						return;
+					}
 					sendfile_deal("achive");
 				};
 				sendfile_send = function(){
-					sendfile_deal("send");
+					var args ={};
+					var obj = {url:rosten.webPath + "/system/userTreeDataStore?companyId=${company?.id }"};
+		            if(args){
+		                if(args.callback)obj.callback = args.callback;
+		                if(args.callbackargs) obj.callbackargs = args.callbackargs;
+		                if(args.onLoadFunction) obj.onLoadFunction = args.onLoadFunction;
+		            }
+		            var rostenShowDialog = null;
+		            if(rostenShowDialog!=null) rostenShowDialog.destroy();
+		            rostenShowDialog = new DepartUserDialog(obj);
+		            rostenShowDialog.open();
+
+		            rostenShowDialog.callback = function(data) {
+		            	var _data = [];
+		            	for (var k = 0; k < data.length; k++) {
+		            		var item = data[k];
+		            		_data.push(item.value + ":" + item.departName);
+		            	};
+		            	sendfile_deal("send",_data);	
+		            }  
 				};
 				sendfile_agrain = function(){
 					var _data = [];

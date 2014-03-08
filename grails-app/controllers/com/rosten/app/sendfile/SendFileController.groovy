@@ -35,11 +35,62 @@ class SendFileController {
 				sendFile.fileNo = sendFileLabel.nowYear + "【" + sendFileLabel.subCategory + "】" + sendFileLabel.nowSN.toString().padLeft(4,"0")
 				sendFile.fileDate = new Date()
 				break;
+			case "send":
+				//分发
+				if(!sendFile.isSend){
+					sendFile.isSend = true
+				}
+				//发送相关人员并记录日志	
+				def _nextUsers=[]
+				params.dealUser.split(",").each{
+					def _nextUser = User.get(Util.strLeft(it,":"))
+					if(!sendFile.readers.contains(_nextUser)){
+						sendFile.addToReaders(_nextUser)
+					}
+					def _name
+					if(_nextUser.chinaName!=null){
+						_name = _nextUser.chinaName
+					}else{
+						_name = _nextUser.username
+					}
+					_nextUsers << _name
+					
+					//创建待办文件
+					def args = [:]
+					args["type"] = "【发文】"
+					args["content"] = "请您查看名称为  【" + sendFile.title +  "】 的发文"
+					args["contentStatus"] = sendFile.status
+					args["contentId"] = sendFile.id
+					args["user"] = _nextUser
+					args["company"] = _nextUser.company
+					
+					startService.addGtask(args)
+				}
+				//添加日志
+				def sendFileLog = new SendFileLog()
+				sendFileLog.user = currentUser
+				sendFileLog.sendFile = sendFile
+				sendFileLog.content = "分发文件【" + _nextUsers.join("、") + "】"
+				sendFileLog.save()
+				
+				if(sendFile.save(flush:true)){
+					json["result"] = true
+				}else{
+					json["result"] = false
+				}
+				
+				render json as JSON
+				
+				return;
 			case "achive":
 				sendFile.status = "已归档"
+				sendFile.currentUser = null
+				sendFile.currentDepart = null
 				break;
 			case "notAgrain":
 				sendFile.status = "不同意"
+				sendFile.currentUser = null
+				sendFile.currentDepart = null
 				break;
 		}
 		
