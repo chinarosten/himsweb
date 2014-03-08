@@ -19,9 +19,16 @@ class MeetingController {
 		if(params.id){
 			//已经保存过
 			def meeting = Meeting.get(params.id)
-			model["meeting"] = meeting
+			model["meeting"] = params.id
 			//获取附件信息
 			model["attachFiles"] = Attachment.findAllByBeUseId(params.id)
+			
+			def user = springSecurityService.getCurrentUser()
+			if("admin".equals(user.getUserType())){
+				model["isShowFile"] = true
+			}else if(user.equals(meeting.currentUser) && !"已归档".equals(meeting.status) ){
+				model["isShowFile"] = true
+			}
 		}else{
 			//尚未保存
 			model["newDoc"] = true

@@ -106,7 +106,7 @@
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>拟稿部门：</div></td>
 					    <td>
 					    	<input id="drafterDepart" data-dojo-type="dijit/form/ValidationTextBox" 
-			                 	data-dojo-props='trim:true,readOnly:true,
+			                 	data-dojo-props='trim:true,
 									value:"${meeting?.drafterDepart}"
 			                '/>
 			            </td>    
@@ -115,7 +115,7 @@
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>标题：</div></td>
 					    <td colspan=3>
 					    	<input id="subject" data-dojo-type="dijit/form/ValidationTextBox" 
-			                 	data-dojo-props='name:"subject",readOnly:true,
+			                 	data-dojo-props='name:"subject",
 			                 		trim:true,style:{width:"551px"},
 									value:"${meeting?.subject}"
 			                '/>	

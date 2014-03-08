@@ -128,13 +128,21 @@
 		            	var _data = [];
 		            	for (var k = 0; k < data.length; k++) {
 		            		var item = data[k];
-		            		_data.push(item.value + ":" + item.departId);
+		            		_data.push(item.value + ":" + item.departName);
 		            	};
 		            	sendfile_deal("submit",_data);	
 		            }  
 				};
+				sendfile_achive = function(){
+					sendfile_deal("achive");
+				};
+				sendfile_send = function(){
+					sendfile_deal("send");
+				};
 				sendfile_agrain = function(){
-					sendfile_deal("agrain");
+					var _data = [];
+					_data.push("${sendFile?.drafter?.id + ":" + sendFile?.drafterDepart}");
+					sendfile_deal("agrain",_data);
 				};
 				sendfile_notAgrain = function(){
 					sendfile_deal("notAgrain");

@@ -20,7 +20,7 @@ class SendFile {
 	//成文日期
 	Date fileDate
 	
-	@GridColumn(name="成文日期",width="150px",colIdx=3)
+	@GridColumn(name="成文日期",width="120px",colIdx=3)
 	def getFormattedFileDate(){
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		if(fileDate){
@@ -31,7 +31,7 @@ class SendFile {
 	}
 	
 	//文件编号
-	@GridColumn(name="文件编号",width="80px")
+	@GridColumn(name="文件编号",width="110px")
 	String fileNo
 	
 	//文件种类

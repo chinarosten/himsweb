@@ -16,39 +16,34 @@ class SendFileController {
 	
 	def springSecurityService
 	def sendFileService
+	def startService
 	
 	def sendFileFlowDeal = {
 		def json=[:]
-		
-		//获取配置文档
-		def sendFileLabel = SendLable.get(params.fileTypeId)
-		if(!sendFileLabel){
-			json["result"] = "noSendFileLabel"
-			render json as JSON
-			return
-		}
-		
 		def sendFile = SendFile.get(params.id)
-		
-		//处理当前人的待办事项
+		def sendFileLabel = SendLable.get(params.fileTypeId)
 		def currentUser = springSecurityService.getCurrentUser()
 		def frontStatus = sendFile.status
 		
+		//获取下一处理人
 		switch (params.deal){
 			case "submit":
 				sendFile.status="审核"
 				break;
 			case "agrain":
 				sendFile.status = "已签发"
-				sendFile.fileNo = sendFileLabel.nowYear + sendFileLabel.nowSN.toString().padLeft(4,"0")
-				
+				sendFile.fileNo = sendFileLabel.nowYear + "【" + sendFileLabel.subCategory + "】" + sendFileLabel.nowSN.toString().padLeft(4,"0")
+				sendFile.fileDate = new Date()
+				break;
+			case "achive":
+				sendFile.status = "已归档"
 				break;
 			case "notAgrain":
 				sendFile.status = "不同意"
 				break;
 		}
 		
-		def nextUser=""
+		def nextUsers=[]
 		if(params.dealUser){
 			//下一步相关信息处理
 			def dealUsers = params.dealUser.split(",")
@@ -56,32 +51,37 @@ class SendFileController {
 				//并发
 			}else{
 				//串行
-				def _user = User.get(Util.strLeft(params.dealUser,":"))
+				def nextUser = User.get(Util.strLeft(params.dealUser,":"))
 				def args = [:]
 				args["type"] = "【发文】"
 				args["content"] = "请您审核名称为  【" + sendFile.title +  "】 的发文"
 				args["contentStatus"] = sendFile.status
 				args["contentId"] = sendFile.id
-				args["user"] = _user
-				args["company"] = _user.company
+				args["user"] = nextUser
+				args["company"] = nextUser.company
 				
 				startService.addGtask(args)
 				
-				sendFile.currentUser = _user
-				def departEntity = Depart.get(Util.strRight(params.dealUser, ":"))
-				sendFile.currentDepart = departEntity.departName
+				sendFile.currentUser = nextUser
+				sendFile.currentDepart = Util.strRight(params.dealUser, ":")
 				sendFile.currentDealDate = new Date()
 				
 				if(!sendFile.readers.find{ item->
-					item.id.equals(_user.id)
+					item.id.equals(nextUser.id)
 				}){
-					sendFile.addToReaders(_user)
+					sendFile.addToReaders(nextUser)
 				}
-				nextUser = _user.username
+				def _name
+				if(nextUser.chinaName!=null){
+					_name = nextUser.chinaName
+				}else{
+					_name = nextUser.username
+				}
+				nextUsers << _name
 			}
 			
 		}
-		
+		//修改当前处理人的待办事项
 		def gtask = Gtask.findWhere(
 			user:currentUser,
 			company:currentUser.company,
@@ -102,18 +102,21 @@ class SendFileController {
 			
 			switch (sendFile.status){
 				case "审核":
-					sendFileLog.content = "提交【" + nextUser + "】" + sendFile.status
+					sendFileLog.content = "提交审核【" + nextUsers.join("、") + "】"
 					break
 				case "已签发":
-					sendFileLog.content = sendFile.status
+					sendFileLog.content = "签发文件【" + nextUsers.join("、") + "】,文件编号为:" + sendFile.fileNo
 					
 					//修改配置文档中的流水号
 					sendFileLabel.nowSN += 1
 					sendFileLabel.save(flush:true)
 					
 					break
+				case "已归档":
+					sendFileLog.content = "归档发文"
+					break
 				case "不同意":
-					sendFileLog.content = sendFile.status
+					sendFileLog.content = "不同意签发！"
 					break
 			}
 			sendFileLog.save(flush:true)
@@ -134,7 +137,7 @@ class SendFileController {
 		if(params.id){
 			//已经保存过
 			def sendFile = SendFile.get(params.id)
-			model["docEntityId"] = sendFile
+			model["docEntityId"] = params.id
 			//获取附件信息
 			model["attachFiles"] = Attachment.findAllByBeUseId(params.id)
 			
@@ -185,7 +188,10 @@ class SendFileController {
 		attachment.size = f.size
 		attachment.beUseId = params.id
 		attachment.upUser = (User) springSecurityService.getCurrentUser()
-		attachment.save(flush:true)
+		
+		def sendFile = SendFile.get(params.id)
+		sendFile.addToAttachments(attachment)
+		sendFile.save(flush:true)
 		
 		json["result"] = "true"
 		json["fileId"] = attachment.id
@@ -426,7 +432,7 @@ class SendFileController {
 				def sendFileLog = new SendFileLog()
 				sendFileLog.user = user
 				sendFileLog.sendFile = sendFile
-				sendFileLog.content = "拟稿"
+				sendFileLog.content = "拟稿发文,流水号为:" + sendFile.serialNo
 				sendFileLog.save(flush:true)
 				
 				//修改配置文档中的流水号

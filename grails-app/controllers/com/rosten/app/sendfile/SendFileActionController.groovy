@@ -69,8 +69,14 @@ class SendFileActionController {
 					case "审核":
 						actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
 						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
-						actionList << createAction("发布",webPath +imgPath + "ok.png","sendfile_agrain")
+						actionList << createAction("签发",webPath +imgPath + "ok.png","sendfile_agrain")
 						actionList << createAction("不同意",webPath +imgPath + "back.png","sendfile_notAgrain")
+						break;
+					case "已签发":
+						actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
+						actionList << createAction("归档",webPath +imgPath + "gd.png","sendfile_achive")
+						actionList << createAction("分发",webPath +imgPath + "send.png","sendfile_send")
 						break;
 				}
 			}
