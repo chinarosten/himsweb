@@ -98,6 +98,8 @@ class SendFile {
 	//件号
 	String unitNo
 	
+	boolean isSend = false
+	
 	//附件、读者
 	static hasMany=[attachments:Attachment,readers:User]
 	
