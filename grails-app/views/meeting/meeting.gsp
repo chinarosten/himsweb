@@ -144,18 +144,7 @@
 					});
 				};
 				meeting_submit = function(){
-					var args ={};
-					var obj = {url:rosten.webPath + "/system/userTreeDataStore?companyId=${company?.id }",type:"single"};
-		            if(args){
-		                if(args.callback)obj.callback = args.callback;
-		                if(args.callbackargs) obj.callbackargs = args.callbackargs;
-		                if(args.onLoadFunction) obj.onLoadFunction = args.onLoadFunction;
-		            }
-		            var rostenShowDialog = null;
-		            if(rostenShowDialog!=null) rostenShowDialog.destroy();
-		            rostenShowDialog = new DepartUserDialog(obj);
-		            rostenShowDialog.open();
-
+					var rostenShowDialog = rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","single");
 		            rostenShowDialog.callback = function(data) {
 		            	var _data = [];
 		            	for (var k = 0; k < data.length; k++) {
@@ -288,44 +277,44 @@
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>主持人：</div></td>
 					    <td>
 					    	<input id="presider" data-dojo-type="dijit/form/ValidationTextBox" 
-			                 	data-dojo-props='name:"presider",readOnly:true,
-			                 		trim:true,required:true,
-									value:"${meeting?.presider}"
+			                 	data-dojo-props='readOnly:true,trim:true,required:true,
+									value:"${meeting?.presider?.username}"
 			                '/>
+			                <input  data-dojo-type="dijit/form/ValidationTextBox" id="presiderId" data-dojo-props='name:"presiderId",style:{display:"none"},value:"${meeting?.presider?.id }"' />
 			                <button data-dojo-type="dijit/form/Button" 
-								data-dojo-props = 'onClick:function(){}'
+								data-dojo-props = 'onClick:function(){rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","single","presider","presiderId")}'
 							>选择</button>
 			            </td>    
 					</tr>
 					<tr>
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>参会人员：</div></td>
 					    <td colspan=3>
+					    	<input  data-dojo-type="dijit/form/ValidationTextBox" id="joinerId" data-dojo-props='name:"joinerId",style:{display:"none"},value:"${joinerIds }"' />
 					    	<textarea id="joiner" data-dojo-type="dijit/form/SimpleTextarea" 
-    							data-dojo-props='name:"joiner",readOnly:true,
-                                		"class":"input",
+    							data-dojo-props='readOnly:true,"class":"input",
                                 		style:{width:"550px"},
                                 		trim:true,
-                                		value:"${meeting?.joiner }"
+                                		value:"${joiner}"
                            '>
     						</textarea>
     						<button data-dojo-type="dijit/form/Button" 
-								data-dojo-props = 'onClick:function(){}'
+								data-dojo-props = 'onClick:function(){rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","multile","joiner","joinerId")}'
 							>选择</button>
 			            </td>    
 					</tr>
 					<tr>
 					    <td><div align="right">列席人员：</div></td>
 					    <td colspan=3>
+					    	<input  data-dojo-type="dijit/form/ValidationTextBox" id="guestersId" data-dojo-props='name:"guestersId",style:{display:"none"},value:"${guestersIds }"' />
 					    	<textarea id="guesters" data-dojo-type="dijit/form/SimpleTextarea" 
-    							data-dojo-props='name:"guesters",readOnly:true,
-                                		"class":"input",
+    							data-dojo-props='readOnly:true,"class":"input",
                                 		style:{width:"550px"},
                                 		trim:true,
-                                		value:"${meeting?.guesters }"
+                                		value:"${guesters}"
                            '>
     						</textarea>
     						<button data-dojo-type="dijit/form/Button" 
-								data-dojo-props = 'onClick:function(){}'
+								data-dojo-props = 'onClick:function(){rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","multile","guesters","guestersId")}'
 							>选择</button>
 			            </td>    
 					</tr>

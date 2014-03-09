@@ -5,7 +5,8 @@ define(["dojo/_base/lang",
 		"dijit/registry",
 		"rosten/widget/MultiSelectDialog",
 		"rosten/widget/PickTreeDialog",
-		"rosten/kernel/_kernel"], function(lang,registry,MultiSelectDialog,PickTreeDialog) {
+		"rosten/widget/DepartUserDialog",
+		"rosten/kernel/_kernel"], function(lang,registry,MultiSelectDialog,PickTreeDialog,DepartUserDialog) {
 			
 	var application = {};
     application.cssinitcommon = function() {
@@ -67,7 +68,37 @@ define(["dojo/_base/lang",
 		}
 		
 	};
-    
+    application.selectUser = function(url,type,inputName,inputId){
+        var id = "sys_userDialog";
+
+        if (rosten[id] && registry.byId(id)) {
+            rosten[id].open();
+            rosten[id].refresh();
+        } else {
+            var args = {
+                url : url,
+                type:type
+            };
+            rosten[id] = new DepartUserDialog(args);
+            rosten[id].open();
+        }
+        rosten[id].callback = function(data) {
+            var _data = [];
+            var _data_1 = [];
+            for (var k = 0; k < data.length; k++) {
+                var item = data[k];
+                _data.push(item.name);
+                _data_1.push(item.value);
+            }
+            if( inputName !=undefined){
+                registry.byId(inputName).attr("value", _data.join(","));
+            }
+            if( inputId !=undefined){
+                registry.byId(inputId).attr("value",_data_1.join(","));
+            }
+        }; 
+        return rosten[id];
+    };
 	application.selectDepart = function(url,type,inputName,inputId) {
         var id = "sys_departDialog";
 
@@ -85,24 +116,19 @@ define(["dojo/_base/lang",
             rosten[id].open();
         }
         rosten[id].callback = function(data) {
-            var _data = "";
-            var _data_1 = "";
+            var _data = [];
+            var _data_1 = [];
             for (var k = 0; k < data.length; k++) {
                 var item = data[k];
-                if (_data == "") {
-                    _data += item.name;
-                    _data_1 += item.id;
-                } else {
-                    _data += "," + item.name;
-                    _data_1 += "," + item.id;
-                }
+                _data.push(item.name);
+                _data_1.push(item.id);
 
             }
             if( inputName !=undefined){
-            	registry.byId(inputName).attr("value", _data);
+            	registry.byId(inputName).attr("value", _data.join(","));
             }
             if( inputId !=undefined){
-            	dom.byId(inputId).value = _data_1;
+            	registry.byId(inputId).attr("value", _data_1.join(","));
             }
         };
     };

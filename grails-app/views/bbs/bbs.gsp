@@ -157,18 +157,7 @@
 				});
 			};
 			bbs_submit = function(){
-				var args ={};
-				var obj = {url:rosten.webPath + "/system/userTreeDataStore?companyId=${company?.id }",type:"single"};
-	            if(args){
-	                if(args.callback)obj.callback = args.callback;
-	                if(args.callbackargs) obj.callbackargs = args.callbackargs;
-	                if(args.onLoadFunction) obj.onLoadFunction = args.onLoadFunction;
-	            }
-	            var rostenShowDialog = null;
-	            if(rostenShowDialog!=null) rostenShowDialog.destroy();
-	            rostenShowDialog = new DepartUserDialog(obj);
-	            rostenShowDialog.open();
-
+				var rostenShowDialog = rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","single");
 	            rostenShowDialog.callback = function(data) {
 	            	var _data = [];
 	            	for (var k = 0; k < data.length; k++) {

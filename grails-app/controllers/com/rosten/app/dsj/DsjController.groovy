@@ -272,11 +272,11 @@ class DsjController {
 			
 			dsj.company = Company.get(params.companyId)
 			dsj.currentUser = user
-			dsj.currentDepart = params.dealDepart
+			dsj.currentDepart = params.drafterDepart
 			dsj.currentDealDate = new Date()
 			
 			dsj.drafter = user
-			dsj.drafterDepart = params.dealDepart
+			dsj.drafterDepart = params.drafterDepart
 			
 			dsj.serialNo = dsjConfig.nowYear + dsjConfig.nowSN.toString().padLeft(4,"0")
 			
