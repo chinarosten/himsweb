@@ -86,11 +86,13 @@ class SendFileController {
 				sendFile.status = "已归档"
 				sendFile.currentUser = null
 				sendFile.currentDepart = null
+				sendFile.currentDealDate = new Date()
 				break;
 			case "notAgrain":
 				sendFile.status = "不同意"
 				sendFile.currentUser = null
 				sendFile.currentDepart = null
+				sendFile.currentDealDate = new Date()
 				break;
 		}
 		
@@ -139,7 +141,7 @@ class SendFileController {
 			contentId:sendFile.id,
 			contentStatus:frontStatus
 		)
-		if(gtask!=null){
+		if(gtask!=null && "0".equals(gtask.status)){
 			gtask.dealDate = new Date()
 			gtask.status = "1"
 			gtask.save()

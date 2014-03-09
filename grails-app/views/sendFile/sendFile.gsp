@@ -137,7 +137,8 @@
 		            }  
 				};
 				sendfile_achive = function(){
-					if(!${sendFile?.isSend}){
+					var isSend = registry.byId("isSend").attr("value");
+					if(isSend=="false" || isSend == false){
 						rosten.alert("当前发文尚未分发，请先分发！");
 						return;
 					}
@@ -212,6 +213,7 @@
 		<form id="sendfile_form" name="sendfile_form" url='[controller:"sendFile",action:"sendFileSave"]' class="rosten_form" style="padding:0px">
 			<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${sendFile?.id }"' />
         	<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
+        	<input  data-dojo-type="dijit/form/ValidationTextBox" id="isSend"  data-dojo-props='style:{display:"none"},value:"${sendFile?.isSend }"' />
         		
 			<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"基本信息",toggleable:false,moreText:"",height:"300px",marginBottom:"2px"'>
 			<table border="0" width="740" align="left">

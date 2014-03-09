@@ -31,7 +31,7 @@ class SendFile {
 	}
 	
 	//文件编号
-	@GridColumn(name="文件编号",width="110px")
+	@GridColumn(name="文件编号",width="120px")
 	String fileNo
 	
 	//文件种类
@@ -187,6 +187,8 @@ class SendFile {
 		fonds nullable:true,blank:true
 		volumnNo nullable:true,blank:true
 		unitNo nullable:true,blank:true
+		currentUser nullable:true,blank:true
+		currentDepart nullable:true,blank:true
     }
 	
 	static mapping = {
