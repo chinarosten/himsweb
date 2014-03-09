@@ -115,18 +115,7 @@
 					});
 				};
 				sendfile_submit = function(){
-					var args ={};
-					var obj = {url:rosten.webPath + "/system/userTreeDataStore?companyId=${company?.id }",type:"single"};
-		            if(args){
-		                if(args.callback)obj.callback = args.callback;
-		                if(args.callbackargs) obj.callbackargs = args.callbackargs;
-		                if(args.onLoadFunction) obj.onLoadFunction = args.onLoadFunction;
-		            }
-		            var rostenShowDialog = null;
-		            if(rostenShowDialog!=null) rostenShowDialog.destroy();
-		            rostenShowDialog = new DepartUserDialog(obj);
-		            rostenShowDialog.open();
-
+		            var rostenShowDialog = rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","single");
 		            rostenShowDialog.callback = function(data) {
 		            	var _data = [];
 		            	for (var k = 0; k < data.length; k++) {
@@ -265,10 +254,12 @@
 				    <td>
 				    	<input id="dealDepart" data-dojo-type="dijit/form/ValidationTextBox" 
 		                 	data-dojo-props='name:"dealDepart",required:true,
-		                 		trim:true,${fieldAcl.isReadOnly("dealDepart")},
+		                 		trim:true,readOnly:true,
 								value:"${sendFile?.dealDepart}"
 		                '/>
-				    
+				    	<button data-dojo-type="dijit/form/Button" 
+							data-dojo-props = 'onClick:function(){rosten.selectDepart("${createLink(controller:'system',action:'departTreeDataStore',params:[companyId:company?.id])}",false,"dealDepart")}'
+						>选择</button>
 				    <td><div align="right"><span style="color:red">*&nbsp;</span>拟稿人：</div></td>
 				    <td>
 				    	<input id="drafter" data-dojo-type="dijit/form/ValidationTextBox" 
