@@ -40,18 +40,152 @@
 				kernel.addOnLoad(function(){
 					rosten.init({webpath:"${request.getContextPath()}"});
 					rosten.cssinit();
+					<g:if test="${meeting.id && meeting.id!=null && !"".equals(meeting.id)}">
+					
+						var ioArgs = {
+							url : rosten.webPath + "/meeting/meetingGetContent/${meeting?.id}",
+							sync : true,
+							handleAs : "text",
+							preventCache : true,
+							encoding : "utf-8",
+							load : function(data) {
+								registry.byId("content").set("value",data);
+							}
+						};
+						xhr.get(ioArgs);
+					</g:if>
 				});
 				meeting_add = function(){
+					var drafterDepart = registry.byId("drafterDepart");
+					if(!drafterDepart.isValid()){
+						rosten.alert("拟稿部门不正确！").queryDlgClose = function(){
+							drafterDepart.focus();
+						};
+						return;
+					}
+					var subject = registry.byId("subject");
+					if(!subject.isValid()){
+						rosten.alert("标题不正确！").queryDlgClose = function(){
+							subject.focus();
+						};
+						return;
+					}
+					var startDate = registry.byId("startDate");
+					if(!startDate.isValid()){
+						rosten.alert("开始时间不正确！").queryDlgClose = function(){
+							startDate.focus();
+						};
+						return;
+					}
+					var endDate = registry.byId("endDate");
+					if(!endDate.isValid()){
+						rosten.alert("结束时间不正确！").queryDlgClose = function(){
+							endDate.focus();
+						};
+						return;
+					}
+					var address = registry.byId("address");
+					if(!address.isValid()){
+						rosten.alert("会议地点不正确！").queryDlgClose = function(){
+							address.focus();
+						};
+						return;
+					}
+					var presider = registry.byId("presider");
+					if(!presider.isValid()){
+						rosten.alert("主持人不正确！").queryDlgClose = function(){
+							presider.focus();
+						};
+						return;
+					}
+					var joiner = registry.byId("joiner");
+					if(!joiner.isValid()){
+						rosten.alert("参与人员不正确！").queryDlgClose = function(){
+							joiner.focus();
+						};
+						return;
+					}
 					
+					rosten.readSync(rosten.webPath + "/meeting/meetingSave",{},function(data){
+						if(data.result=="true" || data.result == true){
+							rosten.alert("保存成功！").queryDlgClose= function(){
+								if(window.location.href.indexOf(data.id)==-1){
+									window.location.replace(window.location.href + "&id=" + data.id);
+								}else{
+									window.location.reload();
+								}
+							};
+						}else if(data.result=="noConfig"){
+							rosten.alert("系统不存在配置文档，请通知管理员！");
+						}else{
+							rosten.alert("保存失败!");
+						}
+					},null,"meeting_form");
+				};
+				meeting_deal = function(type,readArray){
+					var content = {};
+					content.id = registry.byId("id").attr("value");
+					content.deal = type;
+					if(readArray){
+						content.dealUser = readArray.join(",");
+					}
+					rosten.readSync(rosten.webPath + "/meeting/meetingFlowDeal",content,function(data){
+						if(data.result=="true" || data.result == true){
+							rosten.alert("成功！").queryDlgClose= function(){
+								if(type=="agrain"){
+									//刷新待办事项内容
+									window.opener.showStartGtask("${user?.id}","${company?.id }");
+								}
+								rosten.pagequit();
+							}
+						}else{
+							rosten.alert("失败!");
+						}	
+					});
 				};
 				meeting_submit = function(){
-					
+					var args ={};
+					var obj = {url:rosten.webPath + "/system/userTreeDataStore?companyId=${company?.id }",type:"single"};
+		            if(args){
+		                if(args.callback)obj.callback = args.callback;
+		                if(args.callbackargs) obj.callbackargs = args.callbackargs;
+		                if(args.onLoadFunction) obj.onLoadFunction = args.onLoadFunction;
+		            }
+		            var rostenShowDialog = null;
+		            if(rostenShowDialog!=null) rostenShowDialog.destroy();
+		            rostenShowDialog = new DepartUserDialog(obj);
+		            rostenShowDialog.open();
+
+		            rostenShowDialog.callback = function(data) {
+		            	var _data = [];
+		            	for (var k = 0; k < data.length; k++) {
+		            		var item = data[k];
+		            		_data.push(item.value + ":" + item.departId);
+		            	};
+		            	meeting_deal("submit",_data);	
+		            }  
+				};
+				meeting_agrain = function(){
+					meeting_deal("agrain");
+				};
+				meeting_notAgrain = function(){
+					meeting_deal("notAgrain");
 				};
 				page_quit = function(){
 					rosten.pagequit();
 				};
 				addComment = function(){
-
+					var id = registry.byId("id").get("value");
+					var commentDialog = rosten.addCommentDialog({type:"meeting"});
+					commentDialog.callback = function(_data){
+						rosten.readSync(rosten.webPath + "/meeting/addComment/" + id,{dataStr:_data.content,userId:"${user?.id}"},function(data){
+							if(data.result=="true" || data.result == true){
+								rosten.alert("成功！");
+							}else{
+								rosten.alert("失败!");
+							}	
+						});
+					};
 				};
 			
 		});
@@ -106,17 +240,20 @@
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>拟稿部门：</div></td>
 					    <td>
 					    	<input id="drafterDepart" data-dojo-type="dijit/form/ValidationTextBox" 
-			                 	data-dojo-props='trim:true,
+			                 	data-dojo-props='name:"drafterDepart",trim:true,required:true,readOnly:true,
 									value:"${meeting?.drafterDepart}"
 			                '/>
+			                <button data-dojo-type="dijit/form/Button" 
+								data-dojo-props = 'onClick:function(){rosten.selectDepart("${createLink(controller:'system',action:'departTreeDataStore',params:[companyId:company?.id])}",false,"drafterDepart")}'
+							>选择</button>
 			            </td>    
 					</tr>
 					<tr>
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>标题：</div></td>
 					    <td colspan=3>
 					    	<input id="subject" data-dojo-type="dijit/form/ValidationTextBox" 
-			                 	data-dojo-props='name:"subject",
-			                 		trim:true,style:{width:"551px"},
+			                 	data-dojo-props='name:"subject",required:true,
+			                 		trim:true,style:{width:"555px"},
 									value:"${meeting?.subject}"
 			                '/>	
 			           </td>
@@ -126,7 +263,7 @@
 					    <td>
 					    	<input id="startDate" data-dojo-type="dijit/form/DateTextBox" 
 			                 	data-dojo-props='name:"startDate",
-			                 		trim:true,
+			                 		trim:true,required:true,
 									value:"${meeting?.getShowDate("start")}"
 			                '/>
 			            </td>
@@ -134,7 +271,7 @@
 					    <td>
 					    	<input id="endDate" data-dojo-type="dijit/form/DateTextBox" 
 			                 	data-dojo-props='name:"endDate",
-			                 		trim:true,
+			                 		trim:true,required:true,
 									value:"${meeting?.getShowDate("end")}"
 			                '/>
 			            </td>    
@@ -144,15 +281,15 @@
 					    <td>
 					    	<input id="address" data-dojo-type="dijit/form/ValidationTextBox" 
 			                 	data-dojo-props='name:"address",
-			                 		trim:true,
+			                 		trim:true,required:true,
 									value:"${meeting?.address}"
 			                '/>
 			            </td>
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>主持人：</div></td>
 					    <td>
 					    	<input id="presider" data-dojo-type="dijit/form/ValidationTextBox" 
-			                 	data-dojo-props='name:"presider",
-			                 		trim:true,
+			                 	data-dojo-props='name:"presider",readOnly:true,
+			                 		trim:true,required:true,
 									value:"${meeting?.presider}"
 			                '/>
 			                <button data-dojo-type="dijit/form/Button" 
@@ -161,10 +298,10 @@
 			            </td>    
 					</tr>
 					<tr>
-					    <td><div align="right">参会人员：</div></td>
+					    <td><div align="right"><span style="color:red">*&nbsp;</span>参会人员：</div></td>
 					    <td colspan=3>
 					    	<textarea id="joiner" data-dojo-type="dijit/form/SimpleTextarea" 
-    							data-dojo-props='name:"joiner",
+    							data-dojo-props='name:"joiner",readOnly:true,
                                 		"class":"input",
                                 		style:{width:"550px"},
                                 		trim:true,
@@ -180,7 +317,7 @@
 					    <td><div align="right">列席人员：</div></td>
 					    <td colspan=3>
 					    	<textarea id="guesters" data-dojo-type="dijit/form/SimpleTextarea" 
-    							data-dojo-props='name:"guesters",
+    							data-dojo-props='name:"guesters",readOnly:true,
                                 		"class":"input",
                                 		style:{width:"550px"},
                                 		trim:true,

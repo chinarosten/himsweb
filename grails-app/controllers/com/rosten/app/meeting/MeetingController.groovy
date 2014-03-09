@@ -11,7 +11,11 @@ import com.rosten.app.system.User
 class MeetingController {
 	def springSecurityService
 	def meetingService
-		
+	
+	def meetingGetContent ={
+		def meeting = Meeting.get(params.id)
+		render meeting.content
+	}
 	def getFileUpload ={
 		def model =[:]
 		model["docEntity"] = "meeting"
