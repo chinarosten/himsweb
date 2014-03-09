@@ -77,6 +77,9 @@ class Meeting {
 	//当前处理人部门
 	String currentDepart
 	
+	//处理时间
+	Date currentDealDate
+	
 	//状态
 	@GridColumn(name="状态",colIdx=6)
 	String status = "拟稿"

@@ -199,8 +199,7 @@
 					    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>流水号：</div></td>
 					    <td width="250">
 					    	<input id="serialNo" data-dojo-type="dijit/form/ValidationTextBox" 
-			                 	data-dojo-props='name:"serialNo",readOnly:true,
-			                 		trim:true,placeHolder:"保存后自动生成",
+			                 	data-dojo-props='readOnly:true,trim:true,placeHolder:"保存后自动生成",
 									value:"${meeting?.serialNo}"
 			                '/>
 					    </td>

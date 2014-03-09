@@ -148,6 +148,78 @@ class MeetingController {
 	def meetingAdd ={
 		redirect(action:"meetingShow",params:params)
 	}
+	def meetingSave = {
+		def json=[:]
+		
+		//获取配置文档
+		def meetingConfig = MeetingConfig.first()
+		if(!meetingConfig){
+			json["result"] = "noConfig"
+			render json as JSON
+			return
+		}
+		
+		def user = springSecurityService.getCurrentUser()
+		
+		def meetingStatus = "new"
+		def meeting
+		if(params.id && !"".equals(params.id)){
+			meeting = Meeting.get(params.id)
+			meeting.properties = params
+			meeting.clearErrors()
+			meetingStatus = "old"
+		}else{
+			meeting = new Meeting()
+			meeting.properties = params
+			meeting.clearErrors()
+			
+			meeting.company = Company.get(params.companyId)
+			meeting.currentUser = user
+			meeting.currentDepart = params.drafterDepart
+			meeting.currentDealDate = new Date()
+			
+			meeting.drafter = user
+			meeting.drafterDepart = params.drafterDepart
+			
+			meeting.serialNo = meetingConfig.nowYear + meetingConfig.nowSN.toString().padLeft(4,"0")
+		}
+		meeting.presider = User.get(params.presiderId)
+		params.joinerId.split(",").each{
+			meeting.addToGuesters(User.get(it))
+		}
+		params.guestersId.split(",").each{
+			meeting.addToGuesters(User.get(it))
+		}
+		
+		if(!meeting.readers.find{ it.id.equals(user.id) }){
+			meeting.addToReaders(user)
+		}
+		
+		if(meeting.save(flush:true)){
+			json["result"] = true
+			json["id"] = meeting.id
+			json["companyId"] = meeting.company.id
+			
+			if("new".equals(meetingStatus)){
+				//添加日志
+				def meetingLog = new MeetingLog()
+				meetingLog.user = user
+				meetingLog.meeting = meeting
+				meetingLog.content = "拟稿"
+				meetingLog.save(flush:true)
+				
+				//修改配置文档中的流水号
+				meetingConfig.nowSN += 1
+				meetingConfig.save(flush:true)
+			}
+		}else{
+			meeting.errors.each{
+				println it
+			}
+			json["result"] = false
+		}
+		render json as JSON
+	}
 	def meetingShow ={
 		def model =[:]
 		
