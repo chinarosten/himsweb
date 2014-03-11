@@ -3,6 +3,7 @@
  */
 define([
 	"dojo/_base/kernel", 
+	"dojo/has",
 	"dojo/dom-style", 
 	"dojo/dom-class",
 	"dojo/_base/lang", 
@@ -13,12 +14,16 @@ define([
 	"rosten/widget/ActionBar",
 	"rosten/widget/RostenDialog",
 	"rosten/widget/ShowDialog",
-	"rosten/widget/CommentDialog"], function(kernel, domStyle, domClass , lang,registry,_kernel,ConfirmDialog, AlertDialog, ActionBar, RostenDialog,ShowDialog,CommentDialog) {
+	"rosten/widget/CommentDialog"], function(kernel, has,domStyle, domClass , lang,registry,_kernel,ConfirmDialog, AlertDialog, ActionBar, RostenDialog,ShowDialog,CommentDialog) {
 	
 	var behavior = {};
 	behavior.addAttachShow = function(node,jsonObj){
 		var a = document.createElement("a");
-		a.setAttribute("href", rosten.webPath + "/system/downloadFile/" + jsonObj.fileId);
+		if (has("ie")) {
+			a.href = rosten.webPath + "/system/downloadFile/" + jsonObj.fileId;
+		}else{
+			a.setAttribute("href", rosten.webPath + "/system/downloadFile/" + jsonObj.fileId);
+		}
 		a.setAttribute("style","margin-right:20px");
 		a.setAttribute("dealId",jsonObj.fileId);
 		a.innerHTML = jsonObj.fileName;

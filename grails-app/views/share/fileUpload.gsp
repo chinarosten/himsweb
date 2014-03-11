@@ -19,16 +19,17 @@
 		    	<div data-dojo-type="dijit/form/DropDownButton" >
 					<span>添加附件</span>
 					<div data-dojo-type="dijit/TooltipDialog" id="fileUpload_dialog" data-dojo-props="title: 'fileUpload'" style="width:380px">
-							<form data-dojo-type="dijit/form/Form" method="post" 
+							<form data-dojo-type="dijit/form/Form" method="post"
 								action="${createLink(controller:docEntity,action:'uploadFile',id:docEntityId)}" id="fileUpload_form" enctype="multipart/form-data">
 								
 								<div data-dojo-type="dojox/form/Uploader"  type="file" 
 									id="fileUploader"  data-dojo-props="name:'uploadedfile'">添加
 									<script type="dojo/method" data-dojo-event="onComplete" data-dojo-args="dataArray">
 										if(dataArray.result=="true"){
-											dijit.byId("fileUpload_dialog").reset();
-											dijit.byId("fileUpload_dialog").onCancel();
 											rosten.addAttachShow(dojo.byId("fileShow"),dataArray);
+											dijit.byId("fileUpload_fileList").reset();
+											dijit.byId("fileUpload_dialog").onCancel();
+											
 										}else if(dataArray.result=="big"){
 											rosten.alert("上传文件过大，请重新上传！");
 										}else{rosten.alert("上传失败");}
