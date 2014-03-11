@@ -229,6 +229,11 @@ define(["dojo/_base/kernel"
     		var companyId = rosten.kernel.getUserInforByKey("companyid");
     		rosten.openNewWindow("dsj", rosten.webPath + "/dsj/dsjShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
     		break;
+    	case "【会议通知】":
+    		var userid = rosten.kernel.getUserInforByKey("idnumber");
+    		var companyId = rosten.kernel.getUserInforByKey("companyid");
+    		rosten.openNewWindow("meeting", rosten.webPath + "/meeting/meetingShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
+    		break;
     	}
     };
     showStartMail = function(userId,companyId){

@@ -143,12 +143,11 @@
 				rosten.readSync(rosten.webPath + "/bbs/bbsFlowDeal",content,function(data){
 					if(data.result=="true" || data.result == true){
 						rosten.alert("成功！").queryDlgClose= function(){
-							if(type=="agrain"){
-								//刷新首页bbs内容
-								window.opener.showStartBbs("${user?.id}","${company?.id }");
-								//刷新待办事项内容
-								window.opener.showStartGtask("${user?.id}","${company?.id }");
-							}
+							//刷新首页bbs内容
+							window.opener.showStartBbs("${user?.id}","${company?.id }");
+							//刷新待办事项内容
+							window.opener.showStartGtask("${user?.id}","${company?.id }");
+							
 							rosten.pagequit();
 						}
 					}else{

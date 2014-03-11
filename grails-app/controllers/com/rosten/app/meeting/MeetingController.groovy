@@ -387,6 +387,7 @@ class MeetingController {
 
 	def meetingGrid ={
 		def json=[:]
+		def user = User.get(params.userId)
 		def company = Company.get(params.companyId)
 		if(params.refreshHeader){
 			json["gridHeader"] = meetingService.getMeetingListLayout()
@@ -399,11 +400,30 @@ class MeetingController {
 			args["offset"] = (nowPage-1) * perPageNum
 			args["max"] = perPageNum
 			args["company"] = company
-			json["gridData"] = meetingService.getMeetingListDataStore(args)
+			
+			def gridData
+			if("person".equals(params.type)){
+				//个人待办
+				args["user"] = user
+				gridData = meetingService.getMeetingListDataStoreByUser(args)
+			}else if("all".equals(params.type)){
+				//所有文档
+				gridData = meetingService.getMeetingListDataStore(args)
+			}
+			
+			json["gridData"] = gridData
 			
 		}
 		if(params.refreshPageControl){
-			def total = meetingService.getMeetingCount(company)
+			def total
+			if("person".equals(params.type)){
+				//个人待办
+				total = meetingService.getMeetingCountByUser(company,user)
+			}else if("all".equals(params.type)){
+				//所有文档
+				total = meetingService.getMeetingCount(company)
+			}
+			
 			json["pageControl"] = ["total":total.toString()]
 		}
 		render json as JSON
