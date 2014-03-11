@@ -146,7 +146,7 @@
 
 <div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
 	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props=''>
-		<form id="dsj_form" name="dsj_form" url='[controller:"dsj",action:"dsjSave"]' class="rosten_form" style="padding:0px">
+		<form id="dsj_form" name="dsj_form" url='[controller:"dsj",action:"dsjSave"]' onsubmit="return false;" class="rosten_form" style="padding:0px">
 			<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${dsj?.id }"' />
         	<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
         	
@@ -175,7 +175,7 @@
 					    <td>
 					    	<input id="drafter" data-dojo-type="dijit/form/ValidationTextBox" 
 			                 	data-dojo-props='trim:true,readOnly:true,
-									value:"${dsj?.drafter?.username}"
+									value:"${dsj?.drafter?.getFormattedName()}"
 			                '/>
 			            </td>
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>拟稿部门：</div></td>

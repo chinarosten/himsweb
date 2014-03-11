@@ -11,9 +11,14 @@ class SendFileActionController {
 		def strname = "sendFile"
 		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
 		actionList << createAction("查看发文",imgPath + "read.gif","read_" + strname)
-		actionList << createAction("删除发文",imgPath + "delete.png","delete_" + strname)
-		actionList << createAction("状态迁移",imgPath + "changeStatus.gif",strname + "_changeStatus")
-		actionList << createAction("用户迁移",imgPath + "changeUser.gif",strname + "_changeUser")
+		
+		def user = User.get(params.userId)
+		if("admin".equals(user.getUserType())){
+			actionList << createAction("删除发文",imgPath + "delete.png","delete_" + strname)
+			actionList << createAction("状态迁移",imgPath + "changeStatus.gif",strname + "_changeStatus")
+			actionList << createAction("用户迁移",imgPath + "changeUser.gif",strname + "_changeUser")
+		}
+		
 		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
 		
 		render actionList as JSON

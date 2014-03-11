@@ -72,7 +72,7 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 		case "allDsjManage":
 			var naviJson = {
 				identifier : oString,
-				actionBarSrc : rosten.webPath + "/dsjAction/allDsjView",
+				actionBarSrc : rosten.webPath + "/dsjAction/allDsjView?userId=" + userid,
 				gridSrc : rosten.webPath + "/dsj/dsjGrid?companyId=" + companyId + "&userId=" + userid + "&type=all"
 			};
 			rosten.kernel.addRightContent(naviJson);

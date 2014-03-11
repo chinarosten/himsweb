@@ -68,7 +68,7 @@ class Bbs {
 	@GridColumn(name="当前处理人",width="60px",colIdx=5)
 	def getCurrentUserName(){
 		if(currentUser!=null){
-			return currentUser.username
+			return currentUser.getFormattedName()
 		}else{
 			return ""
 		}
@@ -96,7 +96,7 @@ class Bbs {
 	@GridColumn(name="拟稿人",width="60px",colIdx=7)
 	def getFormattedDrafter(){
 		if(drafter!=null){
-			return drafter.username
+			return drafter.getFormattedName()
 		}else{
 			return ""
 		}	

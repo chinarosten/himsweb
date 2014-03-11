@@ -71,7 +71,7 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 		case "allMeetingManage":
 			var naviJson = {
 				identifier : oString,
-				actionBarSrc : rosten.webPath + "/meetingAction/allMeetingView",
+				actionBarSrc : rosten.webPath + "/meetingAction/allMeetingView?userId=" + userid,",
 				gridSrc : rosten.webPath + "/meeting/meetingGrid?companyId=" + companyId + "&userId=" + userid + "&type=all"
 			};
 			rosten.kernel.addRightContent(naviJson);

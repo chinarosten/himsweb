@@ -74,7 +74,7 @@
 </div>
 <div style="text-Align:center">
 	
-<g:form id="dsjConfig_form" name="dsjConfig_form" url='[controller:"dsj",action:"dsjConfigSave"]' class="rosten_form" style="text-align:left">
+<g:form id="dsjConfig_form" name="dsjConfig_form" url='[controller:"dsj",action:"dsjConfigSave"]' onsubmit="return false;" class="rosten_form" style="text-align:left">
 	<fieldset class="fieldset-form">
 	<legend class="tableHeader">配置文档</legend>
 		<input id="id" data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-props='name:"id",style:{display:"none"},value:"${dsjConfig?.id }"' />
@@ -86,7 +86,7 @@
 			    	<input id="nowYear" data-dojo-type="dijit/form/ValidationTextBox" 
 	                 	data-dojo-props='name:"nowYear",${fieldAcl.isReadOnly("nowYear")},
 	                 		trim:true,
-	                 		class:"input",
+	                 		"class":"input",
 	                 		required:true,
 							value:"${dsjConfig?.nowYear}"
 	                '/>
@@ -96,7 +96,7 @@
 			    	<input id="nowSN" data-dojo-type="dijit/form/ValidationTextBox" 
 	                 	data-dojo-props='name:"nowSN",${fieldAcl.isReadOnly("nowSN")},
 	                 		trim:true,
-	                 		class:"input",
+	                 		"class":"input",
 	                 		required:true,
 							value:"${dsjConfig?.nowSN}"
 	                '/>
@@ -122,7 +122,7 @@
 	                 	data-dojo-props='name:"frontYear",${fieldAcl.isReadOnly("frontYear")},
 	                 		trim:true,
 	                 		required:true,
-	                 		class:"input",
+	                 		"class":"input",
 							value:"${dsjConfig?.frontYear}"
 	                '/>
 			    </td>
@@ -132,7 +132,7 @@
 	                 	data-dojo-props='name:"frontSN",${fieldAcl.isReadOnly("frontSN")},
 	                 		trim:true,
 	                 		required:true,
-	                 		class:"input",
+	                 		"class":"input",
 							value:"${dsjConfig?.frontSN}"
 	                '/>
 	           </td>

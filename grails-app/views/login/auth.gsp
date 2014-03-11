@@ -140,6 +140,17 @@
 			color: #c33;
 		}
 	</style>
+	<script type="text/javascript">
+	/*
+		require(["dojo/parser","dojo/_base/xhr"],function(){
+
+			
+			login = function(){
+				
+			}
+		});
+		*/
+	</script>
 </head>
 
 <body>

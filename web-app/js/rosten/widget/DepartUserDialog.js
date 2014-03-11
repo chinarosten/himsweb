@@ -316,7 +316,8 @@ define(["dojo/_base/declare",
             });
             var _openOnClick= true;
             if (!this.showCheckBox){
-            	_openOnClick = false;
+            	//默认均为可以单击打开
+            	//_openOnClick = false;
             }
             var _treeArgs = {
                 model: treeModel,

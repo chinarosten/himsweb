@@ -37,7 +37,7 @@
 </div>
 <div style="text-Align:center">
 	
-<g:form id="userSimple_form" name="userSimple_form" class="rosten_form" style="text-align:left">
+<g:form id="userSimple_form" name="userSimple_form" onsubmit="return false;" class="rosten_form" style="text-align:left">
 	<fieldset class="fieldset-form">
 	<legend class="tableHeader">个人资料</legend>
 		<input id="id" data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-props='name:"id",style:{display:"none"},value:"${user?.id }"' />
@@ -47,14 +47,14 @@
 			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>用户名：</div></td>
 			    <td width="240">
 			    	<input id="username" data-dojo-type="dijit/form/ValidationTextBox" 
-	                 	data-dojo-props='readOnly:true,class:"input",trim:true,
+	                 	data-dojo-props='readOnly:true,"class":"input",trim:true,
 							value:"${user?.username}"
 	                '/>
 			    </td>
 			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>所属机构：</div></td>
 			    <td width="240">
 			    	<input data-dojo-type="dijit/form/ValidationTextBox" 
-	                 	data-dojo-props='class:"input",readOnly:true,
+	                 	data-dojo-props='"class":"input",readOnly:true,
 							value:"${user?.getDepartName()}"
 	                '/>
 	           </td>
@@ -63,14 +63,14 @@
 			    <td><div align="right">中文名称：</div></td>
 			    <td>
 	                <input id="chinaName" data-dojo-type="dijit/form/ValidationTextBox" 
-	                 	data-dojo-props='name:"chinaName",trim:true,class:"input",
+	                 	data-dojo-props='name:"chinaName",trim:true,"class":"input",
 							value:"${user?.chinaName}"
 	                '/>
 			    </td>
 			    <td><div align="right">具有角色：</div></td>
 			    <td>
 			    	<input id="allowrolesName" data-dojo-type="dijit/form/ValidationTextBox" 
-	                 	data-dojo-props='readOnly:true,class:"input",
+	                 	data-dojo-props='readOnly:true,"class":"input",
 							value:"${allowrolesName}"
 	                '/>
 	           </td>

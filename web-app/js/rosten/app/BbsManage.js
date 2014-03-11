@@ -80,7 +80,7 @@ define([ "dojo/_base/connect", "dijit/registry","rosten/util/general", "rosten/k
 		case "allbbsManage":
 			var naviJson = {
 				identifier : oString,
-				actionBarSrc : rosten.webPath + "/bbsAction/allbbsView",
+				actionBarSrc : rosten.webPath + "/bbsAction/allbbsView?userId=" + userid,
 				gridSrc : rosten.webPath + "/bbs/bbsGrid?companyId=" + companyId + "&userId=" + userid + "&type=all"
 			};
 			rosten.kernel.addRightContent(naviJson);

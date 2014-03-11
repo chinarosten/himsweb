@@ -49,8 +49,8 @@ class DsjService {
 		def pa=[max:max,offset:offset]
 		def query = {
 			eq("company",company)
-			
-			}
+			order("createDate", "desc")
+		}
 		return c.list(pa,query)
 	}
 	def getDsjCount ={company->

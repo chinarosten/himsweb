@@ -1414,7 +1414,7 @@ class SystemController {
 							}
 							if(it.id.equals(depart.id)){
 								//增加当前用户
-								def userMap = ["id":user.id,"name":user.username,"type":"user","departId":it.id]
+								def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id]
 								json.items+=userMap
 								
 								def userChildMap = ["_reference":user.id]
@@ -1443,7 +1443,7 @@ class SystemController {
 						}
 						if(blongDeparts.contains(it)){
 							//增加当前用户
-							def userMap = ["id":user.id,"name":user.username,"type":"user","departId":it.id]
+							def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id]
 							json.items+=userMap
 							
 							def userChildMap = ["_reference":user.id]
@@ -1475,11 +1475,7 @@ class SystemController {
 					}
 				}
 				it.getAllUser().each{user->
-					def userName = user.username
-					if(user.chinaName!=null){
-						userName = user.chinaName
-					}
-					def userMap = ["id":user.id,"name":userName,"type":"user","departId":it.id]
+					def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id]
 					json.items+=userMap
 					
 					def userChildMap = ["_reference":user.id]
@@ -1499,11 +1495,7 @@ class SystemController {
 					sMap.children += childMap
 				}
 				it.getAllUser().each{user->
-					def userName = user.username
-					if(user.chinaName!=null){
-						userName = user.chinaName
-					}
-					def userMap = ["id":user.id,"name":userName,"type":"user","departId":it.id]
+					def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id]
 					json.items+=userMap
 					
 					def userChildMap = ["_reference":user.id]
