@@ -17,6 +17,7 @@
 		 		"dojo/_base/kernel",
 		 		"dijit/registry",
 		 		"dojo/_base/xhr",
+		 		"dojo/has",
 		 		"dojo/date/stamp",
 		 		"rosten/widget/DepartUserDialog",
 		 		"dijit/layout/TabContainer",
@@ -34,10 +35,15 @@
 		     	"rosten/widget/TitlePane",
 		     	"rosten/app/Application",
 		     	"rosten/kernel/behavior"],
-			function(parser,kernel,registry,xhr,datestamp,DepartUserDialog){
+			function(parser,kernel,registry,xhr,has,datestamp,DepartUserDialog){
 				kernel.addOnLoad(function(){
 					rosten.init({webpath:"${request.getContextPath()}"});
 					rosten.cssinit();
+					if (has("ie")) {
+						require(["dojox/form/uploader/plugins/Flash"]);
+					}else{
+						require(["dojox/form/uploader/plugins/HTML5"]);
+					}
 				});
 				dsj_add = function(){
 					var time = registry.byId("time");
