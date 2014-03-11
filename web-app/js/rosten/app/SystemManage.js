@@ -297,6 +297,7 @@ define(["dojo/_base/connect",
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
         rosten.openNewWindow("user", rosten.webPath + "/system/userShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+        rosten.kernel.getGrid().clearSelected();
     };
     delete_user = function() {
         var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
@@ -348,6 +349,7 @@ define(["dojo/_base/connect",
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
         rosten.openNewWindow("resource", rosten.webPath + "/system/resourceShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+        rosten.kernel.getGrid().clearSelected();
     };
     delete_resource = function() {
         var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
@@ -375,6 +377,7 @@ define(["dojo/_base/connect",
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
         rosten.openNewWindow("permission", rosten.webPath + "/system/permissionShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+        rosten.kernel.getGrid().clearSelected();
     };
     delete_permission = function() {
         var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
@@ -403,6 +406,7 @@ define(["dojo/_base/connect",
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
         rosten.openNewWindow("model", rosten.webPath + "/system/roleShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+        rosten.kernel.getGrid().clearSelected();
     };
     delete_role = function() {
         var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
@@ -431,6 +435,7 @@ define(["dojo/_base/connect",
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
         rosten.openNewWindow("model", rosten.webPath + "/system/groupShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+        rosten.kernel.getGrid().clearSelected();
     };
     delete_group = function() {
         var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
@@ -460,6 +465,7 @@ define(["dojo/_base/connect",
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
         rosten.openNewWindow("model", rosten.webPath + "/system/modelShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+        rosten.kernel.getGrid().clearSelected();
     };
     delete_model = function() {
         //获取参数数据
@@ -488,6 +494,7 @@ define(["dojo/_base/connect",
         if (unid == "")
             return;
         rosten.openNewWindow("question", rosten.webPath + "/system/questionShow/" + unid);
+        rosten.kernel.getGrid().clearSelected();
     };
     read_question = function() {
         change_question();
@@ -517,6 +524,7 @@ define(["dojo/_base/connect",
 
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         rosten.openNewWindow("company", rosten.webPath + "/system/userShow/" + unid + "?userid=" + userid);
+        rosten.kernel.getGrid().clearSelected();
     };
     delete_administrator = function() {
         var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
@@ -543,6 +551,7 @@ define(["dojo/_base/connect",
 
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         rosten.openNewWindow("company", rosten.webPath + "/system/companyShow/" + unid + "?userid=" + userid);
+        rosten.kernel.getGrid().clearSelected();
     };
     delete_company = function() {
         var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
@@ -571,6 +580,7 @@ define(["dojo/_base/connect",
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
         rosten.openNewWindow("userType", rosten.webPath + "/system/userTypeShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+        rosten.kernel.getGrid().clearSelected();
     };
     delete_userType = function() {
         var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
