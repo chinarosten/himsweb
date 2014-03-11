@@ -4,11 +4,11 @@
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
 	
-	dsj_changeStatus = {
+	dsj_changeStatus = function(){
 			
 			
 	};
-	dsj_changeUser = {
+	dsj_changeUser = function(){
 			
 	};
 	dsj_formatTitle = function(value,rowIndex){
@@ -28,10 +28,12 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
         rosten.openNewWindow("dsj", rosten.webPath + "/dsj/dsjAdd?companyId=" + companyId + "&userid=" + userid);
     };
 	change_dsj = function() {
+		var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
 		var unid = rosten.getGridUnid("single");
 		if (unid == "")
 			return;
-		rosten.openNewWindow("dsj", rosten.webPath + "/dsj/dsjShow/" + unid);
+		rosten.openNewWindow("dsj", rosten.webPath + "/dsj/dsjShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
 	};
 	read_dsj = function() {
 		change_dsj();

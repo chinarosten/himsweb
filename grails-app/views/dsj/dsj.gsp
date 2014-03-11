@@ -99,6 +99,9 @@
 						}	
 					});
 				};
+				dsj_achive = function(){
+					dsj_deal("achive");
+				};
 				dsj_submit = function(){
 					var rostenShowDialog = rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","single");
 		            rostenShowDialog.callback = function(data) {

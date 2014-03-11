@@ -26,6 +26,10 @@ class User {
 	@GridColumn(name="中文名")
 	String chinaName
 	
+	def getFormattedName(){
+		return chinaName?chinaName:username
+	}
+	
 	//用户类型
 	UserType userTypeEntity
 	

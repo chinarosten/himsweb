@@ -99,14 +99,14 @@
 						return;
 					}
 					var joiner = registry.byId("joiner");
-					if(!joiner.isValid()){
+					if(joiner.get("value")==""){
 						rosten.alert("参与人员不正确！").queryDlgClose = function(){
 							joiner.focus();
 						};
 						return;
 					}
 					
-					rosten.readSync(rosten.webPath + "/meeting/meetingSave",{},function(data){
+					rosten.readSync(rosten.webPath + "/meeting/meetingSave",{content:registry.byId("content").get("value")},function(data){
 						if(data.result=="true" || data.result == true){
 							rosten.alert("保存成功！").queryDlgClose= function(){
 								if(window.location.href.indexOf(data.id)==-1){
@@ -142,6 +142,9 @@
 							rosten.alert("失败!");
 						}	
 					});
+				};
+				meeting_achive = function(){
+					meeting_deal("achive");
 				};
 				meeting_submit = function(){
 					var rostenShowDialog = rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","single");
@@ -183,7 +186,7 @@
 <body>
 <div class="rosten_action">
 	<div data-dojo-type="rosten/widget/ActionBar" data-dojo-id="meeting_actionBar" 
-		data-dojo-props='actionBarSrc:"${createLink(controller:'meetingAction',action:'meetingForm')}"'>
+		data-dojo-props='actionBarSrc:"${createLink(controller:'meetingAction',action:'meetingForm',id:meeting?.id,params:[userid:user?.id])}"'>
 	</div>
 </div>
 
@@ -222,7 +225,7 @@
 					    <td>
 					    	<input id="drafter" data-dojo-type="dijit/form/ValidationTextBox" 
 			                 	data-dojo-props='trim:true,readOnly:true,
-									value:"${meeting?.drafter?.username}"
+									value:"${meeting.drafter?.getFormattedName()}"
 			                '/>
 			            </td>
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>拟稿部门：</div></td>
@@ -277,7 +280,7 @@
 					    <td>
 					    	<input id="presider" data-dojo-type="dijit/form/ValidationTextBox" 
 			                 	data-dojo-props='readOnly:true,trim:true,required:true,
-									value:"${meeting?.presider?.username}"
+									value:"${meeting.presider?.getFormattedName()}"
 			                '/>
 			                <input  data-dojo-type="dijit/form/ValidationTextBox" id="presiderId" data-dojo-props='name:"presiderId",style:{display:"none"},value:"${meeting?.presider?.id }"' />
 			                <button data-dojo-type="dijit/form/Button" 
@@ -288,32 +291,32 @@
 					<tr>
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>参会人员：</div></td>
 					    <td colspan=3>
-					    	<input  data-dojo-type="dijit/form/ValidationTextBox" id="joinerId" data-dojo-props='name:"joinerId",style:{display:"none"},value:"${joinerIds }"' />
+					    	<input  data-dojo-type="dijit/form/ValidationTextBox" id="joinerIds" data-dojo-props='name:"joinerIds",style:{display:"none"},value:"${joinerIds.join(",") }"' />
 					    	<textarea id="joiner" data-dojo-type="dijit/form/SimpleTextarea" 
     							data-dojo-props='readOnly:true,"class":"input",
                                 		style:{width:"550px"},
                                 		trim:true,
-                                		value:"${joiner}"
+                                		value:"${joiners.join(",")}"
                            '>
     						</textarea>
     						<button data-dojo-type="dijit/form/Button" 
-								data-dojo-props = 'onClick:function(){rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","multile","joiner","joinerId")}'
+								data-dojo-props = 'onClick:function(){rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","multile","joiner","joinerIds")}'
 							>选择</button>
 			            </td>    
 					</tr>
 					<tr>
 					    <td><div align="right">列席人员：</div></td>
 					    <td colspan=3>
-					    	<input  data-dojo-type="dijit/form/ValidationTextBox" id="guestersId" data-dojo-props='name:"guestersId",style:{display:"none"},value:"${guestersIds }"' />
+					    	<input  data-dojo-type="dijit/form/ValidationTextBox" id="guesterIds" data-dojo-props='name:"guesterIds",style:{display:"none"},value:"${guesterIds.join(",") }"' />
 					    	<textarea id="guesters" data-dojo-type="dijit/form/SimpleTextarea" 
     							data-dojo-props='readOnly:true,"class":"input",
                                 		style:{width:"550px"},
                                 		trim:true,
-                                		value:"${guesters}"
+                                		value:"${guesters.join(",")}"
                            '>
     						</textarea>
     						<button data-dojo-type="dijit/form/Button" 
-								data-dojo-props = 'onClick:function(){rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","multile","guesters","guestersId")}'
+								data-dojo-props = 'onClick:function(){rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","multile","guesters","guesterIds")}'
 							>选择</button>
 			            </td>    
 					</tr>

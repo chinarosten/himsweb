@@ -28,14 +28,20 @@ class MeetingActionController {
 			if(user.equals(meeting.currentUser)){
 				//当前处理人
 				switch (meeting.status){
-					case "起草":
+					case "拟稿":
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
 						break;
 					case "审核":
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
-						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
+						actionList << createAction("同意",webPath +imgPath + "ok.png",strname + "_agrain")
+						actionList << createAction("不同意",webPath +imgPath + "back.png",strname + "_notAgrain")
+						break;
+					case "已签发":
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname +"_add")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
+						actionList << createAction("归档",webPath +imgPath + "gd.png",strname +"_achive")
 						break;
 				}
 			}

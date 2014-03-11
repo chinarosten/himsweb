@@ -4,24 +4,35 @@
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
 	
-	meeting_changeStatus = {
+	meeting_changeStatus = function(){
 			
 			
 	};
-	meeting_changeUser = {
+	meeting_changeUser = function(){
 			
 	};
-	
+	meeting_formatTitle =function(value,rowIndex){
+		return "<a href=\"javascript:meeting_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+	};
+	meeting_onMessageOpen = function(rowIndex){
+        var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("meeting", rosten.webPath + "/meeting/meetingShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
+	};
 	add_meeting = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
         rosten.openNewWindow("meeting", rosten.webPath + "/meeting/meetingAdd?companyId=" + companyId + "&userid=" + userid);
     };
 	change_meeting = function() {
+		var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
 		var unid = rosten.getGridUnid("single");
 		if (unid == "")
 			return;
-		rosten.openNewWindow("meeting", rosten.webPath + "/meeting/meetingShow/" + unid);
+		rosten.openNewWindow("meeting", rosten.webPath + "/meeting/meetingShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
 	};
 	read_meeting = function() {
 		change_meeting();

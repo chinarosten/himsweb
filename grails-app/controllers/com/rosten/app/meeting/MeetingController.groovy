@@ -7,11 +7,118 @@ import com.rosten.app.util.Util
 import com.rosten.app.system.Attachment
 import com.rosten.app.system.Company
 import com.rosten.app.system.User
+import com.rosten.app.gtask.Gtask
 
 class MeetingController {
 	def springSecurityService
 	def meetingService
+	def startService
 	
+	def meetingFlowDeal = {
+		def json=[:]
+		def meeting = Meeting.get(params.id)
+		
+		//处理当前人的待办事项
+		def currentUser = springSecurityService.getCurrentUser()
+		def frontStatus = meeting.status
+		
+		switch (params.deal){
+			case "submit":
+				meeting.status="审核"
+				break;
+			case "agrain":
+				meeting.status = "已签发"
+				break;
+			case "achive":
+				meeting.status = "已归档"
+				meeting.currentUser = null
+				meeting.currentDepart = null
+				meeting.currentDealDate = new Date()
+				break;
+			case "notAgrain":
+				meeting.status = "不同意"
+				meeting.currentUser = null
+				meeting.currentDepart = null
+				meeting.currentDealDate = new Date()
+				break;
+		}
+		
+		def nextUsers=[]
+		if(params.dealUser){
+			//下一步相关信息处理
+			def dealUsers = params.dealUser.split(",")
+			if(dealUsers.size() >1){
+				//并发
+			}else{
+				//串行
+				def nextUser = User.get(Util.strLeft(params.dealUser,":"))
+				def args = [:]
+				args["type"] = "【会议通知】"
+				args["content"] = "请您审核名称为  【" + meeting.subject +  "】 的会议通知"
+				args["contentStatus"] = meeting.status
+				args["contentId"] = meeting.id
+				args["user"] = nextUser
+				args["company"] = nextUser.company
+				
+				startService.addGtask(args)
+				
+				meeting.currentUser = nextUser
+				meeting.currentDepart = Util.strRight(params.dealUser, ":")
+				meeting.currentDealDate = new Date()
+				
+				if(!meeting.readers.find{ item->
+					item.id.equals(nextUser.id)
+				}){
+					meeting.addToReaders(nextUser)
+				}
+				nextUsers << nextUser.getFormattedName()
+			}
+			
+		}
+		
+		def gtask = Gtask.findWhere(
+			user:currentUser,
+			company:currentUser.company,
+			contentId:meeting.id,
+			contentStatus:frontStatus
+		)
+		if(gtask!=null && "0".equals(gtask.status)){
+			gtask.dealDate = new Date()
+			gtask.status = "1"
+			gtask.save()
+		}
+		
+		if(meeting.save(flush:true)){
+			//添加日志
+			def meetingLog = new MeetingLog()
+			meetingLog.user = currentUser
+			meetingLog.meeting = meeting
+			
+			switch (meeting.status){
+				case "审核":
+					meetingLog.content = "提交审核【" + nextUsers.join("、") + "】"
+					break
+				case "已签发":
+					meetingLog.content = "签发文件【" + nextUsers.join("、") + "】" 
+					break
+				case "已归档":
+					meetingLog.content = "归档发文"
+					break
+				case "不同意":
+					meetingLog.content = "不同意签发！"
+					break
+			}
+			meetingLog.save(flush:true)
+			
+			json["result"] = true
+		}else{
+			meeting.errors.each{
+				println it
+			}
+			json["result"] = false
+		}
+		render json as JSON
+	}
 	def meetingGetContent ={
 		def meeting = Meeting.get(params.id)
 		render meeting.content
@@ -113,7 +220,7 @@ class MeetingController {
 		def model =[:]
 		def meeting = Meeting.get(params.id)
 		if(meeting){
-			def logs = meetingComment.findAllByMeeting(meeting,[ sort: "createDate", order: "desc"])
+			def logs = MeetingComment.findAllByMeeting(meeting,[ sort: "createDate", order: "desc"])
 			model["log"] = logs
 		}
 		
@@ -184,13 +291,20 @@ class MeetingController {
 			meeting.serialNo = meetingConfig.nowYear + meetingConfig.nowSN.toString().padLeft(4,"0")
 		}
 		meeting.presider = User.get(params.presiderId)
-		params.joinerId.split(",").each{
-			meeting.addToGuesters(User.get(it))
-		}
-		params.guestersId.split(",").each{
-			meeting.addToGuesters(User.get(it))
+		
+		if(params.joinerIds){
+			meeting.joiners?.clear()
+			params.joinerIds.split(",").each{
+				meeting.addToJoiners(User.get(it))
+			}
 		}
 		
+		if(params.guesterIds){
+			meeting.guesters?.clear()
+			params.guesterIds.split(",").each{
+				meeting.addToGuesters(User.get(it))
+			}
+		}
 		if(!meeting.readers.find{ it.id.equals(user.id) }){
 			meeting.addToReaders(user)
 		}
@@ -240,6 +354,26 @@ class MeetingController {
 		model["user"]=user
 		model["company"] = company
 		model["meeting"] = meeting
+		
+		//参与人员
+		def joiners =[]
+		def joinerIds =[]
+		meeting.joiners.each { elem ->
+			joiners << elem.chinaName?elem.chinaName:elem.username
+			joinerIds << elem.id
+		}
+		model["joiners"] = joiners
+		model["joinerIds"] = joinerIds
+		
+		//列些人员
+		def guesters =[]
+		def guesterIds =[]
+		meeting.guesters.each { elem ->
+			guesters << elem.chinaName?elem.chinaName:elem.username
+			guesterIds << elem.id
+		}
+		model["guesters"] = guesters
+		model["guesterIds"] = guesterIds
 		
 		FieldAcl fa = new FieldAcl()
 		if("normal".equals(user.getUserType())){

@@ -31,12 +31,21 @@ class DsjController {
 			case "agrain":
 				dsj.status = "已签发"
 				break;
+			case "achive":
+				dsj.status = "已归档"
+				dsj.currentUser = null
+				dsj.currentDepart = null
+				dsj.currentDealDate = new Date()
+				break;
 			case "notAgrain":
 				dsj.status = "不同意"
+				dsj.currentUser = null
+				dsj.currentDepart = null
+				dsj.currentDealDate = new Date()
 				break;
 		}
 		
-		def nextUser=""
+		def nextUsers=[]
 		if(params.dealUser){
 			//下一步相关信息处理
 			def dealUsers = params.dealUser.split(",")
@@ -44,28 +53,27 @@ class DsjController {
 				//并发
 			}else{
 				//串行
-				def _user = User.get(Util.strLeft(params.dealUser,":"))
+				def nextUser = User.get(Util.strLeft(params.dealUser,":"))
 				def args = [:]
 				args["type"] = "【大事记】"
 				args["content"] = "请您审核名称为  【" + dsj.subject +  "】 的大事记"
 				args["contentStatus"] = dsj.status
 				args["contentId"] = dsj.id
-				args["user"] = _user
-				args["company"] = _user.company
+				args["user"] = nextUser
+				args["company"] = nextUser.company
 				
 				startService.addGtask(args)
 				
-				dsj.currentUser = _user
-				def departEntity = Depart.get(Util.strRight(params.dealUser, ":"))
-				dsj.currentDepart = departEntity.departName
+				dsj.currentUser = nextUser
+				dsj.currentDepart = Util.strRight(params.dealUser, ":")
 				dsj.currentDealDate = new Date()
 				
 				if(!dsj.readers.find{ item->
-					item.id.equals(_user.id)
+					item.id.equals(nextUser.id)
 				}){
-					dsj.addToReaders(_user)
+					dsj.addToReaders(nextUser)
 				}
-				nextUser = _user.username
+				nextUsers << nextUser.chinaName?nextUser.chinaName:nextUser.username
 			}
 			
 		}
@@ -76,7 +84,7 @@ class DsjController {
 			contentId:dsj.id,
 			contentStatus:frontStatus
 		)
-		if(gtask!=null){
+		if(gtask!=null && "0".equals(gtask.status)){
 			gtask.dealDate = new Date()
 			gtask.status = "1"
 			gtask.save()
@@ -90,13 +98,16 @@ class DsjController {
 			
 			switch (dsj.status){
 				case "审核":
-					dsjLog.content = "提交【" + nextUser + "】" + dsj.status
+					dsjLog.content = "提交审核【" + nextUsers.join("、") + "】"
 					break
 				case "已签发":
-					dsjLog.content = dsj.status
+					dsjLog.content = "签发文件【" + nextUsers.join("、") + "】" 
+					break
+				case "已归档":
+					dsjLog.content = "归档发文"
 					break
 				case "不同意":
-					dsjLog.content = dsj.status
+					dsjLog.content = "不同意签发！"
 					break
 			}
 			dsjLog.save(flush:true)

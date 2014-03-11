@@ -6,11 +6,11 @@ define([ "dojo/_base/connect", "dijit/registry","rosten/util/general", "rosten/k
 	
 	var general = new General();
 	
-	bbs_changeStatus = {
+	bbs_changeStatus = function(){
 			
 			
 	};
-	bbs_changeUser = {
+	bbs_changeUser = function(){
 			
 	};
 	formatBbsLevel = function(value){

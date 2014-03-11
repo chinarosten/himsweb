@@ -3,11 +3,11 @@
  */
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
-	sendFile_changeStatus = {
+	sendFile_changeStatus = function(){
 			
 			
 	};
-	sendFile_changeUser = {
+	sendFile_changeUser = function(){
 			
 	};
 	sendFile_formatTitle = function(value,rowIndex){
@@ -69,11 +69,12 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
         rosten.openNewWindow("sendfile", rosten.webPath + "/sendFile/sendFileAdd?companyId=" + companyId + "&userid=" + userid);
     };
 	change_sendFile = function() {
+		var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
 		var unid = rosten.getGridUnid("single");
 		if (unid == "")
 			return;
-		rosten.openNewWindow("sendFile", rosten.webPath
-				+ "/sendFile/sendFileShow/" + unid);
+		rosten.openNewWindow("sendFile", rosten.webPath + "/sendFile/sendFileShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
 	};
 	read_sendFile = function() {
 		change_sendFile();
