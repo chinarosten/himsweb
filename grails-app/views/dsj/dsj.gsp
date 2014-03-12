@@ -40,9 +40,7 @@
 					rosten.init({webpath:"${request.getContextPath()}"});
 					rosten.cssinit();
 					if (has("ie")) {
-						require(["dojox/form/uploader/plugins/Flash"]);
-					}else{
-						require(["dojox/form/uploader/plugins/HTML5"]);
+						//require(["dojox/form/uploader/plugins/HTML5"]);
 					}
 
 					<g:if test="${dsj.id && dsj.id!=null && !"".equals(dsj.id)}">
