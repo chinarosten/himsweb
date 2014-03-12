@@ -44,6 +44,13 @@
 					}else{
 						require(["dojox/form/uploader/plugins/HTML5"]);
 					}
+
+					<g:if test="${dsj.id && dsj.id!=null && !"".equals(dsj.id)}">
+						rosten.readSync(rosten.webPath + "/dsj/dsjGetContent/${dsj?.id}",{},function(data){
+							registry.byId("subject").set("value",data.subject);
+							registry.byId("description").set("value",data.description);
+						});
+					</g:if>
 				});
 				dsj_add = function(){
 					var time = registry.byId("time");
@@ -201,7 +208,7 @@
 					    	<textarea id="subject" data-dojo-type="dijit/form/SimpleTextarea" 
     							data-dojo-props='name:"subject","class":"input",
                                 		style:{width:"550px"},
-                                		trim:true,value:"${dsj?.subject }"
+                                		trim:true,value:"${}"
                            '>
     						</textarea>
 					    </td>
@@ -212,7 +219,7 @@
 					    	<textarea id="description" data-dojo-type="dijit/form/SimpleTextarea" 
     							data-dojo-props='name:"description","class":"input",
                                		style:{width:"550px"},rows:"10",
-                               		trim:true,value:"${dsj?.description }"
+                               		trim:true,value:"${ }"
                            '>
     						</textarea>
 					    </td>

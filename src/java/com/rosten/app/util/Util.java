@@ -10,6 +10,9 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import java.util.zip.*;
 import java.sql.Timestamp;
 
@@ -20,6 +23,16 @@ import java.sql.Timestamp;
  *          工具类
  */
 public final class Util {
+
+	// 过滤特殊字符
+	public static String StringFilter(String str) throws PatternSyntaxException {
+		if(str!=null){
+			String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+			Pattern p = Pattern.compile(regEx);
+			Matcher m = p.matcher(str);
+			return m.replaceAll("").trim();
+		}else return null;
+	}
 
 	/**
 	 * @param len
@@ -184,6 +197,7 @@ public final class Util {
 			return Float.valueOf(n.toString()).floatValue();
 
 	}
+
 	public static long obj2Long(Object n) {// Object转long型
 		if (null == n)
 			return 0;
@@ -251,25 +265,27 @@ public final class Util {
 		}
 		return strTarget;
 	}
-	public static String strLeft(String oStr,String splitStr){
-		int index =  oStr.indexOf(splitStr);
-		if(index !=-1){
-			return oStr.substring(0,index);
-		}else{
+
+	public static String strLeft(String oStr, String splitStr) {
+		int index = oStr.indexOf(splitStr);
+		if (index != -1) {
+			return oStr.substring(0, index);
+		} else {
 			return oStr;
 		}
 	}
-	public static String strRight(String oStr,String splitStr){
-		int index =  oStr.indexOf(splitStr);
-		if(index !=-1){
+
+	public static String strRight(String oStr, String splitStr) {
+		int index = oStr.indexOf(splitStr);
+		if (index != -1) {
 			return oStr.substring(index + 1);
-		}else{
+		} else {
 			return oStr;
 		}
 	}
 
 	/**
-	 *<br>
+	 * <br>
 	 * 方法说明：实现文件的压缩处理 <br>
 	 * 输入参数：String fileName 压缩的文件 <br>
 	 * 返回类型：
@@ -342,8 +358,8 @@ public final class Util {
 		Process process = null;
 		try {
 			process = Runtime.getRuntime().exec("ipconfig /all");// windows下的命令，显示信息中包含有mac地址信息
-			bufferedReader = new BufferedReader(new InputStreamReader(process
-					.getInputStream()));
+			bufferedReader = new BufferedReader(new InputStreamReader(
+					process.getInputStream()));
 			String line = null;
 			int index = -1;
 			while ((line = bufferedReader.readLine()) != null) {
@@ -374,4 +390,3 @@ public final class Util {
 		return mac;
 	}
 }
-

@@ -16,6 +16,13 @@ class DsjController {
 	def dsjService
 	def startService
 	
+	def dsjGetContent ={
+		def json=[:]
+		def dsj = Dsj.get(params.id)
+		json["subject"] = dsj.subject
+		json["description"] = dsj.description
+		render json as JSON
+	}
 	def dsjFlowDeal = {
 		def json=[:]
 		def dsj = Dsj.get(params.id)

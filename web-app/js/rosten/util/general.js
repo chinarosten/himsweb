@@ -4,7 +4,47 @@
  */
 define(["dojo/_base/declare"], function(declare) {
     return declare("rosten.util.general", null, {
-
+    	
+    	/*
+    	 * 过滤网页中的html标签
+    	 */
+    	/*
+    	dealHtml:function(str){
+    		str = Regex.Replace(str, @"\<(img)[^>]*>|<\/(img)>", "", RegexOptions.IgnoreCase);
+    		str = Regex.Replace(str, @"\<(table|tbody|tr|td|th|)[^>]*>|<\/(table|tbody|tr|td|th|)>", "", RegexOptions.IgnoreCase);
+    		str = Regex.Replace(str, @"\<(div|blockquote|fieldset|legend)[^>]*>|<\/(div|blockquote|fieldset|legend)>", "", RegexOptions.IgnoreCase);
+    		str = Regex.Replace(str, @"\<(font|i|u|h[1-9]|s)[^>]*>|<\/(font|i|u|h[1-9]|s)>", "", RegexOptions.IgnoreCase);
+    		str = Regex.Replace(str, @"\<(style|strong)[^>]*>|<\/(style|strong)>", "", RegexOptions.IgnoreCase);
+    		str = Regex.Replace(str, @"\<a[^>]*>|<\/a>", "", RegexOptions.IgnoreCase);
+    		str = Regex.Replace(str, @"\<(meta|iframe|frame|span|tbody|layer)[^>]*>|<\/(iframe|frame|meta|span|tbody|layer)>", "", RegexOptions.IgnoreCase);
+    		str = Regex.Replace(str, @"\<a[^>]*", "", RegexOptions.IgnoreCase);
+    		return str;
+    	},*/
+    
+    	/*
+    	 * 网页特殊字符加密解密
+    	 */
+    	htmlEncode:function(theString){
+    		theString = theString.Replace(">", "&gt;");
+    		theString = theString.Replace("<", "&lt;");
+    		theString = theString.Replace(" ", " &nbsp;");
+    		theString = theString.Replace(" ", " &nbsp;");
+    		theString = theString.Replace("\"", "&quot;");
+    		theString = theString.Replace("\'", "&#39;");
+    		theString = theString.Replace("\n", "<br/> ");
+    		return theString;
+    	},
+    	htmlDiscode:function(theString){
+    		theString = theString.Replace("&gt;", ">");
+    		theString = theString.Replace("&lt;", "<");
+    		theString = theString.Replace("&nbsp;", " ");
+    		theString = theString.Replace(" &nbsp;", " ");
+    		theString = theString.Replace("&quot;", "\"");
+    		theString = theString.Replace("&#39;", "\'");
+    		theString = theString.Replace("<br/> ", "\n");
+    		return theString;
+    	},
+    	
         /*
          * select option 增删改，解决dojo不完善功能
          */
