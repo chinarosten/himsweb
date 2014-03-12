@@ -32,5 +32,6 @@ class DsjComment {
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']
 		table "ROSTEN_DSJ_COMMENT"
+		content sqlType:"longtext"
 	}
 }

@@ -80,7 +80,7 @@ class DsjController {
 				}){
 					dsj.addToReaders(nextUser)
 				}
-				nextUsers << nextUser.chinaName?nextUser.chinaName:nextUser.username
+				nextUsers << nextUser.getFormattedName()
 			}
 			
 		}
@@ -254,6 +254,10 @@ class DsjController {
 			ids.each{
 				def dsj = Dsj.get(it)
 				if(dsj){
+					//删除相关的gtask待办事项
+					Gtask.findAllByContentId(it).each{item->
+						item.delete()
+					}
 					dsj.delete(flush: true)
 				}
 			}

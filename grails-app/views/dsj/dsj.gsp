@@ -123,7 +123,9 @@
 		            }  
 				};
 				dsj_agrain = function(){
-					dsj_deal("agrain");
+					var _data = [];
+					_data.push("${dsj?.drafter.id + ":" + dsj?.drafterDepart}");
+					dsj_deal("agrain",_data);
 				};
 				dsj_notAgrain = function(){
 					dsj_deal("notAgrain");
@@ -135,6 +137,10 @@
 					var id = registry.byId("id").get("value");
 					var commentDialog = rosten.addCommentDialog({type:"dsj"});
 					commentDialog.callback = function(_data){
+						if(_data==null){
+							rosten.alert("请正确填写意见！");
+							return;
+						}
 						rosten.readSync(rosten.webPath + "/dsj/addComment/" + id,{dataStr:_data.content,userId:"${user?.id}"},function(data){
 							if(data.result=="true" || data.result == true){
 								rosten.alert("成功！");
@@ -204,7 +210,7 @@
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>条目：</div></td>
 					    <td  colspan=3>
 					    	<textarea id="subject" data-dojo-type="dijit/form/SimpleTextarea" 
-    							data-dojo-props='name:"subject","class":"input",
+    							data-dojo-props='name:"subject","class":"input",maxLength:"250",
                                 		style:{width:"550px"},
                                 		trim:true,value:"${}"
                            '>

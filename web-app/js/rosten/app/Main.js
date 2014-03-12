@@ -425,7 +425,7 @@ define(["dojo/_base/kernel"
         };
     };
     refreshSystem = function() {
-        window.location.replace(rosten.webPath);
+        window.location.reload();
     };
     /*
      *  更换皮肤

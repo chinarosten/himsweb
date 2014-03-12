@@ -12,7 +12,7 @@
 		<g:each in="${log}">
 			<div class="title-nav">
 				<h3>
-					<span>${it.user.username + "【" + it.status + "】" }</span>
+					<span>${it.user.getFormattedName() + "【" + it.status + "】" }</span>
 				</h3>
 			</div>
 	

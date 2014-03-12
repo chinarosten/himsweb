@@ -7,7 +7,15 @@ define(["dojo/dom",
         "rosten/widget/PickTreeDialog",
         "rosten/app/Application",
         "rosten/kernel/behavior"], function(dom,registry,connect,PickTreeDialog) {
-    
+    gtask_formatTitle = function(value,rowIndex){
+        return "<a href=\"javascript:gtask_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+    },
+    gtask_onMessageOpen = function(rowIndex){
+        var unid = rosten.kernel.getGridItemValue(rowIndex,"contentId");
+        var type = rosten.kernel.getGridItemValue(rowIndex,"type");
+        openGtask(type,unid);
+        rosten.kernel.getGrid().clearSelected();
+    },
 	delete_gtask = function(){
 		var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
         _1.callback = function() {
@@ -130,7 +138,7 @@ define(["dojo/dom",
 	        case "gtaskManage":
 	            var naviJson = {
 	                identifier : oString,
-	                actionBarSrc : rosten.webPath + "/startAction/gtaskView",
+	                actionBarSrc : rosten.webPath + "/startAction/gtaskView?userId=" + userid,
 	                gridSrc : rosten.webPath + "/start/gtaskGrid?userid=" + userid + "&companyId=" + companyId
 	            };
 	            rosten.kernel.addRightContent(naviJson);

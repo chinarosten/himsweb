@@ -14,7 +14,7 @@
 				<g:each in="${log}">
 					<tr>
 						<th>${it.getFormattedCreatedDate()}</th>
-   						<td>${it.user.username + " —> " + it.content}</td>
+   						<td>${it.user.getFormattedName() + " —> " + it.content}</td>
    					</tr>
 				</g:each>
 			</tbody>

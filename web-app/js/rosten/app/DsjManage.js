@@ -46,7 +46,7 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 				return;
 			var content = {};
 			content.id = unids;
-			rosten.read(rosten.webPath + "/dsj/dsjDelete", content,rosten.deleteCallback);
+			rosten.readNoTime(rosten.webPath + "/dsj/dsjDelete", content,rosten.deleteCallback);
 		};
 	};
     

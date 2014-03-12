@@ -15,7 +15,12 @@ define(["dojo/_base/declare",
 		content:"",
 		
         buildContent: function(node){
-        	this.contentNode = new SimpleTextarea({style:{height:"100px",width:"480px"}});
+        	this.contentNode = new SimpleTextarea({
+        		style:{height:"100px",width:"480px"},
+        		placeHolder:"请输入少于500个字的意见",
+        		maxLength:"1000",
+        		trim:true
+        	});
         	if(this.content!=""){
         		this.contentNode.set("value",this.content);
         	}

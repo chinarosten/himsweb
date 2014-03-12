@@ -86,7 +86,7 @@
 			    	<input id="nowYear" data-dojo-type="dijit/form/ValidationTextBox" 
 	                 	data-dojo-props='name:"nowYear",${fieldAcl.isReadOnly("nowYear")},
 	                 		trim:true,
-	                 		class:"input",
+	                 		"class":"input",
 	                 		required:true,
 							value:"${meetingConfig?.nowYear}"
 	                '/>
@@ -96,7 +96,7 @@
 			    	<input id="nowSN" data-dojo-type="dijit/form/ValidationTextBox" 
 	                 	data-dojo-props='name:"nowSN",${fieldAcl.isReadOnly("nowSN")},
 	                 		trim:true,
-	                 		class:"input",
+	                 		"class":"input",
 	                 		required:true,
 							value:"${meetingConfig?.nowSN}"
 	                '/>
@@ -122,7 +122,7 @@
 	                 	data-dojo-props='name:"frontYear",${fieldAcl.isReadOnly("frontYear")},
 	                 		trim:true,
 	                 		required:true,
-	                 		class:"input",
+	                 		"class":"input",
 							value:"${meetingConfig?.frontYear}"
 	                '/>
 			    </td>
@@ -132,7 +132,7 @@
 	                 	data-dojo-props='name:"frontSN",${fieldAcl.isReadOnly("frontSN")},
 	                 		trim:true,
 	                 		required:true,
-	                 		class:"input",
+	                 		"class":"input",
 							value:"${meetingConfig?.frontSN}"
 	                '/>
 	           </td>

@@ -11,7 +11,7 @@ class Gtask {
 	String id
 	
 	//类型
-	@GridColumn(name="类型",width="60px")
+	@GridColumn(name="类型",width="68px")
 	String type
 	
 	@GridColumn(name="处理状态",width="60px",colIdx=2)
@@ -23,7 +23,7 @@ class Gtask {
 		}
 	}
 	
-	@GridColumn(name="内容")
+	@GridColumn(name="内容",formatter="gtask_formatTitle")
 	String content
 	
 	//内容状态
@@ -31,6 +31,7 @@ class Gtask {
 	String contentStatus
 	
 	//内容链接id
+	@GridColumn(visible=false)
 	String contentId
 	
 	//处理时间

@@ -8,9 +8,10 @@ define(["dojo/dom",
         "rosten/kernel/behavior"], function(dom,registry,PickTreeDialog) {
 
     page_quit_1 = function(flag) {
+        var parentNode = window.opener;
         window.close();
         if (flag && flag == true) {
-            window.opener.refreshSystem();
+            parentNode.refreshSystem();
         }
     };
     page_quit = function() {
