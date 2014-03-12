@@ -33,5 +33,6 @@ class BbsComment {
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']
 		table "ROSTEN_BBS_COMMENT"
+		content sqlType:"longtext"
 	}
 }

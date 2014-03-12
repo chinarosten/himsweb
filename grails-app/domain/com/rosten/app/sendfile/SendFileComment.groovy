@@ -33,5 +33,6 @@ class SendFileComment {
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']
 		table "ROSTEN_SENDFILE_COMMENT"
+		content sqlType:"longtext"
 	}
 }

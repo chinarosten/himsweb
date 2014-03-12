@@ -415,6 +415,10 @@ class SendFileController {
 			ids.each{
 				def sendFile = SendFile.get(it)
 				if(sendFile){
+					//删除相关的gtask待办事项
+					Gtask.findAllByContentId(it).each{item->
+						item.delete()
+					}
 					sendFile.delete(flush: true)
 				}
 			}

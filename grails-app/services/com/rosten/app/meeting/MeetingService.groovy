@@ -49,13 +49,16 @@ class MeetingService {
 		def pa=[max:max,offset:offset]
 		def query = {
 			eq("company",company)
-			
+			order("createDate", "desc")
 			}
 		return c.list(pa,query)
 	}
 	def getMeetingCount ={company->
 		def c = Meeting.createCriteria()
-		def query = { eq("company",company) }
+		def query = { 
+			eq("company",company)
+			order("createDate", "desc")
+		}
 		return c.count(query)
 	}
 	

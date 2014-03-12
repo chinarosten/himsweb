@@ -243,6 +243,10 @@ class MeetingController {
 			ids.each{
 				def meeting = Meeting.get(it)
 				if(meeting){
+					//删除相关的gtask待办事项
+					Gtask.findAllByContentId(it).each{item->
+						item.delete()
+					}
 					meeting.delete(flush: true)
 				}
 			}
@@ -359,7 +363,7 @@ class MeetingController {
 		def joiners =[]
 		def joinerIds =[]
 		meeting.joiners.each { elem ->
-			joiners << elem.chinaName?elem.chinaName:elem.username
+			joiners << elem.getFormattedName()
 			joinerIds << elem.id
 		}
 		model["joiners"] = joiners
@@ -369,7 +373,7 @@ class MeetingController {
 		def guesters =[]
 		def guesterIds =[]
 		meeting.guesters.each { elem ->
-			guesters << elem.chinaName?elem.chinaName:elem.username
+			guesters << elem.getFormattedName()
 			guesterIds << elem.id
 		}
 		model["guesters"] = guesters

@@ -32,5 +32,6 @@ class MeetingComment {
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']
 		table "ROSTEN_MEETING_COMMENT"
+		content sqlType:"longtext"
 	}
 }

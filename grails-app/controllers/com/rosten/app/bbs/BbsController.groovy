@@ -294,6 +294,10 @@ class BbsController {
 			ids.each{
 				def bbs = Bbs.get(it)
 				if(bbs){
+					//删除相关的gtask待办事项
+					Gtask.findAllByContentId(it).each{item->
+						item.delete()
+					}
 					bbs.delete(flush: true)
 				}
 			}

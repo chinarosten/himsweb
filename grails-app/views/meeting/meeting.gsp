@@ -156,7 +156,9 @@
 		            }  
 				};
 				meeting_agrain = function(){
-					meeting_deal("agrain");
+					var _data = [];
+					_data.push("${meeting?.drafter.id + ":" + meeting?.drafterDepart}");
+					meeting_deal("agrain",_data);
 				};
 				meeting_notAgrain = function(){
 					meeting_deal("notAgrain");
