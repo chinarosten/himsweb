@@ -22,7 +22,7 @@ define(["dojo/_base/declare",
 	return declare("rosten.widget.DepartUserDialog", [_Dialog], {
 		general:new General(),
 	
-		title: "人员选择",
+		title: "\u4eba\u5458\u9009\u62e9",//人员选择
         url: null,
         rootLabel: "Rosten",
         showCheckBox: true,
@@ -60,7 +60,7 @@ define(["dojo/_base/declare",
         	
         	var td1 = document.createElement("td");
         	var span1 = document.createElement("span");
-        	span1.innerHTML = "部门名称";
+        	span1.innerHTML = "\u90e8\u95e8\u540d\u79f0";//部门名称
         	td1.appendChild(span1);
         	
         	this.searchDepart = new ComboBox({
@@ -75,7 +75,7 @@ define(["dojo/_base/declare",
         	var td2 = document.createElement("td");
         	
         	var span2 = document.createElement("span");
-        	span2.innerHTML = "人员名称";
+        	span2.innerHTML = "\u4eba\u5458\u540d\u79f0";//人员名称
         	td2.appendChild(span2);
         	
         	this.searchUser = new TextBox({style:{width:"150px",marginLeft:"5px"}});
@@ -85,7 +85,7 @@ define(["dojo/_base/declare",
         	var td3 = document.createElement("td");
         	
         	this.searchButton = new Button({
-				label:"查询"
+				label:"\u67e5\u8be2"//查询
 			});
 			td3.appendChild(this.searchButton.domNode);
         	connect.connect(this.searchButton,"onClick" ,this,"searchFresh");
@@ -257,7 +257,7 @@ define(["dojo/_base/declare",
             	footTd.appendChild(this.allselectnode.domNode);
             	
             	var allSelectSpan = document.createElement("span");
-            	allSelectSpan.innerHTML = "全选";
+            	allSelectSpan.innerHTML = "\u5168\u9009";//全选
             	footTd.appendChild(allSelectSpan);
             	
             	//反选
@@ -265,7 +265,7 @@ define(["dojo/_base/declare",
             	footTd.appendChild(this.noselectnode.domNode);
             	
             	var noSelectSpan = document.createElement("span");
-            	noSelectSpan.innerHTML = "反选";
+            	noSelectSpan.innerHTML = "\u53cd\u9009";//反选
             	footTd.appendChild(noSelectSpan);
             	
             	connect.connect(this.allselectnode, "onClick", this, function(){

@@ -61,7 +61,7 @@ define(["dojo/_base/declare",
         
         pageSize: 15,//每页条目数,控制获取后台条目数
         showPageControl: true, // 是否载入页面控制信息
-        emptymsg: "目前暂无数据！",
+        emptymsg: "\u76ee\u524d\u6682\u65e0\u6570\u636e\uff01",//目前暂无数据！
         pageControl: {
             page: 1,
             total: 0,
@@ -182,7 +182,7 @@ define(["dojo/_base/declare",
                 }),
                 error: lang.hitch(this, function(response, ioArgs){
 					this._closeLoading();
-					_kernel.errordeal(this.containerNode,"无法初始化表格内容数据...");
+					_kernel.errordeal(this.containerNode,"\u65e0\u6cd5\u521d\u59cb\u5316\u8868\u683c\u5185\u5bb9\u6570\u636e...");//无法初始化数据
                 })
             };
             xhr.post(args);
@@ -252,7 +252,7 @@ define(["dojo/_base/declare",
                     autoRender:true,
 					autoHeight:true,
 //					columnReordering:true,//是否允许拖拉列,true表示允许
-					loadingMessage:"系统正在载入数据，请稍候！"
+					loadingMessage:"\u7cfb\u7edf\u6b63\u5728\u8f7d\u5165\u6570\u636e\uff0c\u8bf7\u7a0d\u5019\uff01"//系统正在载入数据，请稍候！
                 };
 				
 				if(this.showRowSelector=="true"){
@@ -324,7 +324,7 @@ define(["dojo/_base/declare",
                     this._gotoPage(this.pageControl.page);
                 }else{
 					this.gotopage.setAttribute("value", this.pageControl.page);
-					behavior.alert("请正确输入页码数字！");
+					behavior.alert("\u8bf7\u6b63\u786e\u8f93\u5165\u9875\u7801\u6570\u5b57\uff01");//请正确输入页码数字！
 				}
             }
         },

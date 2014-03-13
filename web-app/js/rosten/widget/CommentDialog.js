@@ -10,14 +10,14 @@ define(["dojo/_base/declare",
 	return declare("rosten.widget.CommentDialog", [_Dialog], {
 		height:"180px",
 		width:"500px",
-		title: "填写意见",
+		title: "\u586b\u5199\u610f\u89c1",//填写意见
 		type:"",
 		content:"",
 		
         buildContent: function(node){
         	this.contentNode = new SimpleTextarea({
         		style:{height:"100px",width:"480px"},
-        		placeHolder:"请输入少于500个字的意见",
+        		//placeHolder:unescape("\u8bf7\u8f93\u5165\u5c11\u4e8e\u35\u30\u30\u4e2a\u5b57\u7684\u610f\u89c1"),//请输入少于500个字的意见
         		maxLength:"1000",
         		trim:true
         	});

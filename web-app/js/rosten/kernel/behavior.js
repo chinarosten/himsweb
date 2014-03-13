@@ -32,7 +32,7 @@ define([
 	behavior.addCommentDialog = function(obj){
 		if (!_kernel.sys_commentDialog || !registry.byId("sys_commentDialog")) {
             _kernel.sys_commentDialog = new CommentDialog({
-                title : "Rosten_填写意见",
+                title : "\u586b\u5199\u610f\u89c1",//填写意见
                 id : "CommentDialog"
             });
         }
@@ -57,7 +57,7 @@ define([
     behavior.confirm = function(oString) {
         if (!_kernel.sys_confirmDialog || !registry.byId("sys_confirmDialog")) {
             _kernel.sys_confirmDialog = new ConfirmDialog({
-                title : "Rosten_系统对话框",
+                title : "\u7cfb\u7edf\u5bf9\u8bdd\u6846",//系统对话框
                 id : "sys_confirmDialog"
             });
         }
@@ -73,7 +73,7 @@ define([
     behavior.alert = function(oString) {
         if (!_kernel.sys_alertDialog || !registry.byId("sys_alertDialog")) {
             _kernel.sys_alertDialog = new AlertDialog({
-                title : "Rosten_系统对话框",
+                title : "\u7cfb\u7edf\u5bf9\u8bdd\u6846",//系统对话框
                 id : "sys_alertDialog"
             });
         }

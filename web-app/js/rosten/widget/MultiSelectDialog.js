@@ -18,7 +18,7 @@ define(["dojo/_base/declare",
 		
 		height: "370px",
         width: "350px",
-        title: "Rosten_选择框",
+        title: "Rosten_\u9009\u62e9\u6846",//选择框
         chkboxwidgets: [],
         defaultvalues: [],
         datasrc: "",
@@ -57,7 +57,7 @@ define(["dojo/_base/declare",
             domStyle.set(legend, {
                 color: "blue"
             });
-            legend.innerHTML = "请选择以下选项：";
+            legend.innerHTML = "\u8bf7\u9009\u62e9\u4ee5\u4e0b\u9009\u9879\uff1a";//请选择以下选项：
             fieldset.appendChild(legend);
             
             this.choicelist_node = document.createElement("div");
@@ -153,11 +153,11 @@ define(["dojo/_base/declare",
                 domStyle.set(otherlegend, {
                     color: "blue"
                 });
-                otherlegend.innerHTML = "其他选项：";
+                otherlegend.innerHTML = "\u5176\u4ed6\u9009\u9879\uff1a";//其他选项：
                 otherfieldset.appendChild(otherlegend);
                 
                 var label = document.createElement("span");
-                label.innerHTML = "新值：";
+                label.innerHTML = "\u65b0\u503c\uff1a";//新值：
                 otherfieldset.appendChild(label);
                 
                 var div1 = document.createElement("div");
@@ -179,7 +179,7 @@ define(["dojo/_base/declare",
                 var div2 = document.createElement("div");
                 otherfieldset.appendChild(div2);
                 var appendBtn = new Button({
-                    label: "添加"
+                    label: "\u6dfb\u52a0"//添加
                 }, div2);
                 connect.connect(appendBtn, "onClick", this, "appendChoice");
             }
