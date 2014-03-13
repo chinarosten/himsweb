@@ -212,7 +212,7 @@
 					    	<textarea id="subject" data-dojo-type="dijit/form/SimpleTextarea" 
     							data-dojo-props='name:"subject","class":"input",maxLength:"250",
                                 		style:{width:"550px"},
-                                		trim:true,value:"${}"
+                                		trim:true
                            '>
     						</textarea>
 					    </td>
@@ -223,7 +223,7 @@
 					    	<textarea id="description" data-dojo-type="dijit/form/SimpleTextarea" 
     							data-dojo-props='name:"description","class":"input",
                                		style:{width:"550px"},rows:"10",
-                               		trim:true,value:"${ }"
+                               		trim:true
                            '>
     						</textarea>
 					    </td>
