@@ -19,15 +19,25 @@
 		    	<div data-dojo-type="dijit/form/DropDownButton" >
 					<span>添加附件</span>
 					<div data-dojo-type="dijit/TooltipDialog" id="fileUpload_dialog" data-dojo-props="title: 'fileUpload'" style="width:380px">
+						<script type="dojo/method" data-dojo-event="onOpen" data-dojo-args="dataArray">
+							if (dojo.isIE) {
+								dijit.byId("isIE").set("value","yes");
+							}
+						</script>
 							<form data-dojo-type="dijit/form/Form" method="post"
 								action="${createLink(controller:docEntity,action:'uploadFile',id:docEntityId)}" id="fileUpload_form" enctype="multipart/form-data">
+								
+								<input  data-dojo-type="dijit/form/ValidationTextBox" id="isIE"  data-dojo-props='name:"isIE",style:{display:"none"},value:"no"' />
 								
 								<div data-dojo-type="dojox/form/Uploader"  type="file" 
 									id="fileUploader"  data-dojo-props="name:'uploadedfile'">添加
 									<script type="dojo/method" data-dojo-event="onComplete" data-dojo-args="dataArray">
+										if(dojo.isIE){
+											dataArray = dojo.fromJson(dataArray);
+										}
 										if(dataArray.result=="true"){
 											rosten.addAttachShow(dojo.byId("fileShow"),dataArray);
-											dijit.byId("fileUpload_fileList").reset();
+											dijit.byId("fileUpload_dialog").reset();
 											dijit.byId("fileUpload_dialog").onCancel();
 											
 										}else if(dataArray.result=="big"){

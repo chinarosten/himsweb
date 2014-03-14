@@ -39,9 +39,6 @@
 				kernel.addOnLoad(function(){
 					rosten.init({webpath:"${request.getContextPath()}"});
 					rosten.cssinit();
-					if (has("ie")) {
-						//require(["dojox/form/uploader/plugins/HTML5"]);
-					}
 
 					<g:if test="${dsj.id && dsj.id!=null && !"".equals(dsj.id)}">
 						rosten.readSync(rosten.webPath + "/dsj/dsjGetContent/${dsj?.id}",{},function(data){

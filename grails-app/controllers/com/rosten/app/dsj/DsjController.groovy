@@ -197,7 +197,14 @@ class DsjController {
 		json["result"] = "true"
 		json["fileId"] = attachment.id
 		json["fileName"] = name
-		render json as JSON
+		
+		if("yes".equals(params.isIE)){
+			def resultStr  = '{"result":"true", "fileId":"' + json["fileId"]  + '","fileName":"' + json["fileName"] +'"}'
+			render "<textarea>" + resultStr +  "</textarea>"
+			return
+		}else{
+			render json as JSON
+		}
 	}
 	
 	def addComment ={
