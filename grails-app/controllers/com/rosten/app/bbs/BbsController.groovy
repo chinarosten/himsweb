@@ -235,7 +235,7 @@ class BbsController {
 				}){
 					bbs.addToReaders(_user)
 				}
-				nextUser = _user.username
+				nextUser = _user.getFormattedName()
 			}
 			
 		}
