@@ -378,7 +378,7 @@ class SystemService {
 		
 		resource = new Resource()
 		resource.resourceName = "所有发文"
-		resource.url = "allSendfileManage"
+		resource.url = "allSendFileManage"
 		resource.imgUrl = "images/rosten/navigation/bbs_all.gif"
 		model.addToResources(resource)
 		
