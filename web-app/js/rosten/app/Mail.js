@@ -526,6 +526,9 @@ define(["dojo/_base/kernel",
 							if(data[i].children){
                                 newItem.children = data[i].children;
                             }
+                            if(data[i].username){
+                                newItem.username = data[i].username;
+                            }
 							store.newItem(newItem, parent);//给父节点添加子节点	
 						}
 					}	

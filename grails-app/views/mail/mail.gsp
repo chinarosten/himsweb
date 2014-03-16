@@ -184,7 +184,7 @@
 							<td style="width:100px; text-align:right;"><label>收件人:</label></td>
 							<td>
 								<div data-dojo-type="dijit/form/ComboBox" 
-									data-dojo-attach-point="to" hasDownArrow="false" store="contactStore" searchAttr="name"
+									data-dojo-attach-point="to" hasDownArrow="false" store="contactStore" searchAttr="email"
 									style="width: 40em;margin-left:2px">
 									<script type="dojo/method" data-dojo-event="onClick" data-dojo-args="event">
 										rosten.variable.mailTargetNode = this;
@@ -272,7 +272,7 @@
 						var type = store_${'\${departid}'}.getValue(item, "type");
 						if(type=="depart") return ;
 						
-						var username = store_${'\${departid}'}.getValue(item, "name");
+						var username = store_${'\${departid}'}.getValue(item, "username");
 						var inputValue = rosten.variable.mailTargetNode.attr("value");
 						if(inputValue==""){
 							rosten.variable.mailTargetNode.attr("value",username);

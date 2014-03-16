@@ -454,7 +454,7 @@ class MailController {
 		//获取当前单位人员信息
 		User.findAllByCompany(user.company).each{
 			if(!it.equals(user)){
-				def _data = ["id":it.id,"name":it.username,email:it.username,phone:it.telephone,type:"user",,first:gb2Alpha.String2Alpha(it.username)]
+				def _data = ["id":it.id,"name":it.getFormattedName(),email:it.username,phone:it.telephone,type:"user",,first:gb2Alpha.String2Alpha(it.getFormattedName())]
 				json.items << _data
 			}
 		}
@@ -488,7 +488,7 @@ class MailController {
 			def user = (User) springSecurityService.getCurrentUser()
 			depart.getAllUser().each{
 				if(!user.equals(it)){
-					def sMap = ["id":it.id,"name":it.username,"type":"user"]
+					def sMap = ["id":it.id,"username":it.username,"type":"user","name":it.getFormattedName()]
 					json << sMap
 				}
 			}
