@@ -120,8 +120,12 @@ class MeetingController {
 		render json as JSON
 	}
 	def meetingGetContent ={
+		def json=[:]
 		def meeting = Meeting.get(params.id)
-		render meeting.content
+		
+		json["content"] = meeting.content
+		json["description"] = meeting.description
+		render json as JSON
 	}
 	def getFileUpload ={
 		def model =[:]
@@ -130,7 +134,7 @@ class MeetingController {
 		if(params.id){
 			//已经保存过
 			def meeting = Meeting.get(params.id)
-			model["meeting"] = params.id
+			model["docEntityId"] = params.id
 			//获取附件信息
 			model["attachFiles"] = Attachment.findAllByBeUseId(params.id)
 			

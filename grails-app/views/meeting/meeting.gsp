@@ -45,11 +45,12 @@
 						var ioArgs = {
 							url : rosten.webPath + "/meeting/meetingGetContent/${meeting?.id}",
 							sync : true,
-							handleAs : "text",
+							handleAs : "json",
 							preventCache : true,
 							encoding : "utf-8",
 							load : function(data) {
-								registry.byId("content").set("value",data);
+								registry.byId("content").set("value",data.content);
+								registry.byId("description").set("value",data.description);
 							}
 						};
 						xhr.get(ioArgs);
