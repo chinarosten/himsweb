@@ -9,6 +9,28 @@ class SystemController {
 	def springSecurityService
 	def systemService
 	
+	def systemLogGrid ={
+		def model=[:]
+		if(params.refreshHeader){
+			model["gridHeader"] = systemService.getSystemLogListLayout()
+		}
+		if(params.refreshData){
+			def args =[:]
+			int perPageNum = Util.str2int(params.perPageNum)
+			int nowPage =  Util.str2int(params.showPageNum)
+			
+			args["offset"] = (nowPage-1) * perPageNum
+			args["max"] = perPageNum
+			model["gridData"] = systemService.getSystemLogListDataStore(args)
+			
+		}
+		if(params.refreshPageControl){
+			def total = systemService.getSystemLogCount()
+			model["pageControl"] = ["total":total.toString()]
+		}
+		render model as JSON
+	}
+	
 	def downloadFile = {
 		def attachmentInstance =  Attachment.get(params.id)
 		def filename = attachmentInstance.name

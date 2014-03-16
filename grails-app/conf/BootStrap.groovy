@@ -19,6 +19,7 @@ class BootStrap {
 			UserRole.create adminUser, adminRole,true
 		}
 		
+		
 		if(Model.findByCompany(null)==null){
 			
 			def model = new Model(modelName:"首页",description:"首页",serialNo:1,modelCode:"start")
@@ -68,7 +69,26 @@ class BootStrap {
 			resource.imgUrl = "images/rosten/navigation/Resource.gif"
 			model.addToResources(resource)
 			
+			resource = new Resource()
+			resource.resourceName = "日志管理"
+			resource.url = "systemLogManage"
+			resource.imgUrl = "images/rosten/navigation/log.gif"
+			model.addToResources(resource)
+			
 			model.save(failOnError: true)
+		}
+		
+		def defaultModel = Model.findByModelCode("plat")
+		if(defaultModel){
+			if(Resource.findByModelAndUrl(defaultModel,"systemLogManage")==null){
+				def resource = new Resource()
+				resource.resourceName = "日志管理"
+				resource.url = "systemLogManage"
+				resource.imgUrl = "images/rosten/navigation/log.gif"
+				defaultModel.addToResources(resource)
+				
+				defaultModel.save(failOnError: true)
+			}
 		}
 
 	}

@@ -200,6 +200,29 @@ class SystemService {
 	def getSmsCount={
 		return Sms.createCriteria().count(){}
 	}
+	
+	def getSystemLogListDataStore = {params->
+		Integer offset = (params.offset)?params.offset.toInteger():0
+		Integer max = (params.max)?params.max.toInteger():15
+		def propertyList = getAllSystemLog(offset,max)
+
+		def gridUtil = new GridUtil()
+		return gridUtil.buildDataList("id","title",propertyList,offset)
+	}
+	def getSystemLogListLayout ={
+		def gridUtil = new GridUtil()
+		return gridUtil.buildLayoutJSON(new SystemLog())
+	}
+	def getAllSystemLog={offset,max->
+		return SystemLog.createCriteria().list(max:max,offset:offset){
+			order("company", "desc")
+		}
+	}
+	def getSystemLogCount={
+		return SystemLog.createCriteria().count(){
+			order("company", "desc")
+		}
+	}
 
 	def getQuestionListDataStore = {params->
 		Integer offset = (params.offset)?params.offset.toInteger():0

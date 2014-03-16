@@ -6,6 +6,14 @@ class SystemActionController {
 	def systemService
 	def imgPath ="images/rosten/actionbar/"
 	
+	def systemLogView ={
+		def actionList =[]
+		def strname ="systemLog"
+		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
+		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
+		render actionList as JSON
+	}
+	
 	def smsGroupView ={
 		render createCommonAction(null,"smsGroup",true) as JSON
 	}

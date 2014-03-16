@@ -27,10 +27,25 @@ import org.springframework.security.core.context.SecurityContextHolder as SCH
 import org.springframework.security.web.WebAttributes
 
 import grails.plugin.springsecurity.SpringSecurityUtils
+import com.rosten.app.util.Util
+import com.rosten.app.system.SystemLog
 
 @Secured('permitAll')
 class LoginController {
-
+	
+	private def addLoginInformation = {user->
+		def macAddress = Util.getMacAddress()
+		def ipAddress = Util.getIpAddress(request)
+		
+		def systemLog = new SystemLog()
+		systemLog.user = user
+		systemLog.ipAddress= ipAddress
+		systemLog.macAddress= macAddress
+		systemLog.content= "登录系统"
+		systemLog.company= user.company
+		
+		systemLog.save(flush:true)
+	}
 	/**
 	 * Dependency injection for the authenticationTrustResolver.
 	 */
@@ -45,10 +60,16 @@ class LoginController {
 	 * Default action; redirects to 'defaultTargetUrl' if logged in, /login/auth otherwise.
 	 */
 	def index() {
+		//判断是否是授权用户
+		
 		if (springSecurityService.isLoggedIn()) {
-			def model =[:]
 			
 			def user = springSecurityService.getCurrentUser()
+			
+			//添加用户登录记录信息
+			addLoginInformation(user)
+			
+			def model =[:]
 			model["user"] = user
 			
 			def userinfor = [:]

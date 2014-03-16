@@ -617,6 +617,14 @@ define(["dojo/_base/connect",
      */
     show_systemNaviEntity = function(oString) {
         switch (oString) {
+	        case "systemLogManage":
+	            var naviJson = {
+	                identifier : oString,
+	                actionBarSrc : rosten.webPath + "/systemAction/systemLogView",
+	                gridSrc : rosten.webPath + "/system/systemLogGrid"
+	            };
+	            rosten.kernel.addRightContent(naviJson);
+	            break;
             case "smsManage":
                 var naviJson = {
                     identifier : oString,

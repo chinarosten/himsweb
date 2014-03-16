@@ -16,6 +16,8 @@ import java.util.regex.PatternSyntaxException;
 import java.util.zip.*;
 import java.sql.Timestamp;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author rosten
  * @version 20080910
@@ -26,12 +28,13 @@ public final class Util {
 
 	// 过滤特殊字符
 	public static String StringFilter(String str) throws PatternSyntaxException {
-		if(str!=null){
+		if (str != null) {
 			String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
 			Pattern p = Pattern.compile(regEx);
 			Matcher m = p.matcher(str);
 			return m.replaceAll("").trim();
-		}else return null;
+		} else
+			return null;
 	}
 
 	/**
@@ -313,6 +316,24 @@ public final class Util {
 		} catch (Exception e) {
 			System.err.println(e);
 		}
+	}
+
+	/*
+	 * 获取客户端登录的ip地址
+	 */
+
+	public static String getIpAddress(HttpServletRequest request) {
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		return ip;
 	}
 
 	// jdk6以后提供的官方方法
