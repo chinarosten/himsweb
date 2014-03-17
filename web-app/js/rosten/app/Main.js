@@ -190,7 +190,13 @@ define(["dojo/_base/kernel"
                  var span = document.createElement("span");
                  span.innerHTML = data[i].content;
                  a.appendChild(span);
-                 a.setAttribute("href", "javascript:openGtask('" + data[i].type + "','" + data[i].id +  "')");
+                 
+                 if(data[i].gtaskId){
+                	 a.setAttribute("href", "javascript:openGtask('" + data[i].type + "','" + data[i].id + "','" + data[i].gtaskId + "')");
+                 }else{
+                	 a.setAttribute("href", "javascript:openGtask('" + data[i].type + "','" + data[i].id +  "')");
+                 }
+                 
                  li.appendChild(a);
         		 
                  var span_time = document.createElement("span");
@@ -212,29 +218,34 @@ define(["dojo/_base/kernel"
     		rosten.alert("未找到相对应的模块,请通知管理员");
     	}
     };
-    openGtask = function(type,id){
+    openGtask = function(type,id,gtaskId){
+    	var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+    	
     	switch(type){
     	case "【公告】":
-    		var userid = rosten.kernel.getUserInforByKey("idnumber");
-    		var companyId = rosten.kernel.getUserInforByKey("companyid");
     		rosten.openNewWindow("bbs", rosten.webPath + "/bbs/bbsShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
     		break;
     	case "【发文】":
-    		var userid = rosten.kernel.getUserInforByKey("idnumber");
-    		var companyId = rosten.kernel.getUserInforByKey("companyid");
     		rosten.openNewWindow("sendFile", rosten.webPath + "/sendFile/sendFileShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
     		break;
     	case "【大事记】":
-    		var userid = rosten.kernel.getUserInforByKey("idnumber");
-    		var companyId = rosten.kernel.getUserInforByKey("companyid");
     		rosten.openNewWindow("dsj", rosten.webPath + "/dsj/dsjShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
     		break;
     	case "【会议通知】":
-    		var userid = rosten.kernel.getUserInforByKey("idnumber");
-    		var companyId = rosten.kernel.getUserInforByKey("companyid");
     		rosten.openNewWindow("meeting", rosten.webPath + "/meeting/meetingShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
     		break;
     	}
+    	
+    	if(gtaskId){
+    		//关闭task任务
+    		rosten.read(rosten.webPath + "/start/closeGtask/" + gtaskId,{},function(data){
+    			if(data.result=="true" || data.result == true){
+    				showStartGtask(userid,companyId);
+    			}
+    		});
+    	}
+    	
     };
     showStartMail = function(userId,companyId){
     	rosten.read(rosten.webPath + "/mail/publishMail", {userId:userId,companyId:companyId}, function(data) {

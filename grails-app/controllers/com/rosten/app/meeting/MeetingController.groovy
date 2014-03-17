@@ -100,6 +100,24 @@ class MeetingController {
 					break
 				case "已签发":
 					meetingLog.content = "签发文件【" + nextUsers.join("、") + "】" 
+					
+					//增加相关与会人员的待办工作任务
+					def gtaskList = []
+					gtaskList += meeting.guesters
+					gtaskList += meeting.joiners
+					gtaskList.unique().each{
+						def args = [:]
+						args["type"] = "【会议通知】"
+						args["content"] = "请您参加名称为  【" + meeting.subject +  "】 的会议"
+						args["contentStatus"] = "查看"
+						args["contentId"] = meeting.id
+						args["user"] = it
+						args["company"] = it.company
+						args["openDeal"] = true
+						
+						startService.addGtask(args)
+					}
+					
 					break
 				case "已归档":
 					meetingLog.content = "归档发文"
@@ -365,6 +383,12 @@ class MeetingController {
 			meeting.currentDepart = user.getDepartName()
 			
 		}
+		
+		if(!meeting){
+			render '<h2 style="color:red;width:500px;margin:0 auto">此会议通知已过期或删除，请联系管理员！</h2>'
+			return
+		}
+		
 		model["user"]=user
 		model["company"] = company
 		model["meeting"] = meeting

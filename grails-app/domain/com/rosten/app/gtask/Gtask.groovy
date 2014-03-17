@@ -63,10 +63,13 @@ class Gtask {
 	//0:未处理;1:已处理
 	String status="0"
 	
+	boolean openDeal = false
+	
 	static belongsTo = [company:Company,user:User]
 	
     static constraints = {
 		dealDate nullable:true,blank:true
+		openDeal nullable:true,blank:true
     }
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']
