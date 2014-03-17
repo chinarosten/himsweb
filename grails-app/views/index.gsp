@@ -132,7 +132,7 @@
 	   			}
 			});
 		});
-	setInterval("showStartInformation()",60000);
+	//setInterval("showStartInformation()",60000);
 </script>
 </head>
 <body>
