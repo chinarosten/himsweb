@@ -10,6 +10,23 @@ import com.rosten.app.util.Util
 class StartController {
 	def startService
 	
+	def closeGtask ={
+		def json=[:]
+		def gtask = Gtask.get(params.id)
+		if(gtask!=null && "0".equals(gtask.status)){
+			gtask.dealDate = new Date()
+			gtask.status = "1"
+			
+			if(gtask.save(flush:true)){
+				json = [result:'true']
+			}else{
+				json = [result:'false']
+			}
+		}else{
+			json = [result:'true']
+		}
+		render json as JSON
+	}
 	def gtaskDelete ={
 		def ids = params.id.split(",")
 		def json
@@ -84,6 +101,10 @@ class StartController {
 			
 			smap["content"] = leftStr + "【" + Util.getLimitLengthString(contentStr,38,"...") + "】" + Util.strRight(rightStr,"】")
 			smap["date"] = it.getFormattedCreatedDate()
+			
+			if(it.openDeal!=null && it.openDeal){
+				smap["gtaskId"] = it.id
+			}
 			
 			_list << smap
 		}
