@@ -34,17 +34,20 @@ import com.rosten.app.system.SystemLog
 class LoginController {
 	
 	private def addLoginInformation = {user->
-		def macAddress = Util.getMacAddress()
-		def ipAddress = Util.getIpAddress(request)
+		if(!"rostenadmin".equals(user.username)){
+			def macAddress = Util.getMacAddress()
+			def ipAddress = Util.getIpAddress(request)
+			
+			def systemLog = new SystemLog()
+			systemLog.user = user
+			systemLog.ipAddress= ipAddress
+			systemLog.macAddress= macAddress
+			systemLog.content= "登录系统"
+			systemLog.company= user.company
+			
+			systemLog.save(flush:true)
+		}
 		
-		def systemLog = new SystemLog()
-		systemLog.user = user
-		systemLog.ipAddress= ipAddress
-		systemLog.macAddress= macAddress
-		systemLog.content= "登录系统"
-		systemLog.company= user.company
-		
-		systemLog.save(flush:true)
 	}
 	/**
 	 * Dependency injection for the authenticationTrustResolver.
