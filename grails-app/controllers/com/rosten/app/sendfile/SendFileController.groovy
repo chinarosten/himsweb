@@ -529,6 +529,12 @@ class SendFileController {
 			sendFile.currentUser = user
 			sendFile.currentDepart = user.getDepartName()
 		}
+		
+		if(!sendFile){
+			render '<h2 style="color:red;width:500px;margin:0 auto">此发文已过期或删除，请联系管理员！</h2>'
+			return
+		}
+		
 		model["user"]=user
 		model["company"] = company
 		model["sendFile"] = sendFile
