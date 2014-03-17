@@ -73,6 +73,18 @@
 			margin-bottom: 10px;
 			vertical-align: middle;
 		}
+		.login-field2{
+			display: inline-block;
+			padding: 11px 0 11px 10px;
+			width: 296px;
+			height: 90px;
+			color: #ACB6C0;
+			font-size: 17px;
+			background: #fff;
+			border: 1px solid #E5E5E5;
+			border-radius: 6px 6px 6px 6px;
+			margin-bottom: 10px;
+		}
 		.login-field-icon{
 			position: absolute;
 			display: block;
@@ -90,10 +102,9 @@
 			background-position: -1px -137px;
 		}
 		.btn-login{
-			display: block;
 			margin: 0;
 			padding: 10px 0;
-			width: 100%;
+			width: 49%;
 			color: #fff;
 			border: 2px solid #ECEFF1;
 			border-radius: 6px 6px 6px 6px;
@@ -140,6 +151,12 @@
 			color: #c33;
 		}
 	</style>
+	<script type="text/javascript">
+		logout = function(){
+	    	var url = "${createLink(controller:'j_spring_security_logout')}";
+			window.location = url;
+		};
+	</script>
 </head>
 
 <body>
@@ -153,18 +170,21 @@
 				<div class='login_message'> ${flash.message}</div>
 			</g:if>
 			<div class="control-group">
-				<input type='text' name='j_username' id='username' class="login-field" placeholder="用户名" title="用户名" >
-				
-				<label class="login-field-icon user" for="username"></label>
+				<input type='text' name='j_username' id='username' 
+					class="login-field" placeholder="用户名" title="用户名" value="${username }" readonly="readonly" style="display:none" />
 			</div>
 			<div class="control-group">
-				<input type='password'  name='j_password' id='password' class="login-field" placeholder="密码" title="密码" />
-				<label class="login-field-icon pwd" for="password"></label>
+				<input type='password'  name='j_password' id='password' 
+					class="login-field" placeholder="密码" title="密码" value="${password }" readonly="readonly" style="display:none" />
+			</div>
+			<div class="control-group">
+				<textarea name='serialNo' id='serialNo' class="login-field2" placeholder="序列号" title="序列号" >
+				</textarea>
 			</div>
 			<div>
-				<input type='submit' id="submit" value='${message(code: "springSecurity.login.button")}' class="btn-login"  />
+				<input type='submit' id="submit" value='提交' class="btn-login"  />
+				<input type='button' id="cancel" value='返回' class="btn-login" onclick="logout()" />
 			</div>
-			<span class="login-tips"><i></i><b id="msgtip">请输入用户名和密码</b></span>
 			<i class="arrow">箭头</i>
 		</form>
 	</div>

@@ -30,6 +30,8 @@ import grails.plugin.springsecurity.SpringSecurityUtils
 import com.rosten.app.util.Util
 import com.rosten.app.system.SystemLog
 
+import com.rosten.app.system.SerialNoService
+
 @Secured('permitAll')
 class LoginController {
 	
@@ -58,17 +60,46 @@ class LoginController {
 	 * Dependency injection for the springSecurityService.
 	 */
 	def springSecurityService
-
+	
+	def serialNoService
+	
 	/**
 	 * Default action; redirects to 'defaultTargetUrl' if logged in, /login/auth otherwise.
 	 */
 	def index() {
-		//判断是否是授权用户
-		
 		if (springSecurityService.isLoggedIn()) {
-			
 			def user = springSecurityService.getCurrentUser()
-			
+
+			//判断是否是授权用户
+			def _index = false
+			if(serialNoService.checkSerial()==false){
+				switch (serialNoService.checkSerialBeta()){
+					case -1:
+						flash.message = "序列号不正确！"
+						break;
+					case 0:
+						_index = true
+						break;
+					case 1:
+						flash.message = "序列号已过期！"
+						break;
+					case 2:
+						flash.message = "序列号时间被强行修改，不正确！"
+						break;
+				}
+			}else{
+				_index = true
+			}
+			if(!_index){
+				def _model =[:]
+				_model["username"] = user.username
+				_model["password"] = user.password
+				_model["postUrl"] = "${request.contextPath}/login/addSerialNo"
+				
+				render(view:'/login/serialno',model:_model)
+				return
+			}
+						
 			//添加用户登录记录信息
 			addLoginInformation(user)
 			
@@ -127,6 +158,17 @@ class LoginController {
 		else {
 			redirect action: 'auth', params: params
 		}
+	}
+	def addSerialNo ={
+		if(params.j_username){
+			def user = User.findByUsername(params.j_username)
+			if(user){
+				if("rostenadmin".equals(user.username) || user.sysFlag){
+					serialNoService.addOrChangeSerial(params.serialNo.replaceAll(" ", "").trim())
+				}
+			}
+		}
+		redirect controller: 'j_spring_security_logout'
 	}
 	def dlgauth = {
 		def config = SpringSecurityUtils.securityConfig
