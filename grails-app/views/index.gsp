@@ -55,7 +55,7 @@
 	#home_bbs ul li .time,#home_personMail ul li .time,#home_gtask ul li .time{
 		float:right;
 		color:#404040!important;
-		padding-right:10px;
+		/*padding-right:10px;*/
 	}
 	#home_personMail ul li .level,#home_gtask ul li .type{
 		float:left;
