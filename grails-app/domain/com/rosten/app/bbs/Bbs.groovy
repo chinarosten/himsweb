@@ -16,15 +16,15 @@ class Bbs {
 	String serialNo
 	
 	//紧急层度:普通,紧急,特急
-	@GridColumn(name="紧急程度",width="50px",formatter="formatBbsLevel")
+	@GridColumn(name="紧急度",width="40px",formatter="formatBbsLevel")
 	String level = "普通"
 
 	//类别
-	@GridColumn(name="类别",width="40px")
+	@GridColumn(name="类别",width="30px")
 	String category = "公告"
 
 	//主题
-	@GridColumn(name="主题",formatter="bbs_formatTopic")
+	@GridColumn(name="主题",formatter="bbs_formatTopic",colIdx=4)
 	String topic
 
 	//内容
@@ -65,7 +65,7 @@ class Bbs {
 	//当前处理人
 	User currentUser
 
-	@GridColumn(name="当前处理人",width="60px",colIdx=5)
+	@GridColumn(name="当前处理人",width="60px",colIdx=6)
 	def getCurrentUserName(){
 		if(currentUser!=null){
 			return currentUser.getFormattedName()
@@ -75,7 +75,7 @@ class Bbs {
 	}
 
 	//当前处理部门
-	@GridColumn(name="处理人部门",width="80px",colIdx=6)
+	//@GridColumn(name="处理部门",width="60px",colIdx=7)
 	String currentDepart
 
 	//当前处理时间
@@ -93,7 +93,7 @@ class Bbs {
 	//起草人
 	User drafter
 
-	@GridColumn(name="拟稿人",width="60px",colIdx=7)
+	@GridColumn(name="拟稿人",width="50px",colIdx=8)
 	def getFormattedDrafter(){
 		if(drafter!=null){
 			return drafter.getFormattedName()
@@ -103,13 +103,13 @@ class Bbs {
 	}
 
 	//起草部门
-	@GridColumn(name="拟稿部门",width="80px",colIdx=8)
+	//@GridColumn(name="拟稿部门",width="60px",colIdx=9)
 	String drafterDepart
 
 	//创建时间
 	Date createDate = new Date()
 
-	@GridColumn(name="拟稿时间",width="150px")
+	@GridColumn(name="拟稿时间",width="106px")
 	def getFormattedCreatedDate(){
 		if(createDate!=null){
 			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
@@ -120,7 +120,7 @@ class Bbs {
 	}
 
 	//状态：起草,待发布,已发布,退回
-	@GridColumn(name="状态",width="60px",colIdx=4)
+	@GridColumn(name="状态",width="50px",colIdx=5)
 	String status = "起草"
 
 	//附件

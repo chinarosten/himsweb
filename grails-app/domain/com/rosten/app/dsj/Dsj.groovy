@@ -24,7 +24,7 @@ class Dsj {
 	
 	//时间
 	Date time = new Date()
-	@GridColumn(name="日期",width="150px",colIdx=3)
+	@GridColumn(name="大事记日期",width="106px",colIdx=2)
 	def getFormattedTimeDate(){
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		if(time){
@@ -59,7 +59,7 @@ class Dsj {
 	//拟稿人
 	User drafter
 	
-	@GridColumn(name="拟稿人",width="60px")
+	@GridColumn(name="拟稿人",width="50px")
 	def getDrafterName(){
 		if(drafter!=null){
 			return drafter.getFormattedName()
@@ -74,7 +74,7 @@ class Dsj {
 	//当前处理人
 	User currentUser
 	
-	@GridColumn(name="当前处理者",width="60px",colIdx=5)
+	@GridColumn(name="当前处理人",width="60px",colIdx=5)
 	def getCurrentUserName(){
 		if(currentUser!=null){
 			return currentUser.getFormattedName()
@@ -89,13 +89,13 @@ class Dsj {
 	Date currentDealDate
 	
 	//状态
-	@GridColumn(name="状态",width="60px")
+	@GridColumn(name="状态",width="50px")
 	String status = "拟稿"
 	
 	//拟稿时间
 	Date createDate = new Date()
 	
-	@GridColumn(name="拟稿时间",width="150px")
+	@GridColumn(name="拟稿时间",width="106px")
 	def getFormattedDate(){
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		return sd.format(createDate)

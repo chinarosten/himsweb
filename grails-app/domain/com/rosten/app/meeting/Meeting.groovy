@@ -16,11 +16,11 @@ class Meeting {
 	String serialNo
 	
 	//类别
-	@GridColumn(name="类别",width="80px")
+	@GridColumn(name="类别",width="50px")
 	String category = "部门会议"
 	
 	//标题
-	@GridColumn(name="标题",formatter="meeting_formatTitle")
+	@GridColumn(name="标题",formatter="meeting_formatTitle",colIdx=3)
 	String subject
 	
 	//开始时间
@@ -63,10 +63,20 @@ class Meeting {
 		}
 	}
 	
+	
+	@GridColumn(name="当前处理人",colIdx=7,width="60px")
+	def getCurrentUserName(){
+		if(currentUser!=null){
+			return currentUser.chinaName?currentUser.chinaName:currentUser.username
+		}else{
+			return ""
+		}
+	}
+	
 	//拟稿人
 	User drafter
 	
-	@GridColumn(name="拟稿人",colIdx=4,width="60px")
+	@GridColumn(name="拟稿人",colIdx=8,width="50px")
 	def getDrafterName(){
 		if(drafter!=null){
 			return drafter.chinaName?drafter.chinaName:drafter.username
@@ -81,15 +91,6 @@ class Meeting {
 	//当前处理人
 	User currentUser
 	
-	@GridColumn(name="当前处理者",colIdx=5,width="60px")
-	def getCurrentUserName(){
-		if(currentUser!=null){
-			return currentUser.chinaName?currentUser.chinaName:currentUser.username
-		}else{
-			return ""
-		}
-	}
-	
 	//当前处理人部门
 	String currentDepart
 	
@@ -97,25 +98,25 @@ class Meeting {
 	Date currentDealDate
 	
 	//状态
-	@GridColumn(name="状态",colIdx=6,width="80px")
+	@GridColumn(name="状态",colIdx=6,width="50px")
 	String status = "拟稿"
 	
 	//拟稿时间
 	Date createDate = new Date()
 	
-	@GridColumn(name="开始时间",width="150px")
+	@GridColumn(name="开始时间",width="106px",colIdx=4)
 	def getFormattedStartDate(){
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		return sd.format(startDate)
 	}
 	
-	@GridColumn(name="结束时间",width="150px")
+	@GridColumn(name="结束时间",width="106px",colIdx=5)
 	def getFormattedEndDate(){
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		return sd.format(endDate)
 	}
 	
-	@GridColumn(name="拟稿时间",width="150px")
+	@GridColumn(name="拟稿时间",width="106px")
 	def getFormattedDate(){
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		return sd.format(createDate)
