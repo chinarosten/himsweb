@@ -20,7 +20,7 @@ class Bbs {
 	String level = "普通"
 
 	//类别
-	@GridColumn(name="类别",width="30px")
+	@GridColumn(name="类别",width="40px")
 	String category = "公告"
 
 	//主题
@@ -120,7 +120,7 @@ class Bbs {
 	}
 
 	//状态：起草,待发布,已发布,退回
-	@GridColumn(name="状态",width="50px",colIdx=5)
+	@GridColumn(name="状态",width="60px",colIdx=5)
 	String status = "起草"
 
 	//附件

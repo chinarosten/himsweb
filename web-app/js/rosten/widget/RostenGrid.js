@@ -216,10 +216,22 @@ define(["dojo/_base/declare",
                 domStyle.set(this.loadingimg, "display", "none");
             }
         },
+        _checkMobile:function(){
+            var ua = navigator.userAgent.toLowerCase();
+            if(ua.indexOf("windows nt")!=-1) {  
+                return false;
+            }else{
+                return true;
+            }
+        },
         _parseGridHeader: function(data){
+            var isWin = this._checkMobile();
         	kernel.forEach(data,function(item){
         		if(item.formatter){
         			item.formatter = eval(item.formatter);
+        		}
+        		if(isWin && item.width=="auto"){
+        		    item.width="180px";
         		}
         	});
 			if (this.showRowSelector == "new") {
