@@ -216,11 +216,13 @@ class SystemService {
 	def getAllSystemLog={offset,max->
 		return SystemLog.createCriteria().list(max:max,offset:offset){
 			order("company", "desc")
+			order("createDate", "desc")
 		}
 	}
 	def getSystemLogCount={
 		return SystemLog.createCriteria().count(){
 			order("company", "desc")
+			order("createDate", "desc")
 		}
 	}
 
