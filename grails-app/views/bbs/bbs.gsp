@@ -273,7 +273,7 @@
 						    <td><div align="right">内容：</td>
 						    <td colspan=3>
 						    	
-						    	<div data-dojo-type="dijit/Editor" style="overflow:hidden" id="content"
+						    	<div data-dojo-type="dijit/Editor" style="overflow:hidden;width:620px" id="content"
 									extraPlugins="[{name:'dijit/_editor/plugins/FontChoice', command: 'fontName', generic: true},'fontSize']"
 									data-dojo-props='name:"content"
 				            		<g:if test="${fieldAcl.readOnly.contains('content')}">,disabled:true</g:if>
