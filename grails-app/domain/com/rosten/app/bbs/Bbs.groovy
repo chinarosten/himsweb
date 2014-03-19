@@ -93,7 +93,7 @@ class Bbs {
 	//起草人
 	User drafter
 
-	@GridColumn(name="拟稿人",width="50px",colIdx=8)
+	@GridColumn(name="拟稿人",width="50px",colIdx=7)
 	def getFormattedDrafter(){
 		if(drafter!=null){
 			return drafter.getFormattedName()
