@@ -9,7 +9,7 @@ class MailActionController {
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
 		actionList << createAction("发送",imgPath + "ok.png","send_mail")
-		actionList << createAction("存草稿",imgPath + "save.gif","save_mail")
+		actionList << createAction("存草稿",imgPath + "Save.gif","save_mail")
 		actionList << createAction("取消",imgPath + "qx.png","cancel_mail")
 		
 		render actionList as JSON
