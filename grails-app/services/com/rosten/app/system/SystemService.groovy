@@ -393,6 +393,12 @@ class SystemService {
 		
 		def resource = new Resource()
 		resource.resourceName = "配置文档"
+		resource.url = "sendFileConfigManage"
+		resource.imgUrl = "images/rosten/navigation/config.png"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "发文代字"
 		resource.url = "sendfileLabelManage"
 		resource.imgUrl = "images/rosten/navigation/config.png"
 		model.addToResources(resource)
