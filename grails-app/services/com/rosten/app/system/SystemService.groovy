@@ -329,9 +329,11 @@ class SystemService {
 			Model.findAllWhere(company:fromCompany).each{
 				def model = new Model()
 				model.company = company
+				model.modelCode = it.modelCode
 				model.modelName = it.modelName
 				model.modelUrl = it.modelUrl
 				model.description = it.description
+				model.serialNo = it.serialNo
 				it.resources.each{rs->
 					def resource = new Resource()
 					resource.resourceName = rs.resourceName
