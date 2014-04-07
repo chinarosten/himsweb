@@ -80,6 +80,8 @@ class ModelerController {
 		render json as JSON
 		
 	}
-	
+	def modelerGrid ={
+		
+	}
     def index() { }
 }
