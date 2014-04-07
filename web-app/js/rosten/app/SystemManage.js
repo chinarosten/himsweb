@@ -281,7 +281,37 @@ define(["dojo/_base/connect",
         rosten.kernel.refreshGrid(rosten.kernel.getGrid().defaultUrl);
     };
     //------------------------------------------------------------------------------------------------------------------------
-
+    //-----------增加流程引擎部分------------------------------------------------
+    add_modeler = function() {
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        var companyId = rosten.kernel.getUserInforByKey("companyid");
+        rosten.openNewWindow("modeler", rosten.webPath + "/modeler/web/editor.html");
+    };
+    read_modeler = function() {
+        change_modeler();
+    };
+    change_modeler = function() {
+        var unid = rosten.getGridUnid("single");
+        if (unid == "")
+            return;
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        var companyId = rosten.kernel.getUserInforByKey("companyid");
+        rosten.openNewWindow("user", rosten.webPath + "/modeler/modelerShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+        rosten.kernel.getGrid().clearSelected();
+    };
+    delete_modeler = function() {
+        var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
+        _1.callback = function() {
+            var unids = rosten.getGridUnid("multi");
+            if (unids == "")
+                return;
+            var content = {};
+            content.id = unids;
+            rosten.read(rosten.webPath + "/modeler/modelerDelete", content, delete_callback);
+        };
+    };
+    
+    //-------------------------------------------------------------------------
     add_user = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
@@ -617,6 +647,15 @@ define(["dojo/_base/connect",
      */
     show_systemNaviEntity = function(oString) {
         switch (oString) {
+	        case "workFlowManage":
+	            var naviJson = {
+	                identifier : oString,
+	                actionBarSrc : rosten.webPath + "/systemAction/molelerView",
+	                gridSrc : rosten.webPath + "/modeler/modelerGrid"
+	            };
+	            rosten.kernel.addRightContent(naviJson);
+	            break;
+            
 	        case "systemLogManage":
 	            var naviJson = {
 	                identifier : oString,

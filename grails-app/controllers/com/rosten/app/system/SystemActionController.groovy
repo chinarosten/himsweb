@@ -6,6 +6,18 @@ class SystemActionController {
 	def systemService
 	def imgPath ="images/rosten/actionbar/"
 	
+	def molelerView ={
+		def actionList =[]
+		def strname ="modeler"
+		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
+		actionList << createAction("新增",imgPath + "add.png","add_" + strname)
+		actionList << createAction("预览",imgPath + "yl.gif","read_" + strname)
+		actionList << createAction("编辑",imgPath + "ok.png","change_" + strname)
+		actionList << createAction("删除",imgPath + "delete.png","delete_" + strname)
+		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
+		render actionList as JSON
+	}
+	
 	def systemLogView ={
 		def actionList =[]
 		def strname ="systemLog"
