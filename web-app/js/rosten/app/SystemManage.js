@@ -282,10 +282,50 @@ define(["dojo/_base/connect",
     };
     //------------------------------------------------------------------------------------------------------------------------
     //-----------增加流程引擎部分------------------------------------------------
+    deploy_modeler = function(){
+    	
+    };
+    export_modeler = function(){
+    	
+    };
     add_modeler = function() {
-        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        rosten.kernel.createRostenShowDialog(rosten.webPath + "/modeler/add", {
+            onLoadFunction : function() {
+
+            }
+        });
+    };
+    create_modeler = function(){
+    	var workFlowName = registry.byId("workFlowName");
+		if(!workFlowName.isValid()){
+			rosten.alert("流程名称不正确！").queryDlgClose = function(){
+				workFlowName.focus();
+			};
+			return;
+		}
+		var workFlowKey = registry.byId("workFlowKey");
+		if(!workFlowKey.isValid()){
+			rosten.alert("流程idkey不正确！").queryDlgClose = function(){
+				workFlowKey.focus();
+			};
+			return;
+		}
+		var content = {name:workFlowName.attr("value"),key:workFlowKey.attr("value"),description:registry.byId("description").attr("value")};
+		
+		rosten.readSync(rosten.webPath + "/modeler/create",content,function(data){
+			if(data.result=="true"){
+				rosten.alert("保存成功！").queryDlgClose= function(){
+					rosten.openNewWindow("modeler", rosten.webPath + "/modeler/web/editor.html?id=" + data.modelId);	
+				};
+			}else{
+				rosten.alert("保存失败!");
+			}
+		});
+    };
+    save_modeler = function(){
+    	var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
-        rosten.openNewWindow("modeler", rosten.webPath + "/modeler/web/editor.html");
+        
     };
     read_modeler = function() {
         change_modeler();

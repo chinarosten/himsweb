@@ -11,9 +11,11 @@ class SystemActionController {
 		def strname ="modeler"
 		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
 		actionList << createAction("新增",imgPath + "add.png","add_" + strname)
-		actionList << createAction("预览",imgPath + "yl.gif","read_" + strname)
 		actionList << createAction("编辑",imgPath + "ok.png","change_" + strname)
 		actionList << createAction("删除",imgPath + "delete.png","delete_" + strname)
+		actionList << createAction("流程预览",imgPath + "yl.gif","read_" + strname)
+		actionList << createAction("流程部署",imgPath + "deploy.png","deploy_" + strname)
+		actionList << createAction("导出xml文件",imgPath + "export.png","export_" + strname)
 		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
 		render actionList as JSON
 	}
