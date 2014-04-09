@@ -26,10 +26,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td width="80">
+                            <td>
                                 <div align="right">流程idkey：</div>
                             </td>
-                           <td  width="220">
+                           <td>
                                 <input id="workFlowKey" data-dojo-type="dijit/form/ValidationTextBox"
                                 	data-dojo-props='name:"workFlowKey",
                                 		"class":"input",
@@ -46,7 +46,6 @@
                             	<textarea id="description" data-dojo-type="dijit/form/SimpleTextarea"
                              		data-dojo-props='name:"description",
                                 		"class":"input",
-                                		style:{width:"400px"},
                                 		trim:true
                                 '></textarea>
                             </td>

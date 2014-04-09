@@ -14,17 +14,6 @@ class ModelerController {
 			model.setName(params.name);
 			model.setKey(params.key);
 			
-			//-----------编辑内容--------------------
-			def editorNode = [:]
-			editorNode["id"] = "canvas";
-			editorNode["resourceId"] = "canvas";
-			
-			def stencilSetNode =[:]
-			stencilSetNode["namespace"] = "http://b3mn.org/stencilset/bpmn2.0#";
-			
-			editorNode["stencilset"] = stencilSetNode
-			//------------编辑内容------------------
-			
 			def modelObjectNode = [:]
 			modelObjectNode["name"] = params.name
 			modelObjectNode["revision"] = 1
@@ -33,9 +22,9 @@ class ModelerController {
 			model.setMetaInfo(modelObjectNode.toString());
 			
 			repositoryService.saveModel(model);
-			repositoryService.addModelEditorSource(model.getId(), editorNode.toString().getBytes("utf-8"));
 			
 			json["result"] = "true"
+			json["modelId"] = model.getId()
 			
 		}catch (Exception e) {
 			json["result"] = "false"
@@ -56,19 +45,16 @@ class ModelerController {
 		
 		if (bytes != null) {
 			String modelEditorSource = new String(bytes, "utf-8");
-	
-			//Map modelNode = jsonMapper.fromJson(modelEditorSource, Map.class);
-			
-			root["model"] = [:]
+			root["model"] = JSON.parse(modelEditorSource)
 			
 		} else {
-			def modeNode = [:]
-			modeNode["id"] = "canvas"
-			modeNode["resourceId"] = "canvas"
+			def modelNode = [:]
+			modelNode["id"] = "canvas"
+			modelNode["resourceId"] = "canvas"
 	
 			def stencilSetNode =[:]
 			stencilSetNode["namespace"] = "http://b3mn.org/stencilset/bpmn2.0#";
-			modeNode["stencilset"] = stencilSetNode
+			modelNode["stencilset"] = stencilSetNode
 	
 			root["model"] = modelNode
 		}
@@ -86,7 +72,8 @@ class ModelerController {
 		model.setName(params.name);
 		repositoryService.saveModel(model);
 		repositoryService.addModelEditorSource(model.getId(),params.json_xml.getBytes("utf-8"));
-	
+		
+		json["modelId"] = model.getId()
 		render json as JSON
 	}
 	def modelerGrid ={
@@ -95,10 +82,11 @@ class ModelerController {
 			def _gridHeader =[]
 			
 			_gridHeader << ["name":"序号","width":"26px","colIdx":0,"field":"rowIndex"]
-			_gridHeader << ["name":"流程名称","width":"auto","colIdx":1,"field":"name"]
-			_gridHeader << ["name":"版本号","width":"60px","colIdx":2,"field":"version"]
-			_gridHeader << ["name":"创建时间","width":"130px","colIdx":3,"field":"createTime"]
-			_gridHeader << ["name":"更新时间","width":"130px","colIdx":4,"field":"lastUpdateTime"]
+			_gridHeader << ["name":"流程名称","width":"100px","colIdx":1,"field":"key"]
+			_gridHeader << ["name":"流程名称","width":"auto","colIdx":2,"field":"name"]
+			_gridHeader << ["name":"版本号","width":"60px","colIdx":3,"field":"version"]
+			_gridHeader << ["name":"创建时间","width":"130px","colIdx":4,"field":"createTime"]
+			_gridHeader << ["name":"更新时间","width":"130px","colIdx":5,"field":"lastUpdateTime"]
 			
 			json["gridHeader"] = _gridHeader
 		}

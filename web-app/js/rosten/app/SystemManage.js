@@ -315,6 +315,7 @@ define(["dojo/_base/connect",
 		rosten.readSync(rosten.webPath + "/modeler/create",content,function(data){
 			if(data.result=="true"){
 				rosten.alert("保存成功！").queryDlgClose= function(){
+					rosten.kernel.hideRostenShowDialog();
 					rosten.openNewWindow("modeler", rosten.webPath + "/modeler/web/editor.html?id=" + data.modelId);	
 				};
 			}else{
@@ -336,7 +337,7 @@ define(["dojo/_base/connect",
             return;
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
-        rosten.openNewWindow("user", rosten.webPath + "/modeler/modelerShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+        rosten.openNewWindow("modeler", rosten.webPath + "/modeler/web/editor.html?id=" + unid);
         rosten.kernel.getGrid().clearSelected();
     };
     delete_modeler = function() {
@@ -694,6 +695,9 @@ define(["dojo/_base/connect",
 	                gridSrc : rosten.webPath + "/modeler/modelerGrid"
 	            };
 	            rosten.kernel.addRightContent(naviJson);
+	            
+	            var rostenGrid = rosten.kernel.getGrid();
+                rostenGrid.onRowDblClick = read_modeler;
 	            break;
             
 	        case "systemLogManage":

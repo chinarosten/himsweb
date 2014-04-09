@@ -11582,7 +11582,8 @@ ORYX.Editor = {
                   maModelAuthI + 
                 "</span>" + 
                 "<div id='header_close_image'>" +
-                  "<a href=\""+ORYX.CONFIG.WEB_URL+"\" target=\"_self\" title=\"close modeler\">" +
+//                  "<a href=\""+ORYX.CONFIG.WEB_URL+"\" target=\"_self\" title=\"close modeler\">" +
+                  "<a href=\"javascript:window.close()\" title=\"close modeler\">" +
                     "<img src='../editor/images/close_button.png' border=\"0\" />" + 
                   "</a>" +
                 "</div>" + 
@@ -24677,7 +24678,6 @@ ORYX.Plugins.Save = Clazz.extend({
 					if (!this.processURI && loc) {
 						this.processURI = loc;
 					}
-	
 					if( forceNew ){
 						var resJSON = transport.responseText.evalJSON();
 						
@@ -24704,7 +24704,7 @@ ORYX.Plugins.Save = Clazz.extend({
 					success = true;
 					
 					win.close();
-				
+					
 					if (success) {
 						// Reset changes
 						this.changeDifference = 0;
@@ -24718,6 +24718,8 @@ ORYX.Plugins.Save = Clazz.extend({
 						if(modelMeta["new"]) {
 							modelMeta["new"] = false;
 						}
+						window.opener.rosten.kernel.refreshGrid();
+						alert("保存成功！");
 					}
 					
 					
@@ -24895,7 +24897,8 @@ ORYX.Plugins.Save = Clazz.extend({
 			method			: method,
 			timeout			: 1800000,
 			disableCaching	: true,
-			headers			: {'Accept':"application/json", 'Content-Type':'charset=UTF-8'},
+			//headers			: {'Accept':"application/json", 'Content-Type':'charset=UTF-8'},
+			headers			: {'Accept':"application/json"},
 			params			: params,
 			success			: success,
 			failure			: failure
