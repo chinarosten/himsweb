@@ -114,6 +114,7 @@ activiti {
 	  history = "audit" // "none", "activity", "audit" or "full"
 	  sessionUsernameKey = "username"
 	  useFormKey = true
+	  activityFontName = "宋体"
 }
 
 environments {
