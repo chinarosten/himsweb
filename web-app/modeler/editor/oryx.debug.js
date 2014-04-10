@@ -24807,6 +24807,8 @@ ORYX.Plugins.Save = Clazz.extend({
 	    });
 				      
 		win.show();
+		//win.body.mask(ORYX.I18N.Save.pleaseWait, "x-waiting-box");
+		//callback($('edit_model'));
     },
 	
 	/**

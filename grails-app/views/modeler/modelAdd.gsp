@@ -14,7 +14,7 @@
                     <tbody>
 						<tr>
                             <td width="80">
-                                <div align="right">流程名称：</div>
+                                <div align="right"><span style="color:red">*&nbsp;</span>流程名称：</div>
                             </td>
                            <td  width="220">
                                 <input id="workFlowName" data-dojo-type="dijit/form/ValidationTextBox"
@@ -27,7 +27,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <div align="right">流程idkey：</div>
+                                <div align="right"><span style="color:red">*&nbsp;</span>流程idkey：</div>
                             </td>
                            <td>
                                 <input id="workFlowKey" data-dojo-type="dijit/form/ValidationTextBox"

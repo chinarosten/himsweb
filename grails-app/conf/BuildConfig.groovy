@@ -47,7 +47,7 @@ grails.project.dependency.resolution = {
 		compile ":jackson-mapper-asl:1.9.9"
 		compile ":activiti-json-converter:5.12.1"
 		compile ":javaGeom:0.11.0"
-		compile ":himsweb-common-jar:0.1"
+//		compile ":himsweb-common-jar:0.1"
     }
 
     plugins {
