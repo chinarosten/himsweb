@@ -3,7 +3,8 @@
  */
 define(["dojo/_base/connect",
         "dijit/registry",
-        "rosten/kernel/behavior"], function(connect,registry) {
+        "dojo/has", 
+        "rosten/kernel/behavior"], function(connect,registry,has) {
 
     searchGridSubmit = function() {
         var url = "jsproot/sysmanage/";
@@ -283,12 +284,31 @@ define(["dojo/_base/connect",
     //------------------------------------------------------------------------------------------------------------------------
     //-----------增加流程引擎部分------------------------------------------------
     deploy_modeler = function(){
-    	
+    	var unid = rosten.getGridUnid("single");
+        if (unid == "")
+            return;
+    	rosten.readSync(rosten.webPath + "/modeler/deploy/" + unid,{},function(data){
+			if(data.result=="true" || data.result == true ){
+				rosten.alert("部署成功！").queryDlgClose= function(){
+					rosten.kernel.refreshGrid();
+				};
+			}else{
+				rosten.alert("部署失败!");
+			}
+		});
     };
     export_modeler = function(){
-    	
+    	var unid = rosten.getGridUnid("single");
+        if (unid == "")
+            return;
+    	var url = rosten.webPath + "/modeler/export/" + unid;
+    	window.open(url,false);
     };
     add_modeler = function() {
+    	if (has("ie")) {
+    		rosten.alert("此功能不支持IE浏览器！");
+    		return;
+    	}
         rosten.kernel.createRostenShowDialog(rosten.webPath + "/modeler/add", {
             onLoadFunction : function() {
 
@@ -332,6 +352,10 @@ define(["dojo/_base/connect",
         change_modeler();
     };
     change_modeler = function() {
+    	if (has("ie")) {
+    		rosten.alert("此功能不支持IE浏览器！");
+    		return;
+    	}
         var unid = rosten.getGridUnid("single");
         if (unid == "")
             return;

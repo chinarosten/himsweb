@@ -23,25 +23,31 @@ grails.project.dependency.resolution = {
 
     repositories {
         inherits true // Whether to inherit repository definitions from plugins
-
+		flatDir name:'myRepo', dirs:"lib"
+		
         grailsPlugins()
         grailsHome()
         grailsCentral()
 
         mavenLocal()
         mavenCentral()
-
+		
         // uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
-		mavenRepo "https://maven.alfresco.com/nexus/content/groups/public/"
+		//mavenRepo "https://maven.alfresco.com/nexus/content/groups/public/"
     }
 
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
 		runtime 'mysql:mysql-connector-java:5.1.26'
+		compile ":jackson-core-asl:1.9.9"
+		compile ":jackson-mapper-asl:1.9.9"
+		compile ":activiti-json-converter:5.12.1"
+		compile ":javaGeom:0.11.0"
+		compile ":himsweb-common-jar:0.1"
     }
 
     plugins {
