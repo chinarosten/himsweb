@@ -1,8 +1,8 @@
 /**
  * @author rosten
  */
-define([ "dojo/_base/connect", "dijit/registry","rosten/util/general", "rosten/kernel/behavior" ], function(
-		connect, registry,General) {
+define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/behavior" ], function(
+		connect, registry,has) {
 	
 	//增加已部署流程功能
 	read_flow = function() {

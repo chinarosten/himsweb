@@ -3,8 +3,7 @@
  */
 define(["dojo/_base/connect",
         "dijit/registry",
-        "dojo/has", 
-        "rosten/kernel/behavior"], function(connect,registry,has) {
+        "rosten/kernel/behavior"], function(connect,registry) {
 
     searchGridSubmit = function() {
         var url = "jsproot/sysmanage/";

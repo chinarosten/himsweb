@@ -58,7 +58,7 @@ class ModelerController {
 				sMap["rowIndex"] = idx+1
 				sMap["id"] = processDefinition.id
 				sMap["deploymentId"] = deployment.id
-				sMap["name"] = processDefinition.name
+				sMap["name"] = deployment.name
 				sMap["version"] = processDefinition.version
 				
 				if(processDefinition.isSuspended()){
@@ -187,9 +187,6 @@ class ModelerController {
 					sMap["version"] = item.version
 					sMap["createTime"] = item.createTime
 					sMap["lastUpdateTime"] = item.lastUpdateTime
-					
-					println idx
-					println item.getDeploymentId()
 					
 					if(item.getDeploymentId()){
 						sMap["status"] = "已部署"
