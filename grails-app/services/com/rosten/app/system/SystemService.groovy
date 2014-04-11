@@ -351,6 +351,28 @@ class SystemService {
 		return true
 	}
 	
+	private def initData_workFlow ={ path,company ->
+		def model = new Model(company:company)
+		model.modelName = "流程管理"
+		model.modelCode = "workflow"
+		model.modelUrl = path + "/system/navigation"
+		model.description ="流程管理模块"
+
+		def resource = new Resource()
+		resource.resourceName = "模型工作区"
+		resource.url = "workFlowManage"
+		resource.imgUrl = "images/rosten/navigation/config.png"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "流程定义"
+		resource.url = "flowDefinedManage"
+		resource.imgUrl = "images/rosten/navigation/flow.png"
+		model.addToResources(resource)
+		
+		model.save(flush:true)
+	}
+	
 	private def initData_bbs ={ path,company ->
 		def model = new Model(company:company)
 		model.modelName = "公告栏"
@@ -564,6 +586,9 @@ class SystemService {
 			resource.imgUrl = "images/rosten/navigation/Resource.gif"
 			model.addToResources(resource)
 			model.save(flush:true)
+			
+			//流程管理
+			initData_workFlow(path,company)
 			
 			//公告栏
 			initData_bbs(path,company)
