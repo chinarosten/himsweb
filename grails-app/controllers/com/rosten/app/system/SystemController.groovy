@@ -161,22 +161,22 @@ class SystemController {
 			resource.properties = params
 			
 			if(!resource.model.id.equals(params.modelId)){
-				def _model = resource.model
-				_model.removeFromResources(resource)
-				_model.save(flush:true)
-				
-				def model = Model.get(params.modelId)
-				model.addToResources(resource)
-				model.save(flush:true)
-			}
-				
-			if(resource.save(flush:true)){
-				json["result"] = "true"
-			}else{
-				resource.errors.each{
-					println it
+				try{
+//					def _resource = resource
+					
+//					def _model = resource.model
+//					_model.removeFromResources(resource)
+//					_model.save(flush:true)
+					
+					def model = Model.get(params.modelId)
+					model.addToResources(resource)
+					model.save(flush:true)
+					
+					json["result"] = "true"
+				}catch(Exception e){
+					json = [result:'error']
 				}
-				json["result"] = "false"
+				
 			}
 			render json as JSON
 			

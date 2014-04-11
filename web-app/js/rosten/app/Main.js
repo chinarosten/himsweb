@@ -120,6 +120,11 @@ define(["dojo/_base/kernel"
             	require(["rosten/app/DsjManage"],function(){
             		show_dsjNaviEntity("myDsjManage");
             	});
+            }else if (oString == "workflow") {
+            	deleteMailNavigation();
+            	require(["rosten/app/WorkFlowManage"],function(){
+            		show_workFlowNaviEntity("flowDefinedManage");
+            	});
             }
         });
 		

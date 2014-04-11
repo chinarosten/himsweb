@@ -5,6 +5,8 @@ import org.activiti.bpmn.model.BpmnModel
 import org.activiti.editor.language.json.converter.BpmnJsonConverter
 import org.activiti.engine.repository.Deployment
 import org.activiti.engine.repository.Model
+import org.activiti.engine.repository.ProcessDefinition
+import org.activiti.engine.repository.ProcessDefinitionQuery
 import org.codehaus.jackson.JsonNode
 import org.codehaus.jackson.map.ObjectMapper
 import org.codehaus.jackson.node.ObjectNode
@@ -13,7 +15,74 @@ import com.rosten.app.util.Util
 
 class ModelerController {
 	def repositoryService
+	
+	
+	
+	
+	def flowDefinedGrid ={
+		def json=[:]
+		if(params.refreshHeader){
+			def _gridHeader =[]
 
+			_gridHeader << ["name":"序号","width":"26px","colIdx":0,"field":"rowIndex"]
+			_gridHeader << ["name":"流程id","width":"100px","colIdx":1,"field":"id"]
+			_gridHeader << ["name":"部署id","width":"60px","colIdx":2,"field":"deploymentId"]
+			_gridHeader << ["name":"流程名称","width":"auto","colIdx":3,"field":"name"]
+			_gridHeader << ["name":"版本号","width":"40px","colIdx":4,"field":"version"]
+			_gridHeader << ["name":"状态","width":"40px","colIdx":5,"field":"status"]
+			_gridHeader << ["name":"部署时间","width":"130px","colIdx":6,"field":"deploymentTime"]
+
+			json["gridHeader"] = _gridHeader
+		}
+		def totalNum = 0
+		if(params.refreshData){
+			int perPageNum = Util.str2int(params.perPageNum)
+			int nowPage =  Util.str2int(params.showPageNum)
+
+			def offset = (nowPage-1) * perPageNum
+			def max  = perPageNum
+
+			def _json = [identifier:'id',label:'name',items:[]]
+			
+			ProcessDefinitionQuery processDefinitionQuery = repositoryService.createProcessDefinitionQuery().orderByDeploymentId().desc();
+			totalNum = processDefinitionQuery.count()
+			
+			List<ProcessDefinition> processDefinitionList = processDefinitionQuery.listPage(offset, offset+max);
+			
+			def idx = 0
+			for (ProcessDefinition processDefinition : processDefinitionList) {
+				String deploymentId = processDefinition.getDeploymentId();
+				Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult();
+				
+				def sMap =[:]
+				sMap["rowIndex"] = idx+1
+				sMap["id"] = processDefinition.id
+				sMap["deploymentId"] = deployment.id
+				sMap["name"] = processDefinition.name
+				sMap["version"] = processDefinition.version
+				
+				if(processDefinition.isSuspended()){
+					sMap["status"] = "已挂起"
+				}else{
+					sMap["status"] = "正常"
+				}
+				
+				sMap["deploymentTime"] = deployment.deploymentTime
+				
+				_json.items+=sMap
+				
+				idx += 1
+				
+			}
+
+			json["gridData"] = _json
+		}
+		if(params.refreshPageControl){
+			json["pageControl"] = ["total":totalNum.toString()]
+		}
+		render json as JSON
+	}
+	
 	def create ={
 		def json=[:]
 		try{
