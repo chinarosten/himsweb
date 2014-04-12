@@ -174,9 +174,19 @@ class SystemController {
 					
 					json["result"] = "true"
 				}catch(Exception e){
-					json = [result:'error']
+					json["result"] = "error"
 				}
 				
+			}else{
+				resource.properties = params
+				if(resource.save(flush:true)){
+					json["result"] = "true"
+				}else{
+					resource.errors.each{
+						println it
+					}
+					json["result"] = "false"
+				}
 			}
 			render json as JSON
 			
@@ -209,6 +219,8 @@ class SystemController {
 		def resource = new Resource()
 		if(params.id){
 			resource = Resource.get(params.id)
+		}else{
+			resource.imgUrl = "images/rosten/navigation/rosten.png"
 		}
 		model["user"]=user
 		model["company"] = company

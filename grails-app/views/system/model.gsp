@@ -117,7 +117,7 @@
                                '/>
                             </td>
                         </tr>
-						<tr>
+						<tr style="display:none">
                         	<td>
                                 <div align="right" >
                                     <span style="color:red">*&nbsp;</span>链接导航路径：

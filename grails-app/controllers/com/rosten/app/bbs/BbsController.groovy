@@ -159,6 +159,10 @@ class BbsController {
 			order("publishDate", "desc")
 		}
 		
+		//获取配置文档
+		def bbsConfig = BbsConfig.first()
+		def today= new Date()
+		
 		//取最前面9条数据
 		def bbsList = []
 		def cResult =c.list(pa,query).unique()
@@ -171,9 +175,15 @@ class BbsController {
 			smap["id"] = it.id
 			smap["date"] = it.getFormattedPublishDate("datetime")
 			
-			if(!it.hasReaders.find{item->
-				 item.id == user.id 
-			}){
+			//修改显示new的条件，改为与配置文件中的显示日期相比较----2014-4-12
+//			if(!it.hasReaders.find{item->
+//				 item.id == user.id 
+//			}){
+//				smap["isnew"] = true
+//			}
+			
+			def _num = today - it.publishDate
+			if(_num < bbsConfig.showDays){
 				smap["isnew"] = true
 			}
 			

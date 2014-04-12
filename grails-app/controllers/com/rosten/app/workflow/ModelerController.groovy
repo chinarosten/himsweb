@@ -159,9 +159,8 @@ class ModelerController {
 			_gridHeader << ["name":"流程idkey","width":"100px","colIdx":1,"field":"key"]
 			_gridHeader << ["name":"流程名称","width":"auto","colIdx":2,"field":"name"]
 			_gridHeader << ["name":"版本号","width":"60px","colIdx":3,"field":"version"]
-			_gridHeader << ["name":"状态","width":"40px","colIdx":4,"field":"status"]
-			_gridHeader << ["name":"创建时间","width":"130px","colIdx":5,"field":"createTime"]
-			_gridHeader << ["name":"更新时间","width":"130px","colIdx":6,"field":"lastUpdateTime"]
+			_gridHeader << ["name":"创建时间","width":"130px","colIdx":4,"field":"createTime"]
+			_gridHeader << ["name":"更新时间","width":"130px","colIdx":5,"field":"lastUpdateTime"]
 
 			json["gridHeader"] = _gridHeader
 		}
@@ -187,12 +186,6 @@ class ModelerController {
 					sMap["version"] = item.version
 					sMap["createTime"] = item.createTime
 					sMap["lastUpdateTime"] = item.lastUpdateTime
-					
-					if(item.getDeploymentId()){
-						sMap["status"] = "已部署"
-					}else{
-						sMap["status"] = "未部署"
-					}
 
 					_json.items+=sMap
 				}

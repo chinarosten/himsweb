@@ -11,10 +11,11 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/beha
             return;
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
-        rosten.openNewWindow("flow", rosten.webPath + "/modeler/web/editor.html?id=" + unid);
-        rosten.kernel.getGrid().clearSelected();
+        rosten.alert("此功能尚未开通！");
     };
     delete_flow = function() {
+    	rosten.alert("此功能尚未开通！");
+    	return;
         var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
         _1.callback = function() {
             var unids = rosten.getGridUnid("multi");
@@ -30,21 +31,20 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/beha
         if (unid == "")
             return;
     	var url = rosten.webPath + "/modeler/exportFlow/" + unid;
-    	window.open(url,false);
+    	rosten.alert("此功能尚未开通！");
     };
     start_flow = function(){
     	var unid = rosten.getGridUnid("single");
         if (unid == "")
             return;
     	var url = rosten.webPath + "/modeler/startFlow/" + unid;
-    	window.open(url,false);
+    	rosten.alert("此功能尚未开通！");
     };
     stop_flow = function(){
     	var unid = rosten.getGridUnid("single");
         if (unid == "")
             return;
-    	var url = rosten.webPath + "/modeler/stopFlow/" + unid;
-    	window.open(url,false);
+    	rosten.alert("此功能尚未开通！");
     };
 	
 	//-----------增加流程引擎部分------------------------------------------------
