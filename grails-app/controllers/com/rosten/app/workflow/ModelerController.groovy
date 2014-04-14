@@ -16,8 +16,55 @@ import com.rosten.app.util.Util
 class ModelerController {
 	def repositoryService
 	
+	def flowUpdateState ={
+		def json=[:]
+		try{
+			if ("active".equals(params.status)) {
+				repositoryService.activateProcessDefinitionById(params.id, true, null);
+			}else{
+				repositoryService.suspendProcessDefinitionById(params.id, true, null);
+			}
+			json["result"] = "true"
+		}catch(Exception e){
+			json["result"] = "false"
+		}
+		render json as JSON
+	}
+	def flowExport ={
+		ProcessDefinition processDefinition = repositoryService.getProcessDefinition(params.id)
+		String deploymentId = processDefinition.getDeploymentId();
+		
+		def resourceName = processDefinition.diagramResourceName
+		if(!"image".equals(params.type)){
+			resourceName = processDefinition.resourceName
+		}
+		
+		InputStream resourceAsStream = repositoryService.getResourceAsStream(deploymentId, resourceName);
+		
+		byte[] b = new byte[1024];
+		int len = -1;
+		while ((len = resourceAsStream.read(b, 0, 1024)) != -1) {
+		  response.outputStream.write(b, 0, len);
+		}
+		response.outputStream.flush()
+		response.outputStream.close()
+	}
 	
-	
+	def flowDelete ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				ProcessDefinition processDefinition = repositoryService.getProcessDefinition(it)
+				String deploymentId = processDefinition.getDeploymentId();
+				repositoryService.deleteDeployment(deploymentId, true);
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
+	}
 	
 	def flowDefinedGrid ={
 		def json=[:]
@@ -247,6 +294,19 @@ class ModelerController {
 		}catch (Exception e) {
 			println "error......"
 		}
+	}
+	def modelerDelete ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				repositoryService.deleteModel(it);
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
 	}
 	def index() {
 	}

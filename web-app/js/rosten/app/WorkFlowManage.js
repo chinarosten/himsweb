@@ -9,13 +9,10 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/beha
         var unid = rosten.getGridUnid("single");
         if (unid == "")
             return;
-        var userid = rosten.kernel.getUserInforByKey("idnumber");
-        var companyId = rosten.kernel.getUserInforByKey("companyid");
-        rosten.alert("此功能尚未开通！");
+        var url = rosten.webPath + "/modeler/flowExport?id=" + unid + "&type=image";
+    	window.open(url,false);
     };
     delete_flow = function() {
-    	rosten.alert("此功能尚未开通！");
-    	return;
         var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
         _1.callback = function() {
             var unids = rosten.getGridUnid("multi");
@@ -23,28 +20,50 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/beha
                 return;
             var content = {};
             content.id = unids;
-            rosten.read(rosten.webPath + "/modeler/flowDelete", content, delete_callback);
+            rosten.read(rosten.webPath + "/modeler/flowDelete", content, function(data){
+            	if (data.result == "true" || data.result == true) {
+                    rosten.alert("成功删除!");
+                    rosten.kernel.refreshGrid();
+                } else {
+                    rosten.alert("删除失败!");
+                }
+            });
         };
     };
     export_flow = function(){
     	var unid = rosten.getGridUnid("single");
         if (unid == "")
             return;
-    	var url = rosten.webPath + "/modeler/exportFlow/" + unid;
-    	rosten.alert("此功能尚未开通！");
+    	var url = rosten.webPath + "/modeler/flowExport?id=" + unid;
+    	window.open(url,false);
     };
     start_flow = function(){
     	var unid = rosten.getGridUnid("single");
         if (unid == "")
             return;
-    	var url = rosten.webPath + "/modeler/startFlow/" + unid;
-    	rosten.alert("此功能尚未开通！");
+        rosten.readSync(rosten.webPath + "/modeler/flowUpdateState",{id:unid,status:"active"},function(data){
+			if(data.result=="true" || data.result == true ){
+				rosten.alert("重启成功！").queryDlgClose= function(){
+					rosten.kernel.refreshGrid();
+				};
+			}else{
+				rosten.alert("重启失败!");
+			}
+		});
     };
     stop_flow = function(){
     	var unid = rosten.getGridUnid("single");
         if (unid == "")
             return;
-    	rosten.alert("此功能尚未开通！");
+        rosten.readSync(rosten.webPath + "/modeler/flowUpdateState",{id:unid,status:"suspend"},function(data){
+			if(data.result=="true" || data.result == true ){
+				rosten.alert("挂起成功！").queryDlgClose= function(){
+					rosten.kernel.refreshGrid();
+				};
+			}else{
+				rosten.alert("挂起失败!");
+			}
+		});
     };
 	
 	//-----------增加流程引擎部分------------------------------------------------
@@ -137,7 +156,14 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/beha
                 return;
             var content = {};
             content.id = unids;
-            rosten.read(rosten.webPath + "/modeler/modelerDelete", content, delete_callback);
+            rosten.read(rosten.webPath + "/modeler/modelerDelete", content, function(data){
+            	if (data.result == "true" || data.result == true) {
+                    rosten.alert("成功删除!");
+                    rosten.kernel.refreshGrid();
+                } else {
+                    rosten.alert("删除失败!");
+                }
+            });
         };
     };
     

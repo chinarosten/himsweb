@@ -23,7 +23,7 @@ class ModelerActionController {
 		def strname ="flow"
 		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
 		actionList << createAction("查看流程图",imgPath + "yl.gif","read_" + strname)
-		actionList << createAction("导出xml文件",imgPath + "export.png","export_" + strname)
+		actionList << createAction("查看xml文件",imgPath + "export.png","export_" + strname)
 		actionList << createAction("挂起流程",imgPath + "flow_stop.png","stop_" + strname)
 		actionList << createAction("重启流程",imgPath + "flow_start.png","start_" + strname)
 		actionList << createAction("删除",imgPath + "delete.png","delete_" + strname)
