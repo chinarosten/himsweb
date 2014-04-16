@@ -775,6 +775,7 @@ define(["dojo/_base/connect",
                 var rostenGrid = rosten.kernel.getGrid();
                 rostenGrid.onRowDblClick = change_resource;
                 break;
+                
         }
 
     };

@@ -1,27 +1,56 @@
-package com.rosten.app.system
+package com.rosten.app.publicc
 
 import com.rosten.app.annotation.GridColumn
+import com.rosten.app.system.Attachment;
+import com.rosten.app.system.Company;
+import com.rosten.app.system.User;
+
 import java.text.SimpleDateFormat
 
 class DownLoadFile {
 	String id
 	
 	//标题
+	@GridColumn(name="标题",width="auto")
 	String subject
 	
 	//发布人
 	User publisher
 	
+	@GridColumn(name="发布人",width="60px")
+	def getPublisherName(){
+		if(publisher!=null){
+			return publisher.getFormattedName()
+		}else{
+			return ""
+		}
+	}
+	
 	//发布时间
 	Date publishDate = new Date()
 	
-	@GridColumn(name="拟稿时间",width="106px")
+	@GridColumn(name="发布时间",width="120px")
 	def getFormattedPublishDate(){
 		if(publishDate!=null){
 			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 			return sd.format(publishDate)
 		}else{
 			return ""
+		}
+	}
+	
+	//显示顺序
+	int number = 1
+	
+	//是否显示首页
+	boolean isShow = false
+	
+	@GridColumn(name="显示首页",width="50px")
+	def getFormattedIsShow(){
+		if(isShow){
+			return "是"
+		}else{
+			return "否"
 		}
 	}
 	

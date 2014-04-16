@@ -523,6 +523,23 @@ class SystemService {
 		model.save(flush:true)
 
 	}
+	private def initData_public ={path,company ->
+		//公共资源
+		def model = new Model(company:company)
+		model.modelName = "公共资源"
+		model.modelCode = "public"
+		model.modelUrl = path + "/system/navigation"
+		model.description ="公共资源模块"
+		
+		def resource = new Resource()
+		resource.resourceName = "文件下载"
+		resource.url = "downloadFileManage"
+		resource.imgUrl = "images/rosten/navigation/attach.png"
+		model.addToResources(resource)
+		
+		model.save(flush:true)
+
+	}
 	def initData_first ={path,company->
 		try{
 			
@@ -585,6 +602,8 @@ class SystemService {
 			resource.url = "resourceManage"
 			resource.imgUrl = "images/rosten/navigation/Resource.gif"
 			model.addToResources(resource)
+			
+			
 			model.save(flush:true)
 			
 			//流程管理
@@ -604,6 +623,9 @@ class SystemService {
 			
 			//大事记
 			initData_dsj(path,company)
+			
+			//公共资源
+			initData_public(path,company)
 
 			model = new Model(company:company)
 			model.modelName = "短信发送"

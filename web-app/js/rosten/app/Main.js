@@ -125,6 +125,11 @@ define(["dojo/_base/kernel"
             	require(["rosten/app/WorkFlowManage"],function(){
             		show_workFlowNaviEntity("flowDefinedManage");
             	});
+            }else if (oString == "public") {
+            	deleteMailNavigation();
+            	require(["rosten/app/PublicManage"],function(){
+            		show_publicNaviEntity("downloadFileManage");
+            	});
             }
         });
 		
