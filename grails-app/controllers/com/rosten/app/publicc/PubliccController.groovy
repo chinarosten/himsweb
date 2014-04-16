@@ -5,11 +5,39 @@ import com.rosten.app.util.FieldAcl
 import com.rosten.app.system.Company
 import com.rosten.app.system.User
 import com.rosten.app.system.Attachment
+import com.rosten.app.util.Util
 
 class PubliccController {
+	def publiccService
 	
 	def downloadFileGrid ={
+		def json=[:]
+		def company = Company.get(params.companyId)
+		def user = User.get(params.userId)
 		
+		if(params.refreshHeader){
+			def layout = publiccService.getDownloadFileListLayout()
+			json["gridHeader"] = layout
+		}
+		
+		if(params.refreshData){
+			def args =[:]
+			int perPageNum = Util.str2int(params.perPageNum)
+			int nowPage =  Util.str2int(params.showPageNum)
+			
+			args["offset"] = (nowPage-1) * perPageNum
+			args["max"] = perPageNum
+			args["company"] = company
+			
+			def gridData = publiccService.getDownloadFileListDataStore(args)
+			json["gridData"] = gridData
+			
+		}
+		if(params.refreshPageControl){
+			def total = publiccService.getDownloadFileCount(company)
+			json["pageControl"] = ["total":total.toString()]
+		}
+		render json as JSON
 	}
 	
 	def downloadFileAdd ={
@@ -38,11 +66,6 @@ class PubliccController {
 		FieldAcl fa = new FieldAcl()
 		if("normal".equals(user.getUserType())){
 			//普通用户
-			if(user.equals(downloadFile.currentUser)){
-				
-			}else{
-				
-			}
 		}
 		model["fieldAcl"] = fa
 		
