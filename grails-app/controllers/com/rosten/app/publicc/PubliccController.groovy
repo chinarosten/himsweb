@@ -8,6 +8,10 @@ import com.rosten.app.system.Attachment
 
 class PubliccController {
 	
+	def downloadFileGrid ={
+		
+	}
+	
 	def downloadFileAdd ={
 		redirect(action:"downloadFileShow",params:params)
 	}
