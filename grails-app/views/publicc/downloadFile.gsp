@@ -99,12 +99,12 @@
 </head>
 <body>
 	<div class="rosten_action">
-		<div data-dojo-type="rosten/widget/ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'bbsAction',action:'bbsForm',id:bbs?.id,params:[userid:user?.id])}"'></div>
+		<div data-dojo-type="rosten/widget/ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'publiccAction',action:'downloadFileForm',id:downloadFile?.id,params:[userid:user?.id])}"'></div>
 	</div>
 	<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
 	  	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props=''>
         	<form class="rosten_form" id="rosten_form" onsubmit="return false;" style="padding:0px">
-        		<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${bbs?.id }"' />
+        		<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${downloadFile?.id }"' />
         		<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
         	  	<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"基本信息",toggleable:false,moreText:"",height:"460px",marginBottom:"2px"'>
         	  
@@ -116,7 +116,7 @@
 						    	<input id="serialNo" data-dojo-type="dijit/form/ValidationTextBox" 
 				                 	data-dojo-props='name:"serialNo",readOnly:true,
 				                 		trim:true,placeHolder:"领导发布后自动生成",
-										value:"${bbs?.serialNo}"
+										value:"${downloadFile?.serialNo}"
 				                '/>
 						    </td>
 						    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>类别：</div></td>
@@ -125,7 +125,7 @@
 					                data-dojo-props='name:"category",${fieldAcl.isReadOnly("category")},
 					                trim:true,
 				                 	required:true,
-					      			value:"${bbs?.category}"
+					      			value:"${downloadFile?.category}"
 					            '>
 								<option value="公告">公告</option>
 								<option value="公文">公文</option>
@@ -141,7 +141,7 @@
 					                data-dojo-props='name:"level",${fieldAcl.isReadOnly("level")},
 					               	trim:true,
 				                 	required:true,
-					      			value:"${bbs?.level}"
+					      			value:"${downloadFile?.level}"
 					            '>
 									<option value="普通">普通</option>
 									<option value="紧急">紧急</option>
@@ -154,7 +154,7 @@
 				                	data-dojo-props='name:"publishDate",${fieldAcl.isReadOnly("publishDate")},
 				                	trim:true,
 				                 	required:true,
-				                	value:"${bbs?.getFormattedPublishDate("date")}"
+				                	value:"${downloadFile?.getFormattedPublishDate("date")}"
 				               '/>
 						    
 						   </td>
@@ -168,7 +168,7 @@
 				                 		trim:true,
 				                 		required:true,
 				                 		style:{width:"490px"},
-										value:"${bbs?.topic}"
+										value:"${downloadFile?.topic}"
 				                '/>
 						    
 						    </td>    
@@ -193,17 +193,9 @@
                 </div>
 			</form>
 			<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"附件信息",toggleable:false,moreText:"",
-				height:"60px",href:"${createLink(controller:'bbs',action:'getFileUpload',id:bbs?.id)}"'>
+				height:"60px",href:"${createLink(controller:'publicc',action:'getFileUpload',id:downloadFile?.id)}"'>
 			</div>
 			
-		</div>
-		<div data-dojo-type="dijit/layout/ContentPane" id="bbsComment" title="流转意见" data-dojo-props='refreshOnShow:true,
-			href:"${createLink(controller:'bbs',action:'getCommentLog',id:bbs?.id)}"
-		'>	
-		</div>
-		<div data-dojo-type="dijit/layout/ContentPane" id="bbsFlowLog" title="流程跟踪" data-dojo-props='refreshOnShow:true,
-			href:"${createLink(controller:'bbs',action:'getFlowLog',id:bbs?.id)}"
-		'>	
 		</div>
 	</div>
 </body>

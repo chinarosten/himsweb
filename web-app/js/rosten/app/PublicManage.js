@@ -4,6 +4,9 @@
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
 	
+	formatterDownloadFile = function(value,rowIndex){
+		return "<a href=\"" + rosten.webPath + "/system/downloadFile/" + value + "\">下载</a>";
+	};
 	add_downloadFile = function() {
 		var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");

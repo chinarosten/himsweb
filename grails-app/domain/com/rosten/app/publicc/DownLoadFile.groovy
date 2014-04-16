@@ -60,6 +60,15 @@ class DownLoadFile {
 	//附件
 	Attachment attachment
 	
+	@GridColumn(name="操作",width="80px",formatter="formatterDownloadFile")
+	def getAttachmentId(){
+		if(attachment){
+			return attachment.id
+		}else{
+			return ""
+		}
+	}
+	
 	static belongsTo = [company:Company]
 	
     static constraints = {
