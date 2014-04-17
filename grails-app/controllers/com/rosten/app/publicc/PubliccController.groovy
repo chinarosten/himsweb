@@ -6,9 +6,129 @@ import com.rosten.app.system.Company
 import com.rosten.app.system.User
 import com.rosten.app.system.Attachment
 import com.rosten.app.util.Util
+import com.rosten.app.util.SystemUtil
 
 class PubliccController {
+	def springSecurityService
 	def publiccService
+	
+	def publishDownloadFile ={
+		def user = User.get(params.userId)
+		def company = Company.get(params.companyId)
+		
+		def max = 5
+		def offset = 0
+		
+		def c = DownLoadFile.createCriteria()
+		def pa=[max:max,offset:offset]
+		def query = {
+			eq("company",company)
+			eq("isShow",true)
+			order("number", "asc")
+		}
+		
+		//获取配置文档
+		def today= new Date()
+		
+		//取最前面5条数据
+		def _list = []
+		def cResult =c.list(pa,query).unique()
+		if(cResult.size() > 5){
+			cResult = cResult[0..4]
+		}
+		cResult.each{
+			def smap =[:]
+			smap["topic"] = Util.getLimitLengthString(it.subject,40,"...")
+			smap["id"] = it.id
+			smap["date"] = it.getFormattedPublishDate()
+			
+			_list << smap
+		}
+		render _list as JSON
+	}
+	def getFileUpload ={
+		def model =[:]
+		model["docEntity"] = "publicc"
+		model["isShowFile"] = false
+		if(params.id){
+			//已经保存过
+			def downloadFile = DownLoadFile.get(params.id)
+			model["docEntityId"] = params.id
+			//获取附件信息
+			model["attachFiles"] = Attachment.findAllByBeUseId(params.id)
+			
+			def user = springSecurityService.getCurrentUser()
+			if("admin".equals(user.getUserType())){
+				model["isShowFile"] = true
+			}
+		}else{
+			//尚未保存
+			model["newDoc"] = true
+		}
+		render(view:'/share/fileUpload',model:model)
+	}
+	
+	def uploadFile = {
+		def json=[:]
+		SystemUtil sysUtil = new SystemUtil()
+		
+		def uploadPath
+		def currentUser = (User) springSecurityService.getCurrentUser()
+		def companyPath = currentUser.company?.shortName
+		if(companyPath == null){
+			uploadPath = sysUtil.getUploadPath("downloadFile")
+		}else{
+			uploadPath = sysUtil.getUploadPath(currentUser.company.shortName + "/downloadFile")
+		}
+		
+		def f = request.getFile("uploadedfile")
+		if (f.empty) {
+			json["result"] = "blank"
+			render json as JSON
+			return
+		}
+		
+		def uploadSize = sysUtil.getUploadSize()
+		if(uploadSize!=null){
+			//控制附件上传大小
+			def maxSize = uploadSize * 1024 * 1024
+			if(f.size>=maxSize){
+				json["result"] = "big"
+				render json as JSON
+				return
+			}
+		}
+		String name = f.getOriginalFilename()//获得文件原始的名称
+		def realName = sysUtil.getRandName(name)
+		f.transferTo(new File(uploadPath,realName))
+		
+		def attachment = new Attachment()
+		attachment.name = name
+		attachment.realName = realName
+		attachment.type = "downloadFile"
+		attachment.url = uploadPath
+		attachment.size = f.size
+		attachment.beUseId = params.id
+		attachment.upUser = (User) springSecurityService.getCurrentUser()
+		attachment.save(flush:true)
+		
+		def downloadFile = DownLoadFile.get(params.id)
+		downloadFile.attachment = attachment
+		downloadFile.save(flush:true)
+		
+		json["result"] = "true"
+		json["fileId"] = attachment.id
+		json["fileName"] = name
+		
+		if("yes".equals(params.isIE)){
+			def resultStr  = '{"result":"true", "fileId":"' + json["fileId"]  + '","fileName":"' + json["fileName"] +'"}'
+			render "<textarea>" + resultStr +  "</textarea>"
+			return
+		}else{
+			render json as JSON
+		}
+		
+	}
 	
 	def downloadFileGrid ={
 		def json=[:]
@@ -66,6 +186,7 @@ class PubliccController {
 		FieldAcl fa = new FieldAcl()
 		if("normal".equals(user.getUserType())){
 			//普通用户
+			fa.readOnly = ["isShow","number","subject","description"]
 		}
 		model["fieldAcl"] = fa
 		
@@ -103,6 +224,7 @@ class PubliccController {
 			downloadFile.clearErrors()
 			
 			downloadFile.company = Company.get(params.companyId)
+			downloadFile.publisher = user
 		}
 		
 		if(downloadFile.save(flush:true)){

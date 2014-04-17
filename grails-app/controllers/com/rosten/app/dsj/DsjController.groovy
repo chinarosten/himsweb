@@ -157,7 +157,16 @@ class DsjController {
 		def json=[:]
 		SystemUtil sysUtil = new SystemUtil()
 		
-		def uploadPath = sysUtil.getUploadPath("dsj")
+//		def uploadPath = sysUtil.getUploadPath("dsj")
+		def uploadPath
+		def currentUser = (User) springSecurityService.getCurrentUser()
+		def companyPath = currentUser.company?.shortName
+		if(companyPath == null){
+			uploadPath = sysUtil.getUploadPath("dsj")
+		}else{
+			uploadPath = sysUtil.getUploadPath(currentUser.company.shortName + "/dsj")
+		}
+		
 		def f = request.getFile("uploadedfile")
 		if (f.empty) {
 			json["result"] = "blank"

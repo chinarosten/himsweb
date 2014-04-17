@@ -44,7 +44,16 @@ class BbsController {
 		def json=[:]
 		SystemUtil sysUtil = new SystemUtil()
 		
-		def uploadPath = sysUtil.getUploadPath("bbs")
+//		def uploadPath = sysUtil.getUploadPath("bbs")
+		def uploadPath
+		def currentUser = (User) springSecurityService.getCurrentUser()
+		def companyPath = currentUser.company?.shortName
+		if(companyPath == null){
+			uploadPath = sysUtil.getUploadPath("bbs")
+		}else{
+			uploadPath = sysUtil.getUploadPath(currentUser.company.shortName + "/bbs")
+		}
+		
 		def f = request.getFile("uploadedfile")
 		if (f.empty) {
 			json["result"] = "blank"

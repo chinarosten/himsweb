@@ -26,10 +26,10 @@
 		border-color: #666666;
 		background-color: #ffffff;
 	}
-	#home_bbs,#home_personMail,#home_gtask{overflow:auto;}
-	#home_bbs ul,#home_personMail ul,#home_gtask ul{list-style:none;padding:0px;overflow:hidden;margin:0px}
-	#home_bbs li,#home_personMail li,#home_gtask li{list-style:none;height:25px;line-height:25px;border-bottom:1px dashed #c9c9c9}
-	#home_bbs ul li a{
+	#home_bbs,#home_personMail,#home_gtask,#home_download{overflow:auto;}
+	#home_bbs ul,#home_personMail ul,#home_gtask ul,#home_download ul{list-style:none;padding:0px;overflow:hidden;margin:0px}
+	#home_bbs li,#home_personMail li,#home_gtask li,#home_download li{list-style:none;height:25px;line-height:25px;border-bottom:1px dashed #c9c9c9}
+	#home_bbs ul li a, #home_download ul li a{
 		display:inline;
 		color:#404040!important;
 		float:left;
@@ -52,7 +52,7 @@
 		float:left;
 		text-decoration:none;
 	}
-	#home_bbs ul li .time,#home_personMail ul li .time,#home_gtask ul li .time{
+	#home_bbs ul li .time,#home_personMail ul li .time,#home_gtask ul li .time,#home_download ul li .time{
 		float:right;
 		color:#404040!important;
 		/*padding-right:10px;*/
@@ -240,8 +240,8 @@
 					</div>
 				</div>
 				
-				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%" id="download"
-					data-dojo-props='title:"下载专区",toggleable:false,region:"right",moreText:"更多",height:"146px"'>
+				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%" id="home_download"
+					data-dojo-props='title:"下载专区",toggleable:false,region:"right",_moreClick:more_downloadFile,moreText:"更多",height:"146px"'>
 					下载内容......
 				</div>
 				

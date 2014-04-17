@@ -173,7 +173,16 @@ class MeetingController {
 		def json=[:]
 		SystemUtil sysUtil = new SystemUtil()
 		
-		def uploadPath = sysUtil.getUploadPath("meeting")
+//		def uploadPath = sysUtil.getUploadPath("meeting")
+		def uploadPath
+		def currentUser = (User) springSecurityService.getCurrentUser()
+		def companyPath = currentUser.company?.shortName
+		if(companyPath == null){
+			uploadPath = sysUtil.getUploadPath("meeting")
+		}else{
+			uploadPath = sysUtil.getUploadPath(currentUser.company.shortName + "/meeting")
+		}
+		
 		def f = request.getFile("uploadedfile")
 		if (f.empty) {
 			json["result"] = "blank"

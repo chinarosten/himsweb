@@ -6,6 +6,24 @@ import com.rosten.app.system.User
 class PubliccActionController {
 	def imgPath ="images/rosten/actionbar/"
 	
+	def downloadFileForm ={
+		def webPath = request.getContextPath() + "/"
+		def actionList = []
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
+		
+		def user = User.get(params.userid)
+		if(params.id){
+			def downloadFile = DownLoadFile.get(params.id)
+			if(user.equals(downloadFile.publisher)){
+				//当前处理人
+				actionList << createAction("保存",webPath + imgPath + "Save.gif","downloadFile_add")
+			}
+		}else{
+			//新建
+			actionList << createAction("保存",webPath + imgPath + "Save.gif","downloadFile_add")
+		}
+		render actionList as JSON
+	}
 	def downloadFileView ={
 		def actionList =[]
 		def strname = "downloadFile"

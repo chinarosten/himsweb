@@ -211,7 +211,16 @@ class SendFileController {
 		def json=[:]
 		SystemUtil sysUtil = new SystemUtil()
 		
-		def uploadPath = sysUtil.getUploadPath("sendfile")
+//		def uploadPath = sysUtil.getUploadPath("sendfile")
+		def uploadPath
+		def currentUser = (User) springSecurityService.getCurrentUser()
+		def companyPath = currentUser.company?.shortName
+		if(companyPath == null){
+			uploadPath = sysUtil.getUploadPath("sendfile")
+		}else{
+			uploadPath = sysUtil.getUploadPath(currentUser.company.shortName + "/sendfile")
+		}
+		
 		def f = request.getFile("uploadedfile")
 		if (f.empty) {
 			json["result"] = "blank"

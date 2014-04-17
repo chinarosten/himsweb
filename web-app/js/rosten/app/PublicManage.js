@@ -4,13 +4,27 @@
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
 	
+	formatterDownloadFileSubject = function(value,rowIndex){
+		return "<a href=\"javascript:downloadFile_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+	};
+	downloadFile_onMessageOpen = function(rowIndex){
+		var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("downloadFile", rosten.webPath + "/publicc/downloadFileShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
+	};
 	formatterDownloadFile = function(value,rowIndex){
-		return "<a href=\"" + rosten.webPath + "/system/downloadFile/" + value + "\">下载</a>";
+		if(value!=""){
+			return "<a href=\"" + rosten.webPath + "/system/downloadFile/" + value + "\">下载</a>";
+		}else{
+			return "<span style=\"color:red\">无附件</span>";
+		}
 	};
 	add_downloadFile = function() {
 		var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
-        rosten.openNewWindow("downloadFile", rosten.webPath + "/downloadFile/downloadFileAdd?companyId=" + companyId + "&userid=" + userid);
+        rosten.openNewWindow("downloadFile", rosten.webPath + "/publicc/downloadFileAdd?companyId=" + companyId + "&userid=" + userid);
 	};
 	
 	change_downloadFile = function() {
@@ -19,7 +33,7 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 			return;
 		var userid = rosten.kernel.getUserInforByKey("idnumber");
 		var companyId = rosten.kernel.getUserInforByKey("companyid");
-		rosten.openNewWindow("downloadFile", rosten.webPath + "/downloadFile/downloadFileShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.openNewWindow("downloadFile", rosten.webPath + "/publicc/downloadFileShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
 	};
 	read_downloadFile = function() {
 		change_downloadFile();
@@ -32,7 +46,7 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 				return;
 			var content = {};
 			content.id = unids;
-			rosten.read(rosten.webPath + "/downloadFile/downloadFileDelete", content,rosten.deleteCallback);
+			rosten.read(rosten.webPath + "/publicc/downloadFileDelete", content,rosten.deleteCallback);
 		};
 	};
 	
@@ -53,7 +67,7 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
             rosten.kernel.addRightContent(naviJson);
 
             var rostenGrid = rosten.kernel.getGrid();
-            rostenGrid.onRowDblClick = change_downloadFile;
+//            rostenGrid.onRowDblClick = change_downloadFile;
             break;
 		}
 		

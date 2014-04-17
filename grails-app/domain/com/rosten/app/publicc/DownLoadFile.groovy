@@ -11,7 +11,7 @@ class DownLoadFile {
 	String id
 	
 	//标题
-	@GridColumn(name="标题",width="auto")
+	@GridColumn(name="标题",width="auto",formatter="formatterDownloadFileSubject")
 	String subject
 	
 	//发布人
@@ -40,7 +40,7 @@ class DownLoadFile {
 	}
 	
 	//显示顺序
-	int number = 1
+	int number
 	
 	//是否显示首页
 	boolean isShow = false
@@ -72,6 +72,7 @@ class DownLoadFile {
 	static belongsTo = [company:Company]
 	
     static constraints = {
+		number nullable:true,blank:true
 		attachment nullable:true,blank:true
 		description nullable:true,blank:true
     }

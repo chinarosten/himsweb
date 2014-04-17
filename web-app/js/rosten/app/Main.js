@@ -180,6 +180,7 @@ define(["dojo/_base/kernel"
     	showStartBbs(userId,companyId);
     	showStartGtask(userId,companyId);
     	showStartMail(userId,companyId);
+    	showStartDownloadFile(userId,companyId);
     };
     showStartGtask = function(userId,companyId){
     	rosten.read(rosten.webPath + "/start/getGtask", {userId:userId,companyId:companyId}, function(data) {
@@ -318,6 +319,31 @@ define(["dojo/_base/kernel"
     		rosten.alert("未找到相对应的模块,请通知管理员");
     	}
     };
+    
+    more_downloadFile = function(){
+    	var key = rosten.kernel.getMenuKeyByCode("public");
+    	if(key!=null){
+    		rosten.variable.showStartDownloadFile = true;
+    		rosten.kernel._naviMenuShow(key);
+    		require(["rosten/app/PublicManage"],function(){
+    			show_publicNaviEntity("downloadFileManage");
+    			rosten.variable.showStartDownloadFile = false;
+    		});
+    	}else{
+    		rosten.alert("未找到相对应的模块,请通知管理员");
+    	}
+    };
+    showStartDownloadFile = function(userId,companyId){
+        rosten.read(rosten.webPath + "/publicc/publishDownloadFile", {userId:userId,companyId:companyId}, function(_data) {
+        	addUlInformation("home_download","openDownloadFile",_data);
+        });
+    };
+    openDownloadFile = function(id){
+    	var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("downloadFile", rosten.webPath + "/publicc/downloadFileShow/" + id + "?userid=" + userid + "&companyId=" + companyId);
+    };
+    
     showStartBbs = function(userId,companyId){
         rosten.read(rosten.webPath + "/bbs/publishBbs", {userId:userId,companyId:companyId}, function(_data) {
         	addUlInformation("home_bbs","openBbs",_data);

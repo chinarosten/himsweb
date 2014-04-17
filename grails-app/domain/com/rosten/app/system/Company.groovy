@@ -71,8 +71,8 @@ class Company {
 		"allResource"
 	]
 	static constraints = {
-		companyName blank:false
-		shortName nullable:true,blank:true
+		companyName nullable:false,blank:false,unique: true
+		shortName nullable:false,blank:false,unique: true
 		companyMobile nullable:true,blank:true
 		companyPhone nullable:true,blank:true
 		companyFax nullable:true,blank:true
