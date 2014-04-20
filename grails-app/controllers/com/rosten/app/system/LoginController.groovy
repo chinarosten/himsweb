@@ -27,14 +27,39 @@ import org.springframework.security.core.context.SecurityContextHolder as SCH
 import org.springframework.security.web.WebAttributes
 
 import grails.plugin.springsecurity.SpringSecurityUtils
+
 import com.rosten.app.util.Util
 import com.rosten.app.system.SystemLog
-
 import com.rosten.app.system.SerialNoService
 
 @Secured('permitAll')
 class LoginController {
 	
+	def mobileLogin={
+		def model =[:]
+		render(view:'/login/mobileLogin',model:model)
+	}
+	
+	def mobileIndex ={
+		if (springSecurityService.isLoggedIn()) {
+			def model =[:]
+			def user = springSecurityService.getCurrentUser()
+			
+			model["user"] = user
+			def userInfor = [:]
+			
+			userInfor["userid"] = user.id
+			userInfor["username"] = user.username
+			userInfor["chinaname"] = user.chinaName
+			userInfor["company"] = user.company.id
+			
+			model["userInfor"] = userInfor as JSON
+			
+			render (view: "/mobile/main",model:model)
+		}else{
+			redirect action: 'mobileLogin'
+		}
+	}
 	private def addLoginInformation = {user->
 		if(!"rostenadmin".equals(user.username)){
 			def macAddress = Util.getMacAddress()
@@ -67,6 +92,12 @@ class LoginController {
 	 * Default action; redirects to 'defaultTargetUrl' if logged in, /login/auth otherwise.
 	 */
 	def index() {
+		def isMobile = JudgeIsMobile(request.getHeader("User-Agent"))
+		//isMobile = true
+		if(isMobile){
+			redirect action: 'mobileIndex', params: params
+			return;
+		}
 		if (springSecurityService.isLoggedIn()) {
 			def user = springSecurityService.getCurrentUser()
 
@@ -180,11 +211,47 @@ class LoginController {
 		String view = "dlgauth"
 		render view:view
 	}
-
+	
+	//判断是否手机客户端
+	def boolean JudgeIsMobile(String requestHeader) {
+		boolean isMoblie = false;
+		def mobileAgents = [ "iphone", "android", "phone", "mobile", "wap", "netfront", "java", "opera mobi",
+				"opera mini", "ucweb", "windows ce", "symbian", "series", "webos", "sony", "blackberry", "dopod",
+				"nokia", "samsung", "palmsource", "xda", "pieplus", "meizu", "midp", "cldc", "motorola", "foma",
+				"docomo", "up.browser", "up.link", "blazer", "helio", "hosin", "huawei", "novarra", "coolpad", "webos",
+				"techfaith", "palmsource", "alcatel", "amoi", "ktouch", "nexian", "ericsson", "philips", "sagem",
+				"wellcom", "bunjalloo", "maui", "smartphone", "iemobile", "spice", "bird", "zte-", "longcos",
+				"pantech", "gionee", "portalmmm", "jig browser", "hiptop", "benq", "haier", "^lct", "320x320",
+				"240x320", "176x220", "w3c ", "acs-", "alav", "alca", "amoi", "audi", "avan", "benq", "bird", "blac",
+				"blaz", "brew", "cell", "cldc", "cmd-", "dang", "doco", "eric", "hipt", "inno", "ipaq", "java", "jigs",
+				"kddi", "keji", "leno", "lg-c", "lg-d", "lg-g", "lge-", "maui", "maxo", "midp", "mits", "mmef", "mobi",
+				"mot-", "moto", "mwbp", "nec-", "newt", "noki", "oper", "palm", "pana", "pant", "phil", "play", "port",
+				"prox", "qwap", "sage", "sams", "sany", "sch-", "sec-", "send", "seri", "sgh-", "shar", "sie-", "siem",
+				"smal", "smar", "sony", "sph-", "symb", "t-mo", "teli", "tim-", "tosh", "tsm-", "upg1", "upsi", "vk-v",
+				"voda", "wap-", "wapa", "wapi", "wapp", "wapr", "webc", "winw", "winw", "xda", "xda-",
+				"Googlebot-Mobile" ]
+		if (requestHeader != null) {
+			for (String mobileAgent : mobileAgents) {
+				if (requestHeader.toLowerCase().indexOf(mobileAgent) >= 0) {
+					isMoblie = true;
+					break;
+				}
+			}
+		}
+		return isMoblie;
+		
+	}
+	
 	/**
 	 * Show the login page.
 	 */
 	def auth() {
+		def isMobile = JudgeIsMobile(request.getHeader("User-Agent"))
+		//isMobile = true
+		if(isMobile){
+			redirect action: 'mobileIndex', params: params
+			return;
+		}
 		def config = SpringSecurityUtils.securityConfig
 
 		if (springSecurityService.isLoggedIn()) {
