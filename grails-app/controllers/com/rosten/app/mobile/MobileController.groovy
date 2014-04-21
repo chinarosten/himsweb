@@ -1,10 +1,24 @@
 package com.rosten.app.mobile
 import com.rosten.app.system.Company
 import com.rosten.app.system.Depart
+import com.rosten.app.system.User
 import grails.converters.JSON
 
 class MobileController {
 	
+	def getUserInfor ={
+		def json=[:]
+		def user = User.get(params.id)
+		
+		json["username"] = user.username
+		json["chinaName"] = user.getFormattedName()
+		json["depart"] = user.getDepartName()
+		json["telephone"] = user.telephone
+		json["email"] = user.email
+		json["address"] = user.address
+		
+		render json as JSON
+	}
 	def getUserMobiles ={
 		def json = []
 		def company = Company.get(params.company)
@@ -26,7 +40,8 @@ class MobileController {
 						_smap["label"] = item.getFormattedName()
 					}
 					
-					_smap["moveTo"] = item.getFormattedName()
+					_smap["moveTo"] = "#"
+					_smap["userId"] = item.id
 					
 					smap["children"] << _smap
 				}

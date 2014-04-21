@@ -429,6 +429,18 @@ class BbsController {
 		def bbs = Bbs.get(params.id)
 		render bbs.content
 	}
+	def getBbsJson = {
+		def json=[:]
+		def bbs = Bbs.get(params.id)
+		json["topic"] = bbs.topic
+		json["content"] = bbs.content
+		json["level"] = bbs.level
+		json["publishDate"] = bbs.getFormattedPublishDate()
+		json["serialNo"] = bbs.serialNo
+		json["category"] = bbs.category
+		
+		render json as JSON
+	}
 	def bbsShowStart ={
 		def model =[:]
 		def bbs = Bbs.get(params.id)
