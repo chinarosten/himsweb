@@ -28,7 +28,7 @@
 		}
 		.content {
 			padding:0px 10px;
-			background-color: white;
+			background-color: #C0C0C0;
 			text-align:center;
 		}
 		.title {
