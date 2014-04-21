@@ -40,6 +40,9 @@
 			color:#FFFFFF;
 			font-size:13px;
 		}
+		.imga img{
+			vertical-align:middle;
+		}
 	
 	</style>
 	
@@ -120,6 +123,9 @@
   			<div style="border-bottom:1px solid #B9BDBE;height:50px;line-height:50px;text-align:left" class="content">
   				<label>移动电话：</label>
   				<span id="mobile_telephone"></span>
+				<a href="javascript:telephoneCall()" class="imga" style="height:50px;line-height:50px;float:right;margin-top:10px;margin-right:10px">
+  					<img src="../images/rosten/mobile/phone_green.png">
+  				</a>  				
   			</div>
   			
   		</div>

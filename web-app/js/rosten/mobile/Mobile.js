@@ -86,4 +86,9 @@ define(["dijit/registry",
 		});
 	};
 	
+	telephoneCall = function(){
+		var telephone = document.getElementById("mobile_telephone").innerHTML;
+		window.androidPhone.call(telephone);
+	};
+	
 });
