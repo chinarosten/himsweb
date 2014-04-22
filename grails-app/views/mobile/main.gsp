@@ -166,7 +166,7 @@
   		
   	</div>
   	
-  	<ul data-dojo-type="dojox/mobile/TabBar" data-dojo-props='iconBase:"../js/dojox/mobile/tests/images/tab-icons.png",fixed:"bottom"'>
+  	<ul data-dojo-type="dojox/mobile/TabBar" data-dojo-props='iconBase:"../js/dojox/mobile/tests/images/tab-icons.png",fixed:"bottom"' style="background-color:#000000">
 		<li data-dojo-type="dojox/mobile/TabBarButton" data-dojo-props='
 			icon1:"../images/rosten/mobile/tab-icon-33.png",
 			icon2:"../images/rosten/mobile/tab-icon-33h.png",moveTo:"tabBar_start",
