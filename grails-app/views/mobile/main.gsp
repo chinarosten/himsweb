@@ -28,7 +28,7 @@
 		}
 		.content {
 			padding:0px 10px;
-			background-color: #C0C0C0;
+			background-color: #FFFFFF;
 			text-align:center;
 		}
 		.title {
@@ -42,6 +42,16 @@
 		}
 		.imga img{
 			vertical-align:middle;
+		}
+		#list_mobile .mblListItem{
+			background-color:#FFFFFF;
+			color:#000000;
+		}
+		#list_mobile .mblEdgeToEdgeCategory{
+			background-color:#C0C0C0;
+		}
+		#tabBarContent .mblHeading{
+			background-image:linear-gradient(to bottom, #B0BCCD 0%, #889BB3 50%, #8195AF 50%, #6D84A2 100%)
 		}
 	
 	</style>
@@ -75,13 +85,13 @@
 				var btnWidget = registry.byId("logoutButton");
 				connect.connect(btnWidget.domNode, "click", function(){
 					var url = "${createLink(controller:'j_spring_security_logout')}";
-					window.location = url;
+					window.location.href = url;
 				});	
 			});	
 		});
 	</script>
 </head>
-<body style="background-color:white"> 
+<body style="background-color:#FFFFFF"> 
   
   <div data-dojo-type="dojox.mobile.ScrollableView">
   	<div id="tabBarContent">
@@ -104,7 +114,7 @@
 					</div>
 				</div>
 				
-				<div id="content" style="margin-top:5px;text-align:left;font-size:10px"></div>
+				<div id="content" style="margin-top:5px;text-align:left;font-size:10px;color:#000000"></div>
 			</div>
 		</div>
   		
@@ -115,12 +125,12 @@
   		
   		<div id="mobile_infor" data-dojo-type="dojox/mobile/View" data-dojo-props=''>
   			<h1 id="mobile_header" data-dojo-type="dojox/mobile/Heading" data-dojo-props='fixed:"top",back:"返回",moveTo:"tabBar_mobile"'></h1>
-  			<div style="border-bottom:1px solid #B9BDBE;height:50px;line-height:50px;text-align:left" class="content">
+  			<div style="border-bottom:1px solid #B9BDBE;height:50px;line-height:50px;text-align:left;color:#000000" class="content">
   				<label>所属部门：</label>
   				<span id="mobile_depart"></span>
   			</div>
   			
-  			<div style="border-bottom:1px solid #B9BDBE;height:50px;line-height:50px;text-align:left" class="content">
+  			<div style="border-bottom:1px solid #B9BDBE;height:50px;line-height:50px;text-align:left;color:#000000" class="content">
   				<label>移动电话：</label>
   				<span id="mobile_telephone"></span>
 				<a href="javascript:telephoneCall()" class="imga" style="height:50px;line-height:50px;float:right;margin-top:10px;margin-right:10px">
@@ -133,17 +143,17 @@
   		<div id="tabBar_setting" data-dojo-type="dojox/mobile/View" data-dojo-props='' id="list_setting">
   			<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props='fixed:"top"'>设置</h1>
   			
-  			<div style="border-bottom:1px solid #B9BDBE;height:50px;line-height:50px;text-align:left" class="content">
+  			<div style="border-bottom:1px solid #B9BDBE;height:50px;line-height:50px;text-align:left;color:#000000" class="content">
   				<label>用户名称：</label>
   				<span id="setting_username">${user.getFormattedName() }</span>
   			</div>
   			
-  			<div style="border-bottom:1px solid #B9BDBE;height:50px;line-height:50px;text-align:left" class="content">
+  			<div style="border-bottom:1px solid #B9BDBE;height:50px;line-height:50px;text-align:left;color:#000000" class="content">
   				<label>所属部门：</label>
   				<span id="setting_depart">${user.getDepartName() }</span>
   			</div>
   			
-  			<div style="border-bottom:1px solid #B9BDBE;height:50px;line-height:50px;text-align:left" class="content">
+  			<div style="border-bottom:1px solid #B9BDBE;height:50px;line-height:50px;text-align:left;color:#000000" class="content">
   				<label>移动电话：</label>
   				<span id="setting_telephone">${user.telephone }</span>
   			</div>

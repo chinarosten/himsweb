@@ -93,7 +93,7 @@ class LoginController {
 	 */
 	def index() {
 		def isMobile = JudgeIsMobile(request.getHeader("User-Agent"))
-		//isMobile = true
+//		isMobile = true
 		if(isMobile){
 			redirect action: 'mobileIndex', params: params
 			return;
@@ -233,7 +233,6 @@ class LoginController {
 		if (requestHeader != null) {
 			for (String mobileAgent : mobileAgents) {
 				if (requestHeader.toLowerCase().indexOf(mobileAgent) >= 0) {
-					println mobileAgent
 					isMoblie = true;
 					break;
 				}
@@ -248,7 +247,7 @@ class LoginController {
 	 */
 	def auth() {
 		def isMobile = JudgeIsMobile(request.getHeader("User-Agent"))
-		//isMobile = true
+//		isMobile = true
 		if(isMobile){
 			redirect action: 'mobileIndex', params: params
 			return;
