@@ -8,7 +8,7 @@
 	<link href="../js/dojox/mobile/themes/iphone/iphone.css" type="text/css" rel="stylesheet">
 	
 	<script type="text/javascript" src="../js/dojox/mobile/deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','Button']"></script>	
-  	<script type="text/javascript" src="../js/dojo/dojo.js"  djConfig="parseOnLoad: true,isDebug: true"></script> 
+  	<script type="text/javascript" src="../js/dojo/dojo.js"  djConfig="parseOnLoad: true,isDebug: false"></script> 
   	
   	<script type="text/javascript">
 		require([

@@ -56,6 +56,7 @@ class LoginController {
 			model["userInfor"] = userInfor as JSON
 			
 			render (view: "/mobile/main",model:model)
+			
 		}else{
 			redirect action: 'mobileLogin'
 		}
@@ -93,7 +94,6 @@ class LoginController {
 	 */
 	def index() {
 		def isMobile = JudgeIsMobile(request.getHeader("User-Agent"))
-//		isMobile = true
 		if(isMobile){
 			redirect action: 'mobileIndex', params: params
 			return;
@@ -247,7 +247,6 @@ class LoginController {
 	 */
 	def auth() {
 		def isMobile = JudgeIsMobile(request.getHeader("User-Agent"))
-//		isMobile = true
 		if(isMobile){
 			redirect action: 'mobileIndex', params: params
 			return;

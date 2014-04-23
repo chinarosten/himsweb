@@ -13,13 +13,17 @@ define(["dijit/registry",
 		rosten.webPath = path;
 		rosten.userInfor = data;
 	};
-	openBbs = function(listItemId,id){
+	openBbs = function(){
+		
+		var id = this.get("bbsId");
+		var itemList = this;
+		
 		rosten.readSync(rosten.webPath + "/bbs/getBbsJson",{id:id},function(data){
 			document.getElementById("topic").innerHTML=data.topic;
 			document.getElementById("category").innerHTML=data.category;
 			document.getElementById("content").innerHTML=data.content;
 			document.getElementById("date").innerHTML=data.publishDate;
-			registry.byId(listItemId).transitionTo("bbs_infor");
+			itemList.transitionTo("bbs_infor");
 		});
 	};
 	getBbs = function(){
@@ -29,6 +33,9 @@ define(["dijit/registry",
 				var listItem = new ListItem({
 					variableHeight:true,
 					transition:"slide",
+					bbsId:data[i].id,
+					onClick:openBbs,
+					moveTo:"#",
 					style:{fontSize:"10px"}
                 });
 				var table = document.createElement("table");
@@ -41,15 +48,19 @@ define(["dijit/registry",
 				tr.appendChild(td);
 				
 				var td1 = document.createElement("td");
-				var a = document.createElement("a");
+//				var a = document.createElement("a");
+//				a.setAttribute("class","lnk");
+//				a.setAttribute("href", "javascript:void(0)");
+//				a.setAttribute("onclick", "openBbs('" + listItem.get("id") + "','" + data[i].id + "')");
+//				a.innerHTML = data[i].topic ;
+//				td1.appendChild(a);
+				var a = document.createElement("span");
 				a.setAttribute("class","lnk");
-				a.setAttribute("href", "javascript:void(0)");
-				a.setAttribute("onclick", "openBbs('" + listItem.get("id") + "','" + data[i].id + "')");
 				a.innerHTML = data[i].topic ;
 				td1.appendChild(a);
 				
 				var span = document.createElement("span");
-				span.setAttribute("style","font-size:10px");
+				span.setAttribute("style","font-size:10px;color:#000000");
 				span.innerHTML = "<br><br>" + data[i].date;
 				
 				td1.appendChild(span);
@@ -88,7 +99,9 @@ define(["dijit/registry",
 	
 	telephoneCall = function(){
 		var telephone = document.getElementById("mobile_telephone").innerHTML;
-		window.androidPhone.call(telephone);
+		if(telephone!="" && window.androidPhone){
+			window.androidPhone.call(telephone);
+		}
 	};
 	
 });

@@ -4,22 +4,25 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<title>恒成OA-android版</title>
-	
-	<link href="../js/dojox/mobile/themes/common/domButtons/DomButtonGrayStar.css" rel="stylesheet"/>
+	<!-- 
+	<link href="../js/dojox/mobile/themes/android/android.css" rel="stylesheet"/>
+	<link href="../js/dojox/mobile/themes/android/base.css" rel="stylesheet"/>
+	<link href="../js/dojox/mobile/themes/android/Button.css" rel="stylesheet"/>
+	<link href="../js/dojox/mobile/themes/android/TabBar.css" rel="stylesheet"/> -->
 	<style type="text/css">
 		.list1 li{
 			border-style: solid;
-			border-width: 1px 0px 1px 0px;
+			border-width: 0px 0px 1px 0px;
 			border-top-color: #BABABC;
 			border-bottom-color: #89898C;
-			background-color: #ACACAF;
+			background-color: #FFFFFF;
 			line-height: 0px;
 		}
 		.list1 li table{
 			line-height: normal;
 		}
 		.list1 li:nth-child(even){
-			background-color: #97979B;
+			/* background-color: #97979B; */
 		}
 		.lnk {
 			font-size: 14px;
@@ -55,9 +58,8 @@
 		}
 	
 	</style>
-	
-	<script type="text/javascript" src="../js/dojox/mobile/deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','TabBar','Button']"></script>	
-  	<script type="text/javascript" src="../js/dojo/dojo.js"  djConfig="parseOnLoad: true,isDebug: true"></script> 
+	<script type="text/javascript" src="../js/dojox/mobile/deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','TabBar','Button']"></script>
+  	<script type="text/javascript" src="../js/dojo/dojo.js"  djConfig="parseOnLoad: true,isDebug: false"></script> 
   	<script type="text/javascript" src="../js/rosten/rosten.js"></script> 
   	
   	<script type="text/javascript">

@@ -9,7 +9,7 @@
         <script type="text/javascript">
         	dojoConfig = {
         		has : {
-        			"dojo-firebug" : true,
+        			"dojo-firebug" : false,
         			"dojo-debug-messages" : true
         		},
         		parseOnLoad : true,
