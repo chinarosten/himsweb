@@ -93,8 +93,7 @@ class LoginController {
 	 * Default action; redirects to 'defaultTargetUrl' if logged in, /login/auth otherwise.
 	 */
 	def index() {
-		def isMobile = JudgeIsMobile(request.getHeader("User-Agent"))
-		if(isMobile){
+		if(session.logintype && "mobile".equals(session.logintype)){
 			redirect action: 'mobileIndex', params: params
 			return;
 		}
@@ -246,8 +245,7 @@ class LoginController {
 	 * Show the login page.
 	 */
 	def auth() {
-		def isMobile = JudgeIsMobile(request.getHeader("User-Agent"))
-		if(isMobile){
+		if(session.logintype && "mobile".equals(session.logintype)){
 			redirect action: 'mobileIndex', params: params
 			return;
 		}

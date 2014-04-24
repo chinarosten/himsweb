@@ -39,7 +39,7 @@
 					var content = {};
 					content.j_username = username.get("value");
 					content.j_password = password.get("value");
-					content.loginType = "mobile";
+					content.logintype = "mobile";
 					jsPost("/himsweb/j_spring_security_check",content);
 				});
 			});
