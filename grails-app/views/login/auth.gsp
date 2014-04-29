@@ -22,8 +22,8 @@
 			text-align: left;
 		}
 		.login-icon {
-			float: left;
-			width: 160px;
+			/*float: left;
+			width: 160px;*/
 			height: 96px;
 			text-indent:-9999px;
 			background: url(${resource(dir:'images/rosten/share',file:'logo.png')}) no-repeat;
@@ -139,6 +139,19 @@
 			margin-bottom:15px;
 			color: #c33;
 		}
+		.login-left {
+			float: left;
+			width: 160px;
+		}
+		.login-ewm{
+			margin-top:5px;
+			border:0;cursor:default;text-decoration:none;
+			margin-left:6px;
+		}
+		.login-ewm img{
+			width:150px;
+			height:150px;
+		}
 	</style>
 </head>
 
@@ -146,7 +159,13 @@
 <div class='loginbody'>
 		
 	<div class="login-screen">
-		<div class="login-icon">LOGO</div>
+		<div class="login-left">
+			<div class="login-icon">LOGO</div>
+			<div class="login-ewm">
+				<img src="../images/qrcode.png" alt="二维码" />
+			</div>
+		</div>
+		
 		<form action='${postUrl}' method='POST' id='loginForm' class='login-form' autocomplete='off'>
 			<h1>系统管理登录</h1>
 			<g:if test='${flash.message}'>
