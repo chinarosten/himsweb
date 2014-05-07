@@ -14,19 +14,19 @@ environments {
     development {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:mysql://localhost:3306/himsweb?autoreconnect=true&useUnicode=true&characterEncoding=UTF8"
+            url = "jdbc:mysql://localhost:3306/himsweb?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8"
         }
     }
     test {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:mysql://localhost:3306/himsweb?autoreconnect=true&useUnicode=true&characterEncoding=UTF8"
+            url = "jdbc:mysql://localhost:3306/himsweb?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8"
         }
     }
     production {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:mysql://localhost:3306/himsweb?autoreconnect=true&useUnicode=true&characterEncoding=UTF8"
+            url = "jdbc:mysql://localhost:3306/himsweb?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8"
             pooled = true
             properties {
                maxActive = -1

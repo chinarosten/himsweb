@@ -66,7 +66,7 @@ environments {
     production {
         grails.logging.jul.usebridge = false
         // TODO: grails.serverURL = "http://www.changeme.com"
-		grails.config.locations = ["classpath:datasource_pro.properties"]
+		//grails.config.locations = ["classpath:datasource_pro.properties"]
     }
 }
 rostenFileConfig {
@@ -135,7 +135,7 @@ environments {
 	production {
 		activiti {
 			  processEngineName = "activiti-engine-prod"
-			  databaseSchemaUpdate = false
+			  databaseSchemaUpdate = true
 			  jobExecutorActivate = true
 		}
 	}
