@@ -115,7 +115,6 @@ activiti {
 	  sessionUsernameKey = "username"
 	  useFormKey = true
 	  activityFontName = "微软雅黑"
-	  labelFontName ="微软雅黑"
 }
 
 environments {
