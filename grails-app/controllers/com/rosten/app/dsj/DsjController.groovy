@@ -10,11 +10,18 @@ import com.rosten.app.system.User
 import com.rosten.app.start.StartService
 import com.rosten.app.system.Depart
 import com.rosten.app.gtask.Gtask
+import com.rosten.app.workflow.WorkFlowService
+
+import org.activiti.engine.runtime.ProcessInstance
+import org.activiti.engine.runtime.ProcessInstanceQuery
+import org.activiti.engine.task.Task
+import org.activiti.engine.task.TaskQuery
 
 class DsjController {
 	def springSecurityService
 	def dsjService
 	def startService
+	def workFlowService
 	
 	def dsjGetContent ={
 		def json=[:]
@@ -30,6 +37,28 @@ class DsjController {
 		//处理当前人的待办事项
 		def currentUser = springSecurityService.getCurrentUser()
 		def frontStatus = dsj.status
+		
+		//流程引擎相关信息处理-------------------------------------------------------------------------------------
+		
+		if(dsj.processInstanceId){
+			
+			def tasks = workFlowService.getTasksByFlow(dsj.processInstanceId)
+			
+			tasks.each{
+				println it.getName()
+			}
+			
+			
+		}else{
+			Map<String, Object> variables = new HashMap<String, Object>();
+			ProcessInstance processInstance = workFlowService.addFlowInstance("process", currentUser.id,dsj.id, variables);
+			
+			dsj.processInstanceId = processInstance.getProcessInstanceId()
+			
+			println processInstance.getProcessInstanceId()
+		}
+		
+		//----------------------------------------------------------------------------------------------------
 		
 		switch (params.deal){
 			case "submit":

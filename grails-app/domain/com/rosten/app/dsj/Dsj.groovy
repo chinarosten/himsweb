@@ -100,6 +100,10 @@ class Dsj {
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 		return sd.format(createDate)
 	}
+	
+	//流程id
+	String processInstanceId
+	
 	static belongsTo = [company:Company]
 	
 	static transients = [
@@ -112,6 +116,7 @@ class Dsj {
 		drafterDepart nullable:true,blank:true
 		currentUser nullable:true,blank:true
 		currentDepart nullable:true,blank:true
+		processInstanceId nullable:true,blank:true
 	}
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']
