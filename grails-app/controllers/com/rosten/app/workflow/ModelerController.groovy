@@ -140,6 +140,7 @@ class ModelerController {
 			def modelObjectNode = [:]
 			modelObjectNode["name"] = params.name
 			modelObjectNode["revision"] = 1
+			modelObjectNode["key"] = params.key
 			modelObjectNode["description"] = params.description
 
 			model.setMetaInfo(modelObjectNode.toString());
@@ -158,10 +159,14 @@ class ModelerController {
 	def open ={
 		def root=[:]
 		Model model = repositoryService.getModel(params.id);
-
+		
 		root["modelId"] = model.getId()
 		root["name"] = model.getName()
 		root["revision"] = model.getVersion()
+		root["key"] = model.getKey()
+		
+		def _description = Util.strLeft(Util.strRight(model.getMetaInfo(), "description"), "]")
+		root["description"] = Util.strRight(_description,":")
 
 		byte[] bytes = repositoryService.getModelEditorSource(model.getId());
 
@@ -191,6 +196,7 @@ class ModelerController {
 		def json=[:]
 		Model model = repositoryService.getModel(params.id);
 		model.setName(params.name);
+		
 		repositoryService.saveModel(model);
 		repositoryService.addModelEditorSource(model.getId(),params.json_xml.getBytes("utf-8"));
 
