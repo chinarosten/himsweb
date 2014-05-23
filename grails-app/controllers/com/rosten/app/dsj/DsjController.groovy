@@ -11,6 +11,7 @@ import com.rosten.app.start.StartService
 import com.rosten.app.system.Depart
 import com.rosten.app.gtask.Gtask
 import com.rosten.app.workflow.WorkFlowService
+import com.rosten.app.system.Model
 
 import org.activiti.engine.runtime.ProcessInstance
 import org.activiti.engine.runtime.ProcessInstanceQuery
@@ -37,44 +38,48 @@ class DsjController {
 		//处理当前人的待办事项
 		def currentUser = springSecurityService.getCurrentUser()
 		def frontStatus = dsj.status
+		def nextStatus,processId
 		
 		//流程引擎相关信息处理-------------------------------------------------------------------------------------
-		
-		if(dsj.processInstanceId){
-			
-			def tasks = workFlowService.getTasksByFlow(dsj.processInstanceId)
-			
-			tasks.each{
-				println it.getName()
-			}
-			
-			
-		}else{
+		if(!dsj.processInstanceId){
+			//创建流程实例
+			def _model = Model.findByModelCode("dsj")
+			def _processInstance = workFlowService.getProcessDefinition(modelrelationFlow)
 			Map<String, Object> variables = new HashMap<String, Object>();
-			ProcessInstance processInstance = workFlowService.addFlowInstance("process", currentUser.id,dsj.id, variables);
-			
+			ProcessInstance processInstance = workFlowService.addFlowInstance(_processInstance.key, currentUser.username,dsj.id, variables);
 			dsj.processInstanceId = processInstance.getProcessInstanceId()
+			processId = processInstance.getProcessInstanceId()
+		}else{
+			processId = dsj.processInstanceId
+		}
+		
+		//获取下一状态信息，暂时只处理串行流程
+		def tasks = workFlowService.getTasksByFlow(processId)
+		def task = tasks[0]
+		nextStatus = task.getName()
+		dsj.status = nextStatus
+		
+		if(task.getAssignee().equals(currentUser.username)){
 			
-			println processInstance.getProcessInstanceId()
 		}
 		
 		//----------------------------------------------------------------------------------------------------
 		
 		switch (params.deal){
 			case "submit":
-				dsj.status="审核"
+//				dsj.status="审核"
 				break;
 			case "agrain":
-				dsj.status = "已签发"
+//				dsj.status = "已签发"
 				break;
 			case "achive":
-				dsj.status = "已归档"
+//				dsj.status = "已归档"
 				dsj.currentUser = null
 				dsj.currentDepart = null
 				dsj.currentDealDate = new Date()
 				break;
 			case "notAgrain":
-				dsj.status = "不同意"
+//				dsj.status = "不同意"
 				dsj.currentUser = null
 				dsj.currentDepart = null
 				dsj.currentDealDate = new Date()
