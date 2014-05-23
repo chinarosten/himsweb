@@ -1,15 +1,25 @@
 package com.rosten.app.workflow
 
 import org.activiti.engine.history.HistoricProcessInstanceQuery
+import org.activiti.engine.repository.ProcessDefinition
 import org.activiti.engine.runtime.ProcessInstance
 import org.activiti.engine.runtime.ProcessInstanceQuery
 import org.activiti.engine.task.Task
 import org.activiti.engine.task.TaskQuery
+import org.activiti.engine.ActivitiException
 
 class WorkFlowService {
 	def identityService
 	def runtimeService
 	def taskService
+	def repositoryService
+	
+	
+	//通过流程定义id获取流程定义信息，目前只供模块编辑界面使用
+	def getProcessDefinition ={flowDefinitionId ->
+		ProcessDefinition processDefinition = repositoryService.getProcessDefinition(flowDefinitionId)
+		return ["id":processDefinition.id,"version":processDefinition.version,"name":processDefinition.name,"key":processDefinition.key]
+	}
 	
 	//获取结束的流程实例
 	def getFinishedProcessInstaces ={flowDefinitionId ->
@@ -70,10 +80,15 @@ class WorkFlowService {
 	
 	//创建流程实例
 	def addFlowInstance ={flowDefinitionId,creater,businessKey,variables ->
-		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
-		identityService.setAuthenticatedUserId(creater)
-		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(flowDefinitionId, businessKey, variables);
-		return processInstance
+		try {
+			// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+			identityService.setAuthenticatedUserId(creater)
+			ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(flowDefinitionId, businessKey, variables);
+			return processInstance
+		}catch (ActivitiException e) {
+			e.printStackTrace()
+			return "suspend"
+		}
 	}
 	
     def serviceMethod() {

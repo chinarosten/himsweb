@@ -188,6 +188,23 @@
 									data-dojo-props = 'onClick:function(){selectGroup("${createLink(controller:'system',action:'groupSelect',params:[companyId:company?.id])}")}'
 								>选择</button>
     						</td>
+                        </tr>
+                        <tr>
+                        	<td>
+                                <div align="right" >关联流程：</div>
+                            </td>
+                             <td><input id="allowRelationFlow" data-dojo-type="dijit.form.ValidationTextBox"
+                   					data-dojo-props='"class":"input",
+                   						style:"width:400px",
+                   						trim:true,
+                   						${fieldAcl.isReadOnly("allowRelationFlow")},
+                   						value:"${allowRelationFlow }"
+                   				'/>
+                   				<g:hiddenField name="relationFlow" value="${model.relationFlow }" />
+								<button data-dojo-type="dijit.form.Button" 
+									data-dojo-props = 'onClick:function(){selectRelationFlow("${createLink(controller:'modeler',action:'flowSelect',params:[companyId:company?.id])}")}'
+								>选择</button>
+    						</td>
                         </tr>					
 						<tr>
                         	<td>

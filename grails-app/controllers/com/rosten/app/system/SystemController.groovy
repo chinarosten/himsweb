@@ -4,10 +4,12 @@ import grails.converters.JSON
 import com.rosten.app.util.FieldAcl
 import com.rosten.app.util.Util
 import org.springframework.security.authentication.encoding.PasswordEncoder;
+import com.rosten.app.workflow.WorkFlowService
 
 class SystemController {
 	def springSecurityService
 	def systemService
+	def workFlowService
 	
 	def systemLogGrid ={
 		def model=[:]
@@ -879,6 +881,15 @@ class SystemController {
 			}
 			json["allowgroupsName"] = allowgroupsName.join(',')
 			json["allowgroupsId"] = allowgroupsId.join(",")
+			
+			def allowRelationFlow = []
+			if(model.relationFlow && !"".equals(model.relationFlow)){
+				model.relationFlow.split(",").each{
+					def _result = workFlowService.getProcessDefinition(it)
+					allowRelationFlow << _result.name + "(" + _result.version + ")"
+				}
+			}
+			json["allowRelationFlow"] = allowRelationFlow.join(',')
 		}
 		
 		json["user"]=user
@@ -886,7 +897,7 @@ class SystemController {
 		json["model"] = model
 		
 		FieldAcl fa = new FieldAcl()
-		fa.readOnly +=["allowusersName","allowdepartsName","allowgroupsName"]
+		fa.readOnly +=["allowusersName","allowdepartsName","allowgroupsName","allowRelationFlow"]
 		
 		if("normal".equals(user.getUserType())){
 			//普通用户

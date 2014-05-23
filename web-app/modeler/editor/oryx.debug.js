@@ -24579,6 +24579,7 @@ ORYX.Plugins.Save = Clazz.extend({
 				
 				//rosten 增加----------------------------------
 				json.properties.process_id = modelInfo.key;
+				json.properties.name = modelInfo.name;
 				//-------------------------------------------
 				
 				var glossary = [];

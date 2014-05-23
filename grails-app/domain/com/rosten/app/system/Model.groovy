@@ -11,10 +11,11 @@ class Model {
 	String modelName
 	
 	//模块代码
+	@GridColumn(name="模块代码")
 	String modelCode
 	
 	//模块链接
-	@GridColumn(name="模块链接")
+	//@GridColumn(name="模块链接")
 	String modelUrl
 	
 	//描述
@@ -23,6 +24,10 @@ class Model {
 	
 	//显示顺序
 	Integer serialNo
+	
+	//模块关联流程
+	@GridColumn(name="关联流程",colIdx=3)
+	String relationFlow
 	
 	//创建日期
 	Date createdDate = new Date()
@@ -38,6 +43,7 @@ class Model {
 		modelUrl nullable:true,blank:true
 		description nullable:true,blank:true
 		serialNo nullable:true,blank:true
+		relationFlow nullable:true,blank:true
     }
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']

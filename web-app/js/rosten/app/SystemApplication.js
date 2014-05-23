@@ -142,6 +142,31 @@ define(["dojo/dom",
             dom.byId("allowgroupsId").value = _data_1;
         };
     };
+    selectRelationFlow = function(url) {
+        var id = "sys_relationFlowDialog";
+        var initValue = [];
+        var allowRelationFlow = registry.byId("allowRelationFlow");
+        if (allowRelationFlow.attr("value") != "") {
+            initValue.push(allowRelationFlow.attr("value"));
+        }
+        rosten.selectDialog("关联流程选择", id, url, true, initValue);
+        rosten[id].callback = function(data) {
+            var _data = "";
+            var _data_1 = "";
+            for (var k = 0; k < data.length; k++) {
+                var item = data[k];
+                if (_data == "") {
+                    _data += item.name;
+                    _data_1 += item.id;
+                } else {
+                    _data += "," + item.name;
+                    _data_1 += "," + item.id;
+                }
+            }
+            registry.byId("allowRelationFlow").attr("value", _data);
+            dom.byId("relationFlow").value = _data_1;
+        };
+    };
     selectRole = function(url) {
         var id = "sys_roleDialog";
         var initValue = [];

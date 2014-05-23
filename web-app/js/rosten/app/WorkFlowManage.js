@@ -68,10 +68,11 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/beha
 	
 	//-----------增加流程引擎部分------------------------------------------------
     deploy_modeler = function(){
+    	var companyId = rosten.kernel.getUserInforByKey("companyid");
     	var unid = rosten.getGridUnid("single");
         if (unid == "")
             return;
-    	rosten.readSync(rosten.webPath + "/modeler/deploy/" + unid,{},function(data){
+    	rosten.readSync(rosten.webPath + "/modeler/deploy/" + unid,{companyId:companyId},function(data){
 			if(data.result=="true" || data.result == true ){
 				rosten.alert("部署成功！").queryDlgClose= function(){
 					rosten.kernel.refreshGrid();
@@ -114,7 +115,7 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/beha
 			};
 			return;
 		}
-		var content = {name:workFlowName.attr("value"),key:workFlowKey.attr("value"),description:registry.byId("description").attr("value")};
+		var content = {name:workFlowName.attr("value"),key:workFlowKey.attr("value"),description:registry.byId("description").attr("value"),companyId:rosten.kernel.getUserInforByKey("companyid")};
 		
 		rosten.readSync(rosten.webPath + "/modeler/create",content,function(data){
 			if(data.result=="true"){
@@ -182,7 +183,7 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/beha
 			var naviJson = {
 				identifier : oString,
 				actionBarSrc : rosten.webPath + "/modelerAction/flowDefinedView",
-				gridSrc : rosten.webPath + "/modeler/flowDefinedGrid"
+				gridSrc : rosten.webPath + "/modeler/flowDefinedGrid?userid=" + userid + "&companyId=" + companyId
 			};
 			rosten.kernel.addRightContent(naviJson);
 			break;
@@ -190,7 +191,7 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/beha
             var naviJson = {
                 identifier : oString,
                 actionBarSrc : rosten.webPath + "/modelerAction/molelerView",
-                gridSrc : rosten.webPath + "/modeler/modelerGrid"
+                gridSrc : rosten.webPath + "/modeler/modelerGrid?userid=" + userid + "&companyId=" + companyId
             };
             rosten.kernel.addRightContent(naviJson);
             

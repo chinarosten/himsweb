@@ -4,6 +4,7 @@ import org.activiti.bpmn.converter.BpmnXMLConverter
 import org.activiti.bpmn.model.BpmnModel
 import org.activiti.editor.language.json.converter.BpmnJsonConverter
 import org.activiti.engine.repository.Deployment
+import org.activiti.engine.repository.DeploymentQuery
 import org.activiti.engine.repository.Model
 import org.activiti.engine.repository.ProcessDefinition
 import org.activiti.engine.repository.ProcessDefinitionQuery
@@ -12,10 +13,24 @@ import org.codehaus.jackson.map.ObjectMapper
 import org.codehaus.jackson.node.ObjectNode
 import grails.converters.JSON
 import com.rosten.app.util.Util
+import com.rosten.app.system.Company
 
 class ModelerController {
 	def repositoryService
 	
+	def flowSelect ={
+		def flowList =[]
+		def deploymentList = repositoryService.createDeploymentQuery().deploymentCategory(params.companyId).orderByDeploymenTime().desc().list()
+		
+		deploymentList.each{
+			ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(it.getId()).singleResult()
+			def json=[:]
+			json["id"] = processDefinition.getId()
+			json["name"] = it.name + "(" + processDefinition.version + ")"
+			flowList << json
+		}
+		render flowList as JSON
+	}
 	def flowUpdateState ={
 		def json=[:]
 		try{
@@ -67,12 +82,13 @@ class ModelerController {
 	}
 	
 	def flowDefinedGrid ={
+		def company = Company.get(params.companyId)
 		def json=[:]
 		if(params.refreshHeader){
 			def _gridHeader =[]
 
 			_gridHeader << ["name":"序号","width":"26px","colIdx":0,"field":"rowIndex"]
-			_gridHeader << ["name":"流程id","width":"100px","colIdx":1,"field":"id"]
+			_gridHeader << ["name":"流程id","width":"120px","colIdx":1,"field":"id"]
 			_gridHeader << ["name":"部署id","width":"60px","colIdx":2,"field":"deploymentId"]
 			_gridHeader << ["name":"流程名称","width":"auto","colIdx":3,"field":"name"]
 			_gridHeader << ["name":"版本号","width":"40px","colIdx":4,"field":"version"]
@@ -91,21 +107,18 @@ class ModelerController {
 
 			def _json = [identifier:'id',label:'name',items:[]]
 			
-			ProcessDefinitionQuery processDefinitionQuery = repositoryService.createProcessDefinitionQuery().orderByDeploymentId().desc();
-			totalNum = processDefinitionQuery.count()
-			
-			List<ProcessDefinition> processDefinitionList = processDefinitionQuery.listPage(offset, offset+max);
+			def deploymentList = repositoryService.createDeploymentQuery().deploymentCategory(params.companyId).orderByDeploymenTime().desc().listPage(offset, offset+max)
+			totalNum = deploymentList.size()
 			
 			def idx = 0
-			for (ProcessDefinition processDefinition : processDefinitionList) {
-				String deploymentId = processDefinition.getDeploymentId();
-				Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult();
+			deploymentList.each{
+				ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(it.getId()).singleResult()
 				
 				def sMap =[:]
 				sMap["rowIndex"] = idx+1
 				sMap["id"] = processDefinition.id
-				sMap["deploymentId"] = deployment.id
-				sMap["name"] = deployment.name
+				sMap["deploymentId"] = it.id
+				sMap["name"] = it.name
 				sMap["version"] = processDefinition.version
 				
 				if(processDefinition.isSuspended()){
@@ -114,16 +127,18 @@ class ModelerController {
 					sMap["status"] = "正常"
 				}
 				
-				sMap["deploymentTime"] = deployment.deploymentTime
+				sMap["deploymentTime"] = it.deploymentTime
 				
 				_json.items+=sMap
 				
 				idx += 1
-				
 			}
 
 			json["gridData"] = _json
 		}
+		
+		
+		
 		if(params.refreshPageControl){
 			json["pageControl"] = ["total":totalNum.toString()]
 		}
@@ -133,14 +148,17 @@ class ModelerController {
 	def create ={
 		def json=[:]
 		try{
+			def company = Company.get(params.companyId)
+			
 			Model model = repositoryService.newModel();
 			model.setName(params.name);
-			model.setKey(params.key);
+			model.setKey(company.shortName + "_" + params.key);
+			model.setCategory(params.companyId)
 
 			def modelObjectNode = [:]
 			modelObjectNode["name"] = params.name
 			modelObjectNode["revision"] = 1
-			modelObjectNode["key"] = params.key
+			modelObjectNode["key"] = company.shortName + "_" + params.key
 			modelObjectNode["description"] = params.description
 
 			model.setMetaInfo(modelObjectNode.toString());
@@ -209,7 +227,7 @@ class ModelerController {
 			def _gridHeader =[]
 
 			_gridHeader << ["name":"序号","width":"26px","colIdx":0,"field":"rowIndex"]
-			_gridHeader << ["name":"流程idkey","width":"100px","colIdx":1,"field":"key"]
+			_gridHeader << ["name":"流程id","width":"120px","colIdx":1,"field":"key"]
 			_gridHeader << ["name":"流程名称","width":"auto","colIdx":2,"field":"name"]
 			_gridHeader << ["name":"版本号","width":"60px","colIdx":3,"field":"version"]
 			_gridHeader << ["name":"创建时间","width":"130px","colIdx":4,"field":"createTime"]
@@ -227,7 +245,7 @@ class ModelerController {
 
 			def _json = [identifier:'id',label:'name',items:[]]
 
-			def _dataList = repositoryService.createModelQuery().list();
+			def _dataList = repositoryService.createModelQuery().modelCategory(params.companyId).list();
 			totalNum = _dataList.size()
 			_dataList.eachWithIndex{ item,idx->
 				if(idx>=offset && idx <offset+max){
@@ -262,7 +280,7 @@ class ModelerController {
 			bpmnBytes = new BpmnXMLConverter().convertToXML(model);
 	
 			String processName = modelData.getName() + ".bpmn20.xml";
-			Deployment deployment = repositoryService.createDeployment().name(modelData.getName()).addString(processName, new String(bpmnBytes)).deploy();
+			Deployment deployment = repositoryService.createDeployment().name(modelData.getName()).category(params.companyId).addString(processName, new String(bpmnBytes)).deploy();
 			
 			json["result"] = true
 			json["deployId"] = deployment.getId()
