@@ -23,6 +23,7 @@ class DsjController {
 	def dsjService
 	def startService
 	def workFlowService
+	def taskService
 	
 	def dsjGetContent ={
 		def json=[:]
@@ -44,7 +45,7 @@ class DsjController {
 		if(!dsj.processInstanceId){
 			//创建流程实例
 			def _model = Model.findByModelCode("dsj")
-			def _processInstance = workFlowService.getProcessDefinition(modelrelationFlow)
+			def _processInstance = workFlowService.getProcessDefinition(_model.relationFlow)
 			Map<String, Object> variables = new HashMap<String, Object>();
 			ProcessInstance processInstance = workFlowService.addFlowInstance(_processInstance.key, currentUser.username,dsj.id, variables);
 			dsj.processInstanceId = processInstance.getProcessInstanceId()
@@ -357,6 +358,23 @@ class DsjController {
 		if(!dsj.readers.find{ it.id.equals(user.id) }){
 			dsj.addToReaders(user)
 		}
+		
+		//流程引擎相关信息处理-------------------------------------------------------------------------------------
+		if(!dsj.processInstanceId){
+			//启动流程实例
+			def _model = Model.findByModelCode("dsj")
+			def _processInstance = workFlowService.getProcessDefinition(_model.relationFlow)
+			Map<String, Object> variables = new HashMap<String, Object>();
+			ProcessInstance processInstance = workFlowService.addFlowInstance(_processInstance.key, user.username,dsj.id, variables);
+			dsj.processInstanceId = processInstance.getProcessInstanceId()
+			
+			//获取下一节点任务
+			def task = workFlowService.getTasksByFlow(processInstance.getProcessInstanceId())[0]
+			
+			//任务指派给当前拟稿人
+			taskService.claim(task.getId(), user.username)
+		}
+		//-------------------------------------------------------------------------------------------------
 		
 		if(dsj.save(flush:true)){
 			json["result"] = true
