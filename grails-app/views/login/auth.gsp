@@ -184,6 +184,7 @@
 				<input type='submit' id="submit" value='${message(code: "springSecurity.login.button")}' class="btn-login"  />
 			</div>
 			<span class="login-tips"><i></i><b id="msgtip">请输入用户名和密码</b></span>
+			<span class="login-tips"><b><span style="color:#000000">演示账号:client  密码:password</span></b></span>
 			<i class="arrow">箭头</i>
 		</form>
 	</div>
