@@ -109,7 +109,7 @@
 					dsj_deal("achive");
 				};
 				dsj_submit = function(){
-					var rostenShowDialog = rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","single");
+					var rostenShowDialog = rosten.selectUser("${createLink(controller:'dsj',action:'getDealWithUser',params:[companyId:company?.id,id:dsj?.id])}","single");
 		            rostenShowDialog.callback = function(data) {
 		            	var _data = [];
 		            	for (var k = 0; k < data.length; k++) {
@@ -118,6 +118,13 @@
 		            	};
 		            	dsj_deal("submit",_data);	
 		            }  
+				};
+				dsj_test = function(){
+					var content = {};
+					content.id = registry.byId("id").attr("value");
+					rosten.readSync(rosten.webPath + "/dsj/dsjGetNextTest",content,function(data){
+						alert(data.username);
+					});
 				};
 				dsj_agrain = function(){
 					var _data = [];

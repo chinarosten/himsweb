@@ -53,7 +53,7 @@ class WorkFlowService {
 	def getNextTaskDefinition={taskid ->
 		
 		//获取任务
-		Task task = taskService.createTaskQuery().taskId(taskid)[0]
+		Task task = taskService.createTaskQuery().taskId(taskid).singleResult()
 		
 		//根据当前任务获取当前流程的流程定义，然后根据流程定义获得所有的节点
 		ProcessDefinition processDefinition = repositoryService.getProcessDefinition(task.getProcessDefinitionId())
@@ -74,7 +74,7 @@ class WorkFlowService {
 	}
 	
 	//迭代循环获取下一节点任务
-	private def TaskDefinition nextTaskDefinition ={activityEntity ,activityId ->
+	private def nextTaskDefinition ={activityEntity ,activityId ->
 		if("userTask".equals(activityEntity.getProperty("type")) && !activityId.equals(activityEntity.getId())){
 			TaskDefinition taskDefinition = ((UserTaskActivityBehavior)activityEntity.getActivityBehavior()).getTaskDefinition()
 			return taskDefinition
