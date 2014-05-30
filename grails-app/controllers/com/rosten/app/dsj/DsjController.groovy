@@ -25,6 +25,63 @@ class DsjController {
 	def workFlowService
 	def taskService
 	
+	def dsjGetNextTest ={
+		def json=[:]
+		def dsj = Dsj.get(params.id)
+		
+		if(dsj.taskId){
+			def dsjDefEntity = workFlowService.getNextTaskDefinition(dsj.taskId);
+			
+			if(dsjDefEntity){
+				def expEntity = dsjDefEntity.getAssigneeExpression()
+				if(expEntity){
+					json.username = expEntity.getExpressionText()
+				}
+				
+				def groupEntity = dsjDefEntity.getCandidateGroupIdExpressions()
+				if(groupEntity.size()>0){
+					groupEntity.each{
+						json.group = it.getExpressionText()
+					}	
+				}
+			}
+		}
+		render json as JSON
+	}
+	def getDealWithUser ={
+		def currentUser = springSecurityService.getCurrentUser()
+		
+		def dsj = Dsj.get(params.id)
+		def dsjDefEntity = workFlowService.getNextTaskDefinition(dsj.taskId);
+		
+		def expEntity = dsjDefEntity.getAssigneeExpression()
+		if(expEntity){
+			params.user = expEntity.getExpressionText()
+			redirect controller: "system",action:'userTreeDataStore', params: params
+			return
+		}
+		
+		def groupEntity = dsjDefEntity.getCandidateGroupIdExpressions()
+		if(groupEntity.size()>0){
+			//默认有一组group的方式为true，则整组均为true;true:严格控制本部门权限
+			def groupIds = []
+			def limit = false
+			groupEntity.each{
+				groupIds << Util.strLeft(it.getExpressionText(), ":")
+				if(!limit && "true".equals(Util.strRight(it.getExpressionText(), ":"))){
+					limit = true
+				}
+			}
+			params.groupIds = groupIds.unique().join("-")
+			if(limit){
+				params.limitDepart = currentUser.getDepartEntityTrueName()
+			}
+			
+			redirect controller: "system",action:'userTreeDataStore', params: params
+			return
+		}
+		
+	}
 	def dsjGetContent ={
 		def json=[:]
 		def dsj = Dsj.get(params.id)
@@ -370,6 +427,7 @@ class DsjController {
 			
 			//获取下一节点任务
 			def task = workFlowService.getTasksByFlow(processInstance.getProcessInstanceId())[0]
+			dsj.taskId = task.getId()
 			
 			//任务指派给当前拟稿人
 			taskService.claim(task.getId(), user.username)

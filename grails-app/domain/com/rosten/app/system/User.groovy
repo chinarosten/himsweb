@@ -59,6 +59,12 @@ class User {
 		return departsEntity
 	}
 	
+	def getDepartEntityTrueName(){
+		def entitys = UserDepart.findByUser(this,[sort:"user"])
+		if(entitys) return entitys.depart.departName
+		else return getCompanyName()
+	}
+	
 	//具有角色
 	@GridColumn(name="具有角色")
 	def getAllRolesValue(){

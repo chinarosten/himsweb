@@ -104,6 +104,9 @@ class Dsj {
 	//流程id
 	String processInstanceId
 	
+	//任务id
+	String taskId
+	
 	static belongsTo = [company:Company]
 	
 	static transients = [
@@ -117,6 +120,7 @@ class Dsj {
 		currentUser nullable:true,blank:true
 		currentDepart nullable:true,blank:true
 		processInstanceId nullable:true,blank:true
+		taskId nullable:true,blank:true
 	}
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']

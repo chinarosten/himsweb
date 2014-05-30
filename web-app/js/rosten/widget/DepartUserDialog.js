@@ -322,7 +322,7 @@ define(["dojo/_base/declare",
             var _treeArgs = {
                 model: treeModel,
                 openOnClick: _openOnClick,
-                autoExpand:false,
+                autoExpand:true,
                 persist: false,
                 showRoot: this.showRoot
             };

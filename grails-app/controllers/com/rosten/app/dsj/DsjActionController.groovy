@@ -48,6 +48,7 @@ class DsjActionController {
 					case "拟稿":
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
+						actionList << createAction("获取下一节点(test)",webPath +imgPath + "ok.png",strname + "_test")
 						break;
 					case "审核":
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")

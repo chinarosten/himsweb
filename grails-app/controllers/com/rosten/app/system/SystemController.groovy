@@ -1529,6 +1529,64 @@ class SystemController {
 				json.items+=sMap
 			}
 			
+		}else if(params.groupIds && !"".equals(params.groupIds)){
+			def allUsers =[]
+			def allUsersDepart = []
+			
+			params.groupIds.split("-").each{
+				def _group = Group1.findByGroupName(it)
+				
+				UserGroup.findAllByGroup(_group).each{item->
+					allUsers << item.user
+					allUsersDepart += item.user.getAllDepartEntity()
+				}
+			}
+			allUsers.unique()
+			allUsersDepart.unique()
+			
+			def departSmap =[]	//需要显示的所有部门列表
+			if(params.limitDepart){
+				//严格限制所在部门
+				//只查询部门匹配,匹配部门只允许存在一个
+				def departEntity = Depart.findByCompanyAndDepartName(company,params.limitDepart)
+				
+				getAllDepart(departSmap,departEntity)
+				getAllDepartByChild(departSmap,departEntity)
+				
+			}else{
+				//无需限制部门,从groupId中获取所有相关部门
+				allUsersDepart.each{
+					getAllDepart(departSmap,it)
+					getAllDepartByChild(departSmap,it)
+				}
+			}
+			
+			def lastDepartList = departSmap.unique()
+			lastDepartList.each{
+				def sMap = ["id":it.id,"name":it.departName,"parentId":it.parent?.id,"children":[]]
+				def childMap
+				it.children.each{item->
+					if(lastDepartList.find{_item->
+						_item.id.equals(item.id)
+					}){
+						childMap = ["_reference":item.id]
+						sMap.children += childMap
+					}
+				}
+				it.getAllUser().each{user->
+					
+					if(allUsers.find{ _item1 ->
+						_item1.id.equals(user.id)
+					}){
+						def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id]
+						json.items+=userMap
+						
+						def userChildMap = ["_reference":user.id]
+						sMap.children += userChildMap
+					}
+				}
+				json.items+=sMap
+			}
 		}else{
 			//获取所有部门与用户
 			def dataList = Depart.findAllByCompany(company)
