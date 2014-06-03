@@ -131,6 +131,12 @@ class WorkFlowService {
 		}
 	}
 	
+	//通过流程id获取流程实例
+	def getProcessIntance = {flowId ->
+		ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(flowId).singleResult()
+		return processInstance
+	}
+	
 	//通过流程id获取相关任务
 	def getTasksByFlow ={flowId ->
 		List<Task> tasks = taskService.createTaskQuery().processInstanceId(flowId).active().orderByTaskCreateTime().desc().list()

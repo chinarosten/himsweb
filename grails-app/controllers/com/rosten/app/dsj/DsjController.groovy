@@ -95,87 +95,78 @@ class DsjController {
 		
 		//处理当前人的待办事项
 		def currentUser = springSecurityService.getCurrentUser()
+		
 		def frontStatus = dsj.status
-		def nextStatus,processId
+		def nextStatus
+		def nextUsers=[]
 		
 		//流程引擎相关信息处理-------------------------------------------------------------------------------------
-		if(!dsj.processInstanceId){
-			//创建流程实例
-			def _model = Model.findByModelCode("dsj")
-			def _processInstance = workFlowService.getProcessDefinition(_model.relationFlow)
-			Map<String, Object> variables = new HashMap<String, Object>();
-			ProcessInstance processInstance = workFlowService.addFlowInstance(_processInstance.key, currentUser.username,dsj.id, variables);
-			dsj.processInstanceId = processInstance.getProcessInstanceId()
-			processId = processInstance.getProcessInstanceId()
-		}else{
-			processId = dsj.processInstanceId
-		}
 		
-		//获取下一状态信息，暂时只处理串行流程
-		def tasks = workFlowService.getTasksByFlow(processId)
-		def task = tasks[0]
-		nextStatus = task.getName()
-		dsj.status = nextStatus
+		//结束当前任务，并开启下一节点任务
+		taskService.complete(dsj.taskId)	//结束当前任务
 		
-		if(task.getAssignee().equals(currentUser.username)){
+		ProcessInstance processInstance = workFlowService.getProcessIntance(dsj.processInstanceId)
+		if(!processInstance || processInstance.isEnded()){
+			//流程已结束
+			nextStatus = "已归档"
+			dsj.currentUser = null
+			dsj.currentDepart = null
+			dsj.taskId = null
 			
-		}
-		
-		//----------------------------------------------------------------------------------------------------
-		
-		switch (params.deal){
-			case "submit":
-//				dsj.status="审核"
-				break;
-			case "agrain":
-//				dsj.status = "已签发"
-				break;
-			case "achive":
-//				dsj.status = "已归档"
-				dsj.currentUser = null
-				dsj.currentDepart = null
-				dsj.currentDealDate = new Date()
-				break;
-			case "notAgrain":
-//				dsj.status = "不同意"
-				dsj.currentUser = null
-				dsj.currentDepart = null
-				dsj.currentDealDate = new Date()
-				break;
-		}
-		
-		def nextUsers=[]
-		if(params.dealUser){
-			//下一步相关信息处理
-			def dealUsers = params.dealUser.split(",")
-			if(dealUsers.size() >1){
-				//并发
+		}else{
+			//获取下一节点任务，目前处理串行情况
+			def tasks = workFlowService.getTasksByFlow(dsj.processInstanceId)
+			def task = tasks[0]
+			if(task.getDescription() && !"".equals(task.getDescription())){
+				nextStatus = task.getDescription()
 			}else{
-				//串行
-				def nextUser = User.get(Util.strLeft(params.dealUser,":"))
-				def args = [:]
-				args["type"] = "【大事记】"
-				args["content"] = "请您审核名称为  【" + dsj.subject +  "】 的大事记"
-				args["contentStatus"] = dsj.status
-				args["contentId"] = dsj.id
-				args["user"] = nextUser
-				args["company"] = nextUser.company
-				
-				startService.addGtask(args)
-				
-				dsj.currentUser = nextUser
-				dsj.currentDepart = Util.strRight(params.dealUser, ":")
-				dsj.currentDealDate = new Date()
-				
-				if(!dsj.readers.find{ item->
-					item.id.equals(nextUser.id)
-				}){
-					dsj.addToReaders(nextUser)
+				nextStatus = task.getName()
+			}
+			dsj.taskId = task.getId()
+			
+			
+			if(params.dealUser){
+				//下一步相关信息处理
+				def dealUsers = params.dealUser.split(",")
+				if(dealUsers.size() >1){
+					//并发
+				}else{
+					//串行
+					def nextUser = User.get(Util.strLeft(params.dealUser,":"))
+					
+					//任务指派给当前拟稿人
+					taskService.claim(dsj.taskId, nextUser.username)
+					
+					def args = [:]
+					args["type"] = "【大事记】"
+					args["content"] = "请您审核名称为  【" + dsj.subject +  "】 的大事记"
+					args["contentStatus"] = nextStatus
+					args["contentId"] = dsj.id
+					args["user"] = nextUser
+					args["company"] = nextUser.company
+					
+					startService.addGtask(args)
+					
+					dsj.currentUser = nextUser
+					dsj.currentDepart = Util.strRight(params.dealUser, ":")
+					
+					if(!dsj.readers.find{ item->
+						item.id.equals(nextUser.id)
+					}){
+						dsj.addToReaders(nextUser)
+					}
+					nextUsers << nextUser.getFormattedName()
 				}
-				nextUsers << nextUser.getFormattedName()
+				
 			}
 			
 		}
+		
+		dsj.status = nextStatus
+		dsj.currentDealDate = new Date()
+		
+		
+		//----------------------------------------------------------------------------------------------------
 		
 		def gtask = Gtask.findWhere(
 			user:currentUser,
@@ -195,19 +186,19 @@ class DsjController {
 			dsjLog.user = currentUser
 			dsjLog.dsj = dsj
 			
-			switch (dsj.status){
-				case "审核":
-					dsjLog.content = "提交审核【" + nextUsers.join("、") + "】"
-					break
-				case "已签发":
+			switch (true){
+				case dsj.status.contains("已签发"):
 					dsjLog.content = "签发文件【" + nextUsers.join("、") + "】" 
 					break
-				case "已归档":
-					dsjLog.content = "归档发文"
+				case dsj.status.contains("归档"):
+					dsjLog.content = "归档"
 					break
-				case "不同意":
-					dsjLog.content = "不同意签发！"
+				case dsj.status.contains("不同意"):
+					dsjLog.content = "不同意！"
 					break
+				default:
+					dsjLog.content = "提交" + dsj.status + "【" + nextUsers.join("、") + "】"
+					break	
 			}
 			dsjLog.save(flush:true)
 			

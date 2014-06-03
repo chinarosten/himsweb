@@ -28,7 +28,7 @@
     }, {
       "id" : "documentation",
       "type" : "Text",
-      "title" : "描述",
+      "title" : "描述/状态",
       "value" : "",
       "description" : "BPMN元素的描述性名称.",
       "popular" : true

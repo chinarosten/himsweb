@@ -44,23 +44,28 @@ class DsjActionController {
 			def dsj = Dsj.get(params.id)
 			if(user.equals(dsj.currentUser)){
 				//当前处理人
-				switch (dsj.status){
-					case "拟稿":
+				switch (true){
+					case dsj.status.contains("拟稿"):
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
-						actionList << createAction("获取下一节点(test)",webPath +imgPath + "ok.png",strname + "_test")
+//						actionList << createAction("获取下一节点(test)",webPath +imgPath + "ok.png",strname + "_test")
 						break;
-					case "审核":
+					case dsj.status.contains("审核") || dsj.status.contains("审批"):
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
-						actionList << createAction("同意",webPath +imgPath + "ok.png",strname + "_agrain")
+						actionList << createAction("同意",webPath +imgPath + "ok.png",strname + "_submit")
 						actionList << createAction("不同意",webPath +imgPath + "back.png",strname + "_notAgrain")
 						break;
-					case "已签发":
+					case dsj.status.contains("已签发") || dsj.status.contains("归档"):
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname +"_add")
 						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
 						actionList << createAction("归档",webPath +imgPath + "gd.png",strname +"_achive")
 						break;
+					default :
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
+						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
+						break;
+						
 				}
 			}
 		}else{
