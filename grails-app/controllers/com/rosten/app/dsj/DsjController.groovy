@@ -56,7 +56,14 @@ class DsjController {
 		
 		def expEntity = dsjDefEntity.getAssigneeExpression()
 		if(expEntity){
-			params.user = expEntity.getExpressionText()
+			
+			def expEntityText = expEntity.getExpressionText()
+			if(expEntityText.contains("{")){
+				params.user = dsj.drafter.username
+			}else{
+				params.user = expEntity.getExpressionText()
+			}
+			
 			redirect controller: "system",action:'userTreeDataStore', params: params
 			return
 		}
@@ -421,7 +428,7 @@ class DsjController {
 			dsj.taskId = task.getId()
 			
 			//任务指派给当前拟稿人
-			taskService.claim(task.getId(), user.username)
+			//taskService.claim(task.getId(), user.username)
 		}
 		//-------------------------------------------------------------------------------------------------
 		
