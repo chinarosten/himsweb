@@ -54,12 +54,17 @@ class DsjActionController {
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
 						actionList << createAction("同意",webPath +imgPath + "ok.png",strname + "_submit")
-						actionList << createAction("不同意",webPath +imgPath + "back.png",strname + "_notAgrain")
+						actionList << createAction("不同意",webPath +imgPath + "back.png",strname + "_submit")
 						break;
-					case dsj.status.contains("已签发") || dsj.status.contains("归档"):
+					case dsj.status.contains("已签发"):
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname +"_add")
 						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
-						actionList << createAction("归档",webPath +imgPath + "gd.png",strname +"_achive")
+						actionList << createAction("提交归档",webPath +imgPath + "gd.png",strname +"_submit")
+						break;
+					case dsj.status.contains("归档"):
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname +"_add")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
+						actionList << createAction("归档",webPath +imgPath + "gd.png",strname +"_submit")
 						break;
 					default :
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")

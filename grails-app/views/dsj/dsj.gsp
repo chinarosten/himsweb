@@ -98,18 +98,19 @@
 							rosten.alert("成功！").queryDlgClose= function(){
 								//刷新待办事项内容
 								window.opener.showStartGtask("${user?.id}","${company?.id }");
-								rosten.pagequit();
+								if(data.refresh=="true" || data.refresh==true){
+									window.location.reload();
+								}else{
+									rosten.pagequit();
+								}
 							}
 						}else{
 							rosten.alert("失败!");
 						}	
 					});
 				};
-				dsj_achive = function(){
-					dsj_deal("achive");
-				};
 				dsj_submit = function(){
-					var rostenShowDialog = rosten.selectUser("${createLink(controller:'dsj',action:'getDealWithUser',params:[companyId:company?.id,id:dsj?.id])}","single");
+					var rostenShowDialog = rosten.selectFlowUser("${createLink(controller:'dsj',action:'getDealWithUser',params:[companyId:company?.id,id:dsj?.id])}","single");
 		            rostenShowDialog.callback = function(data) {
 		            	var _data = [];
 		            	for (var k = 0; k < data.length; k++) {
@@ -117,7 +118,17 @@
 		            		_data.push(item.value + ":" + item.departId);
 		            	};
 		            	dsj_deal("submit",_data);	
-		            }  
+		            }
+					rostenShowDialog.afterLoad = function(){
+						var _data = rostenShowDialog.getData();
+			            if(_data && _data.length==1){
+				            //直接调用
+			            	rostenShowDialog.doAction();
+				        }else{
+							//显示对话框
+							rostenShowDialog.open();
+					    }
+					}
 				};
 				dsj_test = function(){
 					var content = {};
@@ -125,11 +136,6 @@
 					rosten.readSync(rosten.webPath + "/dsj/dsjGetNextTest",content,function(data){
 						alert(data.username);
 					});
-				};
-				dsj_agrain = function(){
-					var _data = [];
-					_data.push("${dsj?.drafter.id + ":" + dsj?.drafterDepart}");
-					dsj_deal("agrain",_data);
 				};
 				dsj_notAgrain = function(){
 					dsj_deal("notAgrain");

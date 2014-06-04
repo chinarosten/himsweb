@@ -30,6 +30,7 @@ define(["dojo/_base/declare",
         query:{parentId:null},
         folderClass:null,
         type:"multile",	//type为:multile多选;single:单选
+        isSelected:true,//默认在type为single时生效,含义为:如果单选并只存在一条数据时默认选中单选数据
         
         height: "565px",
         width: "600px",
@@ -297,7 +298,6 @@ define(["dojo/_base/declare",
             	table.appendChild(tfoot);
         	}
         	
-        	
         	node.appendChild(table);
         },
         _buildTree: function(node){
@@ -331,6 +331,19 @@ define(["dojo/_base/declare",
                 connect.connect(this.tree, "onClick", this, "onclick");
             }
             
+            if(this.type!="multile" && this.isSelected){
+            	connect.connect(this.tree, "onLoad", this, function(){
+    				//默认选中唯一的数据
+        			this._getStoreItem(this.treeStore,{type:"user"},function(items){
+        				if(items.length==1){
+        					var item = items[0];
+                         	this.onclick(item);
+        				}
+        				this.afterLoad();
+    				 });
+    			});
+            }
+            
             this.tree.startup();
         },
         refresh: function(){
@@ -347,6 +360,9 @@ define(["dojo/_base/declare",
         	}else{
         		this.returnData.length = 0;
         	}
+        },
+        afterLoad:function(){
+        	
         },
         _addOption:function(node,item){
         	var c = win.doc.createElement('option');

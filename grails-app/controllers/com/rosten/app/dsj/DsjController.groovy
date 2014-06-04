@@ -131,7 +131,6 @@ class DsjController {
 			}
 			dsj.taskId = task.getId()
 			
-			
 			if(params.dealUser){
 				//下一步相关信息处理
 				def dealUsers = params.dealUser.split(",")
@@ -172,6 +171,10 @@ class DsjController {
 		dsj.status = nextStatus
 		dsj.currentDealDate = new Date()
 		
+		//判断下一处理人是否与当前处理人员为同一人
+		if(currentUser.equals(dsj.currentUser)){
+			json["refresh"] = true
+		}
 		
 		//----------------------------------------------------------------------------------------------------
 		

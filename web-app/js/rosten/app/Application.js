@@ -68,6 +68,38 @@ define(["dojo/_base/lang",
 		}
 		
 	};
+	application.selectFlowUser = function(url,type){
+        var id = "sys_flowUserDialog";
+
+        if (rosten[id] && registry.byId(id)) {
+        	if (rosten[id].initialized == false) {
+        		rosten[id].buildContent(rosten[id].contentPane);
+        		rosten[id].buildControl(rosten[id].controlPane);
+        		rosten[id].initialized = true;
+			}
+            rosten[id].refresh();
+        } else {
+            var args = {
+                url : url,
+                type:type
+            };
+            rosten[id] = new DepartUserDialog(args);
+            if (rosten[id].initialized == false) {
+        		rosten[id].buildContent(rosten[id].contentPane);
+        		rosten[id].buildControl(rosten[id].controlPane);
+        		rosten[id].initialized = true;
+			}
+        }
+//        var _data = rosten[id].getData();
+//        if(_data && _data.length==1){
+//            //直接调用
+//        	rosten[id].doAction();
+//        }else{
+//			//显示对话框
+//        	rosten[id].open();
+//	    }
+        return rosten[id];
+    };
     application.selectUser = function(url,type,inputName,inputId){
         var id = "sys_userDialog";
 
