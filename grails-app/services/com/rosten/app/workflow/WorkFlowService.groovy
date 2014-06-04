@@ -1,7 +1,9 @@
 package com.rosten.app.workflow
 
+import org.activiti.bpmn.model.BpmnModel
 import org.activiti.engine.history.HistoricProcessInstanceQuery
 import org.activiti.engine.history.HistoricTaskInstance
+import org.activiti.engine.impl.ProcessEngineImpl
 import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity
 import org.activiti.engine.impl.pvm.PvmActivity
@@ -15,6 +17,9 @@ import org.activiti.engine.runtime.ProcessInstanceQuery
 import org.activiti.engine.task.Task
 import org.activiti.engine.task.TaskQuery
 import org.activiti.engine.ActivitiException
+import org.activiti.engine.ProcessEngine
+import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator
+import org.activiti.engine.impl.context.Context
 
 class WorkFlowService {
 	def identityService
@@ -22,6 +27,24 @@ class WorkFlowService {
 	def taskService
 	def repositoryService
 	def historyService
+	def processEngineConfig
+		
+	def getflowActiveStream ={flowDefinitionId,taskId ->
+		
+		BpmnModel bpmnModel = repositoryService.getBpmnModel(flowDefinitionId)
+		InputStream imageStream
+		
+		Context.setProcessEngineConfiguration(processEngineConfig)
+		//获取任务
+		if(taskId){
+			Task task = taskService.createTaskQuery().taskId(taskId).singleResult()
+			String excId = task.getExecutionId()
+			imageStream = ProcessDiagramGenerator.generateDiagram(bpmnModel, "png",runtimeService.getActiveActivityIds(excId))
+		}else{
+			imageStream = ProcessDiagramGenerator.generateDiagram(bpmnModel, "png",[])
+		}
+		return imageStream
+	}
 	
 	//查询Execution操作列表
 	def getExecutionList ={

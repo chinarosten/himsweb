@@ -48,6 +48,19 @@ class DsjController {
 		}
 		render json as JSON
 	}
+	def flowActiveExport ={
+		def dsj = Dsj.get(params.id)
+		InputStream imageStream = workFlowService.getflowActiveStream(dsj.processDefinitionId,dsj.taskId)
+		
+		byte[] b = new byte[1024];
+		int len = -1;
+		while ((len = imageStream.read(b, 0, 1024)) != -1) {
+		  response.outputStream.write(b, 0, len);
+		}
+		response.outputStream.flush()
+		response.outputStream.close()
+		
+	}
 	def getDealWithUser ={
 		def currentUser = springSecurityService.getCurrentUser()
 		
@@ -425,6 +438,7 @@ class DsjController {
 			Map<String, Object> variables = new HashMap<String, Object>();
 			ProcessInstance processInstance = workFlowService.addFlowInstance(_processInstance.key, user.username,dsj.id, variables);
 			dsj.processInstanceId = processInstance.getProcessInstanceId()
+			dsj.processDefinitionId = processInstance.getProcessDefinitionId()
 			
 			//获取下一节点任务
 			def task = workFlowService.getTasksByFlow(processInstance.getProcessInstanceId())[0]

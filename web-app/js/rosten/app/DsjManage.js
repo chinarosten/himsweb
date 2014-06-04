@@ -4,6 +4,7 @@
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
 	
+	
 	dsj_changeStatus = function(){
 			
 			

@@ -101,6 +101,9 @@ class Dsj {
 		return sd.format(createDate)
 	}
 	
+	//流程定义id
+	String processDefinitionId
+	
 	//流程id
 	String processInstanceId
 	
@@ -121,6 +124,7 @@ class Dsj {
 		currentDepart nullable:true,blank:true
 		processInstanceId nullable:true,blank:true
 		taskId nullable:true,blank:true
+		processDefinitionId nullable:true,blank:true
 	}
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']

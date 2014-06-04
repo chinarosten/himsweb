@@ -86,6 +86,15 @@
 						}
 					},null,"dsj_form");
 				};
+				dsj_test = function(){
+					var content = {};
+					content.id = registry.byId("id").attr("value");
+//					rosten.readSync(rosten.webPath + "/dsj/dsjGetNextTest",content,function(data){
+//						alert(data.username);
+//					});
+					var url = rosten.webPath + "/dsj/flowActiveExport?id=" + content.id;
+			    	window.open(url,false);
+				};
 				dsj_deal = function(type,readArray){
 					var content = {};
 					content.id = registry.byId("id").attr("value");
@@ -129,13 +138,6 @@
 							rostenShowDialog.open();
 					    }
 					}
-				};
-				dsj_test = function(){
-					var content = {};
-					content.id = registry.byId("id").attr("value");
-					rosten.readSync(rosten.webPath + "/dsj/dsjGetNextTest",content,function(data){
-						alert(data.username);
-					});
 				};
 				dsj_notAgrain = function(){
 					dsj_deal("notAgrain");

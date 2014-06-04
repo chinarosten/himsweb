@@ -48,7 +48,6 @@ class DsjActionController {
 					case dsj.status.contains("拟稿"):
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
-//						actionList << createAction("获取下一节点(test)",webPath +imgPath + "ok.png",strname + "_test")
 						break;
 					case dsj.status.contains("审核") || dsj.status.contains("审批"):
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
@@ -73,6 +72,7 @@ class DsjActionController {
 						
 				}
 			}
+			actionList << createAction("流程图",webPath +imgPath + "ok.png",strname + "_test")
 		}else{
 			//新建
 			actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
