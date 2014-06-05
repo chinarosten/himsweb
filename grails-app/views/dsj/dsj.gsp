@@ -252,11 +252,11 @@
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" id="dsjComment" title="流转意见" data-dojo-props='refreshOnShow:true,
 		href:"${createLink(controller:'dsj',action:'getCommentLog',id:dsj?.id)}"
-	'>	
+	'>
 	</div>
 	<div data-dojo-type="dijit/layout/ContentPane" id="dsjFlowLog" title="流程跟踪" data-dojo-props='refreshOnShow:true,
 		href:"${createLink(controller:'dsj',action:'getFlowLog',id:dsj?.id)}"
-	'>	
+	'>
 	</div>
 </div>
 </body>

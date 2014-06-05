@@ -365,6 +365,9 @@ class DsjController {
 		if(dsj){
 			def logs = DsjLog.findAllByDsj(dsj,[ sort: "createDate", order: "asc"])
 			model["log"] = logs
+			
+			model["logEntityId"] = params.id
+			model["logEntityName"] = "dsj"
 		}
 		
 		render(view:'/share/flowLog',model:model)

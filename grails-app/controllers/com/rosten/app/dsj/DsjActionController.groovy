@@ -72,7 +72,7 @@ class DsjActionController {
 						
 				}
 			}
-			actionList << createAction("流程图",webPath +imgPath + "ok.png",strname + "_test")
+//			actionList << createAction("流程图",webPath +imgPath + "ok.png",strname + "_test")
 		}else{
 			//新建
 			actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
