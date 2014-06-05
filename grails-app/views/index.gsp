@@ -74,7 +74,7 @@
 		margin-top: 2px;
 		margin-bottom: 10px;
 		display: inline;
-		width: 30%;
+		width: 25%;
 		text-align: cneter;
 	}
 	#information ul li a{
@@ -236,8 +236,8 @@
 			</div>
 			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"center",gutters:false'>
 				
-				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%;" id="information"
-					data-dojo-props='title:"常用信息/应用",toggleable:false,region:"left",moreText:"",height:"146px"'>
+				<div data-dojo-type="rosten/widget/TitlePane" id="information" style="margin-left:1px;margin-right:1px" 
+					data-dojo-props='title:"常用信息/应用",toggleable:false,region:"center",moreText:"",height:"146px"'>
 					<ul>
 						<li>
 							<a href="javascript:top_addSendfile()">
@@ -266,8 +266,8 @@
 					</ul>
 				</div>
 				
-				<div data-dojo-type="rosten/widget/TitlePane" style="margin-left:1px;margin-right:1px"
-					data-dojo-props='title:"通讯录",toggleable:false,region:"center",moreText:"",height:"146px"'>
+				<div data-dojo-type="rosten/widget/TitlePane"  style="width:30%;"
+					data-dojo-props='title:"通讯录",toggleable:false,region:"left",moreText:"",height:"146px"'>
 					<div style="text-align:center">
                       <span>关键字：</span>
                       <input id="personSearchInput" data-dojo-type="dijit/form/ValidationTextBox" 
