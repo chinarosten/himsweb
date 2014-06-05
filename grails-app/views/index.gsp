@@ -61,6 +61,31 @@
 		float:left;
 		display:inline;
 	}
+	#information ul{
+		padding:8px 0px 0px 0px;
+		width: 100%;
+		margin: 0px auto;
+		overflow: hidden;
+		text-align:center;
+	}
+	#information ul li{
+		position: relative;
+		float: left;
+		margin-top: 2px;
+		margin-bottom: 10px;
+		display: inline;
+		width: 30%;
+		text-align: cneter;
+	}
+	#information ul li a{
+		cursor:pointer;
+	}
+	#information ul li h5{
+		color: #142E65;
+		height: 24px;
+		font-weight:normal;
+		margin-top:0px;
+	}
 </style>
 <script type="text/javascript">
    	logout = function(){
@@ -212,8 +237,33 @@
 			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"center",gutters:false'>
 				
 				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%;" id="information"
-					data-dojo-props='title:"常用信息",toggleable:false,region:"left",moreText:"",height:"146px"'>
-					常用信息内容......
+					data-dojo-props='title:"常用信息/应用",toggleable:false,region:"left",moreText:"",height:"146px"'>
+					<ul>
+						<li>
+							<a href="javascript:top_addSendfile()">
+								<img width="36px" height="36px" src="images/rosten/share/top_sendfile.png"></img>
+								<h5>新建发文</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addBbs()">
+								<img width="36px" height="36px" src="images/rosten/share/top_bbs.png"></img>
+								<h5>新建公告</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addMeeting()">
+								<img width="36px" height="36px" src="images/rosten/share/top_meeting.png"></img>
+								<h5>新建会议通知</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addDsj()">
+								<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
+								<h5>新建大事记</h5>
+							</a>
+						</li>
+					</ul>
 				</div>
 				
 				<div data-dojo-type="rosten/widget/TitlePane" style="margin-left:1px;margin-right:1px"

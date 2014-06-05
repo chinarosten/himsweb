@@ -172,6 +172,26 @@ define(["dojo/_base/kernel"
         //增加时获取后台session功能
         //setInterval("session_checkTimeOut()",60000*120 + 2000);
     };
+    top_addSendfile = function(){
+		var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("sendfile", rosten.webPath + "/sendFile/sendFileAdd?companyId=" + companyId + "&userid=" + userid);
+    };
+    top_addDsj = function(){
+    	var userid = rosten.kernel.getUserInforByKey("idnumber");
+        var companyId = rosten.kernel.getUserInforByKey("companyid");
+        rosten.openNewWindow("dsj", rosten.webPath + "/dsj/dsjAdd?companyId=" + companyId + "&userid=" + userid);
+    };
+    top_addMeeting = function(){
+  	 	var userid = rosten.kernel.getUserInforByKey("idnumber");
+  	 	var companyId = rosten.kernel.getUserInforByKey("companyid");
+  	 	rosten.openNewWindow("meeting", rosten.webPath + "/meeting/meetingAdd?companyId=" + companyId + "&userid=" + userid);
+    };
+    top_addBbs = function(){
+	   	var userid = rosten.kernel.getUserInforByKey("idnumber");
+	    var companyId = rosten.kernel.getUserInforByKey("companyid");
+	    rosten.openNewWindow("bbs", rosten.webPath + "/bbs/bbsAdd?companyId=" + companyId + "&userid=" + userid);
+	};
     showStartInformation = function(userId,companyId){
     	if(userId==undefined){
     		userId = rosten.kernel.getUserInforByKey("idnumber");
