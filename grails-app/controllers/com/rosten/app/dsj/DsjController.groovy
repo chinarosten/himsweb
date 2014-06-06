@@ -436,7 +436,7 @@ class DsjController {
 		//流程引擎相关信息处理-------------------------------------------------------------------------------------
 		if(!dsj.processInstanceId){
 			//启动流程实例
-			def _model = Model.findByModelCode("dsj")
+			def _model = Model.findByModelCodeAndCompany("dsj",dsj.company)
 			def _processInstance = workFlowService.getProcessDefinition(_model.relationFlow)
 			Map<String, Object> variables = new HashMap<String, Object>();
 			ProcessInstance processInstance = workFlowService.addFlowInstance(_processInstance.key, user.username,dsj.id, variables);
