@@ -282,6 +282,53 @@ define(["dojo/_base/connect",
     };
     //------------------------------------------------------------------------------------------------------------------------
     
+    changePassword = function(){
+    	var unid = rosten.getGridUnid("single");
+        if (unid == "")
+            return;
+    	rosten.kernel.createRostenShowDialog(rosten.webPath + "/system/passwordChangeShow1/"+ unid, {
+            onLoadFunction : function() {
+
+            }
+        });
+    };
+    changePasswordSubmit = function(){
+        var newpassword = registry.byId("newpassword");
+        if (!newpassword.isValid()) {
+            rosten.alert("新密码不正确！").queryDlgClose = function() {
+                newpassword.focus();
+            };
+            return;
+        }
+        var newpasswordcheck = registry.byId("newpasswordcheck");
+        if (!newpasswordcheck.isValid()) {
+            rosten.alert("确认密码不正确！").queryDlgClose = function() {
+                newpasswordcheck.focus();
+            };
+            return;
+        }
+        if (newpassword.getValue() != newpasswordcheck.getValue()) {
+            rosten.alert("新密码与确认密码不一致！").queryDlgClose = function() {
+                newpassword.focus();
+            };
+            return;
+        }
+        var content = {};
+        content.newpassword = newpassword.getValue();
+        content.id = registry.byId("dealunid").getValue();
+
+        rosten.read(rosten.webPath + "/system/passwordChangeSubmit1", content, function(data) {
+            if (data.result == "true") {
+                rosten.kernel.hideRostenShowDialog();
+                rosten.kernel.getGrid().clearSelected();
+                rosten.alert("修改密码成功!");
+            } else if (data.result == "error") {
+                rosten.alert("当前密码错误,修改密码失败!");
+            } else {
+                rosten.alert("修改密码失败!");
+            }
+        });
+    };
     add_user = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");

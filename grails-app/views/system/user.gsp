@@ -76,6 +76,7 @@
 				var content = {};
 				<g:if test='${!userType.equals("super") }'>
 					content.companyId = "${company?.id}";
+					content.userNameFront = registry.byId("userNameFront").attr("value");
 				</g:if>
 				rosten.readSync(rosten.webPath + "/system/userSave",content,function(data){
 					if(data.result=="true"){
@@ -112,14 +113,34 @@
                                 </div>
                             </td>
                             <td>
-                            	<input id="username" data-dojo-type="dijit/form/ValidationTextBox" 
-                                	data-dojo-props='name:"username",${fieldAcl.isReadOnly("username")},
-                                		"class":"input",
-                                		trim:true,
-                                		required:true,
-                                		promptMessage:"请正确输入用户名...",
-              							value:"${user?.username}"
-                                '/>
+                            	<g:if test='${userType.equals("admin") }'>
+                            		<input id="userNameFront" data-dojo-type="dijit/form/ValidationTextBox" 
+                                	data-dojo-props='name:"userNameFront","class":"input",style:{width:"50px"},
+              							value:"${company?.shortName}-",disabled:true
+                                	'/>
+                                	
+                                	<input id="username" data-dojo-type="dijit/form/ValidationTextBox" 
+	                                	data-dojo-props='name:"username",${fieldAcl.isReadOnly("username")},
+	                                		"class":"input",
+	                                		trim:true,
+	                                		required:true,
+	                                		promptMessage:"请正确输入用户名...",
+	                                		style:{width:"140px"},
+	                                		<g:if test="${username && !"".equals(username)}">disabled:true,</g:if>
+	              							value:"${username}"
+	                                '/>
+                            	</g:if>
+                            	<g:else>
+                            		<input id="username" data-dojo-type="dijit/form/ValidationTextBox" 
+	                                	data-dojo-props='name:"username",${fieldAcl.isReadOnly("username")},
+	                                		"class":"input",
+	                                		trim:true,
+	                                		required:true,
+	                                		promptMessage:"请正确输入用户名...",
+	              							value:"${user?.username}"
+	                                '/>
+                            	</g:else>
+                            	
                             </td>
                         </tr>
                         <tr>
@@ -138,13 +159,13 @@
                         <g:if test='${userType.equals("admin") }'>
 	                        <tr>
 		                        <td>
-		                        	 <div align="right"> 用户类型：</div>
+		                        	 <div align="right"><span style="color:red">*&nbsp;</span>用户类型：</div>
 		                        </td>
 		                        <td>
 		                        	<select id="userTypeName" data-dojo-type="dijit/form/ComboBox"
 	                             		data-dojo-props='name:"userTypeName",
-	                             			autoComplete:false,
-	                             			style:{width:"100px"},
+	                             			autoComplete:true,
+	                             			style:{fontSize:"14px",width:"194px"},
 	                             			${fieldAcl.isReadOnly("userTypeName")},
 	              							value:"${user?.userTypeEntity?.typeName }"
 	                                '>
@@ -217,7 +238,7 @@
                         <g:if test='${userType.equals("admin") }'>
                         	<tr>
 	                           <td>
-	                                <div align="right">所属部门：</div>
+	                                <div align="right"><span style="color:red">*&nbsp;</span>所属部门：</div>
 	                            </td>
 	                            <td>
 	                            	<input id="allowdepartsName" data-dojo-type="dijit/form/ValidationTextBox" 
@@ -262,7 +283,7 @@
 	                             		data-dojo-props='name:"sysFlag",
 	                             			type:"radio",
 	                             			${fieldAcl.isReadOnly("sysFlag")},
-	                             			<g:if test="${user?.sysFlag }">checked:true,</g:if>
+	                             			<g:if test="${!user?.sysFlag || user.sysFlag==true }">checked:true,</g:if>
 	              							value:"true"
 	                                '/>
 									<label for="admin1">是</label>
@@ -271,7 +292,7 @@
 	                             		data-dojo-props='name:"sysFlag",
 	                             			type:"radio",
 	                             			${fieldAcl.isReadOnly("sysFlag")},
-	                             			<g:if test="${!user?.sysFlag }">checked:true,</g:if>
+	                             			<g:if test="${user?.sysFlag && user.sysFlag==false }">checked:true,</g:if>
 	              							value:"false"
 	                                '/>
 									<label for="admin2">否</label>
@@ -281,12 +302,12 @@
 	                    </g:if>
 	                    <tr>
 	                        <td>
-	                        	 <div align="right"> CSS样式表：</div>
+	                        	 <div align="right"><span style="color:red">*&nbsp;</span>CSS样式表：</div>
 	                        </td>
 	                        <td>
 	                        	<select id="cssStyle" data-dojo-type="dijit/form/FilteringSelect"
                              		data-dojo-props='name:"cssStyle",
-                             			style:{fontSize:"13px"},
+                             			style:{fontSize:"14px",width:"194px"},
                              			autoComplete:false,
                              			${fieldAcl.isReadOnly("cssStyle")},
               							value:"${(user!=null && user.cssStyle!=null)?user.cssStyle:"normal" }"

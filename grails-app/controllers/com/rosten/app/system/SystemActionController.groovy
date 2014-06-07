@@ -140,6 +140,7 @@ class SystemActionController {
 	
 	def userView ={
 		def actionList = createCommonAction(null,"user",true)
+		actionList << createAction("更改密码",imgPath + "changePassword.gif","changePassword")
 		actionList << createAction("搜索",imgPath + "search.gif","searchGrid")
 		actionList << createAction("取消搜索",imgPath + "search_cancel.gif","cancelSearch")
 		render actionList as JSON

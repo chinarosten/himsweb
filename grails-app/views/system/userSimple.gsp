@@ -51,7 +51,7 @@
 							value:"${user?.username}"
 	                '/>
 			    </td>
-			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>所属机构：</div></td>
+			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>所属部门：</div></td>
 			    <td width="240">
 			    	<input data-dojo-type="dijit/form/ValidationTextBox" 
 	                 	data-dojo-props='"class":"input",readOnly:true,

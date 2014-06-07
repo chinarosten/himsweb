@@ -120,6 +120,25 @@ class SystemController {
 		def model = [:]
 		render(view:'/system/passwordchg',model:model)
 	}
+	def passwordChangeShow1 ={
+		def model = [:]
+		model["unid"] = params.id
+		render(view:'/system/passwordchg1',model:model)
+	}
+	def passwordChangeSubmit1 ={
+		def json =[:]
+		def user = User.get(params.id)
+		user.password = params.newpassword
+		if(user.save(flush:true)){
+			json["result"] = "true"
+		}else{
+			user.errors.each {
+				println it
+			}
+			json["result"] = "false"
+		}
+		render json as JSON
+	}
 	
 	def resourceTreeDataStore ={
 		def company = Company.get(params.companyId)
@@ -1645,6 +1664,9 @@ class SystemController {
 			user = User.get(params.id)
 		}else{
 			user.enabled = true
+			if(!params.sysFlag && params.userNameFront){
+				params.username = params.userNameFront + params.username
+			}
 		}
 		user.properties = params
 		user.clearErrors()
@@ -1744,6 +1766,8 @@ class SystemController {
 				model["userTypeList"] = UserType.findAllByCompany(_user.company)
 			}
 			
+			model["username"] = Util.strRight(_user.username, "-")
+			
 		}else{
 //			model["user"] = new User()
 		}
@@ -1771,6 +1795,9 @@ class SystemController {
 			params.each{key,value->
 				fa.readOnly << key
 			}
+		}
+		if(params.id){
+			fa.readOnly << "username"
 		}
 		model["fieldAcl"] = fa
 		render(view:'/system/user',model:model)
