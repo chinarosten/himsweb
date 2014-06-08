@@ -281,7 +281,6 @@ define(["dojo/_base/connect",
         rosten.kernel.refreshGrid(rosten.kernel.getGrid().defaultUrl);
     };
     //------------------------------------------------------------------------------------------------------------------------
-    
     changePassword = function(){
     	var unid = rosten.getGridUnid("single");
         if (unid == "")

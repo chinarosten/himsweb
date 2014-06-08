@@ -7,6 +7,46 @@ define(["dojo/dom",
         "rosten/widget/PickTreeDialog",
         "rosten/app/Application",
         "rosten/kernel/behavior"], function(dom,registry,connect,PickTreeDialog) {
+    authorize_start = function(){
+        var unid = rosten.getGridUnid("single");
+        if (unid == "")
+            return;
+        
+    };
+    authorize_cancel = function(){
+        var unid = rosten.getGridUnid("single");
+        if (unid == "")
+            return;
+    };
+    
+    add_authorize = function() {
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        var companyId = rosten.kernel.getUserInforByKey("companyid");
+        rosten.openNewWindow("authorize", rosten.webPath + "/system/authorizeAdd?companyId=" + companyId + "&userid=" + userid);
+    };
+    read_authorize = function() {
+        change_authorize();
+    };
+    change_authorize = function() {
+        var unid = rosten.getGridUnid("single");
+        if (unid == "")
+            return;
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        var companyId = rosten.kernel.getUserInforByKey("companyid");
+        rosten.openNewWindow("authorize", rosten.webPath + "/system/authorizeShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+        rosten.kernel.getGrid().clearSelected();
+    };
+    delete_authorize = function() {
+        var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
+        _1.callback = function() {
+            var unids = rosten.getGridUnid("multi");
+            if (unids == "")
+                return;
+            var content = {};
+            content.id = unids;
+            rosten.read(rosten.webPath + "/system/authorizeDelete", content, delete_callback);
+        };
+    };
     gtask_formatTitle = function(value,rowIndex){
         return "<a href=\"javascript:gtask_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
     },
@@ -154,7 +194,14 @@ define(["dojo/dom",
                 var rostenGrid = rosten.kernel.getGrid();
                 rostenGrid.onRowDblClick = change_smsGroup;
                 break;
-            
+            case "authorizeManage":
+                var naviJson = {
+                    identifier : oString,
+                    actionBarSrc : rosten.webPath + "/systemAction/authorizeView?userId=" + userid,
+                    gridSrc : rosten.webPath + "/system/authorizeGrid?userid=" + userid + "&companyId=" + companyId
+                };
+                rosten.kernel.addRightContent(naviJson);
+                break;
         }    
     };
     connect.connect("show_naviEntity", show_smsNaviEntity);

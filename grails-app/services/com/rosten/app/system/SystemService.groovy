@@ -5,6 +5,31 @@ import com.rosten.app.util.GridUtil
 
 class SystemService {
 	static transactional = true
+	
+	def getAuthorizeListDataStore = {params->
+		Integer offset = (params.offset)?params.offset.toInteger():0
+		Integer max = (params.max)?params.max.toInteger():15
+		def propertyList = getAllAuthorize(offset,max,params.company)
+
+		def gridUtil = new GridUtil()
+		return gridUtil.buildDataList("id","title",propertyList,offset)
+	}
+	def getAuthorizeListLayout ={
+		def gridUtil = new GridUtil()
+		return gridUtil.buildLayoutJSON(new Authorize())
+	}
+	def getAllAuthorize={offset,max,company->
+		def c = Authorize.createCriteria()
+		def pa=[max:max,offset:offset]
+		def query = { eq("company",company) }
+		return c.list(pa,query)
+	}
+	def getAuthorizeCount={company->
+		def c = Authorize.createCriteria()
+		def query = { eq("company",company) }
+		return c.count(query)
+	}
+	
 	def deleteRole ={role->
 		for(def index=0;role.children.size();index++){
 			deleteRole(role.children[index])
@@ -540,6 +565,40 @@ class SystemService {
 		model.save(flush:true)
 
 	}
+	private def initData_person ={path,company ->
+		//公共资源
+		def model = new Model(company:company)
+		model.modelName = "个人配置"
+		model.modelCode = "personconfig"
+		model.modelUrl = path + "/system/navigation"
+		model.description ="个人配置模块"
+		
+		def resource = new Resource()
+		resource.resourceName = "个人资料"
+		resource.url = "personInformation"
+		resource.imgUrl = "images/rosten/navigation/User.gif"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "短信群组"
+		resource.url = "smsgroup"
+		resource.imgUrl = "images/rosten/navigation/Group.gif"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "待办工作"
+		resource.url = "gtaskManage"
+		resource.imgUrl = "images/rosten/navigation/gtask.png"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "授权委托"
+		resource.url = "authorizeManage"
+		resource.imgUrl = "images/rosten/navigation/authorize.gif"
+		model.addToResources(resource)
+		
+		model.save(flush:true)
+	}
 	def initData_first ={path,company->
 		try{
 			
@@ -603,7 +662,6 @@ class SystemService {
 			resource.imgUrl = "images/rosten/navigation/Resource.gif"
 			model.addToResources(resource)
 			
-			
 			model.save(flush:true)
 			
 			//流程管理
@@ -641,31 +699,8 @@ class SystemService {
 			model.description ="你问我答模块"
 			model.save(flush:true)
 			
-			model = new Model(company:company)
-			model.modelName = "个人配置"
-			model.modelCode = "personconfig"
-			model.modelUrl = path + "/system/navigation"
-			model.description ="个人配置模块"
-			
-			resource = new Resource()
-			resource.resourceName = "个人资料"
-			resource.url = "personInformation"
-			resource.imgUrl = "images/rosten/navigation/User.gif"
-			model.addToResources(resource)
-			
-			resource = new Resource()
-			resource.resourceName = "短信群组"
-			resource.url = "smsgroup"
-			resource.imgUrl = "images/rosten/navigation/Group.gif"
-			model.addToResources(resource)
-			
-			resource = new Resource()
-			resource.resourceName = "待办工作"
-			resource.url = "gtaskManage"
-			resource.imgUrl = "images/rosten/navigation/gtask.png"
-			model.addToResources(resource)
-			
-			model.save(flush:true)
+			//个人配置
+			initData_person(path,company)
 			
 		}catch(Exception e){
 			print e.message

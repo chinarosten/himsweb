@@ -1,15 +1,102 @@
 package com.rosten.app.system
 
 import grails.converters.JSON
+
 import com.rosten.app.util.FieldAcl
 import com.rosten.app.util.Util
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import com.rosten.app.workflow.WorkFlowService
 
+@SuppressWarnings("deprecation")
 class SystemController {
 	def springSecurityService
 	def systemService
 	def workFlowService
+	
+	def authorizeDelete ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def authorize = Authorize.get(it)
+				if(authorize){
+					authorize.delete(flush: true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
+	}
+	def authorizeSave ={
+		def json=[:]
+		def authorize = new Authorize()
+		if(params.id && !"".equals(params.id)){
+			authorize = Authorize.get(params.id)
+		}
+		authorize.properties = params
+		if(params.companyId){
+			authorize.company = Company.get(params.companyId)
+		}
+		if(authorize.save(flush:true)){
+			json["result"] = "true"
+		}else{
+			authorize.errors.each{
+				println it
+			}
+			json["result"] = "false"
+		}
+		render json as JSON
+	}
+	def authorizeAdd ={
+		redirect(action:"authorizeShow",params:params)
+	}
+	def authorizeShow ={
+		def model =[:]
+		
+		def user = User.get(params.userid)
+		def company = Company.get(params.companyId)
+		def authorize = new Authorize()
+		if(params.id){
+			authorize = Authorize.get(params.id)
+		}
+		model["user"]=user
+		model["company"] = company
+		model["authorize"] = authorize
+		
+		FieldAcl fa = new FieldAcl()
+		if("normal".equals(user.getUserType())){
+			//普通用户
+//			fa.readOnly += ["authority","description"]
+		}
+		model["fieldAcl"] = fa
+		
+		render(view:'/system/authorize',model:model)
+	}
+	def authorizeGrid ={
+		def json=[:]
+		def company = Company.get(params.companyId)
+		if(params.refreshHeader){
+			json["gridHeader"] = systemService.getAuthorizeListLayout()
+		}
+		if(params.refreshData){
+			def args =[:]
+			int perPageNum = Util.str2int(params.perPageNum)
+			int nowPage =  Util.str2int(params.showPageNum)
+			
+			args["offset"] = (nowPage-1) * perPageNum
+			args["max"] = perPageNum
+			args["company"] = company
+			json["gridData"] = systemService.getAuthorizeListDataStore(args)
+			
+		}
+		if(params.refreshPageControl){
+			def total = systemService.getAuthorizeCount(company)
+			json["pageControl"] = ["total":total.toString()]
+		}
+		render json as JSON
+	}
 	
 	def systemLogGrid ={
 		def model=[:]

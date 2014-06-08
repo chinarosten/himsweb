@@ -6,6 +6,19 @@ class SystemActionController {
 	def systemService
 	def imgPath ="images/rosten/actionbar/"
 	
+	def authorizeView ={
+		def actionList = createCommonAction(null,"authorize",true)
+		actionList << createAction("启用授权",imgPath + "authorize_start.gif","authorize_start")
+		actionList << createAction("取消授权",imgPath + "authorize_cancel.gif","authorize_cancel")
+		render actionList as JSON
+	}
+	def authorizeForm ={
+		def webPath = request.getContextPath() + "/"
+		def actionList = []
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("保存",webPath + imgPath + "Save.gif","authorize_add")
+		render actionList as JSON
+	}
 	def systemLogView ={
 		def actionList =[]
 		def strname ="systemLog"
