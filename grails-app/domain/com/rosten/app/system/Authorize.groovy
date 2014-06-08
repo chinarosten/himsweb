@@ -1,32 +1,52 @@
 package com.rosten.app.system
 
 import java.util.Date
+
 import com.rosten.app.annotation.GridColumn
+
 import java.text.SimpleDateFormat
 
 class Authorize {
 	String id
 	
+	//授权信息
+	@GridColumn(name="授权信息",colIdx=1)
+	String authorizeInfor
+	
 	//授权人
 	User authorizer
 	
-	@GridColumn(name="授权人",colIdx=1)
+	@GridColumn(name="授权人",width="60px",colIdx=2)
 	def getFormattedAuthorizer(){
-		return authorizer.getFormattedName()
+		if(authorizer){
+			return authorizer.getFormattedName()
+		}else{
+			return ""
+		}
 	}
+	
+	//授权人部门
+	String authorizerDepart
 	
 	//被授权人
 	User beAuthorizer
 	
-	@GridColumn(name="被授权人",colIdx=2)
+	@GridColumn(name="被授权人",width="60px",colIdx=3)
 	def getFormattedBeAuthorizer(){
-		return beAuthorizer.getFormattedName()
+		if(beAuthorizer){
+			return beAuthorizer.getFormattedName()
+		}else{
+			return ""
+		}
 	}
 	
-	//授权开始时间
-	Date startDate
+	//被授权人部门
+	String beAuthorizerDepart
 	
-	@GridColumn(name="开始时间",width="106px",colIdx=3)
+	//授权开始时间
+	Date startDate = new Date()
+	
+	@GridColumn(name="开始时间",width="106px",colIdx=4)
 	def getFormattedStartDate(){
 		if(startDate!=null){
 			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
@@ -37,9 +57,9 @@ class Authorize {
 	}
 	
 	//授权结束时间
-	Date endDate
+	Date endDate = new Date()
 	
-	@GridColumn(name="结束时间",width="106px",colIdx=4)
+	@GridColumn(name="结束时间",width="106px",colIdx=5)
 	def getFormattedEndDate(){
 		if(endDate!=null){
 			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm")
@@ -49,11 +69,20 @@ class Authorize {
 		}
 	}
 	
+	def getShowDate(String type){
+		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd")
+		if("start".equals(type)){
+			return sd.format(startDate)
+		}else{
+			return sd.format(endDate)
+		}
+	}
+	
 	//授权模块
 	static hasMany=[authModels:Model]
 	
 	//状态
-	@GridColumn(name="授权状态",colIdx=5)
+	@GridColumn(name="授权状态",width="60px",colIdx=6)
 	String status = "正常"
 	
 	//创建日期

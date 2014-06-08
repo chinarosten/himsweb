@@ -60,6 +60,10 @@ class SystemController {
 		def authorize = new Authorize()
 		if(params.id){
 			authorize = Authorize.get(params.id)
+		}else{
+			authorize.authorizer = user
+			authorize.authorizerDepart = user.getDepartName()
+			authorize.endDate = authorize.endDate + 7
 		}
 		model["user"]=user
 		model["company"] = company
@@ -1565,7 +1569,7 @@ class SystemController {
 							}
 							if(it.id.equals(depart.id)){
 								//增加当前用户
-								def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id]
+								def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id,"departName":it.departName]
 								json.items+=userMap
 								
 								def userChildMap = ["_reference":user.id]
@@ -1594,7 +1598,7 @@ class SystemController {
 						}
 						if(blongDeparts.contains(it)){
 							//增加当前用户
-							def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id]
+							def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id,"departName":it.departName]
 							json.items+=userMap
 							
 							def userChildMap = ["_reference":user.id]
@@ -1626,7 +1630,7 @@ class SystemController {
 					}
 				}
 				it.getAllUser().each{user->
-					def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id]
+					def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id,"departName":it.departName]
 					json.items+=userMap
 					
 					def userChildMap = ["_reference":user.id]
@@ -1684,7 +1688,7 @@ class SystemController {
 					if(allUsers.find{ _item1 ->
 						_item1.id.equals(user.id)
 					}){
-						def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id]
+						def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id,"departName":it.departName]
 						json.items+=userMap
 						
 						def userChildMap = ["_reference":user.id]
@@ -1704,7 +1708,7 @@ class SystemController {
 					sMap.children += childMap
 				}
 				it.getAllUser().each{user->
-					def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id]
+					def userMap = ["id":user.id,"name":user.getFormattedName(),"type":"user","departId":it.id,"departName":it.departName]
 					json.items+=userMap
 					
 					def userChildMap = ["_reference":user.id]

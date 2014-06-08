@@ -57,7 +57,8 @@ define(["dojo/_base/declare"], function(declare) {
                     var map ={
                         name:objSelect.options[i].text,
                         value:objSelect.options[i].value,
-                        departId:objSelect.options[i].departId
+                        departId:objSelect.options[i].departId,
+                        departName:objSelect.options[i].departName
                     };
                     data.push(map);
                 }

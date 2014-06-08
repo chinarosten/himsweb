@@ -11,7 +11,7 @@ class Gtask {
 	String id
 	
 	//类型
-	@GridColumn(name="类型",width="68px")
+	@GridColumn(name="类型",width="78px")
 	String type
 	
 	@GridColumn(name="处理状态",width="60px",colIdx=2)

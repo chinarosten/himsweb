@@ -369,6 +369,7 @@ define(["dojo/_base/declare",
 	        c.innerHTML = item.name;
 	        c.value = item.id;
 	        c.departId = item.departId;
+	        c.departName = item.departName;
 	        node.appendChild(c);
         },
         getData: function(){
