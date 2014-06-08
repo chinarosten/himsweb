@@ -11,12 +11,31 @@ define(["dojo/dom",
         var unid = rosten.getGridUnid("single");
         if (unid == "")
             return;
-        
+        var content = {};
+        content.id = unid;
+        rosten.readSync(rosten.webPath + "/system/authorizeStart", content, function(data){
+            if (data.result == "true" || data.result == true) {
+                rosten.alert("成功启用!");
+                rosten.kernel.refreshGrid();
+            } else {
+                rosten.alert("删除失败!");
+            }
+        });
     };
     authorize_cancel = function(){
         var unid = rosten.getGridUnid("single");
         if (unid == "")
             return;
+        var content = {};
+        content.id = unid;
+        rosten.readSync(rosten.webPath + "/system/authorizeCancel", content, function(data){
+            if (data.result == "true" || data.result == true) {
+                rosten.alert("成功取消!");
+                rosten.kernel.refreshGrid();
+            } else {
+                rosten.alert("删除失败!");
+            }
+        });
     };
     
     add_authorize = function() {

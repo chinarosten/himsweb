@@ -157,7 +157,7 @@
 			            </td>    
 					</tr>
 					<tr>
-					    <td><div align="right">授权模块：</div></td>
+					    <td><div align="right"><span style="color:red">*&nbsp;</span>授权模块：</div></td>
 					    <td colspan=3>
 					    	<textarea id="authrizeModels" data-dojo-type="dijit/form/SimpleTextarea" 
     							data-dojo-props='name:"authrizeModels",
@@ -165,10 +165,10 @@
                               		style:{width:"549px"},
                               		trim:true,
                               		readOnly:true,
-                              		value:"${}"
+                              		value:"${authrizeModels}"
                            '>
     						</textarea>
-    						<input id="authrizeModelsId" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-props='name:"authrizeModelsId",value:"${}",style:{display:"none"}'/>
+    						<input id="authrizeModelsId" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-props='name:"authrizeModelsId",value:"${authrizeModelsId}",style:{display:"none"}'/>
 							<button data-dojo-type="dijit.form.Button" data-dojo-props='onClick:function(){selectModel("${company?.id }")}'>选择</button>
 			            </td>    
 					</tr>

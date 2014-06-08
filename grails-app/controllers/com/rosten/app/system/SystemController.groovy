@@ -13,6 +13,34 @@ class SystemController {
 	def systemService
 	def workFlowService
 	
+	def authorizeCancel ={
+		def json=[:]
+		def authorize = Authorize.get(params.id)
+		authorize.status = "取消"
+		if(authorize.save(flush:true)){
+			json["result"] = "true"
+		}else{
+			authorize.errors.each{
+				println it
+			}
+			json["result"] = "false"
+		}
+		render json as JSON
+	}
+	def authorizeStart ={
+		def json=[:]
+		def authorize = Authorize.get(params.id)
+		authorize.status = "正常"
+		if(authorize.save(flush:true)){
+			json["result"] = "true"
+		}else{
+			authorize.errors.each{
+				println it
+			}
+			json["result"] = "false"
+		}
+		render json as JSON
+	}
 	def authorizeDelete ={
 		def ids = params.id.split(",")
 		def json
