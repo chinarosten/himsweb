@@ -3,6 +3,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="layout" content="rosten" />
+    <style type="text/css">
+    	.rosten .departTree{
+    		width:393px;
+    	}
+    </style>
     <title>权限管理</title>
 	<script type="text/javascript">
 		require(["dojo/parser",
@@ -20,6 +25,7 @@
 				kernel.addOnLoad(function(){
 					rosten.init({webpath:"${request.getContextPath()}"});
 					rosten.cssinit();
+					permission_addResource();
 				});
 			permission_add = function(){
 				var permissionName = registry.byId("permissionName");
@@ -29,6 +35,7 @@
 					};
 					return;
 				}
+				rostenShowDialog.doAction();
 				var content = {};
 				
 				rosten.readSync(rosten.webPath + "/system/permissionSave",content,function(data){
@@ -40,7 +47,19 @@
 						rosten.alert("保存失败!");
 					}
 				},null,"rosten_form");
-			}
+			};
+			permission_addResource = function(){
+				rostenShowDialog = selectResource1("${createLink(controller:'system',action:'resourceTreeDataStore',params:[companyId:company?.id])}");
+				rostenShowDialog.afterLoad = function(){
+					var allowResources = registry.byId("allowResources");
+					allowResources.set("content",rostenShowDialog.contentPane);
+					<g:if test="${allowresourcesId}">
+						var allowresourcesId = "${allowresourcesId}".split(",");
+						rostenShowDialog.selectedData(allowresourcesId);
+					</g:if>
+				}	
+				
+			};
 	});
     </script>
 </head>
@@ -86,11 +105,13 @@
                             	<input data-dojo-type="dijit/form/CheckBox" data-dojo-props='id: "setOperation_4", name:"setOperation", value:"change",checked:${setOperation.contains("change") } '/> 修改
                             </td>
                         </tr>
-                         <tr>
+                        <!--
+                        <tr>
                             <td>
                                 <div align="right" >具有资源：</div>
                             </td>
                             <td>
+                            	
                                 <textarea id="allowresourcesName" data-dojo-type="dijit/form/SimpleTextarea"
                    					data-dojo-props='"class":"input",
                    						style:"width:395px",
@@ -102,6 +123,16 @@
 								<button data-dojo-type="dijit/form/Button" 
 									data-dojo-props = 'onClick:function(){selectResource("${createLink(controller:'system',action:'resourceTreeDataStore',params:[companyId:company?.id])}")}'
 								>选择</button>
+                            </td>
+                        </tr>
+                        -->
+                        <tr>
+                            <td>
+                                <div align="right" >授权资源：</div>
+                            </td>
+                            <td>
+                            	<g:hiddenField name="allowresourcesId" value="${allowresourcesId }" />
+                                <div data-dojo-type="dijit/layout/ContentPane" id="allowResources" data-dojo-props='style:{padding:"0px"}'></div>
                             </td>
                         </tr>
                         <tr>

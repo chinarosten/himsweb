@@ -139,8 +139,22 @@ define(["dojo/_base/declare",
             if (!this.showCheckBox) {
                 connect.connect(this.tree, "onClick", this, "onclick");
             }
-            
+            connect.connect(this.tree, "onLoad", this,"afterLoad");
             this.tree.startup();
+        },
+        afterLoad:function(){
+        	//tree加载后处理事项
+        },
+        selectedData:function(ids){
+        	//根据idkey选中数据
+        	for (var i = 0; i < ids.length; i++) {
+        		this.treeStore.fetchItemByIdentity({
+        			identity:ids[i],
+        			onItem: lang.hitch(this,function(item){
+        				this.tree.model.updateCheckbox(item,true);
+        			})
+        		});
+        	}
         },
         refresh: function(){
 	        this.contentPane.innerHTML = "";

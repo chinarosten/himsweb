@@ -252,4 +252,44 @@ define(["dojo/dom",
             dom.byId("allowresourcesId").value = _data_1;
         };
     };
+    selectResource1 = function(url) {
+        var id = "sys_resourceDialog1";
+
+        if (rosten[id] && registry.byId(id)) {
+        	if (rosten[id].initialized == false) {
+        		rosten[id].buildContent(rosten[id].contentPane);
+        		rosten[id].buildControl(rosten[id].controlPane);
+        		rosten[id].initialized = true;
+			}
+            rosten[id].refresh();
+        } else {
+            var args = {
+                url : url,
+                rootLabel : "资源层级",
+                showCheckBox : true,
+                folderClass : "departTree"
+            };
+            rosten[id] = new PickTreeDialog(args);
+            if (rosten[id].initialized == false) {
+        		rosten[id].buildContent(rosten[id].contentPane);
+        		rosten[id].buildControl(rosten[id].controlPane);
+        		rosten[id].initialized = true;
+			}
+        }
+        rosten[id].callback = function(data) {
+            var _data_1 = "";
+            for (var k = 0; k < data.length; k++) {
+                var item = data[k];
+                if (item.type == "resource") {
+                    if (_data_1 == "") {
+                        _data_1 += item.id;
+                    } else {
+                        _data_1 += "," + item.id;
+                    }
+                }
+            }
+            dom.byId("allowresourcesId").value = _data_1;
+        };
+        return rosten[id];
+    };
 });
