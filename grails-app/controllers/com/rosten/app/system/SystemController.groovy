@@ -910,14 +910,23 @@ class SystemController {
 	}
 	
 	def modelSelect ={
-		def modelList =[]
-		Model.findAllByCompany(Company.get(params.companyId)).each{
+		def modelJson = []
+		
+		def modelList = []
+		if(params.userId){
+			def user = User.get(params.userId)
+			modelList = getPermissionModel(user)
+		}else{
+			modelList = Model.findAllByCompany(Company.get(params.companyId))
+		}
+		
+		modelList.each{
 			def json=[:]
 			json["id"] = it.id
 			json["name"] = it.modelName
-			modelList << json
+			modelJson << json
 		}
-		render modelList as JSON
+		render modelJson as JSON
 	}
 	def modelDelete ={
 		def ids = params.id.split(",")
@@ -2083,6 +2092,54 @@ class SystemController {
 		}
 		systemService.crateDefaultNavigation(resourceList)
 		render resourceList as JSON
+	}
+	private def getPermissionModel={user ->
+		def modelList =[]
+		//获取缺省允许登录模块
+		Model.findAllWhere(company:user.company).each{
+			def modelUser = ModelUser.findAllByModel(it)
+			def modelDepart = ModelDepart.findAllByModel(it)
+			def modelGroup = ModelGroup.findAllByModel(it)
+			
+			if(modelUser.size==0 && modelDepart.size() ==0 && modelGroup.size()==0){
+				modelList << it
+			}
+		}
+		
+		//获取用户模块集合
+		ModelUser.findAllByUser(user).each{
+			modelList << it.model
+		}
+		//获取用户群组,并通过群组获取群组模块集合
+		UserGroup.findAllByUser(user).each{
+			ModelGroup.findAllByGroup(it.group).each{item->
+				modelList << item.model
+			}
+		}
+		//获取部门，并通过部门获取部门模块集合
+		UserDepart.findAllByUser(user).each{
+			ModelDepart.findAllByDepart(it.depart).each{item->
+				modelList << item.model
+			}
+		}
+		
+		def _modelList =[]
+		modelList.each{modelEntity->
+			//过滤无子菜单的model
+			def _resourceList = []
+			user.getAllRoles().each{
+				it.getAllPermissions().each{item->
+					_resourceList += item.getAllResourcesByModel(modelEntity)
+				}
+			}
+			if(_resourceList.size!=0){
+				_modelList << modelEntity
+			}
+		}
+		modelList = _modelList
+		
+		modelList.unique()
+		return modelList
 	}
 	def naviMenu ={
 		def model =[:]

@@ -67,6 +67,25 @@
 					}
 	            };
 			};
+			authorize_selectModel = function(companyId) {
+		        var id = "sys_modelDialog1";
+		        var initValue = [];
+		        var modelName = registry.byId("modelName");
+		        if (modelName.attr("value") != "") {
+		            initValue= modelName.attr("value").split(",");
+		        }
+		        rosten.selectDialog("模块选择", id, rosten.webPath + "/system/modelSelect?companyId=" + companyId + "&userId=${user?.id}", true, initValue);
+		        rosten[id].callback = function(data) {
+			        var _name = [];
+			        var _id =[];
+		        	for (var k = 0; k < data.length; k++) {
+						_name.push(data[k].name);
+						_id.push(data[k].id);
+		        	}	
+		        	registry.byId("modelName").attr("value", _name.join(","));
+		        	registry.byId("modelId").attr("value", _id.join(","));
+		        };
+		    };
 			page_quit = function(){
 				rosten.pagequit();
 			};
@@ -159,17 +178,17 @@
 					<tr>
 					    <td><div align="right"><span style="color:red">*&nbsp;</span>授权模块：</div></td>
 					    <td colspan=3>
-					    	<textarea id="authrizeModels" data-dojo-type="dijit/form/SimpleTextarea" 
-    							data-dojo-props='name:"authrizeModels",
+					    	<textarea id="modelName" data-dojo-type="dijit/form/SimpleTextarea" 
+    							data-dojo-props='
                               		"class":"input",
                               		style:{width:"549px"},
                               		trim:true,
                               		readOnly:true,
-                              		value:"${authrizeModels}"
+                              		value:"${modelName}"
                            '>
     						</textarea>
-    						<input id="authrizeModelsId" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-props='name:"authrizeModelsId",value:"${authrizeModelsId}",style:{display:"none"}'/>
-							<button data-dojo-type="dijit.form.Button" data-dojo-props='onClick:function(){selectModel("${company?.id }")}'>选择</button>
+    						<input id="modelId" data-dojo-type="dijit/form/ValidationTextBox" data-dojo-props='name:"modelId",value:"${modelId}",style:{display:"none"}'/>
+							<button data-dojo-type="dijit.form.Button" data-dojo-props='onClick:function(){authorize_selectModel("${company?.id }")}'>选择</button>
 			            </td>    
 					</tr>
 				</table>
