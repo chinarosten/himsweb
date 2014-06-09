@@ -911,13 +911,15 @@ class SystemController {
 	
 	def modelSelect ={
 		def modelJson = []
-		
 		def modelList = []
-		if(params.userId){
-			def user = User.get(params.userId)
-			modelList = getPermissionModel(user)
-		}else{
+		
+		def user = User.get(params.userId)
+		def userType = user.getUserType()
+		if("admin".equals(userType)){
+			//管理员
 			modelList = Model.findAllByCompany(Company.get(params.companyId))
+		}else{
+			modelList = getPermissionModel(user)
 		}
 		
 		modelList.each{
