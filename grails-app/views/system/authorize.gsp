@@ -33,14 +33,57 @@
 				});
 			
 			authorize_add = function(){
-				var authority = registry.byId("authority");
-				if(!authority.isValid()){
-					rosten.alert("角色名称不正确！").queryDlgClose = function(){
-						authority.focus();
+				var authorizeInfor = registry.byId("authorizeInfor");
+				if(!authorizeInfor.isValid()){
+					rosten.alert("授权信息不正确！").queryDlgClose = function(){
+						authorizeInfor.focus();
 					};
 					return;
 				}
-				var content = {};
+				var authorizer = registry.byId("authorizer");
+				if(!authorizer.isValid()){
+					rosten.alert("授权人不正确！").queryDlgClose = function(){
+						authorizer.focus();
+					};
+					return;
+				}
+				var authorizerDepart = registry.byId("authorizerDepart");
+				if(!authorizerDepart.isValid()){
+					rosten.alert("授权部门不正确！").queryDlgClose = function(){
+						authorizerDepart.focus();
+					};
+					return;
+				}
+				var beAuthorizer = registry.byId("beAuthorizer");
+				if(!beAuthorizer.isValid()){
+					rosten.alert("被授权人不正确！").queryDlgClose = function(){
+						beAuthorizer.focus();
+					};
+					return;
+				}
+				var startDate = registry.byId("startDate");
+				if(!startDate.isValid()){
+					rosten.alert("开始时间不正确！").queryDlgClose = function(){
+						startDate.focus();
+					};
+					return;
+				}
+				var endDate = registry.byId("endDate");
+				if(!endDate.isValid()){
+					rosten.alert("结束时间不正确！").queryDlgClose = function(){
+						endDate.focus();
+					};
+					return;
+				}
+				var modelName = registry.byId("modelName");
+				if(modelName.attr("value")==""){
+					rosten.alert("授权模块不正确！").queryDlgClose = function(){
+						modelName.focus();
+					};
+					return;
+				}
+				
+				var content = {userId:"${user?.id}"};
 				
 				rosten.readSync(rosten.webPath + "/system/authorizeSave",content,function(data){
 					if(data.result=="true"){

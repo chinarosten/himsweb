@@ -62,11 +62,27 @@ class SystemController {
 		def authorize = new Authorize()
 		if(params.id && !"".equals(params.id)){
 			authorize = Authorize.get(params.id)
-		}
-		authorize.properties = params
-		if(params.companyId){
+			
+			authorize.properties = params
+			authorize.clearErrors()
+		}else{
+			authorize.properties = params
+			authorize.clearErrors()
+			
 			authorize.company = Company.get(params.companyId)
+			authorize.authorizer = User.get(params.userId)
 		}
+		
+		authorize.beAuthorizer = User.get(params.beAuthorizerId)
+		authorize.startDate = Util.convertToTimestamp(params.startDate)
+		authorize.endDate = Util.convertToTimestamp(params.endDate)
+		
+		params.modelId.split(",").each{
+			def model = Model.get(it)
+			authorize.authModels.clear()
+			authorize.addToAuthModels(model)
+		}
+		
 		if(authorize.save(flush:true)){
 			json["result"] = "true"
 		}else{
@@ -88,6 +104,15 @@ class SystemController {
 		def authorize = new Authorize()
 		if(params.id){
 			authorize = Authorize.get(params.id)
+			
+			def modelName = []
+			def modelId =[]
+			authorize.authModels.each{
+				modelName << it.modelName
+				modelId << it.id
+			}
+			model["modelName"] = modelName.join(",")
+			model["modelId"] = modelId.join(",")
 		}else{
 			authorize.authorizer = user
 			authorize.authorizerDepart = user.getDepartName()
