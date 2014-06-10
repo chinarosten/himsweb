@@ -12,6 +12,8 @@ import com.rosten.app.system.Depart
 import com.rosten.app.gtask.Gtask
 import com.rosten.app.workflow.WorkFlowService
 import com.rosten.app.system.Model
+import com.rosten.app.system.SystemService
+import com.rosten.app.system.Authorize
 
 import org.activiti.engine.runtime.ProcessInstance
 import org.activiti.engine.runtime.ProcessInstanceQuery
@@ -24,6 +26,7 @@ class DsjController {
 	def startService
 	def workFlowService
 	def taskService
+	def systemService
 	
 	def dsjGetNextTest ={
 		def json=[:]
@@ -117,7 +120,7 @@ class DsjController {
 		def currentUser = springSecurityService.getCurrentUser()
 		
 		def frontStatus = dsj.status
-		def nextStatus
+		def nextStatus,nextDepart,nextLogContent
 		def nextUsers=[]
 		
 		//流程引擎相关信息处理-------------------------------------------------------------------------------------
@@ -152,6 +155,18 @@ class DsjController {
 				}else{
 					//串行
 					def nextUser = User.get(Util.strLeft(params.dealUser,":"))
+					nextDepart = Util.strRight(params.dealUser, ":")
+					
+					//判断是否有公务授权------------------------------------------------------------
+					def _model = Model.findByModelCodeAndCompany("dsj",dsj.company)
+					def authorize = systemService.checkIsAuthorizer(nextUser,_model,new Date())
+					if(authorize){
+						dsjService.addFlowLog(dsj,nextUser,"委托授权给【" + authorize.beAuthorizerDepart + ":" + authorize.getFormattedAuthorizer() + "】")
+						
+						nextUser = authorize.beAuthorizer
+						nextDepart = authorize.beAuthorizerDepart
+					}
+					//-------------------------------------------------------------------------
 					
 					//任务指派给当前拟稿人
 					taskService.claim(dsj.taskId, nextUser.username)
@@ -167,7 +182,7 @@ class DsjController {
 					startService.addGtask(args)
 					
 					dsj.currentUser = nextUser
-					dsj.currentDepart = Util.strRight(params.dealUser, ":")
+					dsj.currentDepart = nextDepart
 					
 					if(!dsj.readers.find{ item->
 						item.id.equals(nextUser.id)
@@ -205,25 +220,22 @@ class DsjController {
 		
 		if(dsj.save(flush:true)){
 			//添加日志
-			def dsjLog = new DsjLog()
-			dsjLog.user = currentUser
-			dsjLog.dsj = dsj
-			
+			def logContent
 			switch (true){
 				case dsj.status.contains("已签发"):
-					dsjLog.content = "签发文件【" + nextUsers.join("、") + "】" 
+					logContent = "签发文件【" + nextUsers.join("、") + "】"
 					break
 				case dsj.status.contains("归档"):
-					dsjLog.content = "归档"
+					logContent = "归档"
 					break
 				case dsj.status.contains("不同意"):
-					dsjLog.content = "不同意！"
+					logContent = "不同意！"
 					break
 				default:
-					dsjLog.content = "提交" + dsj.status + "【" + nextUsers.join("、") + "】"
-					break	
+					logContent = "提交" + dsj.status + "【" + nextUsers.join("、") + "】"
+					break
 			}
-			dsjLog.save(flush:true)
+			dsjService.addFlowLog(dsj,currentUser,logContent)
 			
 			json["result"] = true
 		}else{

@@ -4,6 +4,15 @@ import com.rosten.app.util.GridUtil
 
 class DsjService {
 	
+	//增加流程日志
+	def addFlowLog ={ entity,currentUser,content ->
+		def dsjLog = new DsjLog()
+		dsjLog.user = currentUser
+		dsjLog.dsj = entity
+		dsjLog.content = content
+		dsjLog.save(flush:true)
+	}
+	
 	def getDsjCountByUser ={company,user->
 		def c = Dsj.createCriteria()
 		def query = {

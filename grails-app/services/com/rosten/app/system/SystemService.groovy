@@ -6,6 +6,28 @@ import com.rosten.app.util.GridUtil
 class SystemService {
 	static transactional = true
 	
+	/*
+	 * 检查是否有授权委托，返回authorize最新一次对象
+	 * 检查参数:授权人,当前运行模块,是否需要检查时间节点
+	 * 默认按当前时间比较
+	 */
+	def checkIsAuthorizer ={user,model,checkDate->
+		def c = Authorize.createCriteria()
+		def results = c.list {
+			eq("authorizer",user)
+			authModels{
+				eq("id",model?.id)
+			}
+			le("startDate",checkDate)
+			ge("endDate",checkDate)
+			order("createdDate", "desc")
+		}
+		if(results.size()!=0){
+			return results[0]
+		}else{
+			return null
+		}
+	}
 	def getAuthorizeListDataStore = {params->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15

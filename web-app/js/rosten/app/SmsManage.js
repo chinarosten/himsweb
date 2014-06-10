@@ -73,7 +73,14 @@ define(["dojo/dom",
                 return;
             var content = {};
             content.id = unids;
-            rosten.read(rosten.webPath + "/system/authorizeDelete", content, delete_callback);
+            rosten.read(rosten.webPath + "/system/authorizeDelete", content, function(data){
+            	if (data.result == "true" || data.result == true) {
+                    rosten.alert("成功删除!");
+                    rosten.kernel.refreshGrid();
+                } else {
+                    rosten.alert("删除失败!");
+                }
+            });
         };
     };
     gtask_formatTitle = function(value,rowIndex){
