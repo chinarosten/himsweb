@@ -7,6 +7,16 @@ define(["dojo/dom",
         "rosten/widget/PickTreeDialog",
         "rosten/app/Application",
         "rosten/kernel/behavior"], function(dom,registry,connect,PickTreeDialog) {
+	authorize_formatTopic = function(value,rowIndex){
+		return "<a href=\"javascript:authorize_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+	};
+	authorize_onMessageOpen = function(rowIndex){
+        var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("authorize", rosten.webPath + "/system/authorizeShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
+	};
     authorize_start = function(){
         var unid = rosten.getGridUnid("single");
         if (unid == "")

@@ -65,6 +65,8 @@ class SystemController {
 			
 			authorize.properties = params
 			authorize.clearErrors()
+			
+			authorize.authModels.clear()
 		}else{
 			authorize.properties = params
 			authorize.clearErrors()
@@ -79,7 +81,6 @@ class SystemController {
 		
 		params.modelId.split(",").each{
 			def model = Model.get(it)
-			authorize.authModels.clear()
 			authorize.addToAuthModels(model)
 		}
 		

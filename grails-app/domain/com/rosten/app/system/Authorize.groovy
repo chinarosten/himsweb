@@ -10,7 +10,7 @@ class Authorize {
 	String id
 	
 	//授权信息
-	@GridColumn(name="授权信息",colIdx=1)
+	@GridColumn(name="授权信息",colIdx=1,formatter="authorize_formatTopic")
 	String authorizeInfor
 	
 	//授权人
