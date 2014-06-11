@@ -45,6 +45,14 @@ class Company {
 		if(isSmsOn)return "是"
 		else return "否"
 	}
+	
+	//外网是否发送邮件
+	boolean isOnMail = true
+	@GridColumn(name="外网邮箱")
+	def getIsOnMailValue(){
+		if(isOnMail)return "是"
+		else return "否"
+	}
 
 	//内容描述
 	String description
@@ -78,6 +86,7 @@ class Company {
 		companyFax nullable:true,blank:true
 		companyAddress nullable:true,blank:true
 		description nullable:true,blank:true
+		isOnMail nullable:true,blank:true
 	}
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']

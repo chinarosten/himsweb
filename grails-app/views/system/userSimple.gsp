@@ -7,11 +7,13 @@
 
 		require([
 				"dijit/registry",
+				"dojo/dom-style",
+				"dojo/dom",
 				"dijit/form/SimpleTextarea",
 		 		"dijit/form/ValidationTextBox",
 		 		"dijit/form/RadioButton",
 		 		"rosten/widget/ActionBar"
-		     	],function(registry){
+		     	],function(registry,domStyle,dom){
 	     	
 			userSimple_save = function(){
 				var content = {};
@@ -22,6 +24,13 @@
 						rosten.alert("保存失败！");
 					}	
 				},null,"userSimple_form");
+			};
+			userSimple_checkIsOnMail = function(args){
+				if(args){
+					domStyle.set(dom.byId("isOnMailDiv"),"display","");
+				}else{
+					domStyle.set(dom.byId("isOnMailDiv"),"display","none");
+				}
 			}
 
 		});	
@@ -102,12 +111,27 @@
 			</tr>
 			<tr>
 			    <td><div align="right">邮箱地址：</div></td>
-			    <td colspan=3>
+			    <td>
 			    	<input id="email" data-dojo-type="dijit/form/ValidationTextBox" 
                     	data-dojo-props='name:"email","class":"input",trim:true,
-                    		style:{width:"568px"},
   							value:"${user?.email}"
                     '/>
+			    </td>
+			    <td><div align="right">是否开启外网邮箱：</div></td>
+			    <td>
+			    	<input id="isOnMail1" data-dojo-type="dijit/form/RadioButton"
+	               		data-dojo-props='name:"isOnMail",type:"radio",
+	               			<g:if test="${user?.isOnMail }">checked:true,</g:if>
+								value:"true",onClick:function(){userSimple_checkIsOnMail(true)}
+	                  '/>
+						<label for="isOnMail1">是</label>
+						
+                      <input id="isOnMail2" data-dojo-type="dijit/form/RadioButton"
+                   		data-dojo-props='name:"isOnMail",type:"radio",
+                   			<g:if test="${!user?.isOnMail }">checked:true,</g:if>
+    							value:"false",onClick:function(){userSimple_checkIsOnMail(false)}
+                      '/>
+					<label for="isOnMail2">否</label>
 			    </td>
 			</tr>
 			<tr>
@@ -132,6 +156,49 @@
 			</tr>
 		</table>
 		</fieldset>
+	
+	<fieldset class="fieldset-form" id="isOnMailDiv" <g:if test="${!user?.isOnMail }">style="display:none"</g:if>>
+		<legend class="tableHeader">绑定的外网邮箱</legend>
+		<table border="0" align="left" style="margin:0 auto;width:740px">
+			
+			<tr>
+			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>smtp名称：</div></td>
+			    <td width="240">
+			    	<input id="smtp" data-dojo-type="dijit/form/ValidationTextBox" 
+	                 	data-dojo-props='name:"smtp",readOnly:true,"class":"input",trim:true,placeHolder:"保存后自动生成",
+							value:"${email?email.smtp:"smtp.qq.com"}"
+	                '/>
+			    </td>
+			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>端口号：</div></td>
+			    <td width="240">
+			    	<input data-dojo-type="dijit/form/ValidationTextBox" 
+	                 	data-dojo-props='name:"port","class":"input",readOnly:true,
+							value:"${email?email.port:"465"}"
+	                '/>
+	           </td>
+			</tr>
+			<tr>
+			    <td><div align="right"><span style="color:red">*&nbsp;</span>登录名：</div></td>
+			    <td>
+	                <input id="loginName" data-dojo-type="dijit/form/ValidationTextBox" 
+	                 	data-dojo-props='name:"loginName",trim:true,"class":"input",
+							value:"${email?email.loginName:user?.email}"
+	                '/>
+			    </td>
+			    <td><div align="right"><span style="color:red">*&nbsp;</span>密码：</div></td>
+			    <td>
+			    	<input id="loginPassword" data-dojo-type="dijit/form/ValidationTextBox" 
+	                   	data-dojo-props='name:"loginPassword",
+	                   		"class":"input",
+	                   		type:"password",
+	                   		trim:true,
+	                   		required:true,
+	 						value:"${email?.loginPassword}"
+	                '/>
+	           </td>
+			</tr>
+		</table>
+	</fieldset>	
 </g:form>
 </div>
 </body>

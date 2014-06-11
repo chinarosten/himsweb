@@ -230,6 +230,31 @@
 								<label for="isSmsOn2">否</label>
     						</td>
                         </tr>
+                        <tr>
+                        	<td>
+                                <div align="right" >
+                                    <span style="color:red">*&nbsp;</span>外网邮箱是否开通：
+                                </div>
+                            </td>
+                             <td colspan="3">
+                             	<input id="isOnMail1" data-dojo-type="dijit/form/RadioButton"
+                             		data-dojo-props='name:"isOnMail",
+                             			type:"radio",
+                             			${fieldAcl.isReadOnly("isOnMail")},
+                             			<g:if test="${company?.isOnMail }">checked:true,</g:if>
+              							value:"true"
+                                '/>
+								<label for="isOnMail1">是</label>
+								
+								<input id="isOnMail2" data-dojo-type="dijit/form/RadioButton"
+                             		data-dojo-props='name:"isOnMail",
+                             			type:"radio",
+                             			<g:if test="${!company?.isOnMail }">checked:true,</g:if>
+              							value:"false"
+                                '/>
+								<label for="isOnMail2">否</label>
+    						</td>
+                        </tr>
 						<tr>
                         	<td>
                                 <div align="right" >内容描述：</div>

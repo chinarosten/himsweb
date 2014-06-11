@@ -124,6 +124,9 @@ class User {
 	@GridColumn(name="邮箱")
 	String email
 	
+	//是否开启外网邮箱
+	boolean isOnMail = false
+	
 	//描述
 	//@GridColumn(name="描述")
 	String description
@@ -149,6 +152,7 @@ class User {
 		email nullable:true,blank:true
 		description nullable:true,blank:true
 		userTypeEntity nullable:true,blank:true
+		isOnMail nullable:true,blank:true
 	}
 
 	static mapping = { 
