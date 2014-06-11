@@ -116,7 +116,19 @@ activiti {
 	  useFormKey = true
 	  activityFontName = "微软雅黑"
 }
-
+grails {
+	mail {
+		host = "<changeme>"
+		port = 465
+		username = "<changeme>"
+		password = "<changeme>"
+		defaultEncoding="UTF-8"
+		props = ["mail.smtp.auth":"true",
+			"mail.smtp.socketFactory.port":"465",
+			"mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+			"mail.smtp.socketFactory.fallback":"false"]
+	}
+}
 environments {
 	development {
 		activiti {

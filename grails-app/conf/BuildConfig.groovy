@@ -70,5 +70,6 @@ grails.project.dependency.resolution = {
 		
 		compile ":activiti:5.12.1"
 		
+		compile ":mail:1.0.5"
     }
 }

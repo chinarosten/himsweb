@@ -362,44 +362,65 @@ class MailController {
 		
 		oktos.each{to->
 			/*
-			//增加收件人信息
-			if(!Contact.findByMailUserAndName(user,params.to)){
-				def contact = new Contact()
-				contact.mailUser = user
-				contact.name = params.to
-				contact.email = params.to
-				contact.save()
-			}
-			*/
-			//创建收件信息
-			def receiveMail = new EmailBox()
-			receiveMail.sender = user.username
-			receiveMail.senderCode = user.id
-			receiveMail.receiver = to
-			receiveMail.receiverCode = to
-			receiveMail.subject = params.subject
-			receiveMail.content = params.content
-			receiveMail.sendDate = new Date()
-			receiveMail.boxType = 1
-			receiveMail.mailUser = User.findByUsername(to)
-			receiveMail.save()
+			 * 判断是否为外部邮件
+			 */
 			
-			//增加附件的处理
-			if(params.files){
-				params.files.split(",").each{
-					def oldAttach = Attachment.get(it)
-					
-					def attach = new Attachment()
-					attach.name = oldAttach.name
-					attach.type = oldAttach.type
-					attach.url = oldAttach.url
-					attach.realName = oldAttach.realName
-					attach.size = oldAttach.size
-					attach.upUser = User.findByUsername(to)
-					attach.beUseId = receiveMail.id
-					attach.save()
-				}
+			if(to.contains("@")){
+				//公网邮件
+				request.mailUsername = "4540443@qq.com"
+				request.mailPassword = "523030_rosten"
+				request.mailHost = "smtp.qq.com"
+				request.mailPort = 465
+				
+				sendMail {
+					to "luhangyu2000@163.com"
+					from "4540443@qq.com"
+					subject "Hello Hahahaha"
+					body 'this is first email.......hahahhahahaha2222222222222222222222'
+				 }
+			}else{
+				//内部邮件
+				/*
+				 //增加收件人信息
+				 if(!Contact.findByMailUserAndName(user,params.to)){
+					 def contact = new Contact()
+					 contact.mailUser = user
+					 contact.name = params.to
+					 contact.email = params.to
+					 contact.save()
+				 }
+				 */
+				 //创建收件信息
+				 def receiveMail = new EmailBox()
+				 receiveMail.sender = user.username
+				 receiveMail.senderCode = user.id
+				 receiveMail.receiver = to
+				 receiveMail.receiverCode = to
+				 receiveMail.subject = params.subject
+				 receiveMail.content = params.content
+				 receiveMail.sendDate = new Date()
+				 receiveMail.boxType = 1
+				 receiveMail.mailUser = User.findByUsername(to)
+				 receiveMail.save()
+				 
+				 //增加附件的处理
+				 if(params.files){
+					 params.files.split(",").each{
+						 def oldAttach = Attachment.get(it)
+						 
+						 def attach = new Attachment()
+						 attach.name = oldAttach.name
+						 attach.type = oldAttach.type
+						 attach.url = oldAttach.url
+						 attach.realName = oldAttach.realName
+						 attach.size = oldAttach.size
+						 attach.upUser = User.findByUsername(to)
+						 attach.beUseId = receiveMail.id
+						 attach.save()
+					 }
+				 }
 			}
+			
 		}
 		
 		//保存发件信息
