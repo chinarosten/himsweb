@@ -131,6 +131,9 @@ class User {
 	//@GridColumn(name="描述")
 	String description
 	
+	//邮箱配置
+	EmailConfig emailConfig
+	
 	//创建日期
 	Date createdDate = new Date()
 	
@@ -153,6 +156,7 @@ class User {
 		description nullable:true,blank:true
 		userTypeEntity nullable:true,blank:true
 		isOnMail nullable:true,blank:true
+		emailConfig nullable:true,blank:true
 	}
 
 	static mapping = { 

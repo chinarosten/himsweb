@@ -16,6 +16,38 @@
 		     	],function(registry,domStyle,dom){
 	     	
 			userSimple_save = function(){
+				var isOnMail = registry.byId("isOnMail1").attr("value");
+				if(isOnMail=="true" || isOnMail==true){
+					var smtp = registry.byId("smtp");
+					if(!smtp.isValid()){
+						rosten.alert("smtp名称不正确！").queryDlgClose = function(){
+							smtp.focus();
+						};
+						return;
+					}
+					var port = registry.byId("port");
+					if(!port.isValid()){
+						rosten.alert("端口号不正确！").queryDlgClose = function(){
+							port.focus();
+						};
+						return;
+					}
+					var loginName = registry.byId("loginName");
+					if(!loginName.isValid()){
+						rosten.alert("登录名不正确！").queryDlgClose = function(){
+							loginName.focus();
+						};
+						return;
+					}
+					var loginPassword = registry.byId("loginPassword");
+					if(!loginPassword.isValid()){
+						rosten.alert("密码不正确！").queryDlgClose = function(){
+							loginPassword.focus();
+						};
+						return;
+					}
+				}
+				
 				var content = {};
 				rosten.readSync("${createLink(controller:'system',action:'userSimpleSave')}",content,function(data){
 					if(data.result==true || data.result =="true"){
@@ -165,15 +197,15 @@
 			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>smtp名称：</div></td>
 			    <td width="240">
 			    	<input id="smtp" data-dojo-type="dijit/form/ValidationTextBox" 
-	                 	data-dojo-props='name:"smtp",readOnly:true,"class":"input",trim:true,placeHolder:"保存后自动生成",
-							value:"${email?email.smtp:"smtp.qq.com"}"
+	                 	data-dojo-props='name:"smtp","class":"input",trim:true,required:true,
+							value:"${emailConfig?emailConfig.smtp:"smtp.qq.com"}"
 	                '/>
 			    </td>
 			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>端口号：</div></td>
 			    <td width="240">
-			    	<input data-dojo-type="dijit/form/ValidationTextBox" 
-	                 	data-dojo-props='name:"port","class":"input",readOnly:true,
-							value:"${email?email.port:"465"}"
+			    	<input data-dojo-type="dijit/form/ValidationTextBox" id="port"
+	                 	data-dojo-props='name:"port","class":"input",required:true,trim:true,
+							value:"${emailConfig?emailConfig.port:"465"}"
 	                '/>
 	           </td>
 			</tr>
@@ -181,8 +213,8 @@
 			    <td><div align="right"><span style="color:red">*&nbsp;</span>登录名：</div></td>
 			    <td>
 	                <input id="loginName" data-dojo-type="dijit/form/ValidationTextBox" 
-	                 	data-dojo-props='name:"loginName",trim:true,"class":"input",
-							value:"${email?email.loginName:user?.email}"
+	                 	data-dojo-props='name:"loginName",trim:true,"class":"input","class":"input",required:true,
+							value:"${emailConfig?emailConfig.loginName:user?.email}"
 	                '/>
 			    </td>
 			    <td><div align="right"><span style="color:red">*&nbsp;</span>密码：</div></td>
@@ -193,7 +225,7 @@
 	                   		type:"password",
 	                   		trim:true,
 	                   		required:true,
-	 						value:"${email?.loginPassword}"
+	 						value:"${emailConfig?.loginPassword}"
 	                '/>
 	           </td>
 			</tr>

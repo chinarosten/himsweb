@@ -348,9 +348,10 @@ class MailController {
 		def oktos=[]
 		def tos = params.to.split(",")
 		tos.each{to->
-			if(User.findByUsername(to)!=null){
-				oktos<<to
-			}
+//			if(User.findByUsername(to)!=null){
+//				oktos<<to
+//			}
+			oktos<<to
 		}
 		if(oktos.size==0){
 			json["result"] = "noUser"
@@ -360,24 +361,27 @@ class MailController {
 		
 		def user = (User) springSecurityService.getCurrentUser()
 		
-		oktos.each{to->
+		oktos.each{_to->
 			/*
 			 * 判断是否为外部邮件
 			 */
 			
-			if(to.contains("@")){
+			if(_to.contains("@")){
 				//公网邮件
-				request.mailUsername = "4540443@qq.com"
-				request.mailPassword = "523030_rosten"
-				request.mailHost = "smtp.qq.com"
-				request.mailPort = 465
-				
-				sendMail {
-					to "luhangyu2000@163.com"
-					from "4540443@qq.com"
-					subject "Hello Hahahaha"
-					body 'this is first email.......hahahhahahaha2222222222222222222222'
-				 }
+				if(user.isOnMail && user.company.isOnMail){
+					request.mailUsername = user.emailConfig.loginName
+					request.mailPassword = user.emailConfig.loginPassword
+					request.mailHost = user.emailConfig.smtp
+					request.mailPort = user.emailConfig.port
+					
+					sendMail {
+//						async true
+						to _to
+						from user.emailConfig.loginName
+						subject params.subject
+						body params.content
+					 }
+				}
 			}else{
 				//内部邮件
 				/*
@@ -394,13 +398,13 @@ class MailController {
 				 def receiveMail = new EmailBox()
 				 receiveMail.sender = user.username
 				 receiveMail.senderCode = user.id
-				 receiveMail.receiver = to
-				 receiveMail.receiverCode = to
+				 receiveMail.receiver = _to
+				 receiveMail.receiverCode = _to
 				 receiveMail.subject = params.subject
 				 receiveMail.content = params.content
 				 receiveMail.sendDate = new Date()
 				 receiveMail.boxType = 1
-				 receiveMail.mailUser = User.findByUsername(to)
+				 receiveMail.mailUser = User.findByUsername(_to)
 				 receiveMail.save()
 				 
 				 //增加附件的处理
@@ -414,7 +418,7 @@ class MailController {
 						 attach.url = oldAttach.url
 						 attach.realName = oldAttach.realName
 						 attach.size = oldAttach.size
-						 attach.upUser = User.findByUsername(to)
+						 attach.upUser = User.findByUsername(_to)
 						 attach.beUseId = receiveMail.id
 						 attach.save()
 					 }

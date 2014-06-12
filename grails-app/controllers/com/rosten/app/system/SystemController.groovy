@@ -1874,6 +1874,20 @@ class SystemController {
 		def user = User.get(params.id)
 		user.properties = params
 		user.clearErrors()
+		
+		//处理邮箱配置信息
+		if(user.isOnMail){
+			if(!user.emailConfig){
+				user.emailConfig = new EmailConfig()
+			}
+			user.emailConfig.user = user
+			user.emailConfig.smtp = params.smtp
+			user.emailConfig.port = params.port.toInteger()
+			user.emailConfig.loginName = params.loginName
+			user.emailConfig.loginPassword = params.loginPassword
+			user.emailConfig.save()
+		}
+		
 		if(user.save(flush:true)){
 			model["result"] = "true"
 		}else{
@@ -1895,8 +1909,9 @@ class SystemController {
 			allowrolesName << it.role.authority
 		}
 		model["allowrolesName"] = allowrolesName.join(',')
-		
 		model["companyId"] = params.companyId
+		model["emailConfig"] = user.emailConfig
+		
 		render(view:'/system/userSimple',model:model)
 	}
 	def userShow ={
