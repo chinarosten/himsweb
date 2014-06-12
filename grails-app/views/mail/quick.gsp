@@ -64,18 +64,25 @@
 <body>
 
 	<div data-dojo-type="dijit/Toolbar" region="top">
+		<button id="mail_getMail" data-dojo-type="dijit/form/Button" iconClass="mailIconGetMail">收信
+			<script type="dojo/method" data-dojo-event="onClick">
+				rosten.alert("暂未开通,敬请关注...");
+			</script>
+		</button>
+		<!--
 		<div id="mail_getMail" data-dojo-type="dijit/form/ComboButton"
 			iconClass="mailIconGetMail" optionsTitle="Mail Source Options">
 			<script type="dojo/method" data-dojo-event="onClick">
 				/* fakeDownload(); */
 				rosten.alert("暂未开通,敬请关注...");
 			</script>
-			<span>收件</span>
+			<span>收信</span>
+			
 			<ul data-dojo-type="dijit/Menu">
 				<li data-dojo-type="dijit/MenuItem" iconClass="mailIconGetMail">Yahoo</li>
 				<li data-dojo-type="dijit/MenuItem" iconClass="mailIconGetMail">GMail</li>
 			</ul>
-		</div>
+		</div>  -->
 		<button id="mail_newMsg" data-dojo-type="dijit/form/Button" iconClass="mailIconNewMessage">写信
 			<script type="dojo/method" data-dojo-event="onClick">
 				write_mail();

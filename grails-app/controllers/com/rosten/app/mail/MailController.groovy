@@ -348,10 +348,9 @@ class MailController {
 		def oktos=[]
 		def tos = params.to.split(",")
 		tos.each{to->
-//			if(User.findByUsername(to)!=null){
-//				oktos<<to
-//			}
-			oktos<<to
+			if(to.contains("@") || User.findByUsername(to)!=null){
+				oktos<<to
+			}
 		}
 		if(oktos.size==0){
 			json["result"] = "noUser"
