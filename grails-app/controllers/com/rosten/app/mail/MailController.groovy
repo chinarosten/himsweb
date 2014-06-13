@@ -11,10 +11,45 @@ import com.rosten.app.system.Depart
 import com.rosten.app.util.GB2Alpha
 import com.rosten.app.util.SystemUtil
 import com.rosten.app.system.Attachment
+import com.rosten.app.mail.EmailBox
 
 class MailController {
 	def springSecurityService
 	
+	def receiveMail = {
+		def json=[:]
+		def user = User.get(params.userId)
+		if(user.isOnMail && user.company.isOnMail){
+			ReceiveMail rmail=new ReceiveMail(user.emailConfig.loginName, user.emailConfig.loginPassword, user.emailConfig.popName, user.emailConfig.popPort)
+			try {
+				def messages = rmail.getMessage();
+				messages.each{
+					//创建收件信息
+					def receiveMail = new EmailBox()
+					receiveMail.sender = rmail.getSender(it)
+					receiveMail.senderCode = rmail.getSender(it)
+					receiveMail.receiver = user.username
+					receiveMail.receiverCode = rmail.getAllRecipients(it)
+					receiveMail.subject = it.getSubject()
+					receiveMail.content = rmail.getContent(it)
+					receiveMail.sendDate = rmail.getReceivedDate(it)
+					receiveMail.boxType = 1
+					receiveMail.mailUser = user
+					receiveMail.save()
+					
+					//增加附件的处理
+				}
+				json["result"] = true
+			}catch (Exception e) {
+				e.printStackTrace();
+				json["result"] = false
+			}
+		}else{
+			json["result"] = "noTurnOn"
+		}
+		
+		render json as JSON
+	}
 	def getMailBody ={
 		def mail = EmailBox.get(params.id)
 		render mail.content

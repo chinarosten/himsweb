@@ -12,7 +12,7 @@ class EmailBox {
 	
 	String id
 	
-	@GridColumn(name="发送人",width="100px")
+	@GridColumn(name="发送人",width="180px")
 	String sender	//发送人
 	
 	String senderCode	//发送人编号/邮箱地址

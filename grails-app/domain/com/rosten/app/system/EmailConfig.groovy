@@ -11,6 +11,12 @@ class EmailConfig {
 	//端口号
 	int port
 	
+	//pop3名称,样例:pop.qq.com
+	String popName
+	
+	//pop端口
+	String popPort
+	
 	//登录名
 	String loginName
 	

@@ -66,7 +66,7 @@
 	<div data-dojo-type="dijit/Toolbar" region="top">
 		<button id="mail_getMail" data-dojo-type="dijit/form/Button" iconClass="mailIconGetMail">收信
 			<script type="dojo/method" data-dojo-event="onClick">
-				rosten.alert("暂未开通,敬请关注...");
+				receive_mailFromWeb();
 			</script>
 		</button>
 		<!--

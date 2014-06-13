@@ -1883,6 +1883,8 @@ class SystemController {
 			user.emailConfig.user = user
 			user.emailConfig.smtp = params.smtp
 			user.emailConfig.port = params.port.toInteger()
+			user.emailConfig.popName = params.popName
+			user.emailConfig.popPort = params.popPort
 			user.emailConfig.loginName = params.loginName
 			user.emailConfig.loginPassword = params.loginPassword
 			user.emailConfig.save()

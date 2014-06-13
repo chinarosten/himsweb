@@ -32,6 +32,20 @@
 						};
 						return;
 					}
+					var popName = registry.byId("popName");
+					if(!popName.isValid()){
+						rosten.alert("pop3名称不正确！").queryDlgClose = function(){
+							popName.focus();
+						};
+						return;
+					}
+					var popPort = registry.byId("popPort");
+					if(!popPort.isValid()){
+						rosten.alert("端口号不正确！").queryDlgClose = function(){
+							popPort.focus();
+						};
+						return;
+					}
 					var loginName = registry.byId("loginName");
 					if(!loginName.isValid()){
 						rosten.alert("登录名不正确！").queryDlgClose = function(){
@@ -210,10 +224,26 @@
 	           </td>
 			</tr>
 			<tr>
+			    <td><div align="right"><span style="color:red">*&nbsp;</span>pop3名称：</div></td>
+			    <td>
+	                <input id="popName" data-dojo-type="dijit/form/ValidationTextBox" 
+	                 	data-dojo-props='name:"popName",trim:true,"class":"input",required:true,
+							value:"${emailConfig?emailConfig.popName:"pop.qq.com"}"
+	                '/>
+			    </td>
+			    <td><div align="right"><span style="color:red">*&nbsp;</span>端口号：</div></td>
+			    <td>
+			    	<input id="popPort" data-dojo-type="dijit/form/ValidationTextBox" 
+	                   	data-dojo-props='name:"popPort","class":"input",trim:true,required:true,
+	 						value:"${emailConfig?emailConfig.popPort:"995"}"
+	                '/>
+	           </td>
+			</tr>
+			<tr>
 			    <td><div align="right"><span style="color:red">*&nbsp;</span>登录名：</div></td>
 			    <td>
 	                <input id="loginName" data-dojo-type="dijit/form/ValidationTextBox" 
-	                 	data-dojo-props='name:"loginName",trim:true,"class":"input","class":"input",required:true,
+	                 	data-dojo-props='name:"loginName",trim:true,"class":"input",required:true,
 							value:"${emailConfig?emailConfig.loginName:user?.email}"
 	                '/>
 			    </td>
