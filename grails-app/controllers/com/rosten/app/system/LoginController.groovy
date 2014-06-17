@@ -182,8 +182,11 @@ class LoginController {
 				//获取所有角色
 			}
 			model["userinfor"] = userinfor as JSON
+			if(params.version && "old".equals(params.version)){
+				render (view:SpringSecurityUtils.securityConfig.successHandler.defaultTargetUrl + "index_old",model:model)
+				return;
+			}
 			render (view:SpringSecurityUtils.securityConfig.successHandler.defaultTargetUrl + "index",model:model)
-//			redirect uri: SpringSecurityUtils.securityConfig.successHandler.defaultTargetUrl
 		}
 		else {
 			redirect action: 'auth', params: params

@@ -26,7 +26,7 @@ class BootStrap {
 			model.modelUrl = "js:home"
 			model.save(fialOnError:true)
 			
-			model = new Model(modelName:"个人办公",description:"个人办公",serialNo:2,modelCode:"person")
+			model = new Model(modelName:"电子邮件",description:"电子邮件",serialNo:2,modelCode:"person")
 			model.modelUrl = "/himsweb/mail/navigation@tree"
 			model.save(fialOnError:true)
 			

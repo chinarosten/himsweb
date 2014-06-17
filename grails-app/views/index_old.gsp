@@ -74,7 +74,7 @@
 		margin-top: 2px;
 		margin-bottom: 10px;
 		display: inline;
-		width: 50%;
+		width: 25%;
 		text-align: cneter;
 	}
 	#information ul li a{
@@ -157,6 +157,7 @@
 	   			}
 			});
 		});
+	//setInterval("showStartInformation()",60000);
 </script>
 </head>
 <body>
@@ -208,106 +209,93 @@
 		<div data-dojo-type="dijit/layout/BorderContainer" id="home"
 			data-dojo-props='region:"center",gutters:false,style:{padding:"1px 1px 0px 1px",height:"100%",width:"100%",display:"none"}'>
 			
-			<div data-dojo-type="dojox/layout/ContentPane" id="information"
-				data-dojo-props='region:"left",executeScripts:true,renderStyles:true,style:"padding:1px;width:206px;border:1px solid #B5BCC7;margin-top:1px;margin-bottom:1px"'>
-				<ul>
-					<li>
-						<a href="javascript:top_addSendfile()">
-							<img width="36px" height="36px" src="images/rosten/share/top_sendfile.png"></img>
-							<h5>新建发文</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addBbs()">
-							<img width="36px" height="36px" src="images/rosten/share/top_bbs.png"></img>
-							<h5>新建公告</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addMeeting()">
-							<img width="36px" height="36px" src="images/rosten/share/top_meeting.png"></img>
-							<h5>新建会议通知</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addDsj()">
-							<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-							<h5>新建大事记</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addDsj()">
-							<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-							<h5>短信发送</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addDsj()">
-							<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-							<h5>你问我答</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addDsj()">
-							<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-							<h5>通讯录</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addDsj()">
-							<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-							<h5>发消息</h5>
-						</a>
-					</li>
-				</ul>
+			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"top",style:{height:"293px"},gutters:false' >
+			
+				<div data-dojo-type="rosten/widget/TitlePane" id="home_bbs"
+					data-dojo-props='title:"最新公告",toggleable:false,
+						_moreClick:more_bbs,
+						height:"243px",width:"50%",style:{marginRight:"1px"},region:"left",moreText:"更多"'>
+				</div>
+				
+				<div data-dojo-type="dojox/layout/ContentPane" style="padding:0px"
+					data-dojo-props='region:"center",executeScripts:true,renderStyles:true'>
+					
+					<div data-dojo-type="rosten/widget/TitlePane" id="home_gtask"
+						data-dojo-props='title:"待办工作",toggleable:false,
+							_moreClick:more_gtask,
+							height:"25%",moreText:"更多",height:"98px"'>
+					</div>
+					
+					<div data-dojo-type="rosten/widget/TitlePane" style="margin-top:1px" id ="home_personMail"
+						data-dojo-props='title:"新收邮件",toggleable:false,
+							_moreClick:more_mail,
+							height:"96px",moreText:"更多"'>
+					</div>
+					
+				</div>
+			</div>
+			<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='region:"center",gutters:false'>
+				
+				<div data-dojo-type="rosten/widget/TitlePane" id="information" style="margin-left:1px;margin-right:1px" 
+					data-dojo-props='title:"常用服务",toggleable:false,region:"center",moreText:"",height:"146px"'>
+					<ul>
+						<li>
+							<a href="javascript:top_addSendfile()">
+								<img width="36px" height="36px" src="images/rosten/share/top_sendfile.png"></img>
+								<h5>新建发文</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addBbs()">
+								<img width="36px" height="36px" src="images/rosten/share/top_bbs.png"></img>
+								<h5>新建公告</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addMeeting()">
+								<img width="36px" height="36px" src="images/rosten/share/top_meeting.png"></img>
+								<h5>新建会议通知</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addDsj()">
+								<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
+								<h5>新建大事记</h5>
+							</a>
+						</li>
+					</ul>
+				</div>
+				
+				<div data-dojo-type="rosten/widget/TitlePane"  style="width:30%;"
+					data-dojo-props='title:"通讯录",toggleable:false,region:"left",moreText:"",height:"146px"'>
+					<div style="text-align:center">
+                      <span>关键字：</span>
+                      <input id="personSearchInput" data-dojo-type="dijit/form/ValidationTextBox" 
+                      	data-dojo-props='style:{width:"200px",marginLeft:"1px"},placeHolder:"姓名/电话/邮箱"'/>
+                      <button id="personSearchButton" data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){searchPerson()}'>查询</button>
+                    </div>
+                    <div class="personSearch">
+						<table width="98%" class="tab_css">
+							<THEAD> 
+								<tr>
+									<th width="15%">姓名</th>
+									<th width="20%">办公电话</th>
+									<th width="20%">移动电话</th>
+									<th>邮箱地址</th>
+								</tr>
+							</THEAD>
+							<tbody id="personSearch">
+							</tbody>
+						</table>
+					</div>
+				</div>
+				
+				<div data-dojo-type="rosten/widget/TitlePane" style="width:30%" id="home_download"
+					data-dojo-props='title:"下载专区",toggleable:false,region:"right",_moreClick:more_downloadFile,moreText:"更多",height:"146px"'>
+					下载内容......
+				</div>
 				
 			</div>
-			
-			<div data-dojo-type="dojox/layout/ContentPane" id="home_center"
-				data-dojo-props='region:"center",executeScripts:true,renderStyles:true,style:"padding:1px"'>
-				
-					<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"200px"}' >
-					
-						<div data-dojo-type="rosten/widget/TitlePane" id="home_gtask"
-							data-dojo-props='region:"left",title:"待办工作",toggleable:false,
-								height:"150px",width:"50%",style:{marginRight:"1px"},
-								_moreClick:more_gtask,moreText:"更多"'>
-						</div>
-							
-						<div data-dojo-type="rosten/widget/TitlePane" id="home_bbs"
-							data-dojo-props='region:"center",title:"最新公告",toggleable:false,
-								height:"150px",
-								_moreClick:more_bbs,moreText:"更多"'>
-						</div>	
-						
-					</div>
-				
-					<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"200px"}' >
-						<div data-dojo-type="rosten/widget/TitlePane" style="margin-top:1px" id ="home_personMail"
-							data-dojo-props='region:"left",title:"新收邮件",toggleable:false,
-								height:"150px",width:"50%",style:{marginRight:"1px"},
-								_moreClick:more_mail,moreText:"更多"'>
-						</div>
-						<div data-dojo-type="rosten/widget/TitlePane"
-							data-dojo-props='region:"center",title:"工作日志",toggleable:false,
-								height:"150px",
-								_moreClick:more_bbs,moreText:"更多"'>
-						</div>
-					</div>
-				 	
-				 	<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"200px"}' >
-						<div data-dojo-type="rosten/widget/TitlePane" style="margin-top:1px" id ="home_download"
-							data-dojo-props='region:"left",title:"下载专区",toggleable:false,
-								height:"150px",width:"50%",style:{marginRight:"1px"},
-								_moreClick:more_downloadFile,moreText:"更多"'>
-						</div>
-						<div data-dojo-type="rosten/widget/TitlePane"
-							data-dojo-props='region:"center",title:"常用地址",toggleable:false,
-								height:"150px",
-								_moreClick:more_bbs,moreText:"更多"'>
-						</div>
-					</div>
-			</div>	
 		</div>	
 		
 		<div data-dojo-type="dijit/layout/BorderContainer" id="modelMain"
@@ -342,7 +330,7 @@
 			</div>
 		</div>
 		<div data-dojo-type="dijit/layout/ContentPane" id="footer"
-			data-dojo-props='region:"bottom",style:"border:1px solid #B5BCC7"'>Copyright @2012 ; rosten
+			data-dojo-props='region:"bottom"'>Copyright @2012 ; rosten
 			版权所有,提供技术支持</div>
 	</div>
 </body>
