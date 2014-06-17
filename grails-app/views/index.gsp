@@ -86,6 +86,9 @@
 		font-weight:normal;
 		margin-top:0px;
 	}
+	#information .dijitTitlePaneTitle ,#information .dijitTitlePaneContentOuter{
+		border:0px;
+	}
 </style>
 <script type="text/javascript">
    	logout = function(){
@@ -209,58 +212,60 @@
 			data-dojo-props='region:"center",gutters:false,style:{padding:"1px 1px 0px 1px",height:"100%",width:"100%",display:"none"}'>
 			
 			<div data-dojo-type="dojox/layout/ContentPane" id="information"
-				data-dojo-props='region:"left",executeScripts:true,renderStyles:true,style:"padding:1px;width:206px;border:1px solid #B5BCC7;margin-top:1px;margin-bottom:1px"'>
-				<ul>
-					<li>
-						<a href="javascript:top_addSendfile()">
-							<img width="36px" height="36px" src="images/rosten/share/top_sendfile.png"></img>
-							<h5>新建发文</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addBbs()">
-							<img width="36px" height="36px" src="images/rosten/share/top_bbs.png"></img>
-							<h5>新建公告</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addMeeting()">
-							<img width="36px" height="36px" src="images/rosten/share/top_meeting.png"></img>
-							<h5>新建会议通知</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addDsj()">
-							<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-							<h5>新建大事记</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addDsj()">
-							<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-							<h5>短信发送</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addDsj()">
-							<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-							<h5>你问我答</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addDsj()">
-							<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-							<h5>通讯录</h5>
-						</a>
-					</li>
-					<li>
-						<a href="javascript:top_addDsj()">
-							<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-							<h5>发消息</h5>
-						</a>
-					</li>
-				</ul>
-				
+				data-dojo-props='region:"left",executeScripts:true,renderStyles:true,style:"padding:0px;width:206px;border:1px solid #B5BCC7;margin-top:1px;margin-bottom:1px"'>
+				<div data-dojo-type="rosten/widget/TitlePane"
+					data-dojo-props='title:"常用服务",toggleable:false,moreText:"",style:{textAlign:"center"}'>
+					<ul>
+						<li>
+							<a href="javascript:top_addSendfile()">
+								<img width="36px" height="36px" src="images/rosten/share/top_sendfile.png"></img>
+								<h5>新建发文</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addBbs()">
+								<img width="36px" height="36px" src="images/rosten/share/top_bbs.png"></img>
+								<h5>新建公告</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addMeeting()">
+								<img width="36px" height="36px" src="images/rosten/share/top_meeting.png"></img>
+								<h5>新建会议通知</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addDsj()">
+								<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
+								<h5>新建大事记</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addDsj()">
+								<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
+								<h5>短信发送</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addDsj()">
+								<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
+								<h5>你问我答</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addDsj()">
+								<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
+								<h5>通讯录</h5>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:top_addDsj()">
+								<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
+								<h5>发消息</h5>
+							</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 			
 			<div data-dojo-type="dojox/layout/ContentPane" id="home_center"

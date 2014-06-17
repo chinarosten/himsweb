@@ -2254,9 +2254,10 @@ class SystemController {
 			}
 			modelList = _modelList
 			
-			//增加短信通知以及你问我答
-			modelList << Model.findByModelCode("sms")
-			modelList << Model.findByModelCode("question")
+//			//增加短信通知以及你问我答--------------2014-6-17,迁移到常用服务中-------------------
+//			modelList << Model.findByModelCode("sms")
+//			modelList << Model.findByModelCode("question")
+			//---------------------------------------------------------------------
 		}
 		
 		def logoset = LogoSet.findWhere(company:user.company)
