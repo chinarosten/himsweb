@@ -98,7 +98,10 @@ class SystemActionController {
 		render actionList as JSON
 	}
 	def serviceView ={
-		render createCommonAction(null,"service",true) as JSON
+		def actionList = createCommonAction(null,"service",true)
+		actionList << createAction("刷新首页",imgPath + "refreshSystem.gif","refreshSystem")
+		render actionList as JSON
+		
 	}
 	def serviceForm ={
 		def webPath = request.getContextPath() + "/"

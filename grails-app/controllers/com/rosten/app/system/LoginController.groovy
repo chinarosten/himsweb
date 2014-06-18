@@ -182,6 +182,10 @@ class LoginController {
 				//获取所有角色
 			}
 			model["userinfor"] = userinfor as JSON
+			
+			//获取展示的所有服务
+			model["servicesList"] = NormalService.findAllByCompany(user.company)
+			
 			if(params.version && "old".equals(params.version)){
 				render (view:SpringSecurityUtils.securityConfig.successHandler.defaultTargetUrl + "index_old",model:model)
 				return;

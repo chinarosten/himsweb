@@ -74,11 +74,16 @@
 		margin-top: 2px;
 		margin-bottom: 10px;
 		display: inline;
-		width: 50%;
+		width: 45%;
 		text-align: cneter;
 	}
 	#information ul li a{
 		cursor:pointer;
+		display:inline;
+		text-decoration: none;
+	}
+	#information ul li a:link,#information ul li a:active,#information ul li a:hover,#information ul li a:visited{
+		text-decoration: none;
 	}
 	#information ul li h5{
 		color: #142E65;
@@ -216,54 +221,14 @@
 				<div data-dojo-type="rosten/widget/TitlePane"
 					data-dojo-props='title:"常用服务",toggleable:false,moreText:"",style:{textAlign:"center"}'>
 					<ul>
-						<li>
-							<a href="javascript:top_addSendfile()">
-								<img width="36px" height="36px" src="images/rosten/share/top_sendfile.png"></img>
-								<h5>新建发文</h5>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:top_addBbs()">
-								<img width="36px" height="36px" src="images/rosten/share/top_bbs.png"></img>
-								<h5>新建公告</h5>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:top_addMeeting()">
-								<img width="36px" height="36px" src="images/rosten/share/top_meeting.png"></img>
-								<h5>新建会议通知</h5>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:top_addDsj()">
-								<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-								<h5>新建大事记</h5>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:top_addDsj()">
-								<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-								<h5>短信发送</h5>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:top_addDsj()">
-								<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-								<h5>你问我答</h5>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:top_addDsj()">
-								<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-								<h5>通讯录</h5>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:top_addDsj()">
-								<img width="36px" height="36px" src="images/rosten/share/top_search.png"></img>
-								<h5>发消息</h5>
-							</a>
-						</li>
+						<g:each in="${servicesList}">
+							<li>
+								<a href="javascript:${it.functionName }('${it.functionArgs }')">
+									<img width="39px" height="39px" src="${it.imgUrl }"></img>
+									<h5>${it.serviceName }</h5>
+								</a>
+							</li>
+						</g:each>
 					</ul>
 				</div>
 			</div>
@@ -309,7 +274,7 @@
 						<div data-dojo-type="rosten/widget/TitlePane"
 							data-dojo-props='region:"center",title:"常用地址",toggleable:false,
 								height:"150px",
-								_moreClick:more_bbs,moreText:"更多"'>
+								_moreClick:more_bbs,moreText:""'>
 						</div>
 					</div>
 			</div>	

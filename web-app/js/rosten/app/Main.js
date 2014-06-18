@@ -172,6 +172,34 @@ define(["dojo/_base/kernel"
         //增加时获取后台session功能
         //setInterval("session_checkTimeOut()",60000*120 + 2000);
     };
+    excuteService = function(args){
+    	switch(args){
+    	case "sms" :
+    		require(["rosten/app/SmsManage"],function(){
+    	        rosten.kernel.createRostenShowDialog(rosten.webPath + "/system/smsAdd");
+    	        
+    	    });
+    		break;
+    	case "question":
+    		require(["rosten/app/QuestionManage"],function(){
+                rosten.kernel.createRostenShowDialog(rosten.webPath + "/system/questionAdd");
+                
+            });
+    		break;
+    	case "addSendfile":
+    		top_addSendfile();
+    		break;
+    	case "addDsj":
+    		top_addDsj();
+    		break;
+    	case "addMeeting":
+    		top_addMeeting();
+    		break;
+    	case "addBbs":
+    		top_addBbs();
+    		break;
+    	}
+    };
     top_addSendfile = function(){
 		var userid = rosten.kernel.getUserInforByKey("idnumber");
 		var companyId = rosten.kernel.getUserInforByKey("companyid");
