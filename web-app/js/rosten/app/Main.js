@@ -232,7 +232,14 @@ define(["dojo/_base/kernel"
     };
     showStartGtask = function(userId,companyId){
     	rosten.read(rosten.webPath + "/start/getGtask", {userId:userId,companyId:companyId}, function(data) {
-    		var node = registry.byId("home_gtask").containerNode;
+    		var titlePaneNode = registry.byId("home_gtask");
+    		if(data.length>0){
+    			titlePaneNode.changeTitleCount("(" + data.length + "条)");
+    		}else{
+    			titlePaneNode.changeTitleCount("");
+    		}
+    		
+    		var node = titlePaneNode.containerNode;
         	node.innerHTML = "";
         	
         	var ul = document.createElement("ul");
@@ -308,7 +315,14 @@ define(["dojo/_base/kernel"
     };
     showStartMail = function(userId,companyId){
     	rosten.read(rosten.webPath + "/mail/publishMail", {userId:userId,companyId:companyId}, function(data) {
-    		var node = registry.byId("home_personMail").containerNode;
+    		var titlePaneNode = registry.byId("home_personMail");
+    		if(data.length>0){
+    			titlePaneNode.changeTitleCount("(" + data.length + "条)");
+    		}else{
+    			titlePaneNode.changeTitleCount("");
+    		}
+    		
+    		var node = titlePaneNode.containerNode;
         	node.innerHTML = "";
         	
         	var ul = document.createElement("ul");
@@ -398,7 +412,15 @@ define(["dojo/_base/kernel"
         });
     };
     addUlInformation = function(idname,functionName,data){
-    	var node = registry.byId(idname).containerNode;
+    	
+    	var titlePaneNode = registry.byId(idname);
+		if(data.length>0){
+			titlePaneNode.changeTitleCount("(" + data.length + "条)");
+		}else{
+			titlePaneNode.changeTitleCount("");
+		}
+		
+		var node = titlePaneNode.containerNode;
     	node.innerHTML = "";
     	
     	var ul = document.createElement("ul");

@@ -94,6 +94,11 @@
 	#information .dijitTitlePaneTitle ,#information .dijitTitlePaneContentOuter{
 		border:0px;
 	}
+	.rosten .dijitTitlePaneCountNode{
+		margin-left:3px;
+		color:#ff0000;
+		vertical-align:text-top;
+	}
 </style>
 <script type="text/javascript">
    	logout = function(){
@@ -267,12 +272,12 @@
 				 	
 				 	<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"200px"}' >
 						<div data-dojo-type="rosten/widget/TitlePane" style="margin-top:1px" id ="home_download"
-							data-dojo-props='region:"left",title:"下载专区",toggleable:false,
+							data-dojo-props='region:"left",title:"下载专区",toggleable:false,showTitleCount:false,
 								height:"150px",width:"50%",style:{marginRight:"1px"},
 								_moreClick:more_downloadFile,moreText:"更多"'>
 						</div>
 						<div data-dojo-type="rosten/widget/TitlePane"
-							data-dojo-props='region:"center",title:"常用地址",toggleable:false,
+							data-dojo-props='region:"center",title:"常用地址",toggleable:false,showTitleCount:false,
 								height:"150px",
 								_moreClick:more_bbs,moreText:""'>
 						</div>

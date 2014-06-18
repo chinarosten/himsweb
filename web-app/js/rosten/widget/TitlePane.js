@@ -10,7 +10,9 @@ define(["dojo/_base/declare",
     	
         moreText:"more",
 		moreUrl:"",
-        
+        titleCount:"",
+        showTitleCount:true,
+		
         width: "",
         height: "",
         marginBottom: null,
@@ -23,6 +25,7 @@ define(["dojo/_base/declare",
 									'<span data-dojo-attach-point="arrowNodeInner" class="dijitArrowNodeInner"></span>' +
 								 '</span>' +
 						        '<span data-dojo-attach-point="titleNode" class="dijitTitlePaneTextNode"></span>' +
+						        '<span data-dojo-attach-point="titleCountNode" class="dijitTitlePaneCountNode"></span>' +
 								'<span style="float:right;cursor:pointer;" data-dojo-attach-point="moreNode" data-dojo-attach-event="onclick:_moreClick"> </span>' + 
 						    '</div>' +
 						    '<div class="dijitTitlePaneContentOuter" data-dojo-attach-point="hideNode">' +
@@ -56,6 +59,12 @@ define(["dojo/_base/declare",
 			if(this.moreNode!=""){
 				this.moreNode.innerHTML = this.moreText;
 			}
+			if(this.titleCount!=""){
+				this.titleCountNode.innerHTML = this.titleCount;
+			}
+			if(!this.showTitleCount){
+				domStyle.set(this.titleCountNode,"display","none");
+			}
         },
     	changeWidth: function(){
             domStyle.set(this.domNode, {
@@ -66,6 +75,10 @@ define(["dojo/_base/declare",
             domStyle.set(this.containerNode, {
                 "height": this.height
             });
+        },
+        changeTitleCount:function(args){
+        	this.titleCount = args;
+        	this.titleCountNode.innerHTML = args;
         },
 		_moreClick:function(){
 			if(this.moreUrl!="" && this.moreNode!=""){
