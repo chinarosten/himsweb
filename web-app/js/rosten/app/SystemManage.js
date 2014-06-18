@@ -380,6 +380,34 @@ define(["dojo/_base/connect",
             rosten.read(rosten.webPath + "/system/smsgroupDelete", content, delete_callback);
         };
     };
+    add_service = function() {
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        var companyId = rosten.kernel.getUserInforByKey("companyid");
+        rosten.openNewWindow("service", rosten.webPath + "/system/serviceAdd?companyId=" + companyId + "&userid=" + userid);
+    };
+    read_service = function() {
+        change_service();
+    };
+    change_service = function() {
+        var unid = rosten.getGridUnid("single");
+        if (unid == "")
+            return;
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        var companyId = rosten.kernel.getUserInforByKey("companyid");
+        rosten.openNewWindow("service", rosten.webPath + "/system/serviceShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+        rosten.kernel.getGrid().clearSelected();
+    };
+    delete_service = function() {
+        var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
+        _1.callback = function() {
+            var unids = rosten.getGridUnid("multi");
+            if (unids == "")
+                return;
+            var content = {};
+            content.id = unids;
+            rosten.read(rosten.webPath + "/system/serviceDelete", content, delete_callback);
+        };
+    };
     add_resource = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
@@ -820,6 +848,18 @@ define(["dojo/_base/connect",
 
                 var rostenGrid = rosten.kernel.getGrid();
                 rostenGrid.onRowDblClick = change_resource;
+                break;
+            case "serviceManage":
+                var companyId = rosten.kernel.getUserInforByKey("companyid");
+                var naviJson = {
+                    identifier : oString,
+                    actionBarSrc : rosten.webPath + "/systemAction/serviceView",
+                    gridSrc : rosten.webPath + "/system/serviceGrid?companyId=" + companyId
+                };
+                rosten.kernel.addRightContent(naviJson);
+
+                var rostenGrid = rosten.kernel.getGrid();
+                rostenGrid.onRowDblClick = change_service;
                 break;
                 
         }

@@ -97,6 +97,20 @@ class SystemActionController {
 		actionList << createAction("重新登录系统",imgPath + "refreshSystem.gif","refreshSystem")
 		render actionList as JSON
 	}
+	def serviceView ={
+		render createCommonAction(null,"service",true) as JSON
+	}
+	def serviceForm ={
+		def webPath = request.getContextPath() + "/"
+		def actionList = []
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
+		
+//		def user = User.get(params.userid)
+//		if(!"normal".equals(user.getUserType())){
+			actionList << createAction("保存",webPath + imgPath + "Save.gif","service_add")
+//		}
+		render actionList as JSON
+	}
 	def modelView ={
 		render createCommonAction(null,"model",true) as JSON
 	}
@@ -105,10 +119,10 @@ class SystemActionController {
 		def actionList = []
 		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
-		def user = User.get(params.userid)
-		if(!"normal".equals(user.getUserType())){
+//		def user = User.get(params.userid)
+//		if(!"normal".equals(user.getUserType())){
 			actionList << createAction("保存",webPath + imgPath + "Save.gif","model_add")
-		}
+//		}
 		render actionList as JSON
 	}
 	def departView ={
@@ -123,10 +137,10 @@ class SystemActionController {
 		def actionList = []
 		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
-		def user = User.get(params.userid)
-		if(!"normal".equals(user.getUserType())){
+//		def user = User.get(params.userid)
+//		if(!"normal".equals(user.getUserType())){
 			actionList << createAction("保存",webPath + imgPath + "Save.gif","group_add")
-		}
+//		}
 		render actionList as JSON
 	}
 	def userTypeView ={
@@ -137,10 +151,10 @@ class SystemActionController {
 		def actionList = []
 		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
-		def user = User.get(params.userid)
-		if(!"normal".equals(user.getUserType())){
+//		def user = User.get(params.userid)
+//		if(!"normal".equals(user.getUserType())){
 			actionList << createAction("保存",webPath + imgPath + "Save.gif","userType_add")
-		}
+//		}
 		render actionList as JSON
 	}
 	
@@ -167,10 +181,10 @@ class SystemActionController {
 		def actionList = []
 		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
-		def user = User.get(params.userid)
-		if(!"normal".equals(user.getUserType())){
+//		def user = User.get(params.userid)
+//		if(!"normal".equals(user.getUserType())){
 			actionList << createAction("保存",webPath + imgPath + "Save.gif","role_add")
-		}
+//		}
 		render actionList as JSON
 	}
 	
@@ -182,10 +196,10 @@ class SystemActionController {
 		def actionList = []
 		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
-		def user = User.get(params.userid)
-		if(!"normal".equals(user.getUserType())){
+//		def user = User.get(params.userid)
+//		if(!"normal".equals(user.getUserType())){
 			actionList << createAction("保存",webPath + imgPath + "Save.gif","permission_add")
-		}
+//		}
 		render actionList as JSON
 	}
 	
@@ -197,10 +211,10 @@ class SystemActionController {
 		def actionList = []
 		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
-		def user = User.get(params.userid)
-		if(!"normal".equals(user.getUserType())){
+//		def user = User.get(params.userid)
+//		if(!"normal".equals(user.getUserType())){
 			actionList << createAction("保存",webPath + imgPath + "Save.gif","resource_add")
-		}
+//		}
 		render actionList as JSON
 	}
 	

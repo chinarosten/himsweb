@@ -303,6 +303,107 @@ class SystemController {
 		}
 		render json as JSON
 	}
+	def serviceDelete ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def normalService = NormalService.get(it)
+				if(normalService){
+					normalService.delete(flush: true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
+	}
+	def serviceSave ={
+		def json=[:]
+		def normalService = new NormalService()
+		if(params.id && !"".equals(params.id)){
+			normalService = NormalService.get(params.id)
+			normalService.properties = params
+			normalService.clearErrors()
+			
+			normalService.model = Model.get(params.modelId)
+			
+			if(normalService.save(flush:true)){
+				json["result"] = "true"
+			}else{
+				normalService.errors.each{
+					println it
+				}
+				json["result"] = "false"
+			}
+			render json as JSON
+			
+		}else{
+			normalService.properties = params
+			normalService.clearErrors()
+			normalService.company = Company.get(params.companyId)
+			normalService.model = Model.get(params.modelId)
+			if(normalService.save(flush:true)){
+				json["result"] = "true"
+			}else{
+				normalService.errors.each{
+					println it
+				}
+				json["result"] = "false"
+			}
+			render json as JSON
+		}
+		
+	}
+	def serviceAdd ={
+		redirect(action:"serviceShow",params:params)
+	}
+	def serviceShow ={
+		def model =[:]
+		
+		def user = User.get(params.userid)
+		def company = Company.get(params.companyId)
+		def normalService = new NormalService()
+		if(params.id){
+			normalService = NormalService.get(params.id)
+		}
+		model["user"]=user
+		model["company"] = company
+		model["normalService"] = normalService
+		
+		FieldAcl fa = new FieldAcl()
+//		if("normal".equals(user.getUserType())){
+//			//普通用户
+//			fa.readOnly = ["serviceName","url","imgUrl"]
+//		}
+		model["fieldAcl"] = fa
+		
+		render(view:'/system/normalService',model:model)
+	}
+	def serviceGrid ={
+		def json=[:]
+		def company = Company.get(params.companyId)
+		if(params.refreshHeader){
+			json["gridHeader"] = systemService.getNormalServiceListLayout()
+		}
+		if(params.refreshData){
+			def args =[:]
+			int perPageNum = Util.str2int(params.perPageNum)
+			int nowPage =  Util.str2int(params.showPageNum)
+			
+			args["offset"] = (nowPage-1) * perPageNum
+			args["max"] = perPageNum
+			args["company"] = company
+			json["gridData"] = systemService.getNormalServiceListDataStore(args)
+			
+		}
+		if(params.refreshPageControl){
+			def total = systemService.getNormalServiceCount(company)
+			json["pageControl"] = ["total":total.toString()]
+		}
+		render json as JSON
+	}
 	def resourceDelete ={
 		def ids = params.id.split(",")
 		def json
@@ -939,7 +1040,7 @@ class SystemController {
 		def modelJson = []
 		def modelList = []
 		
-		def user = User.get(params.userId)
+		def user = springSecurityService.getCurrentUser()
 		def userType = user.getUserType()
 		if("admin".equals(userType)){
 			//管理员
@@ -2202,7 +2303,13 @@ class SystemController {
 			//管理员
 			modelList << defaultModel
 			modelList << personModel
-			modelList += Model.findAllWhere(company:user.company)
+			
+			//--------------2014-6-17,迁移到常用服务中-------------------
+			def _modelList = Model.findAllWhere(company:user.company)
+			modelList += _modelList.findAll{item->
+				!item.modelCode.equals("sms") && !item.modelCode.equals("question")
+			}
+			//-----------------------------------------------------
 			modelList.unique()
 		}else if("normal".equals(userType)){
 			//普通用户-----------------------------------------------

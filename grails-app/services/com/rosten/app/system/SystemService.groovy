@@ -107,6 +107,29 @@ class SystemService {
 		def query = { eq("company",company) }
 		return c.count(query)
 	}
+	def getNormalServiceListDataStore = {params->
+		Integer offset = (params.offset)?params.offset.toInteger():0
+		Integer max = (params.max)?params.max.toInteger():15
+		def propertyList = getAllNormalService(offset,max,params.company)
+
+		def gridUtil = new GridUtil()
+		return gridUtil.buildDataList("id","title",propertyList,offset)
+	}
+	def getNormalServiceListLayout ={
+		def gridUtil = new GridUtil()
+		return gridUtil.buildLayoutJSON(new NormalService())
+	}
+	def getAllNormalService={offset,max,company->
+		def c = NormalService.createCriteria()
+		def pa=[max:max,offset:offset]
+		def query = { eq("company",company) }
+		return c.list(pa,query)
+	}
+	def getNormalServiceCount={company->
+		def c = NormalService.createCriteria()
+		def query = { eq("company",company) }
+		return c.count(query)
+	}
 	def getPermissionListDataStore = {params->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15
@@ -682,6 +705,12 @@ class SystemService {
 			resource.resourceName = "资源管理"
 			resource.url = "resourceManage"
 			resource.imgUrl = "images/rosten/navigation/Resource.gif"
+			model.addToResources(resource)
+			
+			resource = new Resource()
+			resource.resourceName = "常用服务"
+			resource.url = "serviceManage"
+			resource.imgUrl = "images/rosten/navigation/Service.gif"
 			model.addToResources(resource)
 			
 			model.save(flush:true)
