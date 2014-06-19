@@ -13,6 +13,18 @@ class SystemController {
 	def systemService
 	def workFlowService
 	
+	def getContactDepartInfor ={
+		def _depart = Depart.get(params.departId)
+		render(view:'/system/contact_right',model:[departEntity:_depart])
+	}
+	def getContactDepart ={
+		def company = Company.get(params.companyId)
+		def firstDepart = Depart.findWhere(
+			company:company,
+			parent:null
+		)
+		render(view:'/system/contact_left',model:[departsList:firstDepart.children])
+	}
 	def authorizeCancel ={
 		def json=[:]
 		def authorize = Authorize.get(params.id)
@@ -300,6 +312,23 @@ class SystemController {
 				sMap.children += childMap
 			}
 			json.items+=sMap
+		}
+		render json as JSON
+	}
+	def serviceStatus ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def normalService = NormalService.get(it)
+				if(normalService){
+					normalService.status = params.status
+					normalService.save(flush: true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
 		}
 		render json as JSON
 	}

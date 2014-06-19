@@ -100,6 +100,8 @@ class SystemActionController {
 	def serviceView ={
 		def actionList = createCommonAction(null,"service",true)
 		actionList << createAction("刷新首页",imgPath + "refreshSystem.gif","refreshSystem")
+		actionList << createAction("开启服务",imgPath + "s_open.png","open_service")
+		actionList << createAction("关闭服务",imgPath + "s_close.png","close_service")
 		render actionList as JSON
 		
 	}

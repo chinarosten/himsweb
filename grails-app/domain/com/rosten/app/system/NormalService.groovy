@@ -49,6 +49,9 @@ class NormalService {
 	@GridColumn(name="跳转地址")
 	String functionUrl
 	
+	@GridColumn(name="首页显示")
+	String status = "是"
+	
 	//所属单位
 	static belongsTo = [company:Company]
 	

@@ -26,12 +26,13 @@
 					};
 					return;
 				}
+				/*
 				var modelName = registry.byId("modelName");
 				if(!modelName.isValid()){
 					rosten.alert("所属模块不正确！").queryDlgClose = function(){
 					};
 					return;
-				}
+				}*/
 				var imgUrl = registry.byId("imgUrl");
 				if(!imgUrl.isValid()){
 					rosten.alert("图标地址不正确！").queryDlgClose = function(){
