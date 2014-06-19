@@ -408,6 +408,22 @@ define(["dojo/_base/connect",
             rosten.read(rosten.webPath + "/system/serviceDelete", content, delete_callback);
         };
     };
+    open_service = function(){
+    	var unids = rosten.getGridUnid("multi");
+        if (unids == "")
+            return;
+        var content = {status:"是"};
+        content.id = unids;
+        rosten.read(rosten.webPath + "/system/serviceStatus", content, delete_callback);
+    };
+    close_service = function(){
+    	var unids = rosten.getGridUnid("multi");
+        if (unids == "")
+            return;
+        var content = {status:"否"};
+        content.id = unids;
+        rosten.read(rosten.webPath + "/system/serviceStatus", content, delete_callback);
+    };
     add_resource = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");

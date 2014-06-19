@@ -198,7 +198,23 @@ define(["dojo/_base/kernel"
     	case "addBbs":
     		top_addBbs();
     		break;
+    	case "contact":
+    		top_showContact();
+    		break;
     	}
+    };
+    top_showContact = function(){
+    	domStyle.set(registry.byId("home").domNode,"display","none");
+		domStyle.set(registry.byId("modelMain").domNode,"display","");
+		registry.byId("modelMain").resize();
+    	deleteMailNavigation();
+    	
+    	var companyId = rosten.kernel.getUserInforByKey("companyid");
+    	rosten.kernel.setNaviHref(rosten.webPath + "/system/getContactDepart?companyId=" + companyId,"contact","通讯录");
+    	rosten.kernel.setRightContent(null,"contact");
+    };
+    top_showDepartInfor = function(inforid){
+    	rosten.kernel.setHref(rosten.webPath + "/system/getContactDepartInfor?departId=" + inforid,inforid);
     };
     top_addSendfile = function(){
 		var userid = rosten.kernel.getUserInforByKey("idnumber");
