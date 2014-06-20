@@ -241,45 +241,91 @@
 			<div data-dojo-type="dojox/layout/ContentPane" id="home_center"
 				data-dojo-props='region:"center",executeScripts:true,renderStyles:true,style:"padding:1px"'>
 				
-					<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"210px"}' >
+					<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"207px"}' >
 					
 						<div data-dojo-type="rosten/widget/TitlePane" id="home_gtask"
 							data-dojo-props='region:"left",title:"待办工作",toggleable:false,
-								height:"158px",width:"50%",style:{marginRight:"1px"},
+								height:"157px",width:"50%",style:{marginRight:"1px"},
 								_moreClick:more_gtask,moreText:"更多"'>
 						</div>
 							
 						<div data-dojo-type="rosten/widget/TitlePane" id="home_bbs"
 							data-dojo-props='region:"center",title:"最新公告",toggleable:false,
-								height:"158px",
+								height:"157px",
 								_moreClick:more_bbs,moreText:"更多"'>
 						</div>	
 						
 					</div>
 				
-					<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"210px"}' >
+					<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"207px"}' >
 						<div data-dojo-type="rosten/widget/TitlePane" style="margin-top:1px" id ="home_personMail"
 							data-dojo-props='region:"left",title:"新收邮件",toggleable:false,
-								height:"158px",width:"50%",style:{marginRight:"1px"},
+								height:"157px",width:"50%",style:{marginRight:"1px"},
 								_moreClick:more_mail,moreText:"更多"'>
 						</div>
 						<div data-dojo-type="rosten/widget/TitlePane"
 							data-dojo-props='region:"center",title:"工作日志",toggleable:false,
-								height:"158px",
+								height:"157px",
 								_moreClick:more_bbs,moreText:"更多"'>
+								
+							<div class="por-mod"> 
+							<!--计划-->
+								<div class="por-jh">
+							    	<div class="por-jh-tool">
+							    		<span><g:formatDate format="yyyy年MM月" date="${new Date()}" />
+							    		<a href="#" class="jh-pre-w" title="上一周"></a>第<em>${weekNum }</em>周<a href="#" class="jh-next-w" title="下一周"></a></span>
+							    	</div>
+								    <div class="por-jh-con">
+								    	<table class="por-jh-tab">
+								        	<tbody><tr>
+									          <td>
+									          	<div <g:if test="${nowDay==2 }">class="week-today"</g:if>><h3>星期一</h3><span><g:formatDate format="dd" date="${firstDay}" /></span></div>
+									          </td>
+									          <td ><div <g:if test="${nowDay==3 }">class="week-today"</g:if>><h3>星期二</h3><span><g:formatDate format="dd" date="${firstDay+1 }" /></span></div></td>
+									          <td ><div <g:if test="${nowDay==4 }">class="week-today"</g:if>><h3>星期三</h3><span><g:formatDate format="dd" date="${firstDay+2 }" /></span></div></td>
+									          <td ><div <g:if test="${nowDay==5 }">class="week-today"</g:if>><h3>星期四</h3><span><g:formatDate format="dd" date="${firstDay+3 }" /></span></div></td>
+									          <td ><div <g:if test="${nowDay==6 }">class="week-today"</g:if>><h3>星期五</h3><span><g:formatDate format="dd" date="${firstDay+4 }" /></span></div></td>
+									          <td ><div <g:if test="${nowDay==0 }">class="week-today"</g:if>><h3>星期六</h3><span><g:formatDate format="dd" date="${firstDay+5 }" /></span></div></td>
+									          <td ><div <g:if test="${nowDay==1 }">class="week-today"</g:if>><h3>星期日</h3><span><g:formatDate format="dd" date="${firstDay+6 }" /></span></div></td>
+									        </tr>
+									      </tbody></table>
+								    </div>
+								</div>
+							</div>
 						</div>
 					</div>
 				 	
-				 	<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"210px"}' >
+				 	<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"207px"}' >
 						<div data-dojo-type="rosten/widget/TitlePane" style="margin-top:1px" id ="home_download"
 							data-dojo-props='region:"left",title:"下载专区",toggleable:false,showTitleCount:false,
-								height:"158px",width:"50%",style:{marginRight:"1px"},
+								height:"157px",width:"50%",style:{marginRight:"1px"},
 								_moreClick:more_downloadFile,moreText:"更多"'>
 						</div>
 						<div data-dojo-type="rosten/widget/TitlePane"
-							data-dojo-props='region:"center",title:"常用地址",toggleable:false,showTitleCount:false,
-								height:"158px",
+							data-dojo-props='region:"center",title:"通讯录查询",toggleable:false,showTitleCount:false,
+								height:"157px",
 								_moreClick:more_bbs,moreText:""'>
+								
+								<div style="text-align:center">
+			                      <span>关键字：</span>
+			                      <input id="personSearchInput" data-dojo-type="dijit/form/ValidationTextBox" 
+			                      	data-dojo-props='style:{width:"200px",marginLeft:"1px"},placeHolder:"姓名/电话/邮箱"'/>
+			                      <button id="personSearchButton" data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){searchPerson()}'>查询</button>
+			                    </div>
+			                    <div class="personSearch">
+									<table width="98%" class="tab_css">
+										<THEAD> 
+											<tr>
+												<th width="15%">姓名</th>
+												<th width="20%">办公电话</th>
+												<th width="20%">移动电话</th>
+												<th>邮箱地址</th>
+											</tr>
+										</THEAD>
+										<tbody id="personSearch">
+										</tbody>
+									</table>
+								</div>
 						</div>
 					</div>
 			</div>	

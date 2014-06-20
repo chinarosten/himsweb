@@ -22,7 +22,7 @@
 <body>
 	<div class="contactDetail">
 		<div data-dojo-type="rosten/widget/TitlePane"
-			data-dojo-props='title:"${departEntity?.departName }",toggleable:false,moreText:"",style:{textAlign:"center"}'>
+			data-dojo-props='title:"${departEntity?.departName  + (departEntity.departPhone?"  [" +departEntity.departPhone + "]":"")  }",toggleable:false,moreText:"",style:{textAlign:"center"}'>
 			
 			<g:each in="${departEntity?.getAllUser()}">
 				<div class="con">
@@ -36,7 +36,7 @@
 		</div>
 		<g:each var="item" in="${departEntity?.children }">
 			<div data-dojo-type="rosten/widget/TitlePane"
-				data-dojo-props='title:"${item?.departName }",toggleable:false,moreText:"",style:{textAlign:"center",marginTop:"15px"}'>
+				data-dojo-props='title:"${item?.departName + (item.departPhone?"  [" +item.departPhone + "]":"") }",toggleable:false,moreText:"",style:{textAlign:"center",marginTop:"15px"}'>
 				
 				<g:each in="${item?.getAllUser()}">
 					<div class="con">

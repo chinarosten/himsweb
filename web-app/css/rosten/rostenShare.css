@@ -352,3 +352,37 @@
 	color: blue;
 	display: inline;
 }
+/*
+*首页工作计划样式
+*/
+.por-mod { padding:.5em; }
+.por-rz-tool { padding:3px 0; text-align:right; }
+.por-rz-tool a { color:#0005c6; text-decoration:underline; }
+table.por-rz-tab { width:100%; border-collapse:collapse; }
+table.por-rz-tab th, table.por-rz-tab td { border:1px dotted #828282; border-width:1px 0; text-align:left; padding:.5em .4em; line-height:1.6; color:#222; }
+table.por-rz-tab th { border-right:1px dotted #828282; width:4em; text-align:center; color:#777; }
+.por-rz-bot { padding:.2em 0; text-align:right; }
+.por-rz-bot a { color:#0000ff; }
+a.link-njthwxrz { color:#777; }
+a.link-njthwxrz-cur { color:#0000ff; }
+.por-jh-tool { height:28px; position:relative; text-align:center;margin-bottom:8px }
+.por-jh-tool span { color:#333; font-weight:bold; font-size:14px; }
+.por-jh-tool span em { color:red; margin:0 .4em; }
+table.por-jh-tab { width:100%; border-collapse:collapse; }
+table.por-jh-tab td { border-collapse:collapse; border:1px solid #ccc; padding:0; text-align:center;/*border-bottom:2px solid #ccc;*/ cursor:pointer; }
+table.por-jh-tab td div { padding:5px 0.5em 1em; }
+table.por-jh-tab td div.week-today {/*background:#e7f0f9;*/ background-image:url(../../images/rosten/share/gx.gif); background-repeat:no-repeat; background-position:center bottom; }
+table.por-jh-tab td h3 { padding-bottom:.5em; font-weight:normal; }
+table.por-jh-tab td.week-today {/*background:#e7f0f9;*/ background-image:url(../../images/rosten/share/gx.gif); background-repeat:no-repeat; background-position:center bottom; }
+table.por-jh-tab td.today-has {/*border-bottom:2px solid #f60;*/ background-image:url(../../images/rosten/share/org-has.gif); background-repeat:no-repeat; background-position:right bottom; }
+table.por-jh-tab td.week-day-cur { background-color:#afcae7; }
+.por-jh-bot { height:34px; line-height:45px; overflow:hidden; border-bottom:1px solid #ccc; }
+.por-jh-bot span { color:#322f2f; font-weight:bold; float:left; }
+.por-jh-bot a { float:right; color:#0005c6; text-decoration:underline; }
+ul.today-jh li { padding:5px 0 2px; }
+ul.today-jh li a { color:#333; }
+a.jh-pre-w { background:url(../../images/rosten/share/date_up.gif); color:#2c6899; width:33px; height:21px; display:inline-block; position:relative; top:5px; *top:3px;
+left:-10px;margin-left:20px }
+a.jh-next-w { background:url(../../images/rosten/share/date_down.gif); color:#2c6899; width:33px; height:21px; display:inline-block; position:relative; top:5px; *top:3px;
+left:10px; }
+a.jh-today { background:url(../../images/rosten/share/tab_btn01.gif); width:66px; height:19px; _height:21px; line-height:19px; color:#2c6899; position:absolute; top:3px; left:0px; border:1px solid #a4c9de; }

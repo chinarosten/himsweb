@@ -186,6 +186,15 @@ class LoginController {
 			//获取展示的所有服务
 			model["servicesList"] = NormalService.findAllWhere(company:user.company,status:"是")
 			
+			//首页工作计划日历展示
+			Calendar calendar = Calendar.getInstance()
+			model["nowDay"] = calendar.get(Calendar.DAY_OF_WEEK)
+			
+			calendar.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY)
+			
+			model["firstDay"] = calendar.getTime()
+			model["weekNum"] = calendar.get(Calendar.DAY_OF_WEEK_IN_MONTH)
+			
 			if(params.version && "old".equals(params.version)){
 				render (view:SpringSecurityUtils.securityConfig.successHandler.defaultTargetUrl + "index_old",model:model)
 				return;
