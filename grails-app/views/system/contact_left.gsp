@@ -15,14 +15,17 @@
     		margin:10px;
     	}
 	</style>
+	<script type="text/javascript">
+	</script>
 </head>
 <body>
 	<div class="contactShow">
+	<input  data-dojo-type="dijit/form/ValidationTextBox" id="contactShowId"  data-dojo-props='style:{display:"none"},value:"${contactShowId}"' />
 	<ul>
 		<g:each in="${departsList}">
 			<li>
-			<button onClick="top_showDepartInfor('${it.id}')" data-dojo-props='style:{width:"100px"}'
-				data-dojo-type="dijit/form/Button">${it.departName }</button>
+			<button onClick="top_showDepartInfor('${it.id}')" data-dojo-props=''
+				data-dojo-type="dijit/form/Button"><div style="width:158px">${it.departName }</div></button>
 			</li>
 		</g:each>
 	</ul>

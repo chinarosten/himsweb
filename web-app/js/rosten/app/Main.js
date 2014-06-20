@@ -210,8 +210,10 @@ define(["dojo/_base/kernel"
     	deleteMailNavigation();
     	
     	var companyId = rosten.kernel.getUserInforByKey("companyid");
-    	rosten.kernel.setNaviHref(rosten.webPath + "/system/getContactDepart?companyId=" + companyId,"contact","通讯录");
-    	rosten.kernel.setRightContent(null,"contact");
+    	rosten.kernel.setNaviHref(rosten.webPath + "/system/getContactDepart?companyId=" + companyId,"contact","通讯录",function(){
+    		var nodeValue = registry.byId("contactShowId").attr("value");
+    		top_showDepartInfor(nodeValue);
+    	});
     };
     top_showDepartInfor = function(inforid){
     	rosten.kernel.setHref(rosten.webPath + "/system/getContactDepartInfor?departId=" + inforid,inforid);
@@ -247,7 +249,7 @@ define(["dojo/_base/kernel"
     	showStartDownloadFile(userId,companyId);
     };
     showStartGtask = function(userId,companyId){
-    	rosten.read(rosten.webPath + "/start/getGtask", {userId:userId,companyId:companyId}, function(data) {
+    	rosten.readNoTime(rosten.webPath + "/start/getGtask", {userId:userId,companyId:companyId}, function(data) {
     		var titlePaneNode = registry.byId("home_gtask");
     		if(data.length>0){
     			titlePaneNode.changeTitleCount("(" + data.length + "条)");
@@ -321,7 +323,7 @@ define(["dojo/_base/kernel"
     	
     	if(gtaskId){
     		//关闭task任务
-    		rosten.read(rosten.webPath + "/start/closeGtask/" + gtaskId,{},function(data){
+    		rosten.readNoTime(rosten.webPath + "/start/closeGtask/" + gtaskId,{},function(data){
     			if(data.result=="true" || data.result == true){
     				showStartGtask(userid,companyId);
     			}
@@ -330,7 +332,7 @@ define(["dojo/_base/kernel"
     	
     };
     showStartMail = function(userId,companyId){
-    	rosten.read(rosten.webPath + "/mail/publishMail", {userId:userId,companyId:companyId}, function(data) {
+    	rosten.readNoTime(rosten.webPath + "/mail/publishMail", {userId:userId,companyId:companyId}, function(data) {
     		var titlePaneNode = registry.byId("home_personMail");
     		if(data.length>0){
     			titlePaneNode.changeTitleCount("(" + data.length + "条)");
@@ -412,7 +414,7 @@ define(["dojo/_base/kernel"
     	}
     };
     showStartDownloadFile = function(userId,companyId){
-        rosten.read(rosten.webPath + "/publicc/publishDownloadFile", {userId:userId,companyId:companyId}, function(_data) {
+        rosten.readNoTime(rosten.webPath + "/publicc/publishDownloadFile", {userId:userId,companyId:companyId}, function(_data) {
         	addUlInformation("home_download","openDownloadFile",_data);
         });
     };
@@ -423,7 +425,7 @@ define(["dojo/_base/kernel"
     };
     
     showStartBbs = function(userId,companyId){
-        rosten.read(rosten.webPath + "/bbs/publishBbs", {userId:userId,companyId:companyId}, function(_data) {
+        rosten.readNoTime(rosten.webPath + "/bbs/publishBbs", {userId:userId,companyId:companyId}, function(_data) {
         	addUlInformation("home_bbs","openBbs",_data);
         });
     };

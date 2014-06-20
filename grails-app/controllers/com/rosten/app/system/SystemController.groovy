@@ -23,7 +23,11 @@ class SystemController {
 			company:company,
 			parent:null
 		)
-		render(view:'/system/contact_left',model:[departsList:firstDepart.children])
+		def contactShowId
+		if(firstDepart.children && firstDepart.children.size()>0){
+			contactShowId = firstDepart.children[0].id
+		}
+		render(view:'/system/contact_left',model:[departsList:firstDepart.children,contactShowId:contactShowId])
 	}
 	def authorizeCancel ={
 		def json=[:]

@@ -241,44 +241,44 @@
 			<div data-dojo-type="dojox/layout/ContentPane" id="home_center"
 				data-dojo-props='region:"center",executeScripts:true,renderStyles:true,style:"padding:1px"'>
 				
-					<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"200px"}' >
+					<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"210px"}' >
 					
 						<div data-dojo-type="rosten/widget/TitlePane" id="home_gtask"
 							data-dojo-props='region:"left",title:"待办工作",toggleable:false,
-								height:"150px",width:"50%",style:{marginRight:"1px"},
+								height:"158px",width:"50%",style:{marginRight:"1px"},
 								_moreClick:more_gtask,moreText:"更多"'>
 						</div>
 							
 						<div data-dojo-type="rosten/widget/TitlePane" id="home_bbs"
 							data-dojo-props='region:"center",title:"最新公告",toggleable:false,
-								height:"150px",
+								height:"158px",
 								_moreClick:more_bbs,moreText:"更多"'>
 						</div>	
 						
 					</div>
 				
-					<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"200px"}' >
+					<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"210px"}' >
 						<div data-dojo-type="rosten/widget/TitlePane" style="margin-top:1px" id ="home_personMail"
 							data-dojo-props='region:"left",title:"新收邮件",toggleable:false,
-								height:"150px",width:"50%",style:{marginRight:"1px"},
+								height:"158px",width:"50%",style:{marginRight:"1px"},
 								_moreClick:more_mail,moreText:"更多"'>
 						</div>
 						<div data-dojo-type="rosten/widget/TitlePane"
 							data-dojo-props='region:"center",title:"工作日志",toggleable:false,
-								height:"150px",
+								height:"158px",
 								_moreClick:more_bbs,moreText:"更多"'>
 						</div>
 					</div>
 				 	
-				 	<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"200px"}' >
+				 	<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='gutters:false,style:{height:"210px"}' >
 						<div data-dojo-type="rosten/widget/TitlePane" style="margin-top:1px" id ="home_download"
 							data-dojo-props='region:"left",title:"下载专区",toggleable:false,showTitleCount:false,
-								height:"150px",width:"50%",style:{marginRight:"1px"},
+								height:"158px",width:"50%",style:{marginRight:"1px"},
 								_moreClick:more_downloadFile,moreText:"更多"'>
 						</div>
 						<div data-dojo-type="rosten/widget/TitlePane"
 							data-dojo-props='region:"center",title:"常用地址",toggleable:false,showTitleCount:false,
-								height:"150px",
+								height:"158px",
 								_moreClick:more_bbs,moreText:""'>
 						</div>
 					</div>
@@ -293,8 +293,8 @@
 				<div id="navigationContainer"
 					data-dojo-type="dijit/layout/AccordionContainer"
 					data-dojo-props='region:"center"'>
-					<div id="navigation" data-dojo-type="dijit/layout/ContentPane"
-						data-dojo-props='style:"padding:0px"'>
+					<div id="navigation" data-dojo-type="dojox/layout/ContentPane"
+						data-dojo-props='style:"padding:0px",executeScripts:true,renderStyles:true,'>
 						<!--
 						<div style="text-align: center; position: absolute; top: 30%; margin-left: 20px"
 							class="verticalAlign">
