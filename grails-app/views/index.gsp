@@ -9,22 +9,22 @@
 		font-size:11px;
 		color:#333333;
 		border-width: 1px;
-		border-color: #666666;
+		border-color: #b5bcc7;
 		border-collapse: collapse;
 	}
 	.personSearch table.tab_css th {
 		border-width: 1px;
 		padding: 4px;
 		border-style: solid;
-		border-color: #666666;
-		background-color: #cad9ea;
+		border-color: #b5bcc7;
+		/*background-color: #cad9ea;*/
 	}
 	.personSearch table.tab_css td{
 		border-width: 1px;
 		padding: 4px;
 		border-style: solid;
-		border-color: #666666;
-		background-color: #ffffff;
+		border-color: #b5bcc7;
+		/*background-color: #ffffff;*/
 	}
 	#home_bbs,#home_personMail,#home_gtask,#home_download{overflow:auto;}
 	#home_bbs ul,#home_personMail ul,#home_gtask ul,#home_download ul{list-style:none;padding:0px;overflow:hidden;margin:0px}
@@ -34,6 +34,10 @@
 		color:#404040!important;
 		float:left;
 		text-decoration:none;
+		max-width:65%;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		white-space:nowrap;
 	}
 	#home_bbs ul li .new{
 		background:url(images/rosten/share/icon_new.gif) no-repeat left 5px;
@@ -51,6 +55,10 @@
 		color:#404040!important;
 		float:left;
 		text-decoration:none;
+		max-width:65%;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		white-space:nowrap;
 	}
 	#home_bbs ul li .time,#home_personMail ul li .time,#home_gtask ul li .time,#home_download ul li .time{
 		float:right;
@@ -81,6 +89,10 @@
 		cursor:pointer;
 		display:inline;
 		text-decoration: none;
+		max-width:65%;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		white-space:nowrap;
 	}
 	#information ul li a:link,#information ul li a:active,#information ul li a:hover,#information ul li a:visited{
 		text-decoration: none;
@@ -285,7 +297,7 @@
 									          <td ><div <g:if test="${nowDay==4 }">class="week-today"</g:if>><h3>星期三</h3><span><g:formatDate format="dd" date="${firstDay+2 }" /></span></div></td>
 									          <td ><div <g:if test="${nowDay==5 }">class="week-today"</g:if>><h3>星期四</h3><span><g:formatDate format="dd" date="${firstDay+3 }" /></span></div></td>
 									          <td ><div <g:if test="${nowDay==6 }">class="week-today"</g:if>><h3>星期五</h3><span><g:formatDate format="dd" date="${firstDay+4 }" /></span></div></td>
-									          <td ><div <g:if test="${nowDay==0 }">class="week-today"</g:if>><h3>星期六</h3><span><g:formatDate format="dd" date="${firstDay+5 }" /></span></div></td>
+									          <td ><div <g:if test="${nowDay==7 }">class="week-today"</g:if>><h3>星期六</h3><span><g:formatDate format="dd" date="${firstDay+5 }" /></span></div></td>
 									          <td ><div <g:if test="${nowDay==1 }">class="week-today"</g:if>><h3>星期日</h3><span><g:formatDate format="dd" date="${firstDay+6 }" /></span></div></td>
 									        </tr>
 									      </tbody></table>
@@ -306,7 +318,7 @@
 								height:"157px",
 								_moreClick:more_bbs,moreText:""'>
 								
-								<div style="text-align:center">
+								<div style="text-align:center;margin-bottom:6px">
 			                      <span>关键字：</span>
 			                      <input id="personSearchInput" data-dojo-type="dijit/form/ValidationTextBox" 
 			                      	data-dojo-props='style:{width:"200px",marginLeft:"1px"},placeHolder:"姓名/电话/邮箱"'/>
