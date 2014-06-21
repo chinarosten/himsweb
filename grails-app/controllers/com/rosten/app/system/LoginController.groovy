@@ -189,7 +189,6 @@ class LoginController {
 			//首页工作计划日历展示
 			Calendar calendar = Calendar.getInstance()
 			model["nowDay"] = calendar.get(Calendar.DAY_OF_WEEK)
-			
 			calendar.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY)
 			
 			model["firstDay"] = calendar.getTime()

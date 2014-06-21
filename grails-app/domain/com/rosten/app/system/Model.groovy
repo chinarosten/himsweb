@@ -23,10 +23,11 @@ class Model {
 	String description
 	
 	//显示顺序
+	@GridColumn(name="显示顺序",colIdx=3)
 	Integer serialNo
 	
 	//模块关联流程
-	@GridColumn(name="关联流程",colIdx=3)
+	@GridColumn(name="关联流程",colIdx=4)
 	String relationFlow
 	
 	//创建日期

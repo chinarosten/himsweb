@@ -2015,12 +2015,62 @@ class SystemController {
 				user.emailConfig = new EmailConfig()
 			}
 			user.emailConfig.user = user
-			user.emailConfig.smtp = params.smtp
-			user.emailConfig.port = params.port.toInteger()
-			user.emailConfig.popName = params.popName
-			user.emailConfig.popPort = params.popPort
 			user.emailConfig.loginName = params.loginName
 			user.emailConfig.loginPassword = params.loginPassword
+			
+			//根据用户的登录名，自动匹配smt与pop
+			def _smtp,_smtpPort,_popName,_popPort
+			def _serverName = Util.strLeft(Util.strRight(params.loginName, "@"),".")
+			switch(_serverName){
+				case "qq":
+					_smtp = "smtp.qq.com"
+					_smtpPort = "465"
+					_popName = "pop.qq.com"
+					_popPort = "995"
+					break
+				case "163":
+					_smtp = "smtp.163.com"
+					_smtpPort = "465"
+					_popName = "pop.163.com"
+					_popPort = "995"
+					break
+				case "126":
+					_smtp = "smtp.126.com"
+					_smtpPort = "25"
+					_popName = "pop.126.com"
+					_popPort = "110"
+					break
+				case "gmail":
+					_smtp = "smtp.gmail.com"
+					_smtpPort = "465"
+					_popName = "pop.gmail.com"
+					_popPort = "995"
+					break
+				case "hotmail":
+					_smtp = "smtp.hotmail.com"
+					_smtpPort = "25"
+					_popName = "pop.hotmail.com"
+					_popPort = "995"
+					break
+				case "live":
+					_smtp = "smtp.live.com"
+					_smtpPort = "587"
+					_popName = "pop.live.com"
+					_popPort = "995"
+					break
+				default:
+					_smtp = "smtp." + _serverName + ".com"
+					_smtpPort = "465"
+					_popName = "pop。" + _serverName + ".com"
+					_popPort = "995"
+					break
+			}
+			
+			user.emailConfig.smtp = _smtp
+			user.emailConfig.port = _smtpPort.toInteger()
+			user.emailConfig.popName = _popName
+			user.emailConfig.popPort = _popPort
+			
 			user.emailConfig.save()
 		}
 		

@@ -122,18 +122,22 @@ define(["dojo/_base/kernel",
         });
     };
     receive_mailFromWeb = function(){
-    	var userid = rosten.kernel.getUserInforByKey("idnumber");
-        var companyId = rosten.kernel.getUserInforByKey("companyid");
-    	rosten.readSyncNoTime(rosten.webPath + "/mail/receiveMail", {userId:userid,companyId:companyId}, function(data){
-    		if (data.result == "true" || data.result == true) {
-                rosten.alert("收信成功!");
-                mail_grid.refresh();
-            }else if(data.result="noTurnOn"){
-            	rosten.alert("您尚未开通外网邮箱!");
-            }else {
-                rosten.alert("收信失败!");
-            }
-    	});
+        rosten.alert("接收外网邮件将花费一段时间按，请耐心等待...").queryDlgClose = function(){
+            var userid = rosten.kernel.getUserInforByKey("idnumber");
+            var companyId = rosten.kernel.getUserInforByKey("companyid");
+            showSendBar();
+            rosten.readNoTime(rosten.webPath + "/mail/receiveMail", {userId:userid,companyId:companyId}, function(data){
+                stopSendBar();
+                if (data.result == "true" || data.result == true) {
+                    rosten.alert("收信成功!");
+                    mail_grid.refresh();
+                }else if(data.result=="noTurnOn"){
+                    rosten.alert("您尚未开通外网邮箱!");
+                }else {
+                    rosten.alert("收信失败!");
+                }
+            });
+        };
     };
     write_mail =function(){
         var randomUuid = RandomUuid();

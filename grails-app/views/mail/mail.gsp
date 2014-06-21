@@ -123,6 +123,11 @@
     </script>
 </head>
 <body>
+	<div data-dojo-type="dijit/Dialog" id="sendDialog" title="邮件处理">
+		<div id="sendMailBar" style="text-align:center">
+			<div  id="fakeSend" data-dojo-type="dijit/ProgressBar" style="height:15px; width:175px;" indeterminate="true" ></div>
+		</div>
+	</div>	
 	<div data-dojo-type="dojo/data/ItemFileWriteStore" data-dojo-id="contactStore" url="${createLink(controller:'mail',action:'contactData')}"></div>
 	
 	<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props='style:"padding:0px"'>>
@@ -297,11 +302,7 @@
 			</div>
 		</div>
 	</div>
-	<div data-dojo-type="dijit/Dialog" id="sendDialog" title="邮件处理">
-		<div id="sendMailBar" style="text-align:center">
-			<div  id="fakeSend" data-dojo-type="dijit/ProgressBar" style="height:15px; width:175px;" indeterminate="true" ></div>
-		</div>
-	</div>		
+		
 	<div data-dojo-type="dijit/Declaration" widgetClass="mail.showMessage">
 		<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-attach-point="container" title="Composing..." closeable="true" style="padding:1px">
 			<div data-dojo-type="dijit/layout/ContentPane" region="top" data-dojo-props='style:"padding:0px;height:140px"'>

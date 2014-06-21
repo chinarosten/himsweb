@@ -9,15 +9,17 @@
 				"dijit/registry",
 				"dojo/dom-style",
 				"dojo/dom",
+				"dojox/validate/web",
 				"dijit/form/SimpleTextarea",
 		 		"dijit/form/ValidationTextBox",
 		 		"dijit/form/RadioButton",
 		 		"rosten/widget/ActionBar"
-		     	],function(registry,domStyle,dom){
+		     	],function(registry,domStyle,dom,validate){
 	     	
 			userSimple_save = function(){
 				var isOnMail = registry.byId("isOnMail1").attr("value");
 				if(isOnMail=="true" || isOnMail==true){
+					/*
 					var smtp = registry.byId("smtp");
 					if(!smtp.isValid()){
 						rosten.alert("smtp名称不正确！").queryDlgClose = function(){
@@ -45,9 +47,9 @@
 							popPort.focus();
 						};
 						return;
-					}
+					}*/
 					var loginName = registry.byId("loginName");
-					if(!loginName.isValid()){
+					if(!validate.isEmailAddress(loginName.attr("value"))){
 						rosten.alert("登录名不正确！").queryDlgClose = function(){
 							loginName.focus();
 						};
@@ -206,7 +208,7 @@
 	<fieldset class="fieldset-form" id="isOnMailDiv" <g:if test="${!user?.isOnMail }">style="display:none"</g:if>>
 		<legend class="tableHeader">绑定的外网邮箱</legend>
 		<table border="0" align="left" style="margin:0 auto;width:740px">
-			
+			<!-- 系统根据用户绑定的用户名自动匹配
 			<tr>
 			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>smtp名称：</div></td>
 			    <td width="240">
@@ -239,16 +241,19 @@
 	                '/>
 	           </td>
 			</tr>
+			 -->
 			<tr>
-			    <td><div align="right"><span style="color:red">*&nbsp;</span>登录名：</div></td>
-			    <td>
+			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>登录名：</div></td>
+			    <td width="240">
 	                <input id="loginName" data-dojo-type="dijit/form/ValidationTextBox" 
 	                 	data-dojo-props='name:"loginName",trim:true,"class":"input",required:true,
-							value:"${emailConfig?emailConfig.loginName:user?.email}"
+							value:"${emailConfig?emailConfig.loginName:user?.email}",
+							invalidMessage:"登录名地址是非法的(格式为:example@126.com)",
+							missingMessage:"登录名格式为:example@126.com"
 	                '/>
 			    </td>
-			    <td><div align="right"><span style="color:red">*&nbsp;</span>密码：</div></td>
-			    <td>
+			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>密码：</div></td>
+			    <td width="240">
 			    	<input id="loginPassword" data-dojo-type="dijit/form/ValidationTextBox" 
 	                   	data-dojo-props='name:"loginPassword",
 	                   		"class":"input",
