@@ -216,7 +216,10 @@ class SystemService {
 	def getAllModel={offset,max,company->
 		def c = Model.createCriteria()
 		def pa=[max:max,offset:offset]
-		def query = { eq("company",company) }
+		def query = { 
+			eq("company",company) 
+			order("serialNo", "asc")
+		}
 		return c.list(pa,query)
 	}
 	def getModelCount={company->
