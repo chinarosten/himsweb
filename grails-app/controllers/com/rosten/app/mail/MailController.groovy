@@ -512,7 +512,7 @@ class MailController {
 		
 		//获取当前单位人员信息
 		User.findAllByCompany(user.company).each{
-			if(!it.equals(user)){
+			if(!it.equals(user) && !it.sysFlag){
 				def _data = ["id":it.id,"name":it.getFormattedName(),email:it.username,phone:it.telephone,type:"user",,first:gb2Alpha.String2Alpha(it.getFormattedName())]
 				json.items << _data
 			}
