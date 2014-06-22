@@ -27,21 +27,36 @@ class MeetingActionController {
 			def meeting = Meeting.get(params.id)
 			if(user.equals(meeting.currentUser)){
 				//当前处理人
-				switch (meeting.status){
-					case "拟稿":
+				switch (true){
+					case meeting.status.contains("拟稿"):
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
 						break;
-					case "审核":
+					case meeting.status.contains("审核") || sendFile.status.contains("审批"):
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
-						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
-						actionList << createAction("同意",webPath +imgPath + "ok.png",strname + "_agrain")
-						actionList << createAction("不同意",webPath +imgPath + "back.png",strname + "_notAgrain")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png",strname + "_addComment")
+						actionList << createAction("同意",webPath +imgPath + "ok.png",strname + "_submit")
+						actionList << createAction("不同意",webPath +imgPath + "back.png",strname + "_submit")
 						break;
-					case "已签发":
+					case meeting.status.contains("已签发"):
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname +"_add")
-						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png",strname + "_addComment")
+						actionList << createAction("分发",webPath +imgPath + "send.png",strname + "_send")
+						actionList << createAction("提交归档",webPath +imgPath + "gd.png",strname +"_submit")
+						break;
+					case meeting.status.contains("归档"):
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname +"_add")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png",strname + "_addComment")
 						actionList << createAction("归档",webPath +imgPath + "gd.png",strname +"_achive")
+						break;
+					case meeting.status.contains("已归档"):
+//						if("admin".equals(user.getUserType())){
+//							actionList << createAction("重新分发",webPath +imgPath + "send.png",strname + "_send")
+//						}
+						break;
+					default :
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
+						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
 						break;
 				}
 			}

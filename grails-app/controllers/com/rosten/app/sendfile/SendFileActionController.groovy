@@ -58,6 +58,7 @@ class SendFileActionController {
 	def sendFileForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList =[]
+		def strname = "sendfile"
 		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userid)
@@ -65,34 +66,44 @@ class SendFileActionController {
 			def sendFile = SendFile.get(params.id)
 			if(user.equals(sendFile.currentUser)){
 				//当前处理人
-				switch (sendFile.status){
-					case "拟稿":
-						actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
+				switch (true){
+					case sendFile.status.contains("拟稿"):
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 						actionList << createAction("创建正文",webPath +imgPath + "word_new.png","sendFile_addWord")
-						actionList << createAction("提交",webPath +imgPath + "submit.png","sendfile_submit")
+						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
 						break;
-					case "审核":
-						actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
-						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
-						actionList << createAction("签发",webPath +imgPath + "ok.png","sendfile_agrain")
-						actionList << createAction("不同意",webPath +imgPath + "back.png","sendfile_notAgrain")
+					case sendFile.status.contains("审核") || sendFile.status.contains("审批"):
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png",strname + "_addComment")
+						actionList << createAction("同意",webPath +imgPath + "ok.png",strname + "_submit")
+						actionList << createAction("不同意",webPath +imgPath + "back.png",strname + "_submit")
 						break;
-					case "已签发":
-						actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
-						actionList << createAction("填写意见",webPath +imgPath + "sign.png","addComment")
-						actionList << createAction("分发",webPath +imgPath + "send.png","sendfile_send")
-						actionList << createAction("归档",webPath +imgPath + "gd.png","sendfile_achive")
+					case sendFile.status.contains("已签发"):
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname +"_add")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png",strname + "_addComment")
+						actionList << createAction("分发",webPath +imgPath + "send.png",strname + "_send")
+						actionList << createAction("提交归档",webPath +imgPath + "gd.png",strname +"_submit")
 						break;
-					case "已归档":
+					case sendFile.status.contains("归档"):
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname +"_add")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png",strname + "_addComment")
+						actionList << createAction("归档",webPath +imgPath + "gd.png",strname +"_achive")
+						break;
+					case sendFile.status.contains("已归档"):
 						if("admin".equals(user.getUserType())){
-							actionList << createAction("重新分发",webPath +imgPath + "send.png","sendfile_send")
+							actionList << createAction("重新分发",webPath +imgPath + "send.png",strname + "_send")
 						}
 						break;
+					default :
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
+						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
+						break;
 				}
+				
 			}
 		}else{
 			//新建
-			actionList << createAction("保存",webPath +imgPath + "Save.gif","sendfile_add")
+			actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 		}
 		
 		render actionList as JSON

@@ -9,11 +9,77 @@ import com.rosten.app.system.Company
 import com.rosten.app.system.User
 import com.rosten.app.gtask.Gtask
 
+import com.rosten.app.system.Model
+import com.rosten.app.system.SystemService
+import com.rosten.app.system.Authorize
+
+import com.rosten.app.workflow.WorkFlowService
+import org.activiti.engine.runtime.ProcessInstance
+import org.activiti.engine.runtime.ProcessInstanceQuery
+import org.activiti.engine.task.Task
+import org.activiti.engine.task.TaskQuery
+
 class MeetingController {
 	def springSecurityService
 	def meetingService
 	def startService
+	def workFlowService
+	def taskService
+	def systemService
 	
+	def flowActiveExport ={
+		def meeting = Meeting.get(params.id)
+		InputStream imageStream = workFlowService.getflowActiveStream(meeting.processDefinitionId,meeting.taskId)
+		
+		byte[] b = new byte[1024];
+		int len = -1;
+		while ((len = imageStream.read(b, 0, 1024)) != -1) {
+		  response.outputStream.write(b, 0, len);
+		}
+		response.outputStream.flush()
+		response.outputStream.close()
+		
+	}
+	def getDealWithUser ={
+		def currentUser = springSecurityService.getCurrentUser()
+		
+		def meeting = Meeting.get(params.id)
+		def meetingDefEntity = workFlowService.getNextTaskDefinition(meeting.taskId);
+		
+		def expEntity = meetingDefEntity.getAssigneeExpression()
+		if(expEntity){
+			def expEntityText = expEntity.getExpressionText()
+			if(expEntityText.contains("{")){
+				params.user = meeting.drafter.username
+			}else{
+				params.user = expEntity.getExpressionText()
+			}
+			
+			redirect controller: "system",action:'userTreeDataStore', params: params
+			return
+		}
+		
+		def groupEntity = meetingDefEntity.getCandidateGroupIdExpressions()
+		if(groupEntity.size()>0){
+			//默认有一组group的方式为true，则整组均为true;true:严格控制本部门权限
+			def groupIds = []
+			def limit = false
+			groupEntity.each{
+				groupIds << Util.strLeft(it.getExpressionText(), ":")
+				if(!limit && "true".equals(Util.strRight(it.getExpressionText(), ":"))){
+					limit = true
+				}
+			}
+			params.groupIds = groupIds.unique().join("-")
+			if(limit){
+				params.limitDepart = currentUser.getDepartEntityTrueName()
+			}
+			
+			redirect controller: "system",action:'userTreeDataStore', params: params
+			return
+		}
+		
+	}
 	def meetingFlowDeal = {
 		def json=[:]
 		def meeting = Meeting.get(params.id)
@@ -269,6 +335,9 @@ class MeetingController {
 		if(meeting){
 			def logs = MeetingLog.findAllByMeeting(meeting,[ sort: "createDate", order: "asc"])
 			model["log"] = logs
+			
+			model["logEntityId"] = params.id
+			model["logEntityName"] = "meeting"
 		}
 		
 		render(view:'/share/flowLog',model:model)
@@ -294,7 +363,15 @@ class MeetingController {
 		render json as JSON
 	}
 	def meetingAdd ={
-		redirect(action:"meetingShow",params:params)
+		//判断是否关联流程引擎
+		def company = Company.get(params.companyId)
+		def model = Model.findByModelCodeAndCompany("meeting",company)
+		if(model.relationFlow && !"".equals(model.relationFlow)){
+			redirect(action:"meetingShow",params:params)
+		}else{
+			//不存在流程引擎关联数据
+			render '<h2 style="color:red;width:660px;margin:0 auto;margin-top:60px">当前模块不存在流程设置，无法创建，请联系管理员！</h2>'
+		}
 	}
 	def meetingSave = {
 		def json=[:]

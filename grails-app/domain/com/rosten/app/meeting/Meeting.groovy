@@ -131,6 +131,15 @@ class Meeting {
 		}
 	}
 	
+	//流程定义id
+	String processDefinitionId
+	
+	//流程id
+	String processInstanceId
+	
+	//任务id
+	String taskId
+	
 	static belongsTo = [company:Company]
 	
 	static transients = [
@@ -149,6 +158,10 @@ class Meeting {
 		description nullable:true,blank:true
 		currentUser nullable:true,blank:true
 		currentDepart nullable:true,blank:true
+		
+		processInstanceId nullable:true,blank:true
+		taskId nullable:true,blank:true
+		processDefinitionId nullable:true,blank:true
     }
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']

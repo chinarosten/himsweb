@@ -106,7 +106,12 @@
 								}
 								//刷新待办事项
 								window.opener.showStartGtask("${user?.id}","${company?.id }");
-								rosten.pagequit();
+
+								if(data.refresh=="true" || data.refresh==true){
+									window.location.reload();
+								}else{
+									rosten.pagequit();
+								}
 							}
 						}else{
 							rosten.alert("失败!");
@@ -114,15 +119,25 @@
 					});
 				};
 				sendfile_submit = function(){
-		            var rostenShowDialog = rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","single");
+					var rostenShowDialog = rosten.selectFlowUser("${createLink(controller:'sendFile',action:'getDealWithUser',params:[companyId:company?.id,id:sendFile?.id])}","single");
 		            rostenShowDialog.callback = function(data) {
 		            	var _data = [];
 		            	for (var k = 0; k < data.length; k++) {
 		            		var item = data[k];
-		            		_data.push(item.value + ":" + item.departName);
+		            		_data.push(item.value + ":" + item.departId);
 		            	};
 		            	sendfile_deal("submit",_data);	
-		            }  
+		            }
+					rostenShowDialog.afterLoad = function(){
+						var _data = rostenShowDialog.getData();
+			            if(_data && _data.length==1){
+				            //直接调用
+			            	rostenShowDialog.doAction();
+				        }else{
+							//显示对话框
+							rostenShowDialog.open();
+					    }
+					}   
 				};
 				sendfile_achive = function(){
 					var isSend = registry.byId("isSend").attr("value");
@@ -153,14 +168,6 @@
 		            	};
 		            	sendfile_deal("send",_data);	
 		            }  
-				};
-				sendfile_agrain = function(){
-					var _data = [];
-					_data.push("${sendFile?.drafter?.id + ":" + sendFile?.drafterDepart}");
-					sendfile_deal("agrain",_data);
-				};
-				sendfile_notAgrain = function(){
-					sendfile_deal("notAgrain");
 				};
 				sendFile_addWord = function(){
 					if(kernel.isIE){
