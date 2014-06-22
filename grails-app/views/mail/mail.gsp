@@ -290,6 +290,9 @@
 							mail_addDepart(item,store_${'\${departid}'});
 						}
 					</script>
+				</div>
+				<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props='title:"用户群组"'>
+					
 				</div>	
 			</div>
 			<div data-dojo-type="dijit/layout/ContentPane" region="bottom" style="height:30px" align="center">
