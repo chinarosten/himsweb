@@ -6,6 +6,7 @@ import com.rosten.app.annotation.GridColumn
 import com.rosten.app.system.Company
 import com.rosten.app.system.User
 import com.rosten.app.system.Attachment
+
 import java.text.SimpleDateFormat
 
 class Bbs {
@@ -138,7 +139,16 @@ class Bbs {
 	
 	//已阅读人员,读者
 	static hasMany=[hasReaders:User,readers:User]
-
+	
+	//流程定义id
+	String processDefinitionId
+	
+	//流程id
+	String processInstanceId
+	
+	//任务id
+	String taskId
+	
 	static belongsTo = [company:Company]
 
 	static transients = [
@@ -163,6 +173,10 @@ class Bbs {
 		content nullable:true,blank:true
 		attachment nullable:true,blank:true
 		defaultReaders nullable:true,blank:true
+		
+		processInstanceId nullable:true,blank:true
+		taskId nullable:true,blank:true
+		processDefinitionId nullable:true,blank:true
 	}
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']

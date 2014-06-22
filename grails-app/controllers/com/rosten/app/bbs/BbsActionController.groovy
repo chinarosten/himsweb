@@ -10,6 +10,7 @@ class BbsActionController {
 	def bbsForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
+		def strname = "bbs"
 		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userid)
@@ -17,14 +18,34 @@ class BbsActionController {
 			def bbs = Bbs.get(params.id)
 			if(user.equals(bbs.currentUser)){
 				//当前处理人
-				if("起草".equals(bbs.status)){
-					actionList << createAction("保存",webPath + imgPath + "Save.gif","bbs_add")
-					actionList << createAction("提交",webPath + imgPath + "submit.png","bbs_submit")
-				}else if("待发布".equals(bbs.status)){
-					actionList << createAction("填写意见",webPath + imgPath + "sign.png","bbs_addComment")
-					actionList << createAction("发布",webPath + imgPath + "ok.png","bbs_agrain")
-					actionList << createAction("不同意",webPath + imgPath + "back.png","bbs_notAgrain")
+				switch (true){
+					case bbs.status.contains("起草"):
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
+						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
+						break;
+					case bbs.status.contains("审核") || bbs.status.contains("审批"):
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png",strname + "_addComment")
+						actionList << createAction("同意",webPath +imgPath + "ok.png",strname + "_submit")
+						actionList << createAction("不同意",webPath +imgPath + "back.png",strname + "_submit")
+						break;
+					case bbs.status.contains("已发布"):
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname +"_add")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png",strname + "_addComment")
+						actionList << createAction("提交归档",webPath +imgPath + "gd.png",strname +"_submit")
+						break;
+					case bbs.status.contains("归档"):
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname +"_add")
+						actionList << createAction("填写意见",webPath +imgPath + "sign.png",strname + "_addComment")
+						actionList << createAction("归档",webPath +imgPath + "gd.png",strname +"_submit")
+						break;
+					default :
+						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
+						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
+						break;
+						
 				}
+				
 			}
 		}else{
 			//新建公告

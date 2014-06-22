@@ -183,9 +183,13 @@ define(["dojo/_base/declare",
                 error: lang.hitch(this, function(response, ioArgs){
 					this._closeLoading();
 					_kernel.errordeal(this.containerNode,"\u65e0\u6cd5\u521d\u59cb\u5316\u8868\u683c\u5185\u5bb9\u6570\u636e...");//无法初始化数据
+					this.onDownloadError(response);
                 })
             };
             xhr.post(args);
+        },
+        onDownloadError:function(error){
+            
         },
 		_parseData: function(response){
             if (response.gridHeader) 

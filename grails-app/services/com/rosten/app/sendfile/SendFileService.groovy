@@ -3,7 +3,14 @@ package com.rosten.app.sendfile
 import com.rosten.app.util.GridUtil
 
 class SendFileService {
-	
+	//增加流程日志
+	def addFlowLog ={ entity,currentUser,content ->
+		def logEntity = new SendFileLog()
+		logEntity.user = currentUser
+		logEntity.sendFile = entity
+		logEntity.content = content
+		logEntity.save(flush:true)
+	}
 	def getSendFileCountByUser ={company,user->
 		def c = SendFile.createCriteria()
 		def query = {

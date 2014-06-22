@@ -159,6 +159,9 @@ define(["dojo/_base/kernel"
 		rosten.kernel = new rostenKernel(naviJson);
 		rosten.kernel.addUserInfo(data);
 		
+		//增加页面失效控制
+		rosten.kernel.onDownloadError(refreshSystem);
+		
 		//获取首页显示信息
 		var userId = data["idnumber"];
 		var companyId = data["companyid"];

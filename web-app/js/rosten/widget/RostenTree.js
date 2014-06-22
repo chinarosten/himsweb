@@ -88,11 +88,17 @@ define(["dojo/_base/declare",
                     }
                     
                 }),
-                error: function(response, ioArgs){
-                    console.log("error:" + response);
-                    console.dir(response);
-                }
+                error:lang.hitch(this, function(data){
+                    this.onDownloadError(data);
+                })
+                // error: function(response, ioArgs){
+                    // console.log("error:" + response);
+                    // console.dir(response);
+                // }
             });
+        },
+        onDownloadError:function(error){
+            
         },
         onclick:function(item,node){
             var action = this.store.getValue(item,"action");

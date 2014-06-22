@@ -42,12 +42,16 @@ define(["dojo/_base/declare",
                 load: lang.hitch(this, function(data){	
                     this._setData(data);
                 }),
-                error: function(data){
+                error: lang.hitch(this, function(data){
                     console.log("get Navigation data is error: ", data);
-                }
+                    this.onDownloadError(data);
+                })
             };
 			if(this.urlArgs!=null) args.content = this.urlArgs;
             xhr.post(args);
+        },
+        onDownloadError:function(error){
+            
         },
 		_setData: function(/*JSON*/data){
         	console.log("navigation set data start");

@@ -56,9 +56,13 @@ define(["dojo/_base/declare",
                 error : lang.hitch(this, function(data) {
                     console.log("ActionBar error occurred: ", data);
                     _kernel.errordeal(this.containerNode, "无法初始化操作条数据...");
+                    this.onDownloadError(data);
                 })
             };
             xhr.get(args);
+        },
+        onDownloadError:function(data){
+            
         },
         _setListData : function(data) {
 

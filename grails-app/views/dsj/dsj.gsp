@@ -194,7 +194,7 @@
 					    <td width="250">
 					    	<input id="time" data-dojo-type="dijit/form/DateTextBox" 
 			                	data-dojo-props='name:"time",${fieldAcl.isReadOnly("time")},
-			                	trim:true,required:true,
+			                	trim:true,required:true,missingMessage:"请正确填写日期！",invalidMessage:"请正确填写日期！",
 			                	value:"${dsj?.getShowTimeDate()}"
 			               '/>
 			           </td>
@@ -224,7 +224,7 @@
 					    	<textarea id="subject" data-dojo-type="dijit/form/SimpleTextarea" 
     							data-dojo-props='name:"subject","class":"input",maxLength:"250",
                                 		style:{width:"550px"},
-                                		trim:true
+                                		trim:true,missingMessage:"请正确填写大事记条目！",invalidMessage:"请正确填写大事记条目！",
                            '>
     						</textarea>
 					    </td>

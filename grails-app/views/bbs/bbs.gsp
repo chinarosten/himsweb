@@ -61,7 +61,7 @@
 				}
 				var category = registry.byId("category");
 				if(!category.isValid()){
-					rosten.alert("类型不正确！").queryDlgClose = function(){
+					rosten.alert("类别不正确！").queryDlgClose = function(){
 						category.focus();
 					};
 					return;
@@ -148,7 +148,11 @@
 							//刷新待办事项内容
 							window.opener.showStartGtask("${user?.id}","${company?.id }");
 							
-							rosten.pagequit();
+							if(data.refresh=="true" || data.refresh==true){
+								window.location.reload();
+							}else{
+								rosten.pagequit();
+							}
 						}
 					}else{
 						rosten.alert("失败!");
@@ -156,7 +160,7 @@
 				});
 			};
 			bbs_submit = function(){
-				var rostenShowDialog = rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","single");
+				var rostenShowDialog = rosten.selectFlowUser("${createLink(controller:'bbs',action:'getDealWithUser',params:[companyId:company?.id,id:bbs?.id])}","single");
 	            rostenShowDialog.callback = function(data) {
 	            	var _data = [];
 	            	for (var k = 0; k < data.length; k++) {
@@ -164,13 +168,17 @@
 	            		_data.push(item.value + ":" + item.departId);
 	            	};
 	            	bbs_deal("submit",_data);	
-	            }    
-			};
-			bbs_agrain = function(){
-				bbs_deal("agrain");
-			};
-			bbs_notAgrain = function(){
-				bbs_deal("notAgrain");
+	            }
+				rostenShowDialog.afterLoad = function(){
+					var _data = rostenShowDialog.getData();
+		            if(_data && _data.length==1){
+			            //直接调用
+		            	rostenShowDialog.doAction();
+			        }else{
+						//显示对话框
+						rostenShowDialog.open();
+				    }
+				}   
 			};
 			bbs_addComment = function(){
 				var bbsId = registry.byId("id").get("value");
@@ -219,8 +227,7 @@
 						    <td width="250">
 						    	<select id="category" data-dojo-type="dijit/form/FilteringSelect" 
 					                data-dojo-props='name:"category",${fieldAcl.isReadOnly("category")},
-					                trim:true,
-				                 	required:true,
+					                trim:true,required:true,missingMessage:"请选择类别！",invalidMessage:"请选择类别！",
 					      			value:"${bbs?.category}"
 					            '>
 								<option value="公告">公告</option>
@@ -235,8 +242,7 @@
 				            <td>
 				            	<select id="level" data-dojo-type="dijit/form/FilteringSelect"
 					                data-dojo-props='name:"level",${fieldAcl.isReadOnly("level")},
-					               	trim:true,
-				                 	required:true,
+					               	trim:true,required:true,missingMessage:"请选择紧急程度！",invalidMessage:"请选择紧急程度！",
 					      			value:"${bbs?.level}"
 					            '>
 									<option value="普通">普通</option>
@@ -248,8 +254,7 @@
 						    <td>
 						    	<input id="publishDate" data-dojo-type="dijit/form/DateTextBox" 
 				                	data-dojo-props='name:"publishDate",${fieldAcl.isReadOnly("publishDate")},
-				                	trim:true,
-				                 	required:true,
+				                	trim:true,required:true,missingMessage:"请正确填写发布时间！",invalidMessage:"请正确填写发布时间！",
 				                	value:"${bbs?.getFormattedPublishDate("date")}"
 				               '/>
 						    
@@ -261,8 +266,7 @@
 						    <td colspan=3>
 						    	<input id="topic" data-dojo-type="dijit/form/ValidationTextBox" 
 				                 	data-dojo-props='name:"topic",${fieldAcl.isReadOnly("topic")},
-				                 		trim:true,
-				                 		required:true,
+				                 		trim:true,required:true,missingMessage:"请正确填写标题！",invalidMessage:"请正确填写标题！",
 				                 		style:{width:"490px"},
 										value:"${bbs?.topic}"
 				                '/>

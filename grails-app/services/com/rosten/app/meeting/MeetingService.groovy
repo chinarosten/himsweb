@@ -3,7 +3,14 @@ package com.rosten.app.meeting
 import com.rosten.app.util.GridUtil
 
 class MeetingService {
-	
+	//增加流程日志
+	def addFlowLog ={ entity,currentUser,content ->
+		def logEntity = new MeetingLog()
+		logEntity.user = currentUser
+		logEntity.meeting = entity
+		logEntity.content = content
+		logEntity.save(flush:true)
+	}
 	def getMeetingListDataStoreByUser ={params->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15
