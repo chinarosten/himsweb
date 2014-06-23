@@ -16,6 +16,22 @@ import com.rosten.app.mail.EmailBox
 class MailController {
 	def springSecurityService
 	
+	def deleteAttach ={
+		def json=[:]
+		try{
+			def attach = Attachment.get(params.fileId)
+			if(attach){
+				attach.delete(flush: true)
+				//获取真实文件路径并删除
+				def filepath = new File(attach.url, attach.realName)
+				filepath.delete()
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
+	}
 	def receiveMail = {
 		def json=[:]
 		def user = User.get(params.userId)

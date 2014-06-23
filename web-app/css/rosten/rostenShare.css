@@ -386,3 +386,17 @@ left:-10px;margin-left:20px }
 a.jh-next-w { background:url(../../images/rosten/share/date_down.gif); color:#2c6899; width:33px; height:21px; display:inline-block; position:relative; top:5px; *top:3px;
 left:10px; }
 a.jh-today { background:url(../../images/rosten/share/tab_btn01.gif); width:66px; height:19px; _height:21px; line-height:19px; color:#2c6899; position:absolute; top:3px; left:0px; border:1px solid #a4c9de; }
+
+/* 上传附件样式 */
+.rosten .attachFile ul { margin-left:-45px;margin-top:-15px}
+.rosten .attachFile ul li { float:left; margin-top:5px; height:40px; margin-left:7px; display:inline; background-color:#E3EAF4; position:relative; z-index:95; }
+.rosten .attachFile ul li a { width:100%; height:100%; display:block; cursor:pointer; text-decoration:none; margin-right:30px;margin-top:15px}
+.rosten .attachFile ul li a:hover { text-decoration:none; }
+.rosten .attachFile ul li .xtclose { position:absolute; top:5px; right:6px; width:15px; height:15px; display:block; background:url(../../images/rosten/share/ico_blue.gif) no-repeat left -1029px; cursor:pointer}
+.rosten .attachFile ul li p {text-align:left; }
+.rosten .attachFile ul li .xtname{ color:#155FBE; padding:0; width:100%; display:inline-block; }
+
+
+
+
+

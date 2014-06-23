@@ -195,7 +195,7 @@ define(["dojo/_base/kernel",
         //增加对附件的添加功能
         if(messageNode.attachFile.hasChildNodes()){
         	content.files = "";
-        	var fileNodes = messageNode.attachFile.childNodes;
+        	var fileNodes = messageNode.attachFile.getElementsByTagName("a");
         	for(var i = 0; i < fileNodes.length; i ++){
         		if(content.files==""){
         			content.files = fileNodes[i].getAttribute("dealId");
@@ -265,7 +265,8 @@ define(["dojo/_base/kernel",
     		subject = messageNode.subject.innerHTML,
     		sent = messageNode.sent.innerHTML,
     		// content = messageNode.content.innerHTML,
-    		files = messageNode.fileNode.innerHTML;
+//    		files = messageNode.fileNode.innerHTML;
+    		files = messageNode.fileNodeStr.innerHTML;
     	
     	//新增内容
     	var randomUuid = RandomUuid();
@@ -288,7 +289,8 @@ define(["dojo/_base/kernel",
         });
     	
     	_Message.to.attr("value",sender);
-    	_Message.attachFile.innerHTML = files;
+//    	_Message.attachFile.innerHTML = files;
+    	_attachFileDeal(_Message.attachFile,files,true);
     	
     	_Message.subject.attr("value","回复：" + subject);
     	var addContent = "<hr noshade size=\"1\">在" + sent + ", \" " + sender + " \"写道：<br>" ;
@@ -314,7 +316,8 @@ define(["dojo/_base/kernel",
     		subject = messageNode.subject.innerHTML,
     		sent = messageNode.sent.innerHTML,
     		// content = messageNode.content.innerHTML,
-    		files = messageNode.fileNode.innerHTML;
+//    		files = messageNode.fileNode.innerHTML;
+    		files = messageNode.fileNodeStr.innerHTML;
     	
     	//新增内容
     	var randomUuid = RandomUuid();
@@ -337,7 +340,8 @@ define(["dojo/_base/kernel",
         });
     	
     	_Message.subject.attr("value","转发：" + subject);
-    	_Message.attachFile.innerHTML = files;
+//    	_Message.attachFile.innerHTML = files;
+    	_attachFileDeal(_Message.attachFile,files,true);
     	
     	var addContent = "<hr noshade size=\"1\">在" + sent + ", \" " + sender + " \"写道：<br>" ;
     	// _Message.content.attr("value","<br><br><br><br><br><br>" + addContent + content);
@@ -359,7 +363,7 @@ define(["dojo/_base/kernel",
     		subject = messageNode.subject.innerHTML,
     		sent = messageNode.sent.innerHTML,
     		// content = messageNode.content.innerHTML,
-    		files = messageNode.fileNode.innerHTML;
+    		files = messageNode.fileNodeStr.innerHTML;
     	
     	//摧毁当前内容
     	mail_tabs.removeChild(mail_tabs.selectedChildWidget);
@@ -389,13 +393,25 @@ define(["dojo/_base/kernel",
     	// _Message.content.attr("value",content);
     	_getMailBodyInfo(id,_Message.content,"");
     	
-    	_Message.attachFile.innerHTML = files;
+    	//_Message.attachFile.innerHTML = files;
+    	
+    	_attachFileDeal(_Message.attachFile,files,true);
     	
     	mail_tabs.addChild(newTab);
     	mail_tabs.selectChild(newTab);
     	
     	_Message.to.focus();
         rosten.variable.mailTargetNode = _Message.to;
+    };
+    _attachFileDeal = function(node,fileStr,isShow){
+    	if(fileStr && fileStr!=""){
+        	var filesArray = general.splitString(fileStr,",");
+        	for (var i = 0; i < filesArray.length; i++) {
+        		var jsonObj = {fileId:general.stringLeft(filesArray[i],"&"),fileName:general.stringRight(filesArray[i],";")};
+        		console.log(jsonObj);
+        		mail_addAttachShow(node,jsonObj,isShow);
+        	}
+        }
     };
     formatSubject = function(value, rowIndex) {
 		return "<a href=\"javascript:onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
@@ -452,6 +468,7 @@ define(["dojo/_base/kernel",
         _message.subject.innerHTML = subject;
         _message.sent.innerHTML = sent;
         _message.content.innerHTML = text;
+        _message.fileNodeStr.innerHTML = attachList;
         
         if(attachList && attachList!=""){
         	domStyle.set(_message.fileNodeTr,"display","");
@@ -554,13 +571,47 @@ define(["dojo/_base/kernel",
 			}	
         });
 	};
-	mail_addAttachShow = function(node,jsonObj){
+	mail_addAttachShow = function(node,jsonObj,isConnect){
+		var ul;
+		var uls = node.getElementsByTagName("ul")
+		if(uls && uls.length>0){
+			ul = uls[0]
+		}else{
+			ul = document.createElement("ul");
+			node.appendChild(ul);
+			
+		}
+		var li = document.createElement("li");
+		ul.appendChild(li);
+		
 		var a = document.createElement("a");
 		a.setAttribute("href", rosten.webPath + "/mail/downloadFile/" + jsonObj.fileId);
-		a.setAttribute("style","margin-right:20px");
+		a.setAttribute("class","xtname");
 		a.setAttribute("dealId",jsonObj.fileId);
 		a.innerHTML = jsonObj.fileName;
-		node.appendChild(a);
+		li.appendChild(a);
+		
+		var span = document.createElement("span");
+		span.setAttribute("class","xtclose");
+		span.setAttribute("style","display:none");
+		li.appendChild(span);
+		
+		if(isConnect){
+			connect.connect(li,"onmouseover",function(){
+				domStyle.set(span,"display","block");
+	        });
+			connect.connect(li,"onmouseout",function(){
+				domStyle.set(span,"display","none");
+	        });
+			connect.connect(span,"onclick",function(){
+				//删除附件以及页面显示信息
+				rosten.readNoTime(rosten.webPath + "/mail/deleteAttach", {fileId:jsonObj.fileId}, function(data){
+					if(data.result==true || data.result=="true"){
+						ul.removeChild(li);
+					}
+				});
+	        });
+		}
+		
 	};
-	
 });

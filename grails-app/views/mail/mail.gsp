@@ -224,7 +224,7 @@
 														if(dataArray.result=="true"){
 															dijit.byId("fileUpload_dialog_${'\${departid}'}").reset();
 															dijit.byId("fileUpload_dialog_${'\${departid}'}").onCancel();
-															mail_addAttachShow(dojo.byId("fileShow_${'\${departid}'}"),dataArray);
+															mail_addAttachShow(dojo.byId("fileShow_${'\${departid}'}"),dataArray,true);
 														}else if(dataArray.result=="big"){
 															alert("上传文件过大，请重新上传！");
 														}else{rosten.alert("上传失败");}
@@ -252,7 +252,7 @@
 						</tr>
 						<tr><td></td>
 						<td>
-							<div id="fileShow_${'\${departid}'}" style="margin-top:5px;" data-dojo-attach-point="attachFile"></div>
+							<div id="fileShow_${'\${departid}'}" class="attachFile" style="margin-top:5px;" data-dojo-attach-point="attachFile"></div>
 						</td>
 						</tr>
 					</table>
@@ -343,7 +343,8 @@
 						<tr data-dojo-attach-point="fileNodeTr" style="display:none;padding-top:5px;">
 							<td style="text-align:right;"><label>附件:</label></td>
 							<td>
-								<div data-dojo-attach-point="fileNode" style="margin-left:10px"></div>
+								<div data-dojo-attach-point="fileNode" class="attachFile" style="margin-left:10px"></div>
+								<div data-dojo-attach-point="fileNodeStr" style="display:none"></div>
 							</td>
 						</tr>
 					</table>
