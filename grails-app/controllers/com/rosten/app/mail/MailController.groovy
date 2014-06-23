@@ -12,6 +12,7 @@ import com.rosten.app.util.GB2Alpha
 import com.rosten.app.util.SystemUtil
 import com.rosten.app.system.Attachment
 import com.rosten.app.mail.EmailBox
+import com.rosten.app.system.SmsGroup
 
 class MailController {
 	def springSecurityService
@@ -536,6 +537,21 @@ class MailController {
 		
 		json.items.unique()
 		
+		render json as JSON
+	}
+	def getGroup ={
+		def user = (User) springSecurityService.getCurrentUser()
+		def json = [identifier:'id',label:'name',items:[]]
+		SmsGroup.findAllByUser(user).each{
+			def sMap = ["id":it.id,"name":it.groupName,"type":"depart","children":[]]
+			if(it.members && !"".equals(it.members)){
+				it.members.split(",").each{item->
+					sMap.children << ["id":item,"chinaname":item,"name":item,"type":"user"]
+				}
+			}
+			
+			json.items+=sMap
+		}
 		render json as JSON
 	}
 	def getDepart={

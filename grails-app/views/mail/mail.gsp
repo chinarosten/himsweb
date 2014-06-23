@@ -291,9 +291,18 @@
 						}
 					</script>
 				</div>
+				
+				<div data-dojo-id="groupStore_${'\${departid}'}" data-dojo-type="dojo/data/ItemFileWriteStore" 
+					data-dojo-props='url:"${createLink(controller:'mail',action:'getGroup')}"'></div>
+				<div data-dojo-id="groupModel_${'\${departid}'}" data-dojo-type="dijit/tree/ForestStoreModel" 
+					data-dojo-props='store:groupStore_${'\${departid}'}, query:{type:"depart"},rootLabel:"群组层级", childrenAttrs:["children"]'></div>
+					
+				<div data-dojo-type="dijit/Tree" data-dojo-props='title:"用户群组",model:groupModel_${'\${departid}'}, openOnClick:true'></div>	
+				<!--
 				<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props='title:"用户群组"'>
 					
 				</div>	
+				  -->
 			</div>
 			<div data-dojo-type="dijit/layout/ContentPane" region="bottom" style="height:30px" align="center">
 				<button data-dojo-type="dijit/form/Button" iconClass="mailIconOk" data-dojo-attach-point="sendButton">发送</button>
