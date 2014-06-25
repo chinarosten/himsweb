@@ -542,11 +542,13 @@ class MailController {
 	def getGroup ={
 		def user = (User) springSecurityService.getCurrentUser()
 		def json = [identifier:'id',label:'name',items:[]]
+		def index = 0
 		SmsGroup.findAllByUser(user).each{
 			def sMap = ["id":it.id,"name":it.groupName,"type":"depart","children":[]]
 			if(it.members && !"".equals(it.members)){
-				it.members.split(",").each{item->
-					sMap.children << ["id":item,"chinaname":item,"name":item,"type":"user"]
+				it.members.split(",").eachWithIndex {item,i->
+					sMap.children << ["id":item + index,"chinaname":item,"name":item,"type":"user"]
+					index += 1
 				}
 			}
 			

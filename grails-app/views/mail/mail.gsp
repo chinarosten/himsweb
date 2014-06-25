@@ -94,6 +94,7 @@
 	<script type="text/javascript">
 		require(["dojo/parser",
 		        "dojo/_base/kernel",
+		        "rosten/widget/RostenLinkTree",
 		        "dojo/data/ItemFileWriteStore",
 		        "rosten/widget/ActionBar",
 		        "rosten/widget/RostenGrid",
@@ -117,7 +118,29 @@
 				"dijit/TooltipDialog",
 				"rosten/app/Mail"
 		     	],
-			function(parser,kernel,ActionBar){
+			function(parser,kernel,ActionBar,RostenLinkTree){
+
+			mail_addSendInfor = function(item){
+				console.log(item);
+			};
+			mail_onClick = function(item,store){
+				if(!item || item.root)return;
+				if(rosten.variable.mailTargetNode == undefined) return;
+				var type = store.getValue(item, "type");
+				if(type=="depart") return ;
+					var username = store.getValue(item, "username");
+					var inputValue = rosten.variable.mailTargetNode.attr("value");
+				if(inputValue==""){
+					rosten.variable.mailTargetNode.attr("value",username);
+				}else{
+					rosten.variable.mailTargetNode.attr("value",inputValue + "," + username);
+				}
+			};
+			mail_onOpen = function(item,store){
+				if( item && !item.root && item.children.length == 0){
+					mail_addDepart(item,store);
+				}
+			};
 			
 		});
     </script>
@@ -266,8 +289,11 @@
 			</div>
 			<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='region:"trailing", style:"width: 200px;", splitter:true'>
 				
+				<!--
 				<div data-dojo-id="store_${'\${departid}'}" data-dojo-type="dojo/data/ItemFileWriteStore" 
 					data-dojo-props='url:"${createLink(controller:'mail',action:'getDepart')}"'></div>
+					
+				
 				<div data-dojo-id="model_${'\${departid}'}" data-dojo-type="dijit/tree/ForestStoreModel" 
 					data-dojo-props='store:store_${'\${departid}'}, query:{type:"depart"},rootLabel:"部门层级", childrenAttrs:["children"]'></div>	
 				<div data-dojo-type="dijit/Tree" data-dojo-props='title:"通讯录",model:model_${'\${departid}'}, openOnClick:true'>
@@ -291,18 +317,21 @@
 						}
 					</script>
 				</div>
-				
-				<div data-dojo-id="groupStore_${'\${departid}'}" data-dojo-type="dojo/data/ItemFileWriteStore" 
-					data-dojo-props='url:"${createLink(controller:'mail',action:'getGroup')}"'></div>
-				<div data-dojo-id="groupModel_${'\${departid}'}" data-dojo-type="dijit/tree/ForestStoreModel" 
-					data-dojo-props='store:groupStore_${'\${departid}'}, query:{type:"depart"},rootLabel:"群组层级", childrenAttrs:["children"]'></div>
-					
-				<div data-dojo-type="dijit/Tree" data-dojo-props='title:"用户群组",model:groupModel_${'\${departid}'}, openOnClick:true'></div>	
-				<!--
-				<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props='title:"用户群组"'>
-					
-				</div>	
 				  -->
+				
+				<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props='title:"通讯录"'>
+					<div data-dojo-type="rosten/widget/RostenLinkTree"  
+						data-dojo-props='url:"${createLink(controller:'mail',action:'getDepart')}",linkName:"添加部门",linkShowType:"depart",
+							linkFunction:mail_addSendInfor,onClick:mail_onClick,onOpen:mail_onOpen'>
+            		</div>
+				</div>
+				
+				<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props='title:"用户群组"'>
+					<div data-dojo-type="rosten/widget/RostenLinkTree"  
+						data-dojo-props='url:"${createLink(controller:'mail',action:'getGroup')}",linkName:"添加群组",linkShowType:"depart",linkFunction:mail_addSendInfor'>
+            		</div>
+				</div>	
+				  
 			</div>
 			<div data-dojo-type="dijit/layout/ContentPane" region="bottom" style="height:30px" align="center">
 				<button data-dojo-type="dijit/form/Button" iconClass="mailIconOk" data-dojo-attach-point="sendButton">发送</button>
