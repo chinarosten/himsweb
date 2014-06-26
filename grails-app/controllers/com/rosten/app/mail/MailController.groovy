@@ -406,7 +406,7 @@ class MailController {
 				oktos<<to
 			}else if(to.contains("(")){
 				def toname = Util.strLeft(to, "(")
-				def totype = Util.strLeft(Util.strRight(toname, "("), ")")
+				def totype = Util.strLeft(Util.strRight(to, "("), ")")
 				if("部门".equals(totype)){
 					def _depart = Depart.findByDepartName(toname)
 					if(_depart){
