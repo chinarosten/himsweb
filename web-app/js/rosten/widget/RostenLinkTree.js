@@ -115,17 +115,20 @@ define(["dojo/_base/declare",
                     linkShowType:this.linkShowType
                 };
                 this.tree = new rosten.widget.LinkTree(_treeArgs, treenode);
-                this.tree.dndController.onMouseOver = function(widget, evt){
+                
+                connect.connect(this.tree.dndController,"onMouseOver",this,function(widget, evt){
+                	//判断是否异步加载的数据，如异步加载，则增加widget
+            		this._addLinkWidget(widget);
                 	if(widget.linkWidget){
                 		domStyle.set(widget.linkWidget.a,"display","");
                 	}
-                };
+                });
                 this.tree.dndController.onMouseOut = function(widget, evt){
                 	if(widget.linkWidget){
                     	domStyle.set(widget.linkWidget.a,"display","none");
                    	}
                 };
-                connect.connect(this.tree,"onclick",this,function(item){
+                connect.connect(this.tree,"onClick",this,function(item){
                 	this.onClick(item,this.store);
                 });
                 connect.connect(this.tree,"onOpen",this,function(item){
@@ -137,6 +140,18 @@ define(["dojo/_base/declare",
             
             
         });
+      },
+      _addLinkWidget:function(node){
+    	  if(node.linkWidget) return;
+    	  if(node.item && !node.item.root && (node.item.type && node.linkShowType==node.item.type)){
+    		  node.linkWidget = new rosten.widget.LinkWidget({linkName:node.linkName,linkFunction:node.linkFunction});
+              connect.connect(node.linkWidget.a,"onclick",node,function(){
+            	  node.linkFunction(node.item);
+	            });
+              node.contentNode.appendChild(node.linkWidget.domNode);
+              // in real application this is done by template modification tree node class
+              domConstruct.place(node.labelNode, node.linkWidget.domNode, "first");
+          }  
       },
 	  onClick:function(item,store){
 	  	

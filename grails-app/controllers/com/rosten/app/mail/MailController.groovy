@@ -13,9 +13,11 @@ import com.rosten.app.util.SystemUtil
 import com.rosten.app.system.Attachment
 import com.rosten.app.mail.EmailBox
 import com.rosten.app.system.SmsGroup
+import com.rosten.app.system.SystemService
 
 class MailController {
 	def springSecurityService
+	def systemService
 	
 	def deleteAttach ={
 		def json=[:]
@@ -402,6 +404,23 @@ class MailController {
 		tos.each{to->
 			if(to.contains("@") || User.findByUsername(to)!=null){
 				oktos<<to
+			}else if(to.contains("(")){
+				def toname = Util.strLeft(to, "(")
+				def totype = Util.strLeft(Util.strRight(toname, "("), ")")
+				if("部门".equals(totype)){
+					def _depart = Depart.findByDepartName(toname)
+					if(_depart){
+						systemService.getAllUserByDepart(_depart).each{ _user ->
+							oktos << _user.username
+						}
+					}
+				}else if("群组".equals(totype)){
+					SmsGroup.findByGroupName(toname)?.members.split(",").each{item ->
+						if(item.contains("@") || User.findByUsername(item)!=null){
+							oktos<<item
+						}
+					}
+				}
 			}
 		}
 		if(oktos.size==0){
@@ -544,10 +563,10 @@ class MailController {
 		def json = [identifier:'id',label:'name',items:[]]
 		def index = 0
 		SmsGroup.findAllByUser(user).each{
-			def sMap = ["id":it.id,"name":it.groupName,"type":"depart","children":[]]
+			def sMap = ["id":it.id,"name":it.groupName,"type":"group","children":[]]
 			if(it.members && !"".equals(it.members)){
 				it.members.split(",").eachWithIndex {item,i->
-					sMap.children << ["id":item + index,"chinaname":item,"name":item,"type":"user"]
+					sMap.children << ["id":item + index,"username":item,"name":item,"type":"user"]
 					index += 1
 				}
 			}

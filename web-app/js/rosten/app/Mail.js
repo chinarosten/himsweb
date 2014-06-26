@@ -564,6 +564,9 @@ define(["dojo/_base/kernel",
                             if(data[i].username){
                                 newItem.username = data[i].username;
                             }
+                            if(data[i].type){
+                                newItem.type = data[i].type;
+                            }
 							store.newItem(newItem, parent);//给父节点添加子节点	
 						}
 					}	

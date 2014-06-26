@@ -6,6 +6,25 @@ import com.rosten.app.util.GridUtil
 class SystemService {
 	static transactional = true
 	
+	private def _getAllDepart ={departList,depart->
+		departList << depart
+		if(depart.children){
+			depart.children.each{
+				return _getAllDepart(departList,it)
+			}
+		}else{
+			return departList
+		}
+	}
+	def getAllUserByDepart ={depart ->
+		def departList =[]
+		def userList =[]
+		_getAllDepart(departList,depart)
+		departList.unique().each{
+			userList += it.getAllUser()
+		}
+		return userList.unique()
+	}
 	/*
 	 * 检查是否有授权委托，返回authorize最新一次对象
 	 * 检查参数:授权人,当前运行模块,是否需要检查时间节点
