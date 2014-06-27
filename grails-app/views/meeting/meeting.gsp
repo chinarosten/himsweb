@@ -174,7 +174,7 @@
 				page_quit = function(){
 					rosten.pagequit();
 				};
-				addComment = function(){
+				meeting_addComment = function(){
 					var id = registry.byId("id").get("value");
 					var commentDialog = rosten.addCommentDialog({type:"meeting"});
 					commentDialog.callback = function(_data){

@@ -87,61 +87,89 @@ class MeetingController {
 		//处理当前人的待办事项
 		def currentUser = springSecurityService.getCurrentUser()
 		def frontStatus = meeting.status
-		
-		switch (params.deal){
-			case "submit":
-				meeting.status="审核"
-				break;
-			case "agrain":
-				meeting.status = "已签发"
-				break;
-			case "achive":
-				meeting.status = "已归档"
-				meeting.currentUser = null
-				meeting.currentDepart = null
-				meeting.currentDealDate = new Date()
-				break;
-			case "notAgrain":
-				meeting.status = "不同意"
-				meeting.currentUser = null
-				meeting.currentDepart = null
-				meeting.currentDealDate = new Date()
-				break;
-		}
-		
+		def nextStatus,nextDepart,nextLogContent
 		def nextUsers=[]
-		if(params.dealUser){
-			//下一步相关信息处理
-			def dealUsers = params.dealUser.split(",")
-			if(dealUsers.size() >1){
-				//并发
+		
+		//流程引擎相关信息处理-------------------------------------------------------------------------------------
+		
+		//结束当前任务，并开启下一节点任务
+		taskService.complete(meeting.taskId)	//结束当前任务
+		
+		ProcessInstance processInstance = workFlowService.getProcessIntance(meeting.processInstanceId)
+		if(!processInstance || processInstance.isEnded()){
+			//流程已结束
+			nextStatus = "已归档"
+			meeting.currentUser = null
+			meeting.currentDepart = null
+			meeting.taskId = null
+		}else{
+			//获取下一节点任务，目前处理串行情况
+			def tasks = workFlowService.getTasksByFlow(meeting.processInstanceId)
+			def task = tasks[0]
+			if(task.getDescription() && !"".equals(task.getDescription())){
+				nextStatus = task.getDescription()
 			}else{
-				//串行
-				def nextUser = User.get(Util.strLeft(params.dealUser,":"))
-				def args = [:]
-				args["type"] = "【会议通知】"
-				args["content"] = "请您审核名称为  【" + meeting.subject +  "】 的会议通知"
-				args["contentStatus"] = meeting.status
-				args["contentId"] = meeting.id
-				args["user"] = nextUser
-				args["company"] = nextUser.company
-				
-				startService.addGtask(args)
-				
-				meeting.currentUser = nextUser
-				meeting.currentDepart = Util.strRight(params.dealUser, ":")
-				meeting.currentDealDate = new Date()
-				
-				if(!meeting.readers.find{ item->
-					item.id.equals(nextUser.id)
-				}){
-					meeting.addToReaders(nextUser)
-				}
-				nextUsers << nextUser.getFormattedName()
+				nextStatus = task.getName()
 			}
-			
+			meeting.taskId = task.getId()
+		
+			if(params.dealUser){
+				//下一步相关信息处理
+				def dealUsers = params.dealUser.split(",")
+				if(dealUsers.size() >1){
+					//并发
+				}else{
+					//串行
+					def nextUser = User.get(Util.strLeft(params.dealUser,":"))
+					nextDepart = Util.strRight(params.dealUser, ":")
+					
+					//判断是否有公务授权------------------------------------------------------------
+					def _model = Model.findByModelCodeAndCompany("meeting",meeting.company)
+					def authorize = systemService.checkIsAuthorizer(nextUser,_model,new Date())
+					if(authorize){
+						meetingService.addFlowLog(meeting,nextUser,"委托授权给【" + authorize.beAuthorizerDepart + ":" + authorize.getFormattedAuthorizer() + "】")
+						
+						nextUser = authorize.beAuthorizer
+						nextDepart = authorize.beAuthorizerDepart
+					}
+					//-------------------------------------------------------------------------
+					
+					//任务指派给当前拟稿人
+					taskService.claim(meeting.taskId, nextUser.username)
+					
+					def args = [:]
+					args["type"] = "【会议通知】"
+					args["content"] = "请您审核名称为  【" + meeting.subject +  "】 的会议通知"
+					args["contentStatus"] = meeting.status
+					args["contentId"] = meeting.id
+					args["user"] = nextUser
+					args["company"] = nextUser.company
+					
+					startService.addGtask(args)
+					
+					meeting.currentUser = nextUser
+					meeting.currentDepart = nextDepart
+					
+					if(!meeting.readers.find{ item->
+						item.id.equals(nextUser.id)
+					}){
+						meeting.addToReaders(nextUser)
+					}
+					nextUsers << nextUser.getFormattedName()
+				}
+			}
+		}
+		meeting.status = nextStatus
+		meeting.currentDealDate = new Date()
+		
+		//判断下一处理人是否与当前处理人员为同一人
+		if(currentUser.equals(meeting.currentUser)){
+			json["refresh"] = true
 		}
 		
+		//----------------------------------------------------------------------------------------------------
+		
+		//修改代办事项状态
 		def gtask = Gtask.findWhere(
 			user:currentUser,
 			company:currentUser.company,
@@ -426,6 +454,25 @@ class MeetingController {
 		if(!meeting.readers.find{ it.id.equals(user.id) }){
 			meeting.addToReaders(user)
 		}
+		
+		//流程引擎相关信息处理-------------------------------------------------------------------------------------
+		if(!meeting.processInstanceId){
+			//启动流程实例
+			def _model = Model.findByModelCodeAndCompany("meeting",meeting.company)
+			def _processInstance = workFlowService.getProcessDefinition(_model.relationFlow)
+			Map<String, Object> variables = new HashMap<String, Object>();
+			ProcessInstance processInstance = workFlowService.addFlowInstance(_processInstance.key, user.username,meeting.id, variables);
+			meeting.processInstanceId = processInstance.getProcessInstanceId()
+			meeting.processDefinitionId = processInstance.getProcessDefinitionId()
+			
+			//获取下一节点任务
+			def task = workFlowService.getTasksByFlow(processInstance.getProcessInstanceId())[0]
+			meeting.taskId = task.getId()
+			
+			//任务指派给当前拟稿人
+			//taskService.claim(task.getId(), user.username)
+		}
+		//-------------------------------------------------------------------------------------------------
 		
 		if(meeting.save(flush:true)){
 			json["result"] = true

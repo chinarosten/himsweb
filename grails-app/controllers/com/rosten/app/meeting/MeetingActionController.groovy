@@ -32,7 +32,7 @@ class MeetingActionController {
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 						actionList << createAction("提交",webPath +imgPath + "submit.png",strname + "_submit")
 						break;
-					case meeting.status.contains("审核") || sendFile.status.contains("审批"):
+					case meeting.status.contains("审核") || meeting.status.contains("审批"):
 						actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 						actionList << createAction("填写意见",webPath +imgPath + "sign.png",strname + "_addComment")
 						actionList << createAction("同意",webPath +imgPath + "ok.png",strname + "_submit")

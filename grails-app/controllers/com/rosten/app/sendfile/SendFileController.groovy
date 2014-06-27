@@ -87,119 +87,144 @@ class SendFileController {
 	def sendFileFlowDeal = {
 		def json=[:]
 		def sendFile = SendFile.get(params.id)
-		def sendFileLabel = SendLable.get(params.fileTypeId)
 		def currentUser = springSecurityService.getCurrentUser()
-		def frontStatus = sendFile.status
 		
-		//获取下一处理人
-		switch (params.deal){
-			case "submit":
-				sendFile.status="审核"
-				break;
-			case "agrain":
-				sendFile.status = "已签发"
-				sendFile.fileNo = sendFileLabel.nowYear + "【" + sendFileLabel.subCategory + "】" + sendFileLabel.nowSN.toString().padLeft(4,"0")
-				sendFile.fileDate = new Date()
-				break;
-			case "send":
-				//分发
-				if(!sendFile.isSend){
-					sendFile.isSend = true
+		//分发情况特殊处理
+		if ("send".equals(params.deal)){
+			//分发
+			if(!sendFile.isSend){
+				sendFile.isSend = true
+			}
+			//发送相关人员并记录日志
+			def _nextUsers=[]
+			params.dealUser.split(",").each{
+				def _nextUser = User.get(Util.strLeft(it,":"))
+				if(!sendFile.readers.contains(_nextUser)){
+					sendFile.addToReaders(_nextUser)
 				}
-				//发送相关人员并记录日志	
-				def _nextUsers=[]
-				params.dealUser.split(",").each{
-					def _nextUser = User.get(Util.strLeft(it,":"))
-					if(!sendFile.readers.contains(_nextUser)){
-						sendFile.addToReaders(_nextUser)
+				def _name
+				if(_nextUser.chinaName!=null){
+					_name = _nextUser.chinaName
+				}else{
+					_name = _nextUser.username
+				}
+				_nextUsers << _name
+				
+				//创建待办文件
+				def args = [:]
+				args["type"] = "【发文】"
+				args["content"] = "请您查看名称为  【" + sendFile.title +  "】 的发文"
+				args["contentStatus"] = sendFile.status
+				args["contentId"] = sendFile.id
+				args["user"] = _nextUser
+				args["company"] = _nextUser.company
+				
+				startService.addGtask(args)
+			}
+			//添加日志
+			def sendFileLog = new SendFileLog()
+			sendFileLog.user = currentUser
+			sendFileLog.sendFile = sendFile
+			sendFileLog.content = "分发文件【" + _nextUsers.join("、") + "】"
+			sendFileLog.save()
+			
+			if(sendFile.save(flush:true)){
+				json["result"] = true
+			}else{
+				json["result"] = false
+			}
+			
+			render json as JSON
+			
+			return;
+		}
+		
+		//其他情况正常处理-----
+		def sendFileLabel = SendLable.get(params.fileTypeId)
+		def frontStatus = sendFile.status
+		def nextStatus,nextDepart,nextLogContent
+		def nextUsers=[]
+		
+		//流程引擎相关信息处理-------------------------------------------------------------------------------------
+		
+		//结束当前任务，并开启下一节点任务
+		taskService.complete(sendFile.taskId)	//结束当前任务
+		ProcessInstance processInstance = workFlowService.getProcessIntance(sendFile.processInstanceId)
+		if(!processInstance || processInstance.isEnded()){
+			//流程已结束
+			nextStatus = "已归档"
+			sendFile.currentUser = null
+			sendFile.currentDepart = null
+			sendFile.taskId = null
+		}else{
+			//获取下一节点任务，目前处理串行情况
+			def tasks = workFlowService.getTasksByFlow(sendFile.processInstanceId)
+			def task = tasks[0]
+			if(task.getDescription() && !"".equals(task.getDescription())){
+				nextStatus = task.getDescription()
+			}else{
+				nextStatus = task.getName()
+			}
+			sendFile.taskId = task.getId()
+			
+			if(params.dealUser){
+				//下一步相关信息处理
+				def dealUsers = params.dealUser.split(",")
+				if(dealUsers.size() >1){
+					//并发
+				}else{
+					//串行
+					def nextUser = User.get(Util.strLeft(params.dealUser,":"))
+					nextDepart = Util.strRight(params.dealUser, ":")
+					
+					//判断是否有公务授权------------------------------------------------------------
+					def _model = Model.findByModelCodeAndCompany("sendfile",sendFile.company)
+					def authorize = systemService.checkIsAuthorizer(nextUser,_model,new Date())
+					if(authorize){
+						sendFileService.addFlowLog(sendFile,nextUser,"委托授权给【" + authorize.beAuthorizerDepart + ":" + authorize.getFormattedAuthorizer() + "】")
+						
+						nextUser = authorize.beAuthorizer
+						nextDepart = authorize.beAuthorizerDepart
 					}
-					def _name
-					if(_nextUser.chinaName!=null){
-						_name = _nextUser.chinaName
-					}else{
-						_name = _nextUser.username
-					}
-					_nextUsers << _name
+					//-------------------------------------------------------------------------
+					//任务指派给当前拟稿人
+					taskService.claim(sendFile.taskId, nextUser.username)
 					
 					//创建待办文件
 					def args = [:]
 					args["type"] = "【发文】"
-					args["content"] = "请您查看名称为  【" + sendFile.title +  "】 的发文"
+					args["content"] = "请您审核名称为  【" + sendFile.title +  "】 的发文"
 					args["contentStatus"] = sendFile.status
 					args["contentId"] = sendFile.id
-					args["user"] = _nextUser
-					args["company"] = _nextUser.company
+					args["user"] = nextUser
+					args["company"] = nextUser.company
 					
 					startService.addGtask(args)
+					
+					sendFile.currentUser = nextUser
+					sendFile.currentDepart = nextDepart
+					
+					if(!sendFile.readers.find{ item->
+						item.id.equals(nextUser.id)
+					}){
+						sendFile.addToReaders(nextUser)
+					}
+					nextUsers << nextUser.getFormattedName()
+					
+		
 				}
-				//添加日志
-				def sendFileLog = new SendFileLog()
-				sendFileLog.user = currentUser
-				sendFileLog.sendFile = sendFile
-				sendFileLog.content = "分发文件【" + _nextUsers.join("、") + "】"
-				sendFileLog.save()
-				
-				if(sendFile.save(flush:true)){
-					json["result"] = true
-				}else{
-					json["result"] = false
-				}
-				
-				render json as JSON
-				
-				return;
-			case "achive":
-				sendFile.status = "已归档"
-				sendFile.currentUser = null
-				sendFile.currentDepart = null
-				sendFile.currentDealDate = new Date()
-				break;
-			case "notAgrain":
-				sendFile.status = "不同意"
-				sendFile.currentUser = null
-				sendFile.currentDepart = null
-				sendFile.currentDealDate = new Date()
-				break;
+			}
+		}
+		sendFile.status = nextStatus
+		sendFile.currentDealDate = new Date()
+		
+		//判断下一处理人是否与当前处理人员为同一人
+		if(currentUser.equals(sendFile.currentUser)){
+			json["refresh"] = true
 		}
 		
-		def nextUsers=[]
-		if(params.dealUser){
-			//下一步相关信息处理
-			def dealUsers = params.dealUser.split(",")
-			if(dealUsers.size() >1){
-				//并发
-			}else{
-				//串行
-				def nextUser = User.get(Util.strLeft(params.dealUser,":"))
-				def args = [:]
-				args["type"] = "【发文】"
-				args["content"] = "请您审核名称为  【" + sendFile.title +  "】 的发文"
-				args["contentStatus"] = sendFile.status
-				args["contentId"] = sendFile.id
-				args["user"] = nextUser
-				args["company"] = nextUser.company
-				
-				startService.addGtask(args)
-				
-				sendFile.currentUser = nextUser
-				sendFile.currentDepart = Util.strRight(params.dealUser, ":")
-				sendFile.currentDealDate = new Date()
-				
-				if(!sendFile.readers.find{ item->
-					item.id.equals(nextUser.id)
-				}){
-					sendFile.addToReaders(nextUser)
-				}
-				def _name
-				if(nextUser.chinaName!=null){
-					_name = nextUser.chinaName
-				}else{
-					_name = nextUser.username
-				}
-				nextUsers << _name
-			}
-			
-		}
+		//----------------------------------------------------------------------------------------------------
+		
 		//修改当前处理人的待办事项
 		def gtask = Gtask.findWhere(
 			user:currentUser,
@@ -213,6 +238,12 @@ class SendFileController {
 			gtask.save()
 		}
 		
+		//当前文档特殊字段处理
+		if(nextStatus.equals("已签发")){
+			sendFile.fileNo = sendFileLabel.nowYear + "【" + sendFileLabel.subCategory + "】" + sendFileLabel.nowSN.toString().padLeft(4,"0")
+			sendFile.fileDate = new Date()
+		}
+				
 		if(sendFile.save(flush:true)){
 			//添加日志
 			def sendFileLog = new SendFileLog()
@@ -563,6 +594,25 @@ class SendFileController {
 		if(!sendFile.readers.find{ it.id.equals(user.id) }){
 			sendFile.addToReaders(user)
 		}
+		
+		//流程引擎相关信息处理-------------------------------------------------------------------------------------
+		if(!sendFile.processInstanceId){
+			//启动流程实例
+			def _model = Model.findByModelCodeAndCompany("sendfile",sendFile.company)
+			def _processInstance = workFlowService.getProcessDefinition(_model.relationFlow)
+			Map<String, Object> variables = new HashMap<String, Object>();
+			ProcessInstance processInstance = workFlowService.addFlowInstance(_processInstance.key, user.username,sendFile.id, variables);
+			sendFile.processInstanceId = processInstance.getProcessInstanceId()
+			sendFile.processDefinitionId = processInstance.getProcessDefinitionId()
+			
+			//获取下一节点任务
+			def task = workFlowService.getTasksByFlow(processInstance.getProcessInstanceId())[0]
+			sendFile.taskId = task.getId()
+			
+			//任务指派给当前拟稿人
+			//taskService.claim(task.getId(), user.username)
+		}
+		//-------------------------------------------------------------------------------------------------
 		
 		if(sendFile.save(flush:true)){
 			json["result"] = true

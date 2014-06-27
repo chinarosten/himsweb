@@ -273,7 +273,6 @@ class BbsController {
 		
 		//获取配置文档
 		def bbsConfig = BbsConfig.first()
-		
 		def bbs = Bbs.get(params.id)
 		
 		//处理当前人的待办事项

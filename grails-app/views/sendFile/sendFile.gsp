@@ -179,7 +179,7 @@
 				page_quit = function(){
 					rosten.pagequit();
 				};
-				addComment = function(){
+				sendfile_addComment = function(){
 					var id = registry.byId("id").get("value");
 					var commentDialog = rosten.addCommentDialog({type:"sendFile"});
 					commentDialog.callback = function(_data){
