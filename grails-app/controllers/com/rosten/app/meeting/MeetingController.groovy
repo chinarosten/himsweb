@@ -54,7 +54,6 @@ class MeetingController {
 			}else{
 				params.user = expEntity.getExpressionText()
 			}
-			
 			redirect controller: "system",action:'userTreeDataStore', params: params
 			return
 		}
