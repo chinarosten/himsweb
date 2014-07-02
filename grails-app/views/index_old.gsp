@@ -327,6 +327,7 @@
 					<img src="images/rosten/share/wait_big.gif" alt="waiting..."></img>
 					<span>&nbsp;&nbsp;请稍候,正在获取内容...</span>
 				</div>   -->
+				
 			</div>
 		</div>
 		<div data-dojo-type="dijit/layout/ContentPane" id="footer"
