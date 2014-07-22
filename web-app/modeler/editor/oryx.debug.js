@@ -1919,7 +1919,7 @@ ORYX.CONFIG.BACKEND_SWITCH 		= 		true;
 ORYX.CONFIG.PANEL_LEFT_WIDTH 	= 		250;
 ORYX.CONFIG.PANEL_RIGHT_COLLAPSED 	= 	true;
 ORYX.CONFIG.PANEL_RIGHT_WIDTH	= 		300;
-ORYX.CONFIG.APPNAME = 					'Activiti BPM suite';
+ORYX.CONFIG.APPNAME = 					'可视化自定义工作流引擎';
 ORYX.CONFIG.WEB_URL = 					"../";
 
 ORYX.CONFIG.BLANK_IMAGE = ORYX.CONFIG.LIBS_PATH + '/ext-2.0.2/resources/images/default/s.gif';
@@ -11574,8 +11574,8 @@ ORYX.Editor = {
 			
 			var content =  "<div id='editor_header'>" +
                 "<div id='header_logo_image'>" +                
-                    "<img src='../explorer/src/img/signavio/smoky/logo2.png' border=\"0\" usemap=\"#kisbpmmap\"/>" + 
-                    "<map id=\"kisbpmmap\" name=\"kisbpmmap\"><area shape=\"rect\" alt=\"kisbpm.com\" title=\"kisbpm.com\" coords=\"15,2,322,44\" href=\"http://kisbpm.com\" target=\"_blank\" /></map>" +
+                    "<img src='../explorer/src/img/signavio/smoky/logo2.png' border=\"0\" usemap=\"#rostensoft\"/>" + 
+                    "<map id=\"rostensoft\" name=\"rostensoft\"><area shape=\"rect\" alt=\"rostensoft.com\" title=\"rostensoft.com\" coords=\"15,2,322,44\" href=\"http://www.rostensoft.com\" target=\"_blank\" /></map>" +
                 "</div>" +
                 "<span class='openid " + (publicText == user ? "not" : "") + "'>" + 
                   (unescape(user)) + 
