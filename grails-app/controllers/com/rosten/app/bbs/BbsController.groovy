@@ -28,6 +28,11 @@ class BbsController {
 	def taskService
 	def systemService
 	
+	def bbsSearchView ={
+		def model =[:]
+		render(view:'/bbs/bbsSearch',model:model)
+	}
+	
 	def getFileUpload ={
 		def model =[:]
 		model["docEntity"] = "bbs"
