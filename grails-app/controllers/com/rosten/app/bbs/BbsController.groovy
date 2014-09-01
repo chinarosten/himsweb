@@ -650,7 +650,13 @@ class BbsController {
 			if("person".equals(params.type)){
 				//个人待办
 				args["user"] = user
-				gridData = bbsService.getBbsListDataStoreByUser(args)
+				
+				//2014-9-1 增加搜索功能
+				def searchArgs =[:]
+				if(params.serialNo && !"".equals(params.serialNo)) searchArgs["serialNo"] = params.serialNo
+				if(params.topic && !"".equals(params.topic)) searchArgs["topic"] = params.topic
+				
+				gridData = bbsService.getBbsListDataStoreByUser(args,searchArgs)
 			}else if("all".equals(params.type)){
 				//所有文档
 				gridData = bbsService.getBbsListDataStore(args)

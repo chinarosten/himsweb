@@ -15,20 +15,21 @@ class BbsService {
 		def gridUtil = new GridUtil()
 		return gridUtil.buildLayoutJSON(new Bbs())
 	}
-	def getBbsListDataStoreByUser ={params->
+	def getBbsListDataStoreByUser ={params,searchArgs->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15
-		def propertyList = getAllBbsByUser(offset,max,params.company,params.user)
+		def propertyList = getAllBbsByUser(offset,max,params.company,params.user,searchArgs)
 
 		def gridUtil = new GridUtil()
 		return gridUtil.buildDataList("id","title",propertyList,offset)
 	}
-	private def getAllBbsByUser={offset,max,company,user->
+	private def getAllBbsByUser={offset,max,company,user,searchArgs->
 		def c = Bbs.createCriteria()
 		def pa=[max:max,offset:offset]
 		def query = { 
 			eq("company",company) 
 			eq("currentUser",user)
+			
 			order("createDate", "desc")
 		}
 		return c.list(pa,query)

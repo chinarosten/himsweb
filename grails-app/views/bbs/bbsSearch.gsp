@@ -14,11 +14,33 @@
 	.searchtab table .bz { float:left; }
 	.searchtab table .btn { float:left; }
 </style>
-<script type="text/javascript">
+<script type="text/javascript">	
+require([ "dijit/registry"],
+	function(registry){
+	
 	closesearch = function(){
-		rosten.kernel.toggleSearch(false);
+		var content = {};
+
+		var serialNo = registry.byId("s_serialno");
+		if(serialNo.get("value")!=""){
+			content.serialNo = serialNo.get("value");
+		}
+		
+		var topic = registry.byId("s_topic");
+		if(topic.get("value")!=""){
+			content.topic = topic.get("value");
+		}
+
+		var count = Object.keys(content).length
+		alert(count);
+		if(count==0) return ;
+		
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		var userid = rosten.kernel.getUserInforByKey("idnumber");
+		rosten.kernel.refreshGrid(rosten.webPath + "/bbs/bbsGrid?companyId=" + companyId + "&userId=" + userid + "&type=person", content);
 	}
 
+});
 </script>
 </head>
 <body>
@@ -29,14 +51,14 @@
           <tr>
             <th width="5%">流水号</th>
             <td width="18%">
-            	<input id="username" data-dojo-type="dijit/form/ValidationTextBox" 
+            	<input id="s_serialno" data-dojo-type="dijit/form/ValidationTextBox" 
                 	data-dojo-props='"class":"input",trim:true,
 					value:""
                '/>
             </td>
             <th width="5%">主题</th>
             <td width="18%">
-            	<input data-dojo-type="dijit/form/ValidationTextBox" 
+            	<input id="s_topic"  data-dojo-type="dijit/form/ValidationTextBox" 
                 	data-dojo-props='"class":"input",
 					value:""
                '/>
@@ -50,7 +72,7 @@
             </select></td>
             <td>
             	<div class="btn">
-                	<button data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){closesearch()}'>查询</button>
+                	<button data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){search()}'>查询</button>
                 	<button data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){closesearch()}'>重置条件</button>
               	</div>
             </td>
