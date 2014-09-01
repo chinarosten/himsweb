@@ -637,6 +637,13 @@ class BbsController {
 			json["gridHeader"] = bbsService.getBbsListLayout()
 		}
 		
+		//2014-9-1 增加搜索功能
+		def searchArgs =[:]
+		
+		if(params.serialNo && !"".equals(params.serialNo)) searchArgs["serialNo"] = params.serialNo
+		if(params.topic && !"".equals(params.topic)) searchArgs["topic"] = params.topic
+		if(params.status && !"".equals(params.status)) searchArgs["status"] = params.status
+		
 		if(params.refreshData){
 			def args =[:]
 			int perPageNum = Util.str2int(params.perPageNum)
@@ -650,21 +657,15 @@ class BbsController {
 			if("person".equals(params.type)){
 				//个人待办
 				args["user"] = user
-				
-				//2014-9-1 增加搜索功能
-				def searchArgs =[:]
-				if(params.serialNo && !"".equals(params.serialNo)) searchArgs["serialNo"] = params.serialNo
-				if(params.topic && !"".equals(params.topic)) searchArgs["topic"] = params.topic
-				
 				gridData = bbsService.getBbsListDataStoreByUser(args,searchArgs)
 			}else if("all".equals(params.type)){
 				//所有文档
-				gridData = bbsService.getBbsListDataStore(args)
+				gridData = bbsService.getBbsListDataStore(args,searchArgs)
 			}else if("new".equals(params.type)){
 				//最新文档
 				args["user"] = user
 				args["showDays"] = bbsConfig.showDays;
-				gridData = bbsService.getBbsListDataStoreByNew(args)
+				gridData = bbsService.getBbsListDataStoreByNew(args,searchArgs)
 			}
 			
 			//处理format中的内容
@@ -690,13 +691,13 @@ class BbsController {
 			def total
 			if("person".equals(params.type)){
 				//个人待办
-				total = bbsService.getBbsCountByUser(company,user)
+				total = bbsService.getBbsCountByUser(company,user,searchArgs)
 			}else if("all".equals(params.type)){
 				//所有文档
-				total = bbsService.getBbsCount(company)
+				total = bbsService.getBbsCount(company,searchArgs)
 			}else if("new".equals(params.type)){
 				//最新文档
-				total = bbsService.getBbsCountByNew(company,user,bbsConfig.showDays)
+				total = bbsService.getBbsCountByNew(company,user,bbsConfig.showDays,searchArgs)
 			}
 			json["pageControl"] = ["total":total.toString()]
 		}
