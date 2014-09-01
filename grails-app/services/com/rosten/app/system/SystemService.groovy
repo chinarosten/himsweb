@@ -336,10 +336,10 @@ class SystemService {
 	def getQuestionCount={
 		return Question.createCriteria().count(){}
 	}
-	def getUserListDataStore = {params->
+	def getUserListDataStore = {params,searchArgs->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15
-		def propertyList = getAllUser(offset,max,params.company)
+		def propertyList = getAllUser(offset,max,params.company,searchArgs)
 
 		def gridUtil = new GridUtil()
 		return gridUtil.buildDataList("id","title",propertyList,offset)
@@ -348,20 +348,29 @@ class SystemService {
 		def gridUtil = new GridUtil()
 		return gridUtil.buildLayoutJSON(new User())
 	}
-	def getAllUser={offset,max,company->
+	def getAllUser={offset,max,company,searchArgs->
 		def c = User.createCriteria()
 		def pa=[max:max,offset:offset]
 		def query = {
 			eq("sysFlag",false)
 			eq("company",company)
+			order("username", "asc")
+			
+			searchArgs.each{k,v->
+				like(k,"%" + v + "%")
+			}
 		}
 		return c.list(pa,query)
 	}
-	def getUserCount={company->
+	def getUserCount={company,searchArgs->
 		def c = User.createCriteria()
 		def query = {
 			eq("sysFlag",false)
 			eq("company",company)
+			
+			searchArgs.each{k,v->
+				like(k,"%" + v + "%")
+			}
 		}
 		return c.count(query)
 	}
@@ -467,9 +476,10 @@ class SystemService {
 	
 	private def initData_bbs ={ path,company ->
 		def model = new Model(company:company)
-		model.modelName = "公告栏"
+		model.modelName = "通知公告"
 		model.modelCode = "bbs"
 		model.modelUrl = path + "/system/navigation"
+		model.serialNo = 6
 		model.description ="公告栏模块"
 
 		def resource = new Resource()
@@ -503,6 +513,7 @@ class SystemService {
 		model.modelName = "发文管理"
 		model.modelCode = "sendfile"
 		model.modelUrl = path + "/system/navigation"
+		model.serialNo = 7
 		model.description ="发文管理模块"
 		
 		def resource = new Resource()
@@ -536,6 +547,7 @@ class SystemService {
 		model.modelName = "收文管理"
 		model.modelCode = "receivefile"
 		model.modelUrl = path + "/system/navigation"
+		model.serialNo = 8
 		model.description ="收文管理模块"
 		
 		def resource = new Resource()
@@ -564,6 +576,7 @@ class SystemService {
 		model.modelName = "会议通知"
 		model.modelCode = "meeting"
 		model.modelUrl = path + "/system/navigation"
+		model.serialNo = 9
 		model.description ="会议通知模块"
 		
 		def resource = new Resource()
@@ -592,6 +605,7 @@ class SystemService {
 		model.modelName = "大事记"
 		model.modelCode = "dsj"
 		model.modelUrl = path + "/system/navigation"
+		model.serialNo = 10
 		model.description ="大事记模块"
 		
 		def resource = new Resource()
@@ -621,6 +635,7 @@ class SystemService {
 		model.modelName = "公共资源"
 		model.modelCode = "public"
 		model.modelUrl = path + "/system/navigation"
+		model.serialNo = 100
 		model.description ="公共资源模块"
 		
 		def resource = new Resource()
@@ -635,10 +650,11 @@ class SystemService {
 	private def initData_person ={path,company ->
 		//公共资源
 		def model = new Model(company:company)
-		model.modelName = "个人配置"
+		model.modelName = "个人工作台"
 		model.modelCode = "personconfig"
 		model.modelUrl = path + "/system/navigation"
-		model.description ="个人配置模块"
+		model.serialNo = 5
+		model.description ="个人工作台模块"
 		
 		def resource = new Resource()
 		resource.resourceName = "个人资料"
@@ -662,6 +678,12 @@ class SystemService {
 		resource.resourceName = "授权委托"
 		resource.url = "authorizeManage"
 		resource.imgUrl = "images/rosten/navigation/authorize.gif"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "工作日志"
+		resource.url = "personWorkLog"
+		resource.imgUrl = "images/rosten/navigation/rosten.png"
 		model.addToResources(resource)
 		
 		model.save(flush:true)
@@ -763,6 +785,7 @@ class SystemService {
 			model.modelCode = "sms"
 			model.modelUrl = "js:sms"
 			model.description ="短信发送模块"
+			model.serialNo = 98
 			model.save(flush:true)
 
 			model = new Model(company:company)
@@ -770,6 +793,7 @@ class SystemService {
 			model.modelCode = "question"
 			model.modelUrl = "js:question"
 			model.description ="你问我答模块"
+			model.serialNo = 99
 			model.save(flush:true)
 			
 			//个人配置

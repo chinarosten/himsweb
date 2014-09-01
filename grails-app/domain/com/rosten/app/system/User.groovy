@@ -7,7 +7,7 @@ class User {
 
 	String id
 
-	@GridColumn(name="用户名")
+	@GridColumn(name="登录名")
 	String username
 	String password
 	boolean enabled = true

@@ -5,13 +5,34 @@ import grails.converters.JSON
 import com.rosten.app.util.FieldAcl
 import com.rosten.app.util.Util
 import org.springframework.security.authentication.encoding.PasswordEncoder;
-import com.rosten.app.workflow.WorkFlowService
+//import com.rosten.app.workflow.WorkFlowService
 
 @SuppressWarnings("deprecation")
 class SystemController {
 	def springSecurityService
 	def systemService
-	def workFlowService
+	//def workFlowService
+	
+	def systemSearchView ={
+		def model =[:]
+		render(view:'/system/userSearch',model:model)
+	}
+	def modelAddFlow1 ={
+		def json=[:]
+		def model = Model.get(params.id)
+		model.relationFlow = params.flowId
+		model.relationFlowName = params.flowName
+		
+		if(model.save(flush:true)){
+			json["result"] = "true"
+		}else{
+			model.errors.each{
+				println it
+			}
+			json["result"] = "false"
+		}
+		render json as JSON
+	}
 	
 	def getContactDepartInfor ={
 		def _depart = Depart.get(params.departId)
@@ -1191,14 +1212,14 @@ class SystemController {
 			json["allowgroupsName"] = allowgroupsName.join(',')
 			json["allowgroupsId"] = allowgroupsId.join(",")
 			
-			def allowRelationFlow = []
-			if(model.relationFlow && !"".equals(model.relationFlow)){
-				model.relationFlow.split(",").each{
-					def _result = workFlowService.getProcessDefinition(it)
-					allowRelationFlow << _result.name + "(" + _result.version + ")"
-				}
-			}
-			json["allowRelationFlow"] = allowRelationFlow.join(',')
+//			def allowRelationFlow = []
+//			if(model.relationFlow && !"".equals(model.relationFlow)){
+//				model.relationFlow.split(",").each{
+//					def _result = workFlowService.getProcessDefinition(it)
+//					allowRelationFlow << _result.name + "(" + _result.version + ")"
+//				}
+//			}
+//			json["allowRelationFlow"] = allowRelationFlow.join(',')
 		}
 		
 		json["user"]=user
@@ -1680,6 +1701,13 @@ class SystemController {
 		if(params.refreshHeader){
 			model["gridHeader"] = systemService.getUserListLayout()
 		}
+		//2014-9-1 增加搜索功能
+		def searchArgs =[:]
+		
+		if(params.username && !"".equals(params.username)) searchArgs["username"] = params.username
+		if(params.chinaName && !"".equals(params.chinaName)) searchArgs["chinaName"] = params.chinaName
+		if(params.telephone && !"".equals(params.telephone)) searchArgs["telephone"] = params.telephone
+		
 		if(params.refreshData){
 			def args =[:]
 			int perPageNum = Util.str2int(params.perPageNum)
@@ -1688,11 +1716,11 @@ class SystemController {
 			args["offset"] = (nowPage-1) * perPageNum
 			args["max"] = perPageNum
 			args["company"] = company
-			model["gridData"] = systemService.getUserListDataStore(args)
+			model["gridData"] = systemService.getUserListDataStore(args,searchArgs)
 			
 		}
 		if(params.refreshPageControl){
-			def total = systemService.getUserCount(company)
+			def total = systemService.getUserCount(company,searchArgs)
 			model["pageControl"] = ["total":total.toString()]
 		}
 		render model as JSON
@@ -2319,7 +2347,7 @@ class SystemController {
 				}
 			}
 		}
-		systemService.crateDefaultNavigation(resourceList)
+		//systemService.crateDefaultNavigation(resourceList)
 		render resourceList as JSON
 	}
 	private def getPermissionModel={user ->

@@ -16,6 +16,13 @@ define(["dojo/_base/kernel"
 		, "rosten/app/Mail"
 		, "rosten/kernel/behavior"], function(kernel, lang, registry, dom,domStyle,domClass,domConstruct,connect,ContentPane,rostenKernel,general) {
 	var main = {};
+	main.getGridSelectedValue = function(ostr){
+	    var rostenGrid = rosten.kernel.getGrid();
+	    var selectitems = rostenGrid.getSelected();
+	    var item = selectitems[0];
+	    var gridStore = rostenGrid.getStore();
+	    return gridStore.getValue(item, ostr);
+	};
 	main._getGridUnid = function(rostenGrid,type){
 		/*
 		 * type:single ---单个
