@@ -461,6 +461,8 @@ class BbsController {
 			bbs = Bbs.get(params.id)
 			bbs.properties = params
 			bbs.clearErrors()
+			bbs.publishDate = Util.convertToTimestamp(params.publishDate)
+			
 			bbsStatus = "old"
 		}else{
 			bbs = new Bbs()

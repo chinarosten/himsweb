@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="layout" content="rosten" />
-    <title>公告栏</title>
+    <title>通知公告</title>
     <style type="text/css">
 		body{
 			overflow:auto;
@@ -52,42 +52,13 @@
 				});
 				
 			bbs_add = function(){
-				var level = registry.byId("level");
-				if(!level.isValid()){
-					rosten.alert("紧急程度不正确！").queryDlgClose = function(){
-						level.focus();
-					};
-					return;
-				}
-				var category = registry.byId("category");
-				if(!category.isValid()){
-					rosten.alert("类别不正确！").queryDlgClose = function(){
-						category.focus();
-					};
-					return;
-				}
-				var publishDate = registry.byId("publishDate");
-				if(!publishDate.isValid()){
-					rosten.alert("发布时间不正确！").queryDlgClose = function(){
-						publishDate.focus();
-					};
-					return;
-				}
-				var topic = registry.byId("topic");
-				if(!topic.isValid()){
-					rosten.alert("标题不正确！").queryDlgClose = function(){
-						topic.focus();
-					};
-					return;
-				}
+				var chenkids = ["level","category","publishDate","topic"];
+				if(!rosten.checkData(chenkids)) return;
+				
 				var content = {};
-				content.level = level.attr("value");
-				content.category = category.attr("value");
+				var publishDate = registry.byId("publishDate");
 				content.publishDate = datestamp.toISOString(publishDate.attr("value"),{selector: "date"});
-				content.topic = topic.attr("value");
-				content.content = registry.byId("content").attr("value");
-				content.companyId = "${company?.id }";
-				content.id = registry.byId("id").attr("value");
+				content.content = registry.byId("content").get("value");
 				
 				rosten.readSync(rosten.webPath + "/bbs/bbsSave",content,function(data){
 					if(data.result=="true" || data.result == true){
@@ -97,41 +68,13 @@
 							}else{
 								window.location.reload();
 							}
-							
-							/*
-							//刷新当前操作条信息以及表单隐藏字段信息以及流水号信息
-							if(data.serialNo){
-								registry.byId("serialNo").set("value",data.serialNo);
-							}
-							var actionBar = registry.byId("rosten_actionBar");
-							if(actionBar.actionBarSrc.indexOf(data.id)!=-1){
-								actionBar.refresh(actionBar.actionBarSrc);
-							}else{
-								actionBar.refresh(actionBar.actionBarSrc + "&id=" + data.id);
-								
-							}
-							var bbsFlowLog = registry.byId("bbsFlowLog");
-							if(bbsFlowLog.get("href").indexOf(data.id)==-1){
-								bbsFlowLog.set("href",bbsFlowLog.get("href") + "/" + data.id)
-							}
-
-							var bbsComment = registry.byId("bbsComment");
-							if(bbsComment.get("href").indexOf(data.id)==-1){
-								bbsComment.set("href",bbsComment.get("href") + "/" + data.id)
-							}
-							
-							registry.byId("id").attr("value",data.id);
-							registry.byId("companyId").attr("value",data.companyId);	
-
-							*/						
-
 						};
 					}else if(data.result=="noConfig"){
 						rosten.alert("系统不存在配置文档，请通知管理员！");
 					}else{
 						rosten.alert("保存失败!");
 					}
-				});
+				},null,"rosten_form");
 			}
 			bbs_deal = function(type,readArray){
 				var content = {};
@@ -160,6 +103,14 @@
 				});
 			};
 			bbs_submit = function(){
+				//获取下一处理人
+				rosten.readSync("${createLink(controller:'bbs',action:'getSelectFlowUser',params:[companyId:company?.id,id:bbs?.id])}",content,function(data){
+					
+				
+				
+
+				});
+				
 				var rostenShowDialog = rosten.selectFlowUser("${createLink(controller:'bbs',action:'getDealWithUser',params:[companyId:company?.id,id:bbs?.id])}","single");
 	            rostenShowDialog.callback = function(data) {
 	            	var _data = [];
@@ -206,7 +157,7 @@
 		<div data-dojo-type="rosten/widget/ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'bbsAction',action:'bbsForm',id:bbs?.id,params:[userid:user?.id])}"'></div>
 	</div>
 	<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
-	  	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props=''>
+	  	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props='style:{height:"590px"}'>
         	<form class="rosten_form" id="rosten_form" onsubmit="return false;" style="padding:0px">
         		<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${bbs?.id }"' />
         		<input  data-dojo-type="dijit/form/ValidationTextBox" id="companyId" data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
@@ -218,8 +169,7 @@
 						    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>流水号：</div></td>
 						    <td width="250">
 						    	<input id="serialNo" data-dojo-type="dijit/form/ValidationTextBox" 
-				                 	data-dojo-props='name:"serialNo",readOnly:true,
-				                 		trim:true,placeHolder:"领导发布后自动生成",
+				                 	data-dojo-props='readOnly:true,trim:true,placeHolder:"领导发布后自动生成",
 										value:"${bbs?.serialNo}"
 				                '/>
 						    </td>

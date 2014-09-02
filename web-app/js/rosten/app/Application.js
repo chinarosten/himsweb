@@ -9,6 +9,19 @@ define(["dojo/_base/lang",
 		"rosten/kernel/_kernel"], function(lang,registry,MultiSelectDialog,PickTreeDialog,DepartUserDialog) {
 			
 	var application = {};
+	application.checkData = function(chenkids){
+		var flag=true;
+		for(var i = 0 ;i<chenkids.length;i++){
+			var obj = registry.byId(chenkids[i]);
+			if(!obj.isValid()){
+				rosten.alert("请正确填写信息！").queryDlgClose = function(){
+					obj.focus();
+				};
+				flag=false;
+			}
+			}
+		return flag;
+	};
     application.cssinitcommon = function() {
         //此功能只添加css文件
         var _rosten = window.opener.rosten;
