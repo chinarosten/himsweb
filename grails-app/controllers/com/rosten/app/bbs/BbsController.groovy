@@ -184,7 +184,11 @@ class BbsController {
 					eq("id",user?.id)
 				}
 			}
-			eq("status","已发布")
+			or{
+				eq("status","已发布")
+				eq("status","已归档")
+			}
+			
 			order("publishDate", "desc")
 		}
 		
@@ -233,26 +237,54 @@ class BbsController {
 		response.outputStream.close()
 		
 	}
-	def getDealWithUser ={
+	/*
+	 * 获取下个处理人员----2014-9-2
+	 */
+	def getSelectFlowUser ={
+		def json=[:]
+		json.dealFlow = true
+		
 		def currentUser = springSecurityService.getCurrentUser()
 		
 		def bbs = Bbs.get(params.id)
-		def bbsDefEntity = workFlowService.getNextTaskDefinition(bbs.taskId);
+		def defEntity = workFlowService.getNextTaskDefinition(bbs.taskId);
 		
-		def expEntity = bbsDefEntity.getAssigneeExpression()
-		if(expEntity){
-			def expEntityText = expEntity.getExpressionText()
-			if(expEntityText.contains("{")){
-				params.user = bbs.drafter.username
-			}else{
-				params.user = expEntity.getExpressionText()
-			}
-			
-			redirect controller: "system",action:'userTreeDataStore', params: params
+		if(!defEntity){
+			//流程处于最后一个节点
+			json.dealFlow = false
+			render json as JSON
 			return
 		}
 		
-		def groupEntity = bbsDefEntity.getCandidateGroupIdExpressions()
+		//存在处理人员的情况
+		def expEntity = defEntity.getAssigneeExpression()
+		if(expEntity){
+			def expEntityText = expEntity.getExpressionText()
+			if(expEntityText.contains("{")){
+				json.user = bbs.drafter.username
+			}else{
+				json.user = expEntity.getExpressionText()
+			}
+			
+			//判断下一处理人是否有多部门情况，如果有，则弹出对话框选择，如果没有，直接进入下一步
+			def userEntity = User.findByUsername(json.user)
+			def userDeparts = userEntity.getAllDepartEntity()
+			if(userDeparts && userDeparts.size()>1){
+				//一个人存在多个部门的情况，这种情况比较少
+				json.showDialog = true
+			}else{
+				json.showDialog = false
+				json.userDepart = userDeparts[0].departName
+				json.userId = userEntity.id
+			}
+			
+			json.dealType = "user"
+			render json as JSON
+			return
+		}
+		
+		//处理部门群组的情况
+		def groupEntity = defEntity.getCandidateGroupIdExpressions()
 		if(groupEntity.size()>0){
 			//默认有一组group的方式为true，则整组均为true;true:严格控制本部门权限
 			def groupIds = []
@@ -263,12 +295,13 @@ class BbsController {
 					limit = true
 				}
 			}
-			params.groupIds = groupIds.unique().join("-")
+			json.groupIds = groupIds.unique().join("-")
 			if(limit){
-				params.limitDepart = currentUser.getDepartEntityTrueName()
+				json.limitDepart = currentUser.getDepartEntityTrueName()
 			}
 			
-			redirect controller: "system",action:'userTreeDataStore', params: params
+			json.dealType = "group"
+			render json as JSON
 			return
 		}
 		
@@ -336,7 +369,7 @@ class BbsController {
 					def args = [:]
 					args["type"] = "【公告】"
 					args["content"] = "请您审核名称为  【" + bbs.topic +  "】 的公告"
-					args["contentStatus"] = bbs.status
+					args["contentStatus"] = nextStatus
 					args["contentId"] = bbs.id
 					args["user"] = nextUser
 					args["company"] = nextUser.company
@@ -393,6 +426,7 @@ class BbsController {
 			//添加日志
 			def logContent
 			switch (true){
+				case bbs.status.contains("已发布"):
 				case bbs.status.contains("已签发"):
 					logContent = "签发文件【" + nextUsers.join("、") + "】"
 					

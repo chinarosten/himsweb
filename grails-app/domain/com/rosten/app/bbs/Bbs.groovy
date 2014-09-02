@@ -174,6 +174,9 @@ class Bbs {
 		attachment nullable:true,blank:true
 		defaultReaders nullable:true,blank:true
 		
+		currentUser nullable:true,blank:true
+		currentDepart nullable:true,blank:true
+		
 		processInstanceId nullable:true,blank:true
 		taskId nullable:true,blank:true
 		processDefinitionId nullable:true,blank:true
