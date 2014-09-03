@@ -18,8 +18,9 @@ define(["dojo/_base/lang",
 					obj.focus();
 				};
 				flag=false;
+				break;
 			}
-			}
+		}
 		return flag;
 	};
     application.cssinitcommon = function() {
