@@ -94,7 +94,7 @@
                                '/>
                             </td>
                         </tr>
-                        <tr>
+                        <tr style="display:none">
                             <td>
                                 <div align="right" >操作类型集合：</div>
                             </td>

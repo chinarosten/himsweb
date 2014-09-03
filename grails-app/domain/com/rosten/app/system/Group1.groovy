@@ -8,11 +8,21 @@ class Group1 {
 	String id
 	
 	//群组名称
-	@GridColumn(name="群组名称")
+	@GridColumn(name="群组名称",colIdx=1)
 	String groupName
 	
+	//人员名称
+	@GridColumn(name="人员名称",colIdx=2)
+	def getAllUsers(){
+		def _array = []
+		UserGroup.findAllByGroup(this).each{
+			_array << it.user.getFormattedName()
+		}
+		return _array.join(",")
+	}
+	
 	//具有角色
-	@GridColumn(name="具有角色",colIdx=2)
+	@GridColumn(name="具有角色",colIdx=3)
 	def getAllRoles(){
 		def _array = []
 		RoleGroup.findAllByGroup(this).each{
@@ -20,9 +30,9 @@ class Group1 {
 		}
 		return _array.join(",")
 	}
-	
+		
     //描述
-	@GridColumn(name="描述")
+	@GridColumn(name="描述",colIdx=4)
 	String description
 	
 	//创建日期

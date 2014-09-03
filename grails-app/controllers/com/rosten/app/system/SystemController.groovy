@@ -1011,6 +1011,15 @@ class SystemController {
 						RoleGroup.create(role, group)
 					}
 				}
+				
+				UserGroup.removeAll(group)
+				if(params.allowusersId){
+					params.allowusersId.split(",").each{
+						def user = User.get(it)
+						UserGroup.create(user, group)
+					}
+				}
+				
 				json["result"] = "true"
 			}else{
 				company.errors.each{

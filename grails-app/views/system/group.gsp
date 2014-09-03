@@ -88,7 +88,11 @@
                              	<g:hiddenField name="allowusersId" value="${allowusersId}" />
 							 	<button data-dojo-type="dijit.form.Button"
 							 			data-dojo-props='onClick:function(){
-							 					selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}")
+							 				var _object = selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}");
+							 				_object.afterLoad = function(){
+							 					var allowusersId = "${allowusersId}".split(",");
+												_object.selectedData(allowusersId);
+							 				}
 							 			}'
 							 	>选择</button>
                              
