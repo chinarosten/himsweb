@@ -512,7 +512,9 @@ define(["dojo/_base/kernel"
     	var companyId = rosten.kernel.getUserInforByKey("companyid");
     	rosten.read(rosten.webPath + "/system/serachPerson", {serchInput:inputnode.attr("value"),companyId:companyId}, function(data) {
     		var personSearch = dom.byId("personSearch");
-    		personSearch.innerHTML = "";
+    		for(var i=personSearch.childNodes.length-1;i >= 0;i--){
+    			personSearch.removeChild(personSearch.childNodes[i]);
+    		}
     		
     		for (var i = 0; i < data.length; i++) {
     			var tr = document.createElement("tr");
