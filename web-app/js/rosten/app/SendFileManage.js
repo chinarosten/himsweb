@@ -150,6 +150,7 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 			var naviJson = {
 				identifier : oString,
 				actionBarSrc : rosten.webPath + "/sendFileAction/sendFileView",
+				searchSrc:rosten.webPath + "/sendFile/searchView",
 				gridSrc : rosten.webPath + "/sendFile/sendFileGrid?companyId=" + companyId + "&userId=" + userid+ "&type=person"
 			};
 			rosten.kernel.addRightContent(naviJson);
@@ -158,6 +159,7 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 			var naviJson = {
 				identifier : oString,
 				actionBarSrc : rosten.webPath + "/sendFileAction/allSendFileView?userId=" + userid,
+				searchSrc:rosten.webPath + "/sendFile/searchView",
 				gridSrc : rosten.webPath + "/sendFile/sendFileGrid?companyId=" + companyId + "&userId=" + userid + "&type=all"
 			};
 			rosten.kernel.addRightContent(naviJson);

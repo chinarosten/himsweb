@@ -241,7 +241,7 @@
 						<g:each in="${servicesList}">
 							<li>
 								<a href="javascript:${it.functionName }('${it.functionArgs }')">
-									<img width="39px" height="39px" src="${it.imgUrl }"></img>
+									<img width="39px" height="39px" src="${it.imgUrl }" />
 									<h5>${it.serviceName }</h5>
 								</a>
 							</li>

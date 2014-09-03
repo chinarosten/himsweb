@@ -49,26 +49,54 @@ class SendFileController {
 		response.outputStream.close()
 		
 	}
-	def getDealWithUser ={
+	/*
+	 * 获取下个处理人员----2014-9-3
+	 */
+	def getSelectFlowUser ={
+		def json=[:]
+		json.dealFlow = true
+		
 		def currentUser = springSecurityService.getCurrentUser()
 		
 		def sendFile = SendFile.get(params.id)
-		def sendFileDefEntity = workFlowService.getNextTaskDefinition(sendFile.taskId);
+		def defEntity = workFlowService.getNextTaskDefinition(sendFile.taskId);
 		
-		def expEntity = sendFileDefEntity.getAssigneeExpression()
-		if(expEntity){
-			def expEntityText = expEntity.getExpressionText()
-			if(expEntityText.contains("{")){
-				params.user = sendFile.drafter.username
-			}else{
-				params.user = expEntity.getExpressionText()
-			}
-			
-			redirect controller: "system",action:'userTreeDataStore', params: params
+		if(!defEntity){
+			//流程处于最后一个节点
+			json.dealFlow = false
+			render json as JSON
 			return
 		}
 		
-		def groupEntity = sendFileDefEntity.getCandidateGroupIdExpressions()
+		//存在处理人员的情况
+		def expEntity = defEntity.getAssigneeExpression()
+		if(expEntity){
+			def expEntityText = expEntity.getExpressionText()
+			if(expEntityText.contains("{")){
+				json.user = sendFile.drafter.username
+			}else{
+				json.user = expEntity.getExpressionText()
+			}
+			
+			//判断下一处理人是否有多部门情况，如果有，则弹出对话框选择，如果没有，直接进入下一步
+			def userEntity = User.findByUsername(json.user)
+			def userDeparts = userEntity.getAllDepartEntity()
+			if(userDeparts && userDeparts.size()>1){
+				//一个人存在多个部门的情况，这种情况比较少
+				json.showDialog = true
+			}else{
+				json.showDialog = false
+				json.userDepart = userDeparts[0].departName
+				json.userId = userEntity.id
+			}
+			
+			json.dealType = "user"
+			render json as JSON
+			return
+		}
+		
+		//处理部门群组的情况
+		def groupEntity = defEntity.getCandidateGroupIdExpressions()
 		if(groupEntity.size()>0){
 			//默认有一组group的方式为true，则整组均为true;true:严格控制本部门权限
 			def groupIds = []
@@ -79,12 +107,13 @@ class SendFileController {
 					limit = true
 				}
 			}
-			params.groupIds = groupIds.unique().join("-")
+			json.groupIds = groupIds.unique().join("-")
 			if(limit){
-				params.limitDepart = currentUser.getDepartEntityTrueName()
+				json.limitDepart = currentUser.getDepartEntityTrueName()
 			}
 			
-			redirect controller: "system",action:'userTreeDataStore', params: params
+			json.dealType = "group"
+			render json as JSON
 			return
 		}
 		
@@ -107,13 +136,7 @@ class SendFileController {
 				if(!sendFile.readers.contains(_nextUser)){
 					sendFile.addToReaders(_nextUser)
 				}
-				def _name
-				if(_nextUser.chinaName!=null){
-					_name = _nextUser.chinaName
-				}else{
-					_name = _nextUser.username
-				}
-				_nextUsers << _name
+				_nextUsers << _nextUser.getFormattedName()
 				
 				//创建待办文件
 				def args = [:]
@@ -157,7 +180,7 @@ class SendFileController {
 		ProcessInstance processInstance = workFlowService.getProcessIntance(sendFile.processInstanceId)
 		if(!processInstance || processInstance.isEnded()){
 			//流程已结束
-			nextStatus = "已归档"
+			nextStatus = "已结束"
 			sendFile.currentUser = null
 			sendFile.currentDepart = null
 			sendFile.taskId = null
@@ -199,7 +222,7 @@ class SendFileController {
 					def args = [:]
 					args["type"] = "【发文】"
 					args["content"] = "请您审核名称为  【" + sendFile.title +  "】 的发文"
-					args["contentStatus"] = sendFile.status
+					args["contentStatus"] = nextStatus
 					args["contentId"] = sendFile.id
 					args["user"] = nextUser
 					args["company"] = nextUser.company
@@ -251,30 +274,28 @@ class SendFileController {
 				
 		if(sendFile.save(flush:true)){
 			//添加日志
-			def sendFileLog = new SendFileLog()
-			sendFileLog.user = currentUser
-			sendFileLog.sendFile = sendFile
-			
-			switch (sendFile.status){
-				case "审核":
-					sendFileLog.content = "提交审核【" + nextUsers.join("、") + "】"
-					break
-				case "已签发":
-					sendFileLog.content = "签发文件【" + nextUsers.join("、") + "】,文件编号为:" + sendFile.fileNo
+			def logContent
+			switch (true){
+				case sendFile.status.contains("已发布"):
+				case sendFile.status.contains("已签发"):
+					logContent = "签发文件【" + nextUsers.join("、") + "】,文件编号为:" + sendFile.fileNo
 					
 					//修改配置文档中的流水号
 					sendFileLabel.nowSN += 1
 					sendFileLabel.save(flush:true)
 					
 					break
-				case "已归档":
-					sendFileLog.content = "归档发文"
+				case sendFile.status.contains("归档"):
+					logContent = "归档"
 					break
-				case "不同意":
-					sendFileLog.content = "不同意签发！"
+				case sendFile.status.contains("不同意"):
+					logContent = "不同意签发！"
+					break
+				default:
+					logContent = "提交" + sendFile.status + "【" + nextUsers.join("、") + "】"
 					break
 			}
-			sendFileLog.save(flush:true)
+			sendFileService.addFlowLog(sendFile,currentUser,logContent)
 			
 			json["result"] = true
 		}else{

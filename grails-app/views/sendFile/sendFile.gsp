@@ -267,7 +267,7 @@
 				    <td>
 				    	<input id="dealDepart" data-dojo-type="dijit/form/ValidationTextBox" 
 		                 	data-dojo-props='name:"dealDepart",required:true,
-		                 		trim:true,readOnly:true,
+		                 		trim:true,
 								value:"${sendFile?.dealDepart}"
 		                '/>
 				    	<button data-dojo-type="dijit/form/Button" 

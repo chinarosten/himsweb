@@ -53,7 +53,7 @@ class SendFileService {
 		return gridUtil.buildLayoutJSON(new SendLable())
 	}
 	
-	def getSendFileLabelListDataStore ={params,searchArgs->
+	def getSendFileLabelListDataStore ={params->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15
 		def propertyList = getAllSendFileLabel(offset,max,params.company)
