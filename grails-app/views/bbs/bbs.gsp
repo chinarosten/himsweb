@@ -151,7 +151,7 @@
 						if(data.limitDepart){
 							url += "&limitDepart="+data.limitDepart;
 						}
-						bbs_submit_select(url);
+						bbs_submit_select(encodeURI(url));
 					}
 
 				});
