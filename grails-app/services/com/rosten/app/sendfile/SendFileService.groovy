@@ -11,30 +11,39 @@ class SendFileService {
 		logEntity.content = content
 		logEntity.save(flush:true)
 	}
-	def getSendFileCountByUser ={company,user->
+	def getSendFileCountByUser ={company,user,searchArgs->
 		def c = SendFile.createCriteria()
 		def query = {
 			eq("company",company)
 			eq("currentUser",user)
 			order("createDate", "desc")
+			
+			searchArgs.each{k,v->
+				like(k,"%" + v + "%")
+			}
+			
 		}
 		return c.count(query)
 	}
-	def getSendFileListDataStoreByUser ={params->
+	def getSendFileListDataStoreByUser ={params,searchArgs->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15
-		def propertyList = getAllSendFileByUser(offset,max,params.company,params.user)
+		def propertyList = getAllSendFileByUser(offset,max,params.company,params.user,searchArgs)
 
 		def gridUtil = new GridUtil()
 		return gridUtil.buildDataList("id","title",propertyList,offset)
 	}
-	def getAllSendFileByUser ={offset,max,company,user->
+	def getAllSendFileByUser ={offset,max,company,user,searchArgs->
 		def c = SendFile.createCriteria()
 		def pa=[max:max,offset:offset]
 		def query = {
 			eq("company",company)
 			eq("currentUser",user)
 			order("createDate", "desc")
+			
+			searchArgs.each{k,v->
+				like(k,"%" + v + "%")
+			}
 		}
 		return c.list(pa,query)
 	}
@@ -44,7 +53,7 @@ class SendFileService {
 		return gridUtil.buildLayoutJSON(new SendLable())
 	}
 	
-	def getSendFileLabelListDataStore ={params->
+	def getSendFileLabelListDataStore ={params,searchArgs->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15
 		def propertyList = getAllSendFileLabel(offset,max,params.company)
@@ -71,26 +80,36 @@ class SendFileService {
 		def gridUtil = new GridUtil()
 		return gridUtil.buildLayoutJSON(new SendFile())
 	}
-	def getSendFileListDataStore ={params->
+	def getSendFileListDataStore ={params,searchArgs->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15
-		def propertyList = getAllSendFile(offset,max,params.company)
+		def propertyList = getAllSendFile(offset,max,params.company,searchArgs)
 
 		def gridUtil = new GridUtil()
 		return gridUtil.buildDataList("id","title",propertyList,offset)
 	}
-	def getAllSendFile ={offset,max,company->
+	def getAllSendFile ={offset,max,company,searchArgs->
 		def c = SendFile.createCriteria()
 		def pa=[max:max,offset:offset]
 		def query = { 
 			eq("company",company) 
 			order("createDate", "desc")
+			searchArgs.each{k,v->
+				like(k,"%" + v + "%")
 			}
+			
+		}
 		return c.list(pa,query)
 	}
-	def getSendFileCount ={company->
+	def getSendFileCount ={company,searchArgs->
 		def c = SendFile.createCriteria()
-		def query = { eq("company",company) }
+		def query = { 
+			eq("company",company)
+			searchArgs.each{k,v->
+				like(k,"%" + v + "%")
+			}
+			
+		}
 		return c.count(query)
 	}
 	

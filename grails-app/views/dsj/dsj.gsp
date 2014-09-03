@@ -48,20 +48,9 @@
 					</g:if>
 				});
 				dsj_add = function(){
-					var time = registry.byId("time");
-					if(!time.isValid()){
-						rosten.alert("日期不正确！").queryDlgClose = function(){
-							time.focus();
-						};
-						return;
-					}
-					var drafterDepart = registry.byId("drafterDepart");
-					if(!drafterDepart.isValid()){
-						rosten.alert("拟稿部门不正确！").queryDlgClose = function(){
-							drafterDepart.focus();
-						};
-						return;
-					}
+					var chenkids = ["time","drafterDepart"];
+					if(!rosten.checkData(chenkids)) return;
+					
 					var subject = registry.byId("subject");
 					if(subject.attr("value")==""){
 						rosten.alert("条目不正确！").queryDlgClose = function(){
@@ -86,15 +75,6 @@
 						}
 					},null,"dsj_form");
 				};
-				dsj_test = function(){
-					var content = {};
-					content.id = registry.byId("id").attr("value");
-//					rosten.readSync(rosten.webPath + "/dsj/dsjGetNextTest",content,function(data){
-//						alert(data.username);
-//					});
-					var url = rosten.webPath + "/dsj/flowActiveExport?id=" + content.id;
-			    	window.open(url,false);
-				};
 				dsj_deal = function(type,readArray){
 					var content = {};
 					content.id = registry.byId("id").attr("value");
@@ -118,8 +98,8 @@
 						}	
 					});
 				};
-				dsj_submit = function(){
-					var rostenShowDialog = rosten.selectFlowUser("${createLink(controller:'dsj',action:'getDealWithUser',params:[companyId:company?.id,id:dsj?.id])}","single");
+				dsj_submit_select = function(url){
+					var rostenShowDialog = rosten.selectFlowUser(url,"single");
 		            rostenShowDialog.callback = function(data) {
 		            	var _data = [];
 		            	for (var k = 0; k < data.length; k++) {
@@ -139,8 +119,38 @@
 					    }
 					}
 				};
-				dsj_notAgrain = function(){
-					dsj_deal("notAgrain");
+				dsj_submit = function(){
+					//从后台获取下一处理人
+					var content = {};
+					rosten.readSync("${createLink(controller:'dsj',action:'getSelectFlowUser',params:[companyId:company?.id,id:dsj?.id])}",content,function(data){
+						if(data.dealFlow==false){
+							//流程无下一节点
+							dsj_deal("submit");
+							return;
+						}
+						var url = "${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}";
+						if(data.dealType=="user"){
+							//人员处理
+							if(data.showDialog==false){
+								//单一处理人
+								var _data = [];
+								_data.push(data.userId + ":" + data.userDepart);
+								dsj_deal("submit",_data);
+							}else{
+								//多人，多部门处理
+								url += "&type=user&user=" + data.user;
+								dsj_submit_select(url);
+							}
+						}else{
+							//群组处理
+							url += "&type=group&groupIds=" + data.groupIds;
+							if(data.limitDepart){
+								url += "&limitDepart="+data.limitDepart;
+							}
+							dsj_submit_select(encodeURI(url));
+						}
+
+					});
 				};
 				page_quit = function(){
 					rosten.pagequit();

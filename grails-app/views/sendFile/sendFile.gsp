@@ -41,34 +41,8 @@
 					rosten.cssinit();
 				});
 				sendfile_add = function(){
-					var fileType = registry.byId("fileType");
-					if(!fileType.isValid()){
-						rosten.alert("发文种类不正确！").queryDlgClose = function(){
-							fileType.focus();
-						};
-						return;
-					}
-					var dealDepart = registry.byId("dealDepart");
-					if(!dealDepart.isValid()){
-						rosten.alert("主办部门不正确！").queryDlgClose = function(){
-							dealDepart.focus();
-						};
-						return;
-					}
-					var title = registry.byId("title");
-					if(!title.isValid()){
-						rosten.alert("文件题名不正确！").queryDlgClose = function(){
-							title.focus();
-						};
-						return;
-					}
-					var mainSend = registry.byId("mainSend");
-					if(!mainSend.isValid()){
-						rosten.alert("主送单位不正确！").queryDlgClose = function(){
-							mainSend.focus();
-						};
-						return;
-					}
+					var chenkids = ["fileType","dealDepart","title","mainSend"];
+					if(!rosten.checkData(chenkids)) return;
 					
 					rosten.readSync(rosten.webPath + "/sendFile/sendFileSave",{},function(data){
 						if(data.result=="true" || data.result == true){
@@ -118,8 +92,8 @@
 						}	
 					});
 				};
-				sendfile_submit = function(){
-					var rostenShowDialog = rosten.selectFlowUser("${createLink(controller:'sendFile',action:'getDealWithUser',params:[companyId:company?.id,id:sendFile?.id])}","single");
+				sendfile_submit_select = function(url){
+					var rostenShowDialog = rosten.selectFlowUser(url,"single");
 		            rostenShowDialog.callback = function(data) {
 		            	var _data = [];
 		            	for (var k = 0; k < data.length; k++) {
@@ -137,7 +111,40 @@
 							//显示对话框
 							rostenShowDialog.open();
 					    }
-					}   
+					}
+				};
+				sendfile_submit = function(){
+					//从后台获取下一处理人
+					var content = {};
+					rosten.readSync("${createLink(controller:'sendFile',action:'getSelectFlowUser',params:[companyId:company?.id,id:sendFile?.id])}",content,function(data){
+						if(data.dealFlow==false){
+							//流程无下一节点
+							sendfile_deal("submit");
+							return;
+						}
+						var url = "${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}";
+						if(data.dealType=="user"){
+							//人员处理
+							if(data.showDialog==false){
+								//单一处理人
+								var _data = [];
+								_data.push(data.userId + ":" + data.userDepart);
+								sendfile_deal("submit",_data);
+							}else{
+								//多人，多部门处理
+								url += "&type=user&user=" + data.user;
+								sendfile_submit_select(url);
+							}
+						}else{
+							//群组处理
+							url += "&type=group&groupIds=" + data.groupIds;
+							if(data.limitDepart){
+								url += "&limitDepart="+data.limitDepart;
+							}
+							sendfile_submit_select(encodeURI(url));
+						}
+
+					});
 				};
 				sendfile_achive = function(){
 					var isSend = registry.byId("isSend").attr("value");

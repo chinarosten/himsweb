@@ -28,6 +28,11 @@ class DsjController {
 	def taskService
 	def systemService
 	
+	def searchView ={
+		def model =[:]
+		render(view:'/dsj/dsjSearch',model:model)
+	}
+	
 	def dsjGetNextTest ={
 		def json=[:]
 		def dsj = Dsj.get(params.id)
@@ -64,27 +69,55 @@ class DsjController {
 		response.outputStream.close()
 		
 	}
-	def getDealWithUser ={
+	
+	/*
+	 * 获取下个处理人员----2014-9-2
+	 */
+	def getSelectFlowUser ={
+		def json=[:]
+		json.dealFlow = true
+		
 		def currentUser = springSecurityService.getCurrentUser()
 		
 		def dsj = Dsj.get(params.id)
-		def dsjDefEntity = workFlowService.getNextTaskDefinition(dsj.taskId);
+		def defEntity = workFlowService.getNextTaskDefinition(dsj.taskId);
 		
-		def expEntity = dsjDefEntity.getAssigneeExpression()
-		if(expEntity){
-			
-			def expEntityText = expEntity.getExpressionText()
-			if(expEntityText.contains("{")){
-				params.user = dsj.drafter.username
-			}else{
-				params.user = expEntity.getExpressionText()
-			}
-			
-			redirect controller: "system",action:'userTreeDataStore', params: params
+		if(!defEntity){
+			//流程处于最后一个节点
+			json.dealFlow = false
+			render json as JSON
 			return
 		}
 		
-		def groupEntity = dsjDefEntity.getCandidateGroupIdExpressions()
+		//存在处理人员的情况
+		def expEntity = defEntity.getAssigneeExpression()
+		if(expEntity){
+			def expEntityText = expEntity.getExpressionText()
+			if(expEntityText.contains("{")){
+				json.user = dsj.drafter.username
+			}else{
+				json.user = expEntity.getExpressionText()
+			}
+			
+			//判断下一处理人是否有多部门情况，如果有，则弹出对话框选择，如果没有，直接进入下一步
+			def userEntity = User.findByUsername(json.user)
+			def userDeparts = userEntity.getAllDepartEntity()
+			if(userDeparts && userDeparts.size()>1){
+				//一个人存在多个部门的情况，这种情况比较少
+				json.showDialog = true
+			}else{
+				json.showDialog = false
+				json.userDepart = userDeparts[0].departName
+				json.userId = userEntity.id
+			}
+			
+			json.dealType = "user"
+			render json as JSON
+			return
+		}
+		
+		//处理部门群组的情况
+		def groupEntity = defEntity.getCandidateGroupIdExpressions()
 		if(groupEntity.size()>0){
 			//默认有一组group的方式为true，则整组均为true;true:严格控制本部门权限
 			def groupIds = []
@@ -95,16 +128,18 @@ class DsjController {
 					limit = true
 				}
 			}
-			params.groupIds = groupIds.unique().join("-")
+			json.groupIds = groupIds.unique().join("-")
 			if(limit){
-				params.limitDepart = currentUser.getDepartEntityTrueName()
+				json.limitDepart = currentUser.getDepartEntityTrueName()
 			}
 			
-			redirect controller: "system",action:'userTreeDataStore', params: params
+			json.dealType = "group"
+			render json as JSON
 			return
 		}
 		
 	}
+	
 	def dsjGetContent ={
 		def json=[:]
 		def dsj = Dsj.get(params.id)
@@ -131,7 +166,7 @@ class DsjController {
 		ProcessInstance processInstance = workFlowService.getProcessIntance(dsj.processInstanceId)
 		if(!processInstance || processInstance.isEnded()){
 			//流程已结束
-			nextStatus = "已归档"
+			nextStatus = "已结束"
 			dsj.currentUser = null
 			dsj.currentDepart = null
 			dsj.taskId = null
@@ -222,6 +257,7 @@ class DsjController {
 			//添加日志
 			def logContent
 			switch (true){
+				case dsj.status.contains("已发布"):
 				case dsj.status.contains("已签发"):
 					logContent = "签发文件【" + nextUsers.join("、") + "】"
 					break
@@ -542,6 +578,14 @@ class DsjController {
 		if(params.refreshHeader){
 			json["gridHeader"] = dsjService.getDsjListLayout()
 		}
+		
+		//2014-9-3 增加搜索功能
+		def searchArgs =[:]
+		
+		if(params.serialNo && !"".equals(params.serialNo)) searchArgs["serialNo"] = params.serialNo
+		if(params.subject && !"".equals(params.subject)) searchArgs["subject"] = params.subject
+		if(params.status && !"".equals(params.status)) searchArgs["status"] = params.status
+		
 		if(params.refreshData){
 			def args =[:]
 			int perPageNum = Util.str2int(params.perPageNum)
@@ -555,10 +599,10 @@ class DsjController {
 			if("person".equals(params.type)){
 				//个人待办
 				args["user"] = user
-				gridData = dsjService.getDsjListDataStoreByUser(args)
+				gridData = dsjService.getDsjListDataStoreByUser(args,searchArgs)
 			}else if("all".equals(params.type)){
 				//所有文档
-				gridData = dsjService.getDsjListDataStore(args)
+				gridData = dsjService.getDsjListDataStore(args,searchArgs)
 			}
 			
 			json["gridData"] = gridData
@@ -568,10 +612,10 @@ class DsjController {
 			def total
 			if("person".equals(params.type)){
 				//个人待办
-				total = dsjService.getDsjCountByUser(company,user)
+				total = dsjService.getDsjCountByUser(company,user,searchArgs)
 			}else if("all".equals(params.type)){
 				//所有文档
-				total = dsjService.getDsjCount(company)
+				total = dsjService.getDsjCount(company,searchArgs)
 			}
 			
 			json["pageControl"] = ["total":total.toString()]

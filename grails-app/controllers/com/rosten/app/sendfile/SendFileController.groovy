@@ -31,6 +31,11 @@ class SendFileController {
 	def taskService
 	def systemService
 	
+	def searchView ={
+		def model =[:]
+		render(view:'/sendFile/sendFileSearch',model:model)
+	}
+	
 	def flowActiveExport ={
 		def sendFile = SendFile.get(params.id)
 		InputStream imageStream = workFlowService.getflowActiveStream(sendFile.processDefinitionId,sendFile.taskId)
@@ -692,6 +697,14 @@ class SendFileController {
 		if(params.refreshHeader){
 			json["gridHeader"] = sendFileService.getSendFileListLayout()
 		}
+		
+		//2014-9-3 增加搜索功能
+		def searchArgs =[:]
+		
+		if(params.fileNo && !"".equals(params.fileNo)) searchArgs["fileNo"] = params.fileNo
+		if(params.title && !"".equals(params.title)) searchArgs["title"] = params.title
+		if(params.status && !"".equals(params.status)) searchArgs["status"] = params.status
+		
 		if(params.refreshData){
 			def args =[:]
 			int perPageNum = Util.str2int(params.perPageNum)
@@ -705,10 +718,10 @@ class SendFileController {
 			if("person".equals(params.type)){
 				//个人待办
 				args["user"] = user
-				gridData = sendFileService.getSendFileListDataStoreByUser(args)
+				gridData = sendFileService.getSendFileListDataStoreByUser(args,searchArgs)
 			}else if("all".equals(params.type)){
 				//所有文档
-				gridData = sendFileService.getSendFileListDataStore(args)
+				gridData = sendFileService.getSendFileListDataStore(args,searchArgs)
 			}
 			
 			json["gridData"] = gridData
@@ -718,10 +731,10 @@ class SendFileController {
 			def total
 			if("person".equals(params.type)){
 				//个人待办
-				total = sendFileService.getSendFileCountByUser(company,user)
+				total = sendFileService.getSendFileCountByUser(company,user,searchArgs)
 			}else if("all".equals(params.type)){
 				//所有文档
-				total = sendFileService.getSendFileCount(company)
+				total = sendFileService.getSendFileCount(company,searchArgs)
 			}
 			
 			json["pageControl"] = ["total":total.toString()]

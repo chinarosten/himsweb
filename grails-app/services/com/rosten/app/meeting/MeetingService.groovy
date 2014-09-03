@@ -11,30 +11,39 @@ class MeetingService {
 		logEntity.content = content
 		logEntity.save(flush:true)
 	}
-	def getMeetingListDataStoreByUser ={params->
+	def getMeetingListDataStoreByUser ={params,searchArgs->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15
-		def propertyList = getAllMeetingByUser(offset,max,params.company,params.user)
+		def propertyList = getAllMeetingByUser(offset,max,params.company,params.user,searchArgs)
 
 		def gridUtil = new GridUtil()
 		return gridUtil.buildDataList("id","title",propertyList,offset)
 	}
-	private def getAllMeetingByUser={offset,max,company,user->
+	private def getAllMeetingByUser={offset,max,company,user,searchArgs->
 		def c = Meeting.createCriteria()
 		def pa=[max:max,offset:offset]
 		def query = {
 			eq("company",company)
 			eq("currentUser",user)
 			order("createDate", "desc")
+			
+			searchArgs.each{k,v->
+				like(k,"%" + v + "%")
+			}
+			
 		}
 		return c.list(pa,query)
 	}
-	def getMeetingCountByUser ={company,user->
+	def getMeetingCountByUser ={company,user,searchArgs->
 		def c = Meeting.createCriteria()
 		def query = {
 			eq("company",company)
 			eq("currentUser",user)
 			order("createDate", "desc")
+			
+			searchArgs.each{k,v->
+				like(k,"%" + v + "%")
+			}
 		}
 		return c.count(query)
 	}
@@ -43,28 +52,36 @@ class MeetingService {
 		def gridUtil = new GridUtil()
 		return gridUtil.buildLayoutJSON(new Meeting())
 	}
-	def getMeetingListDataStore ={params->
+	def getMeetingListDataStore ={params,searchArgs->
 		Integer offset = (params.offset)?params.offset.toInteger():0
 		Integer max = (params.max)?params.max.toInteger():15
-		def propertyList = getAllMeeting(offset,max,params.company)
+		def propertyList = getAllMeeting(offset,max,params.company,searchArgs)
 
 		def gridUtil = new GridUtil()
 		return gridUtil.buildDataList("id","title",propertyList,offset)
 	}
-	def getAllMeeting ={offset,max,company->
+	def getAllMeeting ={offset,max,company,searchArgs->
 		def c = Meeting.createCriteria()
 		def pa=[max:max,offset:offset]
 		def query = {
 			eq("company",company)
 			order("createDate", "desc")
+			
+			searchArgs.each{k,v->
+				like(k,"%" + v + "%")
 			}
+		}
 		return c.list(pa,query)
 	}
-	def getMeetingCount ={company->
+	def getMeetingCount ={company,searchArgs->
 		def c = Meeting.createCriteria()
 		def query = { 
 			eq("company",company)
 			order("createDate", "desc")
+			
+			searchArgs.each{k,v->
+				like(k,"%" + v + "%")
+			}
 		}
 		return c.count(query)
 	}

@@ -57,48 +57,10 @@
 					</g:if>
 				});
 				meeting_add = function(){
-					var drafterDepart = registry.byId("drafterDepart");
-					if(!drafterDepart.isValid()){
-						rosten.alert("拟稿部门不正确！").queryDlgClose = function(){
-							drafterDepart.focus();
-						};
-						return;
-					}
-					var subject = registry.byId("subject");
-					if(!subject.isValid()){
-						rosten.alert("标题不正确！").queryDlgClose = function(){
-							subject.focus();
-						};
-						return;
-					}
-					var startDate = registry.byId("startDate");
-					if(!startDate.isValid()){
-						rosten.alert("开始时间不正确！").queryDlgClose = function(){
-							startDate.focus();
-						};
-						return;
-					}
-					var endDate = registry.byId("endDate");
-					if(!endDate.isValid()){
-						rosten.alert("结束时间不正确！").queryDlgClose = function(){
-							endDate.focus();
-						};
-						return;
-					}
-					var address = registry.byId("address");
-					if(!address.isValid()){
-						rosten.alert("会议地点不正确！").queryDlgClose = function(){
-							address.focus();
-						};
-						return;
-					}
-					var presider = registry.byId("presider");
-					if(!presider.isValid()){
-						rosten.alert("主持人不正确！").queryDlgClose = function(){
-							presider.focus();
-						};
-						return;
-					}
+
+					var chenkids = ["drafterDepart","subject","startDate","endDate","address","presider"];
+					if(!rosten.checkData(chenkids)) return;
+					
 					var joiner = registry.byId("joiner");
 					if(joiner.get("value")==""){
 						rosten.alert("参与人员不正确！").queryDlgClose = function(){
@@ -122,6 +84,27 @@
 							rosten.alert("保存失败!");
 						}
 					},null,"meeting_form");
+				};
+				meeting_submit_select = function(url){
+					var rostenShowDialog = rosten.selectFlowUser(url,"single");
+		            rostenShowDialog.callback = function(data) {
+		            	var _data = [];
+		            	for (var k = 0; k < data.length; k++) {
+		            		var item = data[k];
+		            		_data.push(item.value + ":" + item.departId);
+		            	};
+		            	meeting_deal("submit",_data);	
+		            }
+					rostenShowDialog.afterLoad = function(){
+						var _data = rostenShowDialog.getData();
+			            if(_data && _data.length==1){
+				            //直接调用
+			            	rostenShowDialog.doAction();
+				        }else{
+							//显示对话框
+							rostenShowDialog.open();
+					    }
+					}
 				};
 				meeting_deal = function(type,readArray){
 					var content = {};
@@ -147,29 +130,38 @@
 						}	
 					});
 				};
-				meeting_achive = function(){
-					meeting_deal("achive");
-				};
 				meeting_submit = function(){
-					var rostenShowDialog = rosten.selectFlowUser("${createLink(controller:'meeting',action:'getDealWithUser',params:[companyId:company?.id,id:meeting?.id])}","single");
-		            rostenShowDialog.callback = function(data) {
-		            	var _data = [];
-		            	for (var k = 0; k < data.length; k++) {
-		            		var item = data[k];
-		            		_data.push(item.value + ":" + item.departId);
-		            	};
-		            	meeting_deal("submit",_data);	
-		            }
-					rostenShowDialog.afterLoad = function(){
-						var _data = rostenShowDialog.getData();
-			            if(_data && _data.length==1){
-				            //直接调用
-			            	rostenShowDialog.doAction();
-				        }else{
-							//显示对话框
-							rostenShowDialog.open();
-					    }
-					}
+					//从后台获取下一处理人
+					var content = {};
+					rosten.readSync("${createLink(controller:'meeting',action:'getSelectFlowUser',params:[companyId:company?.id,id:meeting?.id])}",content,function(data){
+						if(data.dealFlow==false){
+							//流程无下一节点
+							meeting_deal("submit");
+							return;
+						}
+						var url = "${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}";
+						if(data.dealType=="user"){
+							//人员处理
+							if(data.showDialog==false){
+								//单一处理人
+								var _data = [];
+								_data.push(data.userId + ":" + data.userDepart);
+								meeting_deal("submit",_data);
+							}else{
+								//多人，多部门处理
+								url += "&type=user&user=" + data.user;
+								meeting_submit_select(url);
+							}
+						}else{
+							//群组处理
+							url += "&type=group&groupIds=" + data.groupIds;
+							if(data.limitDepart){
+								url += "&limitDepart="+data.limitDepart;
+							}
+							meeting_submit_select(encodeURI(url));
+						}
+
+					});
 				};
 				page_quit = function(){
 					rosten.pagequit();

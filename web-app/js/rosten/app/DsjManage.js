@@ -4,7 +4,40 @@
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
 	
-	
+	dsj_search = function(){
+		var content = {};
+		
+		switch(rosten.kernel.navigationEntity) {
+		default:
+			var serialNo = registry.byId("s_serialno");
+			if(serialNo.get("value")!=""){
+				content.serialNo = serialNo.get("value");
+			}
+			
+			var subject = registry.byId("s_subject");
+			if(subject.get("value")!=""){
+				content.subject = subject.get("value");
+			}
+			
+			var status = registry.byId("s_status");
+			if(status.get("value")!=""){
+				content.status = status.get("value");
+			}
+			break;
+		}
+		rosten.kernel.refreshGrid(rosten.kernel.getGrid().defaultUrl, content);
+	};
+	dsj_resetSearch = function(){
+		switch(rosten.kernel.navigationEntity) {
+		default:
+			registry.byId("s_serialno").set("value","");
+			registry.byId("s_subject").set("value","");
+			registry.byId("s_status").set("value","");
+			break;
+		}	
+		
+		rosten.kernel.refreshGrid();
+	};
 	dsj_changeStatus = function(){
 			
 			
@@ -66,6 +99,7 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 			var naviJson = {
 				identifier : oString,
 				actionBarSrc : rosten.webPath + "/dsjAction/dsjView",
+				searchSrc:rosten.webPath + "/dsj/searchView",
 				gridSrc : rosten.webPath + "/dsj/dsjGrid?companyId=" + companyId + "&userId=" + userid + "&type=person"
 			};
 			rosten.kernel.addRightContent(naviJson);
@@ -74,6 +108,7 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 			var naviJson = {
 				identifier : oString,
 				actionBarSrc : rosten.webPath + "/dsjAction/allDsjView?userId=" + userid,
+				searchSrc:rosten.webPath + "/dsj/searchView",
 				gridSrc : rosten.webPath + "/dsj/dsjGrid?companyId=" + companyId + "&userId=" + userid + "&type=all"
 			};
 			rosten.kernel.addRightContent(naviJson);

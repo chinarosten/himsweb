@@ -3,6 +3,40 @@
  */
 define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/kernel","rosten/kernel/behavior" ], function(
 		connect, lang,registry,kernel) {
+	sendFile_search = function(){
+		var content = {};
+		
+		switch(rosten.kernel.navigationEntity) {
+		default:
+			var fileNo = registry.byId("s_fileNo");
+			if(fileNo.get("value")!=""){
+				content.fileNo = fileNo.get("value");
+			}
+			
+			var title = registry.byId("s_title");
+			if(title.get("value")!=""){
+				content.title = title.get("value");
+			}
+			
+			var status = registry.byId("s_status");
+			if(status.get("value")!=""){
+				content.status = status.get("value");
+			}
+			break;
+		}
+		rosten.kernel.refreshGrid(rosten.kernel.getGrid().defaultUrl, content);
+	};
+	sendFile_resetSearch = function(){
+		switch(rosten.kernel.navigationEntity) {
+		default:
+			registry.byId("s_fileNo").set("value","");
+			registry.byId("s_title").set("value","");
+			registry.byId("s_status").set("value","");
+			break;
+		}	
+		
+		rosten.kernel.refreshGrid();
+	};
 	sendFile_changeStatus = function(){
 			
 			

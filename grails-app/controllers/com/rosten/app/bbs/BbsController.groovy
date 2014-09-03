@@ -327,7 +327,7 @@ class BbsController {
 		ProcessInstance processInstance = workFlowService.getProcessIntance(bbs.processInstanceId)
 		if(!processInstance || processInstance.isEnded()){
 			//流程已结束
-			nextStatus = "已归档"
+			nextStatus = "已结束"
 			bbs.currentUser = null
 			bbs.currentDepart = null
 			bbs.taskId = null

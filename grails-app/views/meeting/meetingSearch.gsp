@@ -21,9 +21,9 @@
                 	data-dojo-props='trim:true
                '/>
             </td>
-            <th width="5%">主题</th>
+            <th width="5%">标题</th>
             <td width="18%">
-            	<input id="s_topic"  data-dojo-type="dijit/form/ValidationTextBox" 
+            	<input id="s_subject"  data-dojo-type="dijit/form/ValidationTextBox" 
                 	data-dojo-props='trim:true
                '/>
             </td>
@@ -32,7 +32,7 @@
             	<select id="s_status" data-dojo-type="dijit/form/ComboBox"
 	                data-dojo-props='trim:true,value:""
 	            '>
-					<option value="起草">起草</option>
+					<option value="拟稿">拟稿</option>
 					<option value="部门审核">部门审核</option>
 					<option value="领导审批">领导审批</option>
 					<option value="已发布">已发布</option>
@@ -42,8 +42,8 @@
             </td>
             <td>
             	<div class="btn">
-                	<button data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){bbs_search()}'>查询</button>
-                	<button data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){bbs_resetSearch()}'>重置条件</button>
+                	<button data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){meeting_search()}'>查询</button>
+                	<button data-dojo-type="dijit/form/Button" data-dojo-props='onClick:function(){meeting_resetSearch()}'>重置条件</button>
               	</div>
             </td>
           </tr>

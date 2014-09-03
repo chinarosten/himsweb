@@ -27,6 +27,10 @@ class MeetingController {
 	def taskService
 	def systemService
 	
+	def searchView ={
+		def model =[:]
+		render(view:'/meeting/meetingSearch',model:model)
+	}
 	def flowActiveExport ={
 		def meeting = Meeting.get(params.id)
 		InputStream imageStream = workFlowService.getflowActiveStream(meeting.processDefinitionId,meeting.taskId)
@@ -40,25 +44,54 @@ class MeetingController {
 		response.outputStream.close()
 		
 	}
-	def getDealWithUser ={
+	/*
+	 * 获取下个处理人员----2014-9-3
+	 */
+	def getSelectFlowUser ={
+		def json=[:]
+		json.dealFlow = true
+		
 		def currentUser = springSecurityService.getCurrentUser()
 		
 		def meeting = Meeting.get(params.id)
-		def meetingDefEntity = workFlowService.getNextTaskDefinition(meeting.taskId);
+		def defEntity = workFlowService.getNextTaskDefinition(meeting.taskId);
 		
-		def expEntity = meetingDefEntity.getAssigneeExpression()
-		if(expEntity){
-			def expEntityText = expEntity.getExpressionText()
-			if(expEntityText.contains("{")){
-				params.user = meeting.drafter.username
-			}else{
-				params.user = expEntity.getExpressionText()
-			}
-			redirect controller: "system",action:'userTreeDataStore', params: params
+		if(!defEntity){
+			//流程处于最后一个节点
+			json.dealFlow = false
+			render json as JSON
 			return
 		}
 		
-		def groupEntity = meetingDefEntity.getCandidateGroupIdExpressions()
+		//存在处理人员的情况
+		def expEntity = defEntity.getAssigneeExpression()
+		if(expEntity){
+			def expEntityText = expEntity.getExpressionText()
+			if(expEntityText.contains("{")){
+				json.user = meeting.drafter.username
+			}else{
+				json.user = expEntity.getExpressionText()
+			}
+			
+			//判断下一处理人是否有多部门情况，如果有，则弹出对话框选择，如果没有，直接进入下一步
+			def userEntity = User.findByUsername(json.user)
+			def userDeparts = userEntity.getAllDepartEntity()
+			if(userDeparts && userDeparts.size()>1){
+				//一个人存在多个部门的情况，这种情况比较少
+				json.showDialog = true
+			}else{
+				json.showDialog = false
+				json.userDepart = userDeparts[0].departName
+				json.userId = userEntity.id
+			}
+			
+			json.dealType = "user"
+			render json as JSON
+			return
+		}
+		
+		//处理部门群组的情况
+		def groupEntity = defEntity.getCandidateGroupIdExpressions()
 		if(groupEntity.size()>0){
 			//默认有一组group的方式为true，则整组均为true;true:严格控制本部门权限
 			def groupIds = []
@@ -69,12 +102,13 @@ class MeetingController {
 					limit = true
 				}
 			}
-			params.groupIds = groupIds.unique().join("-")
+			json.groupIds = groupIds.unique().join("-")
 			if(limit){
-				params.limitDepart = currentUser.getDepartEntityTrueName()
+				json.limitDepart = currentUser.getDepartEntityTrueName()
 			}
 			
-			redirect controller: "system",action:'userTreeDataStore', params: params
+			json.dealType = "group"
+			render json as JSON
 			return
 		}
 		
@@ -97,7 +131,7 @@ class MeetingController {
 		ProcessInstance processInstance = workFlowService.getProcessIntance(meeting.processInstanceId)
 		if(!processInstance || processInstance.isEnded()){
 			//流程已结束
-			nextStatus = "已归档"
+			nextStatus = "已结束"
 			meeting.currentUser = null
 			meeting.currentDepart = null
 			meeting.taskId = null
@@ -139,7 +173,7 @@ class MeetingController {
 					def args = [:]
 					args["type"] = "【会议通知】"
 					args["content"] = "请您审核名称为  【" + meeting.subject +  "】 的会议通知"
-					args["contentStatus"] = meeting.status
+					args["contentStatus"] = nextStatus
 					args["contentId"] = meeting.id
 					args["user"] = nextUser
 					args["company"] = nextUser.company
@@ -182,17 +216,13 @@ class MeetingController {
 		}
 		
 		if(meeting.save(flush:true)){
-			//添加日志
-			def meetingLog = new MeetingLog()
-			meetingLog.user = currentUser
-			meetingLog.meeting = meeting
 			
-			switch (meeting.status){
-				case "审核":
-					meetingLog.content = "提交审核【" + nextUsers.join("、") + "】"
-					break
-				case "已签发":
-					meetingLog.content = "签发文件【" + nextUsers.join("、") + "】" 
+			//添加日志
+			def logContent
+			switch (true){
+				case meeting.status.contains("已发布"):
+				case meeting.status.contains("已签发"):
+					logContent = "签发文件【" + nextUsers.join("、") + "】"
 					
 					//增加相关与会人员的待办工作任务
 					def gtaskList = []
@@ -212,14 +242,17 @@ class MeetingController {
 					}
 					
 					break
-				case "已归档":
-					meetingLog.content = "归档发文"
+				case meeting.status.contains("归档"):
+					logContent = "归档"
 					break
-				case "不同意":
-					meetingLog.content = "不同意签发！"
+				case meeting.status.contains("不同意"):
+					logContent = "不同意！"
+					break
+				default:
+					logContent = "提交" + meeting.status + "【" + nextUsers.join("、") + "】"
 					break
 			}
-			meetingLog.save(flush:true)
+			meetingService.addFlowLog(meeting,currentUser,logContent)
 			
 			json["result"] = true
 		}else{
@@ -562,6 +595,14 @@ class MeetingController {
 		if(params.refreshHeader){
 			json["gridHeader"] = meetingService.getMeetingListLayout()
 		}
+		
+		//2014-9-3 增加搜索功能
+		def searchArgs =[:]
+		
+		if(params.serialNo && !"".equals(params.serialNo)) searchArgs["serialNo"] = params.serialNo
+		if(params.subject && !"".equals(params.subject)) searchArgs["subject"] = params.subject
+		if(params.status && !"".equals(params.status)) searchArgs["status"] = params.status
+		
 		if(params.refreshData){
 			def args =[:]
 			int perPageNum = Util.str2int(params.perPageNum)
@@ -575,10 +616,10 @@ class MeetingController {
 			if("person".equals(params.type)){
 				//个人待办
 				args["user"] = user
-				gridData = meetingService.getMeetingListDataStoreByUser(args)
+				gridData = meetingService.getMeetingListDataStoreByUser(args,searchArgs)
 			}else if("all".equals(params.type)){
 				//所有文档
-				gridData = meetingService.getMeetingListDataStore(args)
+				gridData = meetingService.getMeetingListDataStore(args,searchArgs)
 			}
 			
 			json["gridData"] = gridData
@@ -588,10 +629,10 @@ class MeetingController {
 			def total
 			if("person".equals(params.type)){
 				//个人待办
-				total = meetingService.getMeetingCountByUser(company,user)
+				total = meetingService.getMeetingCountByUser(company,user,searchArgs)
 			}else if("all".equals(params.type)){
 				//所有文档
-				total = meetingService.getMeetingCount(company)
+				total = meetingService.getMeetingCount(company,searchArgs)
 			}
 			
 			json["pageControl"] = ["total":total.toString()]
