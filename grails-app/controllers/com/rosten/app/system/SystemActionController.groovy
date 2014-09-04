@@ -6,6 +6,13 @@ class SystemActionController {
 	def systemService
 	def imgPath ="images/rosten/actionbar/"
 	
+	def personWorkLogForm ={
+		def webPath = request.getContextPath() + "/"
+		def actionList = []
+		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
+		actionList << createAction("保存",webPath + imgPath + "Save.gif","workLog_add")
+		render actionList as JSON
+	}
 	def personWorkLogView = {
 		def actionList = createCommonAction(null,"personWorkLog",true)
 		render actionList as JSON

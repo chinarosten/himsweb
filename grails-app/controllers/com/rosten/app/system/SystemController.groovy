@@ -13,6 +13,10 @@ class SystemController {
 	def systemService
 	//def workFlowService
 	
+	def workLogGetContent ={
+		def workLog = WorkLog.get(params.id)
+		render workLog.content
+	}
 	def personWorkLogAdd ={
 		redirect(action:"personWorkLogShow",params:params)
 	}

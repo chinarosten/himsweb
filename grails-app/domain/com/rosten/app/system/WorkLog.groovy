@@ -21,13 +21,13 @@ class WorkLog {
 		}
 	}
 	
-	//日志内容
-	@GridColumn(name="日志内容",colIdx=2,formatter="personWorkLog_formatTopic")
-	String content
-	
 	//日志类型
-	@GridColumn(name="日志类型",width="100px" ,colIdx=3)
+	@GridColumn(name="日志类型",width="100px",colIdx=2)
 	String logType = "工作日志"
+	
+	//日志内容
+	@GridColumn(name="日志内容",colIdx=3,formatter="personWorkLog_formatTopic")
+	String content
 	
 	//所属用户
 	static belongsTo = [user:User]

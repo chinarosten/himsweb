@@ -38,7 +38,7 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/beha
     	window.open(url,false);
     };
     start_flow = function(){
-    	var unid = rosten.getGridUnid("single");
+    	var unid = rosten.getGridUnid("multi");
         if (unid == "")
             return;
         rosten.readSync(rosten.webPath + "/modeler/flowUpdateState",{id:unid,status:"active"},function(data){
@@ -52,7 +52,7 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/beha
 		});
     };
     stop_flow = function(){
-    	var unid = rosten.getGridUnid("single");
+    	var unid = rosten.getGridUnid("multi");
         if (unid == "")
             return;
         rosten.readSync(rosten.webPath + "/modeler/flowUpdateState",{id:unid,status:"suspend"},function(data){

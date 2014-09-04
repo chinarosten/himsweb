@@ -301,6 +301,17 @@ define(["dojo/_base/kernel"
         	node.appendChild(ul);
         });
     };
+    more_workLog = function(){
+        var key = rosten.kernel.getMenuKeyByCode("personconfig");
+        if(key!=null){
+            rosten.kernel._naviMenuShow(key);
+            require(["rosten/app/SmsManage"],function(){
+                show_naviEntity("personWorkLog");
+            });
+        }else{
+            rosten.alert("未找到相对应的模块,请通知管理员");
+        }
+    };
     more_gtask = function(){
     	var key = rosten.kernel.getMenuKeyByCode("personconfig");
     	if(key!=null){

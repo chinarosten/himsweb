@@ -34,10 +34,12 @@ class ModelerController {
 	def flowUpdateState ={
 		def json=[:]
 		try{
-			if ("active".equals(params.status)) {
-				repositoryService.activateProcessDefinitionById(params.id, true, null);
-			}else{
-				repositoryService.suspendProcessDefinitionById(params.id, true, null);
+			params.id.split(",").each{
+				if ("active".equals(params.status)) {
+					repositoryService.activateProcessDefinitionById(it, true, null);
+				}else{
+					repositoryService.suspendProcessDefinitionById(it, true, null);
+				}
 			}
 			json["result"] = "true"
 		}catch(Exception e){

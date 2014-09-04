@@ -9,16 +9,35 @@
 		require(["dojo/parser",
 		 		"dojo/_base/kernel",
 		 		"dijit/registry",
+		 		"dojo/_base/xhr",
 		 		"dijit/layout/TabContainer",
 		 		"dijit/form/ValidationTextBox",
 		 		"dijit/layout/ContentPane",
 		 		"dijit/form/SimpleTextarea",
+		 		"dijit/Editor",
+				"dijit/_editor/plugins/FontChoice",
+		 		"rosten/widget/TitlePane",
 		     	"rosten/widget/ActionBar",
 		     	"rosten/app/SystemApplication"
-		     	],function(parser,kernel,registry){
+		     	],function(parser,kernel,registry,xhr){
 			kernel.addOnLoad(function(){
 				rosten.init({webpath:"${request.getContextPath()}"});
 				rosten.cssinit();
+
+				<g:if test="${workLog.id && workLog.id!=null && !"".equals(workLog.id)}">
+				
+				var ioArgs = {
+					url : rosten.webPath + "/system/workLogGetContent/${workLog?.id}",
+					sync : true,
+					handleAs : "text",
+					preventCache : true,
+					encoding : "utf-8",
+					load : function(data) {
+						registry.byId("content").set("value",data);
+					}
+				};
+				xhr.get(ioArgs);
+			</g:if>
 			});
 			workLog_add = function(){
 		    	var date = registry.byId("date");
@@ -57,7 +76,7 @@
 			data-dojo-props='actionBarSrc:"${createLink(controller:'systemAction',action:'personWorkLogForm',params:[userid:user?.id])}"'></div>
 	</div>
 	<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
-	  	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props='style:{height:"590px"}'>
+	  	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props='style:{height:"420px"}'>
         	<form class="rosten_form" id="rosten_form" onsubmit="return false;" style="padding:0px">
         		<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${workLog?.id }"' />
         	  	<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"基本信息",toggleable:false,moreText:"",height:"460px",marginBottom:"2px"'>

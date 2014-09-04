@@ -278,7 +278,7 @@
 						<div data-dojo-type="rosten/widget/TitlePane"
 							data-dojo-props='region:"center",title:"工作日志",toggleable:false,
 								height:"157px",
-								_moreClick:more_bbs,moreText:"更多"'>
+								_moreClick:more_workLog,moreText:"更多"'>
 								
 							<div class="por-mod"> 
 							<!--计划-->
