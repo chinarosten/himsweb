@@ -92,6 +92,33 @@ define([
 			onComplete: callback
 		});
 	};
+	behavior.toggleAction = function(obj,oBoolean){
+		var widget = registry.getEnclosingWidget(obj);
+		if(widget){
+			widget.set("disabled",oBoolean);
+		}
+	};
+	behavior.commonCallback = function(data,oString,func1,func2){
+		var sucessStr = "成功!";
+		var failureStr = "失败!";
+		if(oString){
+			sucessStr = oString + sucessStr;
+			failureStr = oString + failureStr;
+		}
+    	if (data.result == "true" || data.result == true) {
+            if(func1){
+            	rosten.alert(sucessStr).queryDlgClose = fun1;
+            }else{
+            	rosten.alert(sucessStr);
+            }
+        } else {
+        	if(func2){
+            	rosten.alert(sucessStr).queryDlgClose = fun2;
+            }else{
+            	rosten.alert(failureStr);
+            }
+        }
+    };
     lang.mixin(_kernel,behavior);
     return behavior;
 });

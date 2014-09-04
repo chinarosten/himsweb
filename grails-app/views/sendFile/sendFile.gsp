@@ -40,9 +40,13 @@
 					rosten.init({webpath:"${request.getContextPath()}"});
 					rosten.cssinit();
 				});
-				sendfile_add = function(){
+				sendfile_add = function(object){
 					var chenkids = ["fileType","dealDepart","title","mainSend"];
 					if(!rosten.checkData(chenkids)) return;
+
+					//增加对多次单击的次数----2014-9-4
+					var buttonWidget = object.target;
+					rosten.toggleAction(buttonWidget,true);
 					
 					rosten.readSync(rosten.webPath + "/sendFile/sendFileSave",{},function(data){
 						if(data.result=="true" || data.result == true){
@@ -60,10 +64,14 @@
 						}else{
 							rosten.alert("保存失败!");
 						}
-					},null,"sendfile_form");
+						rosten.toggleAction(buttonWidget,false);
+					},function(error){
+						rosten.alert("系统错误，请通知管理员！");
+						rosten.toggleAction(buttonWidget,false);
+					},"sendfile_form");
 					
 				};
-				sendfile_deal = function(type,readArray){
+				sendfile_deal = function(type,readArray,buttonWidget){
 					var content = {};
 					content.id = registry.byId("id").attr("value");
 					content.deal = type;
@@ -89,19 +97,28 @@
 							}
 						}else{
 							rosten.alert("失败!");
+							rosten.toggleAction(buttonWidget,false);
 						}	
+					},function(error){
+						rosten.alert("系统错误，请通知管理员！");
+						rosten.toggleAction(buttonWidget,false);
 					});
 				};
-				sendfile_submit_select = function(url){
+				sendfile_submit_select = function(url,buttonWidget){
 					var rostenShowDialog = rosten.selectFlowUser(url,"single");
 		            rostenShowDialog.callback = function(data) {
-		            	var _data = [];
-		            	for (var k = 0; k < data.length; k++) {
-		            		var item = data[k];
-		            		_data.push(item.value + ":" + item.departId);
-		            	};
-		            	sendfile_deal("submit",_data);	
-		            }
+		            	if(data.length==0){
+			            	rosten.alert("请正确选择人员！");
+		            		rosten.toggleAction(buttonWidget,false);
+			            }else{
+			            	var _data = [];
+			            	for (var k = 0; k < data.length; k++) {
+			            		var item = data[k];
+			            		_data.push(item.value + ":" + item.departId);
+			            	};
+			            	sendfile_deal("submit",_data,buttonWidget);	
+				       	}
+		            };
 					rostenShowDialog.afterLoad = function(){
 						var _data = rostenShowDialog.getData();
 			            if(_data && _data.length==1){
@@ -111,15 +128,23 @@
 							//显示对话框
 							rostenShowDialog.open();
 					    }
-					}
+					};
+					rostenShowDialog.queryDlgClose = function(){
+						rosten.toggleAction(buttonWidget,false);
+					};
 				};
-				sendfile_submit = function(){
+				sendfile_submit = function(object){
 					//从后台获取下一处理人
+					
+					//增加对多次单击的次数----2014-9-4
+					var buttonWidget = object.target;
+					rosten.toggleAction(buttonWidget,true);
+					
 					var content = {};
 					rosten.readSync("${createLink(controller:'sendFile',action:'getSelectFlowUser',params:[companyId:company?.id,id:sendFile?.id])}",content,function(data){
 						if(data.dealFlow==false){
 							//流程无下一节点
-							sendfile_deal("submit");
+							sendfile_deal("submit",null,buttonWidget);
 							return;
 						}
 						var url = "${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}";
@@ -129,11 +154,11 @@
 								//单一处理人
 								var _data = [];
 								_data.push(data.userId + ":" + data.userDepart);
-								sendfile_deal("submit",_data);
+								sendfile_deal("submit",_data,buttonWidget);
 							}else{
 								//多人，多部门处理
 								url += "&type=user&user=" + data.user;
-								sendfile_submit_select(url);
+								sendfile_submit_select(url,buttonWidget);
 							}
 						}else{
 							//群组处理
@@ -141,9 +166,12 @@
 							if(data.limitDepart){
 								url += "&limitDepart="+data.limitDepart;
 							}
-							sendfile_submit_select(encodeURI(url));
+							sendfile_submit_select(encodeURI(url),buttonWidget);
 						}
 
+					},function(error){
+						rosten.alert("系统错误，请通知管理员！");
+						rosten.toggleAction(buttonWidget,false);
 					});
 				};
 				sendfile_achive = function(){
