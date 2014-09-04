@@ -6,6 +6,10 @@ class SystemActionController {
 	def systemService
 	def imgPath ="images/rosten/actionbar/"
 	
+	def personWorkLogView = {
+		def actionList = createCommonAction(null,"personWorkLog",true)
+		render actionList as JSON
+	}
 	def authorizeView ={
 		def actionList = createCommonAction(null,"authorize",true)
 		actionList << createAction("启用授权",imgPath + "authorize_start.gif","authorize_start")

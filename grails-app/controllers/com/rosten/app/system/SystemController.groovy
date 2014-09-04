@@ -13,6 +13,84 @@ class SystemController {
 	def systemService
 	//def workFlowService
 	
+	def personWorkLogAdd ={
+		redirect(action:"personWorkLogShow",params:params)
+	}
+	def personWorkLogShow ={
+		def model =[:]
+		
+		if(params.id){
+			model["workLog"] = WorkLog.get(params.id)
+		}else{
+			model["workLog"] = new WorkLog()
+		}
+		model["user"] = springSecurityService.getCurrentUser()
+		
+		FieldAcl fa = new FieldAcl()
+		model["fieldAcl"] = fa
+		render(view:'/system/workLog',model:model)
+	}
+	def personWorkLogSave ={
+		def model=[:]
+		def workLog = new WorkLog()
+		if(params.unid && !"".equals(params.unid)){
+			workLog = WorkLog.get(params.unid)
+		}else{
+			workLog.user = springSecurityService.getCurrentUser()
+		}
+		
+		workLog.properties = params
+		
+		if(workLog.save(flush:true)){
+			model["result"] = "true"
+		}else{
+			workLog.errors.each{
+				println it
+			}
+			model["result"] = "false"
+		}
+		render model as JSON
+	}
+	def personWorkLogDelete ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def workLog = WorkLog.get(it)
+				if(workLog){
+					workLog.delete(flush: true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
+	}
+	def personWorkLogGrid ={
+		def model=[:]
+		def user = User.get(params.userid)
+		if(params.refreshHeader){
+			model["gridHeader"] = systemService.getWorkLogListLayout()
+		}
+		if(params.refreshData){
+			def args =[:]
+			int perPageNum = Util.str2int(params.perPageNum)
+			int nowPage =  Util.str2int(params.showPageNum)
+			
+			args["offset"] = (nowPage-1) * perPageNum
+			args["max"] = perPageNum
+			args["user"] = user
+			model["gridData"] = systemService.getWorkLogListDataStore(args)
+			
+		}
+		if(params.refreshPageControl){
+			def total = systemService.getWorkLogCount(user)
+			model["pageControl"] = ["total":total.toString()]
+		}
+		render model as JSON
+	}
+	
 	def systemSearchView ={
 		def model =[:]
 		render(view:'/system/userSearch',model:model)

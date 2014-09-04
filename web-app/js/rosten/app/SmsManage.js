@@ -7,6 +7,53 @@ define(["dojo/dom",
         "rosten/widget/PickTreeDialog",
         "rosten/app/Application",
         "rosten/kernel/behavior"], function(dom,registry,connect,PickTreeDialog) {
+	
+	
+	add_personWorkLog = function() {
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        var companyId = rosten.kernel.getUserInforByKey("companyid");
+        rosten.openNewWindow("personWorkLog", rosten.webPath + "/system/personWorkLogAdd?companyId=" + companyId + "&userid=" + userid);
+    };
+    read_personWorkLog = function() {
+        change_personWorkLog();
+    };
+    change_personWorkLog = function() {
+        var unid = rosten.getGridUnid("single");
+        if (unid == "")
+            return;
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        var companyId = rosten.kernel.getUserInforByKey("companyid");
+        rosten.openNewWindow("personWorkLog", rosten.webPath + "/system/personWorkLogShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+        rosten.kernel.getGrid().clearSelected();
+    };
+    delete_personWorkLog = function() {
+        var _1 = rosten.confirm("删除后将无法恢复，是否继续?");
+        _1.callback = function() {
+            var unids = rosten.getGridUnid("multi");
+            if (unids == "")
+                return;
+            var content = {};
+            content.id = unids;
+            rosten.read(rosten.webPath + "/system/personWorkLogDelete", content, function(data){
+            	if (data.result == "true" || data.result == true) {
+                    rosten.alert("成功删除!");
+                    rosten.kernel.refreshGrid();
+                } else {
+                    rosten.alert("删除失败!");
+                }
+            });
+        };
+    };
+    personWorkLog_formatTopic = function(value,rowIndex){
+		return "<a href=\"javascript:personWorkLog_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+	};
+	personWorkLog_onMessageOpen = function(rowIndex){
+        var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("personWorkLog", rosten.webPath + "/system/personWorkLogShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
+	};
 	authorize_formatTopic = function(value,rowIndex){
 		return "<a href=\"javascript:authorize_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
 	};
@@ -235,6 +282,14 @@ define(["dojo/dom",
                     identifier : oString,
                     actionBarSrc : rosten.webPath + "/systemAction/authorizeView?userId=" + userid,
                     gridSrc : rosten.webPath + "/system/authorizeGrid?userid=" + userid + "&companyId=" + companyId
+                };
+                rosten.kernel.addRightContent(naviJson);
+                break;
+            case "personWorkLog":
+                var naviJson = {
+                    identifier : oString,
+                    actionBarSrc : rosten.webPath + "/systemAction/personWorkLogView?userId=" + userid,
+                    gridSrc : rosten.webPath + "/system/personWorkLogGrid?userid=" + userid + "&companyId=" + companyId
                 };
                 rosten.kernel.addRightContent(naviJson);
                 break;

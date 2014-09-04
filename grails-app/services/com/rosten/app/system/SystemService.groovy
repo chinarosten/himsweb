@@ -6,6 +6,34 @@ import com.rosten.app.util.GridUtil
 class SystemService {
 	static transactional = true
 	
+	def getWorkLogListDataStore = {params->
+		Integer offset = (params.offset)?params.offset.toInteger():0
+		Integer max = (params.max)?params.max.toInteger():15
+		def propertyList = getAllWorkLog(offset,max,params.user)
+
+		def gridUtil = new GridUtil()
+		return gridUtil.buildDataList("id","title",propertyList,offset)
+	}
+	def getWorkLogListLayout ={
+		def gridUtil = new GridUtil()
+		return gridUtil.buildLayoutJSON(new WorkLog())
+	}
+	def getAllWorkLog={offset,max,user->
+		def c = WorkLog.createCriteria()
+		def pa=[max:max,offset:offset]
+		def query = {
+			eq("user",user)
+		}
+		return c.list(pa,query)
+	}
+	def getWorkLogCount={user->
+		def c = WorkLog.createCriteria()
+		def query = {
+			eq("user",user)
+		}
+		return c.count(query)
+	}
+	
 	private def _getAllDepart ={departList,depart->
 		departList << depart
 		if(depart.children){
