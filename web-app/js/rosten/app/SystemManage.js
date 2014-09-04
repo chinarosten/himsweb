@@ -41,7 +41,7 @@ define(["dojo/_base/connect",
 		rosten.kernel.refreshGrid();
 	};
     changePassword = function(){
-    	var unid = rosten.getGridUnid("single");
+    	var unid = rosten.getGridUnid("multi");
         if (unid == "")
             return;
     	rosten.kernel.createRostenShowDialog(rosten.webPath + "/system/passwordChangeShow1/"+ unid, {
@@ -75,7 +75,7 @@ define(["dojo/_base/connect",
         content.newpassword = newpassword.getValue();
         content.id = registry.byId("dealunid").getValue();
 
-        rosten.read(rosten.webPath + "/system/passwordChangeSubmit1", content, function(data) {
+        rosten.readNoTime(rosten.webPath + "/system/passwordChangeSubmit1", content, function(data) {
             if (data.result == "true") {
                 rosten.kernel.hideRostenShowDialog();
                 rosten.kernel.getGrid().clearSelected();
@@ -297,8 +297,22 @@ define(["dojo/_base/connect",
             rosten.read(rosten.webPath + "/system/groupDelete", content, delete_callback);
         };
     };
+    model_deleteFlow = function(){
+    	 var unids = rosten.getGridUnid("multi");
+         if (unids == "")
+             return;
+         rosten.read(rosten.webPath + "/system/modelDeleteFlow1/" + unids, {}, function(data){
+        	 if (data.result == "true" || data.result == true) {
+                 rosten.alert("成功!");
+                 rosten.kernel.refreshGrid();
+             } else {
+                 rosten.alert("失败!");
+             }
+         });
+         
+    };
     model_addFlow = function(){
-    	 var unids = rosten.getGridUnid("single");
+    	 var unids = rosten.getGridUnid("multi");
          if (unids == "")
              return;
          

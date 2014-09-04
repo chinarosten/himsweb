@@ -119,6 +119,7 @@ class SystemActionController {
 	def modelView ={
 		def _list = createCommonAction(null,"model",true)
 		_list << createAction("关联流程",imgPath + "flow_start.png","model_addFlow")
+		_list << createAction("取消关联流程",imgPath + "flow_stop.png","model_deleteFlow")
 		render  _list as JSON
 	}
 	def modelForm ={

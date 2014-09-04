@@ -17,19 +17,39 @@ class SystemController {
 		def model =[:]
 		render(view:'/system/userSearch',model:model)
 	}
-	def modelAddFlow1 ={
-		def json=[:]
-		def model = Model.get(params.id)
-		model.relationFlow = params.flowId
-		model.relationFlowName = params.flowName
-		
-		if(model.save(flush:true)){
-			json["result"] = "true"
-		}else{
-			model.errors.each{
-				println it
+	def modelDeleteFlow1 ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def model = Model.get(it)
+				if(model){
+					model.relationFlow = null
+					model.relationFlowName = null
+					model.save(flush:true)
+				}
 			}
-			json["result"] = "false"
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'false']
+		}
+		render json as JSON
+	}
+	def modelAddFlow1 ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def model = Model.get(it)
+				if(model){
+					model.relationFlow = params.flowId
+					model.relationFlowName = params.flowName
+					model.save(flush:true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'false']
 		}
 		render json as JSON
 	}
@@ -308,16 +328,19 @@ class SystemController {
 		render(view:'/system/passwordchg1',model:model)
 	}
 	def passwordChangeSubmit1 ={
-		def json =[:]
-		def user = User.get(params.id)
-		user.password = params.newpassword
-		if(user.save(flush:true)){
-			json["result"] = "true"
-		}else{
-			user.errors.each {
-				println it
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def user = User.get(it)
+				if(user){
+					user.password = params.newpassword
+					user.save(flush: true)
+				}
 			}
-			json["result"] = "false"
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'false']
 		}
 		render json as JSON
 	}
