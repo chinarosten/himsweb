@@ -9,42 +9,32 @@
 		require(["dojo/parser",
 		 		"dojo/_base/kernel",
 		 		"dijit/registry",
+		 		"dijit/layout/TabContainer",
 		 		"dijit/form/ValidationTextBox",
+		 		"dijit/layout/ContentPane",
 		 		"dijit/form/SimpleTextarea",
 		     	"rosten/widget/ActionBar",
-		     	"rosten/app/SystemApplication",
-		     	"rosten/kernel/behavior"
+		     	"rosten/app/SystemApplication"
 		     	],function(parser,kernel,registry){
 			kernel.addOnLoad(function(){
 				rosten.init({webpath:"${request.getContextPath()}"});
 				rosten.cssinit();
 			});
-			smsGroup_add = function(){
-		    	var smsGroupName = registry.byId("smsGroupName");
-				if(!smsGroupName.isValid()){
-					rosten.alert("群组名称不正确！").queryDlgClose = function(){
-						smsGroupName.focus();
+			workLog_add = function(){
+		    	var date = registry.byId("date");
+				if(!date.isValid()){
+					rosten.alert("日期不正确！").queryDlgClose = function(){
+						date.focus();
 					};
 					return;
 				}
 				
 				var content = {};
-				var unid = registry.byId("unid");
-				if(unid.attr("value")!=""){
-					content.unid = unid.attr("value");
+				var content = registry.byId("content");
+				if(content.attr("value")!=""){
+					content.content = content.attr("value");
 				}
-				content.groupName = smsGroupName.attr("value");
-
-				var members = registry.byId("members");
-				if(members.attr("value")!=""){
-					content.members = members.attr("value");
-				}
-				var description = registry.byId("description");
-				if(description.attr("value")!=""){
-					content.description = description.attr("value");
-				}
-				
-		    	rosten.readSync(rosten.webPath + "/system/smsGroupSave",content,function(data){
+		    	rosten.readSync(rosten.webPath + "/system/personWorkLogSave",content,function(data){
 					if(data.result=="true"){
 						rosten.alert("保存成功！").queryDlgClose= function(){
 							page_quit();	
@@ -66,42 +56,54 @@
 		<div data-dojo-type="rosten/widget/ActionBar" id="rosten_actionBar" 
 			data-dojo-props='actionBarSrc:"${createLink(controller:'systemAction',action:'personWorkLogForm',params:[userid:user?.id])}"'></div>
 	</div>
-	<div style="text-Align:center">
-		 
-	    <div class="rosten_form">
-	    	<input style="display:none" data-dojo-type="dijit/form/ValidationTextBox" id="unid" name="unid"  value="${smsgroup?.id }"></input>
-	        <fieldset class="fieldset-form" style="text-align:left">
-	            <legend class="tableHeader">短信群组
-	            </legend>
-	            <table class="tableData">
-				<tr>
-				    <td width="100" align="right"><span style="color:red">*&nbsp;</span>群组名称：</td>
-				    <td>
-				    	<input id="smsGroupName" name="smsGroupName" class="input" type="text" promptMessage="请正确输入群组名称..."
-				    		value="${smsgroup?.groupName }" style="margin-left:1px"
-                            data-dojo-type="dijit/form/ValidationTextBox" trim="true" required="true" />
-				    </td>
-				  </tr>
-				  <tr>
-				    <td align="right"><span style="color:red">*&nbsp;</span>成员：
-				    	<a href="javascript:selectUser('${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}','members')">
-                           <img src="${resource(dir:'images/rosten/share',file:'group.gif')}" width="16" height="16" border="0" align="absbottom">
-						</a>
-				    <td ><textarea id="members" name="members" rows="10" data-dojo-type="dijit/form/SimpleTextarea" 
-				    	value="${smsgroup?.members }"
-				    	trim="true" required="true" style="width: 550px;margin-left:1px;" ></textarea>
-				    	</td>
-				  </tr>
- 				
-				  <tr>
-				    <td align="right">备注：</td>
-				    <td ><textarea id="description" name="description" data-dojo-type="dijit/form/SimpleTextarea" 
-				    	value="${smsgroup?.description }"
-				    	rows="4" style="width: 550px;margin-left:1px;" trim="true" ></textarea></td>
-				  </tr>
-
-				</table>
-	        </fieldset>
+	<div data-dojo-type="dijit/layout/TabContainer" data-dojo-props='persist:false, tabStrip:true,style:{width:"800px",margin:"0 auto"}' >
+	  	<div data-dojo-type="dijit/layout/ContentPane" title="基本信息" data-dojo-props='style:{height:"590px"}'>
+        	<form class="rosten_form" id="rosten_form" onsubmit="return false;" style="padding:0px">
+        		<input  data-dojo-type="dijit/form/ValidationTextBox" id="id"  data-dojo-props='name:"id",style:{display:"none"},value:"${workLog?.id }"' />
+        	  	<div data-dojo-type="rosten/widget/TitlePane" data-dojo-props='title:"基本信息",toggleable:false,moreText:"",height:"460px",marginBottom:"2px"'>
+        	  
+                <table class="tableData" style="width:740px;margin:0px">
+                    <tbody>
+                       <tr>
+						    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>日期：</div></td>
+						    <td width="250">
+						    	<input id="date" data-dojo-type="dijit/form/ValidationTextBox" 
+				                 	data-dojo-props='readOnly:true,trim:true,placeHolder:"领导发布后自动生成",
+										value:"${workLog?.getFormattedCreatedDate()}"
+				                '/>
+						    </td>
+						    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>类型：</div></td>
+						    <td width="250">
+						    	<select id="logType" data-dojo-type="dijit/form/FilteringSelect" 
+					                data-dojo-props='name:"logType",${fieldAcl.isReadOnly("logType")},
+					                trim:true,required:true,missingMessage:"请选择类别！",invalidMessage:"请选择类型！",
+					      			value:"${workLog?.logType}"
+					            '>
+								<option value="工作日志">工作日志</option>
+								<option value="工作周报">工作周报</option>
+					    	</select>
+				           </td>
+						</tr>
+						
+						<tr>
+						    <td><div align="right">工作内容：</td>
+						    <td colspan=3>
+						    	
+						    	<div data-dojo-type="dijit/Editor" style="overflow:hidden;width:620px" id="content"
+									extraPlugins="[{name:'dijit/_editor/plugins/FontChoice', command: 'fontName', generic: true},'fontSize']"
+									data-dojo-props='name:"content"
+				            		<g:if test="${fieldAcl.readOnly.contains('content')}">,disabled:true</g:if>
+					            '>
+									
+								</div>
+						    						    
+						    </td>    
+						</tr>
+						
+                    </tbody>
+                </table>
+                </div>
+			</form>
 		</div>
 	</div>
 </body>
