@@ -83,7 +83,37 @@
 					rosten.alert("系统错误，请通知管理员！");
 					rosten.toggleAction(buttonWidget,false);
 				},"rosten_form");
-			}
+			};
+			bbs_back = function(object){
+				//增加对多次单击的次数----2014-9-4
+				var buttonWidget = object.target;
+				rosten.toggleAction(buttonWidget,true);
+				
+				var content = {};
+				rosten.readSync("${createLink(controller:'bbs',action:'bbsFlowBack',params:[id:bbs?.id])}",content,function(data){
+					if(data.result=="true" || data.result == true){
+						rosten.alert("成功！").queryDlgClose= function(){
+							//刷新首页bbs内容
+							window.opener.showStartBbs("${user?.id}","${company?.id }");
+							//刷新待办事项内容
+							window.opener.showStartGtask("${user?.id}","${company?.id }");
+							
+							if(data.refresh=="true" || data.refresh==true){
+								window.location.reload();
+							}else{
+								rosten.pagequit();
+							}
+						}
+					}else{
+						rosten.alert("失败!");
+						rosten.toggleAction(buttonWidget,false);
+					}
+					
+				},function(error){
+					rosten.alert("系统错误，请通知管理员！");
+					rosten.toggleAction(buttonWidget,false);
+				});
+			};
 			bbs_deal = function(type,readArray,buttonWidget){
 				var content = {};
 				content.id = registry.byId("id").attr("value");

@@ -306,6 +306,81 @@ class BbsController {
 		}
 		
 	}
+	def bbsFlowBack ={
+		def json=[:]
+		def bbs = Bbs.get(params.id)
+		def currentUser = springSecurityService.getCurrentUser()
+		def frontStatus = bbs.status
+		
+		try{
+			//获取上一处理任务
+			def frontTaskList = workFlowService.findBackAvtivity(bbs.taskId)
+			if(frontTaskList && frontTaskList.size()>0){
+				def frontTask = workFlowService.getTaskEntityByActivity(frontTaskList[0])
+				println frontTask
+				
+				def frontTaskId = frontTaskList[0].getId();
+				println frontTaskId
+				
+				workFlowService.backProcess(bbs.taskId, frontTaskId, [:])
+				
+				println "11111"
+				
+				def userId = frontTask.getAssignee()
+				
+				println userId
+				
+				def user = User.findByUsername(userId)
+				
+				def nextStatus = frontTask.getDescription()?frontTask.getDescription():frontTask.getName()
+					
+				//增加待办事项
+				def args = [:]
+				args["type"] = "【公告】"
+				args["content"] = "名称为  【" + bbs.topic +  "】 的公告被退回，请查看！"
+				args["contentStatus"] = nextStatus
+				args["contentId"] = bbs.id
+				args["user"] = user
+				args["company"] = user.company
+				
+				startService.addGtask(args)
+					
+				//修改当前公告信息
+				bbs.currentUser = user
+				bbs.currentDepart = user.getDepartName()
+				bbs.currentDealDate = new Date()
+				bbs.status = nextStatus
+				bbs.taskId = frontTaskId
+				
+				//判断下一处理人是否与当前处理人员为同一人
+				if(currentUser.equals(bbs.currentUser)){
+					json["refresh"] = true
+				}
+				
+				//----------------------------------------------------------------------------------------------------
+				
+				//修改代办事项状态
+				def gtask = Gtask.findWhere(
+					user:currentUser,
+					company:currentUser.company,
+					contentId:bbs.id,
+					contentStatus:frontStatus
+				)
+				if(gtask!=null){
+					gtask.dealDate = new Date()
+					gtask.status = "1"
+					gtask.save()
+				}
+				
+				bbs.save(flush:true)
+			}
+				
+			json["result"] = true
+		}catch(Exception e){
+			json["result"] = false
+		}
+		render json as JSON
+	}
 	def bbsFlowDeal = {
 		def json=[:]
 		
