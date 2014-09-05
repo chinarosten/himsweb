@@ -14,6 +14,7 @@ import org.codehaus.jackson.node.ObjectNode
 import grails.converters.JSON
 import com.rosten.app.util.Util
 import com.rosten.app.system.Company
+import org.activiti.engine.ActivitiException
 
 class ModelerController {
 	def repositoryService
@@ -33,18 +34,18 @@ class ModelerController {
 	}
 	def flowUpdateState ={
 		def json=[:]
-		try{
-			params.id.split(",").each{
+		params.id.split(",").each{
+			try{
 				if ("active".equals(params.status)) {
 					repositoryService.activateProcessDefinitionById(it, true, null);
 				}else{
 					repositoryService.suspendProcessDefinitionById(it, true, null);
 				}
+			}catch(ActivitiException e){
+				println "rosten....截获流程错误信息......"
 			}
-			json["result"] = "true"
-		}catch(Exception e){
-			json["result"] = "false"
 		}
+		json["result"] = "true"
 		render json as JSON
 	}
 	def flowExport ={
