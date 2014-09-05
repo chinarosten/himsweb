@@ -173,6 +173,15 @@ class WorkFlowService {
 		taskService.setAssignee(taskId, userCode);
 	}
 	
+	/*
+	 * 通过activity的Id号获取最新的用户名称
+	 */
+	def getHistrotyActivityByActivity = { taskId,activityId ->
+		ProcessInstance processInstance = findProcessInstanceByTaskId(taskId);
+		HistoricActivityInstance activityInstance = findHistoricUserTask(processInstance, activityId);
+		return activityInstance
+	}
+	
 	//---------------------------------提供可操作功能---------------------------------------
 	
 	/*

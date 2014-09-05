@@ -316,24 +316,34 @@ class BbsController {
 			//获取上一处理任务
 			def frontTaskList = workFlowService.findBackAvtivity(bbs.taskId)
 			if(frontTaskList && frontTaskList.size()>0){
-				def frontTask = workFlowService.getTaskEntityByActivity(frontTaskList[0])
-				println frontTask
 				
-				def frontTaskId = frontTaskList[0].getId();
-				println frontTaskId
+				def activityEntity = frontTaskList[0]
+				def activityId = activityEntity.getId();
 				
-				workFlowService.backProcess(bbs.taskId, frontTaskId, [:])
+				//流程跳转
+				workFlowService.backProcess(bbs.taskId, activityId, null)
 				
-				println "11111"
+				//获取下一节点任务，目前处理串行情况
+				def nextStatus
+				def tasks = workFlowService.getTasksByFlow(bbs.processInstanceId)
+				def task = tasks[0]
+				if(task.getDescription() && !"".equals(task.getDescription())){
+					nextStatus = task.getDescription()
+				}else{
+					nextStatus = task.getName()
+				}
+				bbs.taskId = task.getId()
 				
-				def userId = frontTask.getAssignee()
+				//获取对应节点的处理人员以及相关状态
+				def historyActivity = workFlowService.getHistrotyActivityByActivity(bbs.taskId,activityId)
+				def user = User.findByUsername(historyActivity.getAssignee())
 				
-				println userId
+				/*
+				def taskEntity = workFlowService.getTaskEntityByActivity(activityEntity)
+				def nextStatus = historyActivity.getActivityName()
 				
-				def user = User.findByUsername(userId)
+				*/
 				
-				def nextStatus = frontTask.getDescription()?frontTask.getDescription():frontTask.getName()
-					
 				//增加待办事项
 				def args = [:]
 				args["type"] = "【公告】"
@@ -350,7 +360,6 @@ class BbsController {
 				bbs.currentDepart = user.getDepartName()
 				bbs.currentDealDate = new Date()
 				bbs.status = nextStatus
-				bbs.taskId = frontTaskId
 				
 				//判断下一处理人是否与当前处理人员为同一人
 				if(currentUser.equals(bbs.currentUser)){
@@ -373,6 +382,11 @@ class BbsController {
 				}
 				
 				bbs.save(flush:true)
+				
+				//添加日志
+				def logContent = "退回【" + user.getFormattedName() + "】"
+				
+				bbsService.addFlowLog(bbs,currentUser,logContent)
 			}
 				
 			json["result"] = true
