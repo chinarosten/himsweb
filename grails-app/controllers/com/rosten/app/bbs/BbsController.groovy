@@ -187,6 +187,7 @@ class BbsController {
 			or{
 				eq("status","已发布")
 				eq("status","已归档")
+				eq("status","已结束")
 			}
 			
 			order("publishDate", "desc")
@@ -316,8 +317,8 @@ class BbsController {
 			//获取上一处理任务
 			def frontTaskList = workFlowService.findBackAvtivity(bbs.taskId)
 			if(frontTaskList && frontTaskList.size()>0){
-				
-				def activityEntity = frontTaskList[0]
+				//简单的取最近的一个节点
+				def activityEntity = frontTaskList[frontTaskList.size()-1]
 				def activityId = activityEntity.getId();
 				
 				//流程跳转
@@ -343,6 +344,9 @@ class BbsController {
 				def nextStatus = historyActivity.getActivityName()
 				
 				*/
+				
+				//任务指派给当前拟稿人
+				taskService.claim(bbs.taskId, user.username)
 				
 				//增加待办事项
 				def args = [:]
@@ -373,12 +377,13 @@ class BbsController {
 					user:currentUser,
 					company:currentUser.company,
 					contentId:bbs.id,
-					contentStatus:frontStatus
+					contentStatus:frontStatus,
+					status:"0"
 				)
 				if(gtask!=null){
 					gtask.dealDate = new Date()
 					gtask.status = "1"
-					gtask.save()
+					gtask.save(flush:true)
 				}
 				
 				bbs.save(flush:true)
@@ -492,12 +497,13 @@ class BbsController {
 			user:currentUser,
 			company:currentUser.company,
 			contentId:bbs.id,
-			contentStatus:frontStatus
+			contentStatus:frontStatus,
+			status:"0"
 		)
 		if(gtask!=null){
 			gtask.dealDate = new Date()
 			gtask.status = "1"
-			gtask.save()
+			gtask.save(flush:true)
 		}
 		
 		//当前文档特殊字段处理
