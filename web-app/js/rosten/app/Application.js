@@ -44,10 +44,13 @@ define(["dojo/_base/lang",
      * 关闭当前窗口，并刷新父文档视图
      */
     application.pagequit = function() {
-    	if(window.opener.rosten.kernel){
-    		window.opener.rosten.kernel.refreshGrid();
-    	}
+        var parentNode = window.opener;
         window.close();
+        
+    	if(parentNode.rosten.kernel){
+    		parentNode.rosten.kernel.refreshGrid();
+    	}
+    	
     };
     application.selectDialog = function(dialogTitle,id,url,flag,defaultValue,reload){
 		/*

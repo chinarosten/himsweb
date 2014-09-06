@@ -112,7 +112,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.read(rosten.webPath + "/system/userDelete", content, delete_callback);
+            rosten.readNoTime(rosten.webPath + "/oa/userDelete", content, delete_callback);
         };
     };
     add_smsGroup = function() {
@@ -136,7 +136,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.read(rosten.webPath + "/system/smsgroupDelete", content, delete_callback);
+            rosten.readNoTime(rosten.webPath + "/system/smsgroupDelete", content, delete_callback);
         };
     };
     add_service = function() {
@@ -164,7 +164,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.read(rosten.webPath + "/system/serviceDelete", content, delete_callback);
+            rosten.readNoTime(rosten.webPath + "/system/serviceDelete", content, delete_callback);
         };
     };
     open_service = function(){
@@ -208,7 +208,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.read(rosten.webPath + "/system/resourceDelete", content, delete_callback);
+            rosten.readNoTime(rosten.webPath + "/system/resourceDelete", content, delete_callback);
         };
     };
     add_permission = function() {
@@ -236,7 +236,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.read(rosten.webPath + "/system/permissionDelete", content, delete_callback);
+            rosten.readNoTime(rosten.webPath + "/system/permissionDelete", content, delete_callback);
         };
     };
     add_role = function() {
@@ -265,7 +265,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten._read(rosten.webPath + "/system/roleDelete", content, delete_callback);
+            rosten._readNoTime(rosten.webPath + "/system/roleDelete", content, delete_callback);
         };
     };
     add_group = function() {
@@ -294,14 +294,14 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.read(rosten.webPath + "/system/groupDelete", content, delete_callback);
+            rosten.readNoTime(rosten.webPath + "/system/groupDelete", content, delete_callback);
         };
     };
     model_deleteFlow = function(){
     	 var unids = rosten.getGridUnid("multi");
          if (unids == "")
              return;
-         rosten.read(rosten.webPath + "/system/modelDeleteFlow1/" + unids, {}, function(data){
+         rosten.readNoTime(rosten.webPath + "/system/modelDeleteFlow1/" + unids, {}, function(data){
         	 if (data.result == "true" || data.result == true) {
                  rosten.alert("成功!");
                  rosten.kernel.refreshGrid();
@@ -362,7 +362,7 @@ define(["dojo/_base/connect",
             if (unids == "")
                 return;
             var content = {};
-            rosten.read(rosten.webPath + "/system/modelDelete/" + unids, content, delete_callback);
+            rosten.readNoTime(rosten.webPath + "/system/modelDelete/" + unids, content, delete_callback);
         };
     };
     delete_sms = function() {
@@ -394,7 +394,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.read(rosten.webPath + "/system/questionDelete", content, delete_callback);
+            rosten.readNoTime(rosten.webPath + "/system/questionDelete", content, delete_callback);
         };
     };
     add_administrator = function() {
@@ -421,7 +421,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.readSync(rosten.webPath + "/system/userDelete", content, delete_callback);
+            rosten.readSyncNoTime(rosten.webPath + "/system/userDelete", content, delete_callback);
         };
     };
     add_company = function() {
@@ -448,7 +448,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.readSync(rosten.webPath + "/system/companyDelete", content, delete_callback);
+            rosten.readSyncNoTime(rosten.webPath + "/system/companyDelete", content, delete_callback);
         };
     };
     add_userType = function() {
@@ -477,7 +477,7 @@ define(["dojo/_base/connect",
                 return;
             var content = {};
             content.id = unids;
-            rosten.readSync(rosten.webPath + "/system/userTypeDelete", content, delete_callback);
+            rosten.readSyncNoTime(rosten.webPath + "/system/userTypeDelete", content, delete_callback);
         };
     };
     uploadLogo = function() {

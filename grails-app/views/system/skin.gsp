@@ -3,6 +3,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="layout" content="rosten" />
+    <style type="text/css">
+		body{
+			overflow:auto;
+		}
+    </style>
     <title>个性定制</title>
 	<script type="text/javascript">
 		require(["dojo/parser"

@@ -154,7 +154,7 @@
                         </tr>
 						<tr>
                         	<td>
-                                <div align="right" ><span style="color:red">*&nbsp;</span>参数：</div>
+                                <div align="right" >参数：</div>
                             </td>
                              <td>
                              	<textarea id="functionArgs" data-dojo-type="dijit/form/ValidationTextBox"
@@ -162,8 +162,21 @@
                                 		"class":"input",
                                 		style:{width:"400px"},
                                 		trim:true,
-                                		required:true,
               							value:"${normalService?.functionArgs}"
+                                '></textarea>
+    						</td>
+                        </tr>
+                        <tr>
+                        	<td>
+                                <div align="right" >跳转地址：</div>
+                            </td>
+                             <td>
+                             	<textarea id="functionUrl" data-dojo-type="dijit/form/ValidationTextBox"
+                             		data-dojo-props='name:"functionUrl",${fieldAcl.isReadOnly("functionUrl")},
+                                		"class":"input",
+                                		style:{width:"400px"},
+                                		trim:true,
+              							value:"${normalService?.functionUrl}"
                                 '></textarea>
     						</td>
                         </tr>

@@ -34,7 +34,7 @@ define(["dojo/dom",
                 return;
             var content = {};
             content.id = unids;
-            rosten.read(rosten.webPath + "/system/personWorkLogDelete", content, function(data){
+            rosten.readNoTime(rosten.webPath + "/system/personWorkLogDelete", content, function(data){
             	if (data.result == "true" || data.result == true) {
                     rosten.alert("成功删除!");
                     rosten.kernel.refreshGrid();
@@ -120,7 +120,7 @@ define(["dojo/dom",
                 return;
             var content = {};
             content.id = unids;
-            rosten.read(rosten.webPath + "/system/authorizeDelete", content, function(data){
+            rosten.readNoTime(rosten.webPath + "/system/authorizeDelete", content, function(data){
             	if (data.result == "true" || data.result == true) {
                     rosten.alert("成功删除!");
                     rosten.kernel.refreshGrid();
@@ -180,7 +180,7 @@ define(["dojo/dom",
                 return;
             var content = {};
             content.id = unids;
-            rosten.readSync(rosten.webPath + "/system/smsGroupDelete", content, function(data){
+            rosten.readSyncNoTime(rosten.webPath + "/system/smsGroupDelete", content, function(data){
                 if (data.result == "true" || data.result == true) {
                     rosten.alert("成功删除!");
                     rosten.kernel.refreshGrid();

@@ -202,5 +202,25 @@ class User {
 		UserGroup.removeAll(this)
 		UserRole.removeAll(this)
 		ModelUser.removeAll(this)
+		
+		User.withNewSession{session ->
+			SmsGroup.findAllByUser(this).each{item->
+				item.delete()
+			}
+			Authorize.findAllByAuthorizer(this).each{item ->
+				item.delete()
+			}
+			SystemLog.findAllByUser(this).each{item->
+				item.delete()
+			}
+			Attachment.findAllByUpUser(this).each{item->
+				item.delete()
+			}
+			WorkLog.findAllByUser(this).each{item->
+				item.delete()
+			}
+			session.flush()
+		}
+		
 	}
 }

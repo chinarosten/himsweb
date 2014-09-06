@@ -102,7 +102,7 @@ define([ "dojo/_base/connect", "dijit/registry","rosten/util/general", "rosten/k
 				return;
 			var content = {};
 			content.id = unids;
-			rosten.read(rosten.webPath + "/bbs/bbsDelete", content,
+			rosten.readNoTime(rosten.webPath + "/bbs/bbsDelete", content,
 					rosten.deleteCallback);
 		};
 	};

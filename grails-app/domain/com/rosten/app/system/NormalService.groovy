@@ -31,7 +31,7 @@ class NormalService {
 	Group1 group
 	
 	//图标地址
-	@GridColumn(name="图标路径",width="300px")
+	@GridColumn(name="图标路径",width="260px")
 	String imgUrl = "images/rosten/service/rosten.png"
 	
 	//方法名称
@@ -47,9 +47,9 @@ class NormalService {
 	
 	//跳转地址
 	@GridColumn(name="跳转地址")
-	String functionUrl
+	String functionUrl = "http://"
 	
-	@GridColumn(name="首页显示")
+	@GridColumn(name="首页显示",width="60px")
 	String status = "是"
 	
 	//所属单位

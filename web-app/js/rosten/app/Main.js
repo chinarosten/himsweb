@@ -183,6 +183,11 @@ define(["dojo/_base/kernel"
         //setInterval("session_checkTimeOut()",60000*120 + 2000);
     };
     excuteService = function(args){
+        
+        if(new general().isInArray(args,"http:")){
+            window.open(args);
+            return;
+        }
     	switch(args){
     	case "sms" :
     		require(["rosten/app/SmsManage"],function(){
@@ -211,6 +216,12 @@ define(["dojo/_base/kernel"
     	case "contact":
     		top_showContact();
     		break;
+    	case "addMail":
+    	   more_mail();
+    	   break;
+    	case "personLog":
+            top_addWorkLog();
+            break;
     	}
     };
     top_showContact = function(){
@@ -227,6 +238,11 @@ define(["dojo/_base/kernel"
     };
     top_showDepartInfor = function(inforid){
     	rosten.kernel.setHref(rosten.webPath + "/system/getContactDepartInfor?departId=" + inforid,inforid);
+    };
+    top_addWorkLog = function(){
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+        var companyId = rosten.kernel.getUserInforByKey("companyid");
+        rosten.openNewWindow("personWorkLog", rosten.webPath + "/system/personWorkLogAdd?companyId=" + companyId + "&userid=" + userid);
     };
     top_addSendfile = function(){
 		var userid = rosten.kernel.getUserInforByKey("idnumber");
