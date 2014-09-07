@@ -2,11 +2,29 @@
  * @author rosten
  */
 define(function() {
-
+	
+	checkIsIE = function(){
+		var Sys = {};
+		var ua = navigator.userAgent.toLowerCase()
+		var s;
+		(s = ua.match(/rv:([\d.]+)\) like gecko/)) ? Sys.ie = s[1] :
+		(s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] :
+		(s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
+		(s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
+		(s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
+		(s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
+		
+		return Sys.ie;
+	};
 	var weboffice = {};
-
-	var webObj = document.getElementById("WebOffice1");
-
+	
+	var webOfficeId = "WebOffice1";
+	
+	if(!checkIsIE()){
+		webOfficeId = "Control";
+	}
+	var webObj = document.getElementById(webOfficeId);
+	
 	/****************************************************
 	 *
 	 *		关闭页面时调用此函数，关闭文件
@@ -45,12 +63,15 @@ define(function() {
 		 * conent格式为：[{name:"id1",value:"value1"},{name:"id2",value:"value2"}]
 		 */
 		try{
+			webObj.OptionFlag = 0x0080;
 			webObj.HttpInit();			//初始化Http引擎
+			webObj.SetTrackRevisions(0);
+			
 			// 添加相应的Post元素 
 			for(var o in content){
 				webObj.HttpAddPostString(content[o].name, content[o].value);
 			}
-			webObj.HttpAddPostCurrFile("wordfile","");		// 上传文件
+			webObj.HttpAddPostCurrFile("wordFile","");		// 上传文件
 			return webObj.HttpPost(url);	// 判断上传是否成功
 			
 		}catch(e){
@@ -317,7 +338,7 @@ define(function() {
 	 /****************************************************/
 	weboffice_acceptAllRevisions = function() {
 		try {
-			document.all.WebOffice1.SetTrackRevisions(4);
+			webObj.SetTrackRevisions(4);
 		} catch(e) {
 			alert("异常\r\nError:" + e + "\r\nError Code:" + e.number + "\r\nError Des:" + e.description);
 		}
@@ -334,7 +355,8 @@ define(function() {
 			var strUserName;
 			for (var i = 1; i <= vCount; i++) {
 				strUserName = webObj.GetRevInfo(i, 0);
-				document.all.WebOffice1.AcceptRevision(strUserName, 1);
+				
+				webObj.AcceptRevision(strUserName, 1);
 			}
 		} catch(e) {
 			alert("异常\r\nError:" + e + "\r\nError Code:" + e.number + "\r\nError Des:" + e.description);
@@ -348,11 +370,11 @@ define(function() {
 	 /****************************************************/
 	weboffice_getRevAllInfo = function() {
 		var vCount;
-		vCount = document.all.WebOffice1.GetRevCount();
+		vCount = webObj.GetRevCount();
 		var vOpt = 0;
 		var vDate;
 		for (var i = 1; i <= vCount; i++) {
-			vOpt = document.all.WebOffice1.GetRevInfo(i, 2);
+			vOpt = webObj.GetRevInfo(i, 2);
 			if ("1" == vOpt) {
 				vOpt = "插入";
 			} else if ("2" == vOpt) {
@@ -360,11 +382,11 @@ define(function() {
 			} else {
 				vOpt = "未知操作";
 			}
-			vDate = new String(document.all.WebOffice1.GetRevInfo(i, 1));
+			vDate = new String(webObj.GetRevInfo(i, 1));
 			vDate = parseFloat(vDate);
 			dateObj = new Date(vDate);
 			alert(dateObj.getYear() + "年" + dateObj.getMonth() + 1 + "月" + dateObj.getDate() + "日" + dateObj.getHours() + "时" + dateObj.getMinutes() + "分" + dateObj.getSeconds() + "秒");
-			alert("用户:" + document.all.WebOffice1.GetRevInfo(i, 0) + "\r\n操作:" + vOpt + "\r\n内容:" + document.all.WebOffice1.GetRevInfo(i, 3));
+			alert("用户:" + webObj.GetRevInfo(i, 0) + "\r\n操作:" + vOpt + "\r\n内容:" + webObj.GetRevInfo(i, 3));
 		}
 	};
 
@@ -701,7 +723,6 @@ define(function() {
 	 /****************************************************/
 	weboffice_adducMenu = function() {
 		try {
-			var webObj = document.getElementById("WebOffice1");
 			webObj.HideMenuAction(1, 0x800000);
 			webObj.HideMenuAction(5, 0);
 			//激活设置
@@ -748,7 +769,6 @@ define(function() {
 	 /****************************************************/
 	weboffice_viewMenu = function() {
 		try {
-			var webObj = document.getElementById("WebOffice1");
 			webObj.HideMenuAction(1, 0x4000000);
 			webObj.HideMenuAction(5, 0);
 			//激活设置
@@ -809,7 +829,6 @@ define(function() {
 	 /****************************************************/
 	weboffice_nullityCopy = function() {
 		try {
-			var webObj = document.getElementById("WebOffice1");
 			webObj.HideMenuAction(1, 0x2000);
 			webObj.HideMenuAction(5, 0);
 			//激活设置
@@ -825,7 +844,6 @@ define(function() {
 	 /****************************************************/
 	weboffice_nullityAffix = function() {
 		try {
-			var webObj = document.getElementById("WebOffice1");
 			webObj.HideMenuAction(1, 0x1000);
 			webObj.HideMenuAction(5, 0);
 			//激活设置
@@ -856,7 +874,7 @@ define(function() {
 	weboffice_hideSeal = function() {
 		var obj;
 		try {
-			obj = new Object(document.all.WebOffice1.GetDocumentObject());
+			obj = new Object(webObj.GetDocumentObject());
 			if (obj != null) {
 				obj.Application.CommandBars("电子印章").Visible = !obj.CommandBars("电子印章").Visible;
 
@@ -870,7 +888,7 @@ define(function() {
 	weboffice_write2 = function() {
 		var obj1;
 		try {
-			obj1 = new Object(document.all.WebOffice1.GetDocumentObject());
+			obj1 = new Object(webObj.GetDocumentObject());
 			if (obj1 != null) {
 				obj1.Application.CommandBars("电子印章").Controls("盖章").Execute();
 
@@ -976,13 +994,13 @@ define(function() {
 	 *
 	 ****************************************************/
 	weboffice_notifyCtrlReady = function() {
-		webObj.SetWindowText("Rosten科技公司", 0);
+		webObj.SetWindowText("Rosten恒传技术", 0);
 		webObj.OptionFlag |= 128;
 		// 新建文档
 		 weboffice_newDoc();
 		 webObj.ShowToolBar = false;   //隐藏weboffice自带工具栏
 		 //默认隐藏office工具栏
-		 document.all.WebOffice1.HideMenuArea("hideall","","","");
+		 webObj.HideMenuArea("hideall","","","");
 		 rosten.variable.wordMenu = false;
 	};
 

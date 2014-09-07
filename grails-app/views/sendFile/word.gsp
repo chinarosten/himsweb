@@ -1,9 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>发文正文</title>
     <meta name="layout" content="rosten" />
+    
 	<script type="text/javascript">
 	require(["dojo/parser", "dojo/_base/kernel", "rosten/widget/ActionBar", "rosten/app/WebOffice","rosten/app/Application","rosten/kernel/behavior"], 
 		function(parser, kernel) {
@@ -15,25 +17,38 @@
 		});
 		page_quit = function(){
 			weboffice_close();
+			var parentWin = window.opener;
 			window.close();
+			parentWin.location.reload();
 		};
 		word_save = function(){
-
+			var returnValue = weboffice_uploadDoc([{name:"filename",value:"${sendFile?.serialNo}.doc"},{name:"type",value:"doc"}],"http://192.168.0.106:8080/himsweb/sendFile/addWordFile1/${sendFile?.id}");
+			if("ok" == returnValue){
+				page_quit();
+			} else {
+				rosten.alert("文件上传失败")
+			}
 		};
 		word_menu = function(){
+			var webOfficeId = "WebOffice1";
+			if(!checkIsIE()){
+				webOfficeId = "Control";
+			}
+			var webObj = document.getElementById(webOfficeId);
 			if(rosten.variable.wordMenu == undefined || rosten.variable.wordMenu == true){
 				//隐藏
-				document.all.WebOffice1.HideMenuArea("hideall","","","");
+				webObj.HideMenuArea("hideall","","","");
 				rosten.variable.wordMenu = false;
 			}else{
 				//显示
-				document.all.WebOffice1.HideMenuArea("showmenu","","","");
+				webObj.HideMenuArea("showmenu","","","");
 				rosten.variable.wordMenu = true;
 			}
 		};
 		
 	});
     </script>
+    
     <SCRIPT language=javascript event=NotifyToolBarClick(iIndex) for=WebOffice1>
 		weboffice_notifyToolBarClick(iIndex);
 	</SCRIPT>
@@ -43,13 +58,7 @@
 		<div data-dojo-type="rosten/widget/ActionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'sendFileAction',action:'sendFileWord',params:[userid:user?.id])}"'></div>
 	</div>
 	<div>
-		<script>
-			var s = "";
-			s += "<object id=WebOffice1 height=768 width='100%' style='LEFT: 0px; TOP: 0px'  classid='clsid:E77E049B-23FC-4DB8-B756-60529A35FAD5' codebase='${request.getContextPath()}/weboffice_v6.0.5.0.cab#Version=6,0,5,0'>";
-			s += "<param name='_ExtentX' value='6350'><param name='_ExtentY' value='6350'>";
-			s += "</OBJECT>";
-			document.write(s);
-		</script>
+		<r:jsLoad dir="js/rosten/kernel" file="loadWebOffice.js"/>
 	</div>
 </body>
 </html>

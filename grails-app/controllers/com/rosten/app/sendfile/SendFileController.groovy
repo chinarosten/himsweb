@@ -31,6 +31,56 @@ class SendFileController {
 	def taskService
 	def systemService
 	
+	def addWordFile1 ={
+		SystemUtil sysUtil = new SystemUtil()
+		try{
+			def uploadPath
+			def currentUser = (User) springSecurityService.getCurrentUser()
+			def companyPath = currentUser.company?.shortName
+			if(companyPath == null){
+				uploadPath = sysUtil.getUploadPath("sendfile")
+			}else{
+				uploadPath = sysUtil.getUploadPath(currentUser.company.shortName + "/sendfile")
+			}
+			
+			def f = request.getFile("wordFile")
+			if (f.empty) {
+				render "nothing"
+				return
+			}
+			
+			def uploadSize = sysUtil.getUploadSize()
+			if(uploadSize!=null){
+				//控制附件上传大小
+				def maxSize = uploadSize * 1024 * 1024
+				if(f.size>=maxSize){
+					render "big"
+					return
+				}
+			}
+//			String name = f.getOriginalFilename()//获得文件原始的名称
+			String name = params.filename //获得文件原始的名称
+			def realName = sysUtil.getRandName(name)
+			f.transferTo(new File(uploadPath,realName))
+			
+			def attachment = new Attachment()
+			attachment.name = name
+			attachment.realName = realName
+			attachment.type = "wordOLE"
+			attachment.url = uploadPath
+			attachment.size = f.size
+			attachment.beUseId = params.id
+			attachment.upUser = currentUser
+			
+			def sendFile = SendFile.get(params.id)
+			sendFile.addToAttachments(attachment)
+			sendFile.save(flush:true)
+			
+			render "ok"
+		}catch(Exception e){
+			render "failure"
+		}
+	}
 	def searchView ={
 		def model =[:]
 		render(view:'/sendFile/sendFileSearch',model:model)
@@ -315,7 +365,7 @@ class SendFileController {
 			def sendFile = SendFile.get(params.id)
 			model["docEntityId"] = params.id
 			//获取附件信息
-			model["attachFiles"] = Attachment.findAllByBeUseId(params.id)
+			model["attachFiles"] = Attachment.findAllByBeUseIdAndType(params.id,"sendfile")
 			
 			def user = springSecurityService.getCurrentUser()
 			if("admin".equals(user.getUserType())){
@@ -548,6 +598,8 @@ class SendFileController {
 	
 	def addWord = {
 		def model =[:]
+		def sendFile = SendFile.get(params.id)
+		model["sendFile"] = sendFile
 		render(view:'/sendFile/word',model:model)
 	}
 	def sendFileDelete ={

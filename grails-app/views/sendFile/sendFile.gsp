@@ -205,11 +205,10 @@
 		            }  
 				};
 				sendFile_addWord = function(){
-					if(kernel.isIE){
-						rosten.openNewWindow("sendFile_addWord", rosten.webPath + "/sendFile/addWord");
-					}else{
-						rosten.alert("当前版本正文只支持IE浏览器！");
-					}
+					rosten.openNewWindow("sendFile_addWord", rosten.webPath + "/sendFile/addWord/${sendFile?.id }");
+				};
+				sendFile_readWord = function(){
+					rosten.openNewWindow("sendFile_readWord", rosten.webPath + "/sendFile/readWord/${sendFile?.id }");
 				};
 				page_quit = function(){
 					rosten.pagequit();
