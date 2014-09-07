@@ -70,6 +70,8 @@ define(["dojo/_base/declare",
 			count:0	//每页条目数
         },
         
+        connectArray:[],//关联connect句柄
+        
 		_gridUtil:null,//控制loading界面变量
 		constructor:function(){
 			this.refreshHeader = true;
@@ -181,7 +183,7 @@ define(["dojo/_base/declare",
                     connect.publish("closeUnderlay", [this]);
                 }),
                 error: lang.hitch(this, function(response, ioArgs){
-					this._closeLoading();
+					//this._closeLoading();
 					_kernel.errordeal(this.containerNode,"\u65e0\u6cd5\u521d\u59cb\u5316\u8868\u683c\u5185\u5bb9\u6570\u636e...");//无法初始化数据
 					this.onDownloadError(response);
                 })
@@ -283,16 +285,19 @@ define(["dojo/_base/declare",
 //				this._closeLoading();
                 this.grid.startup();
 //                this.resize();
-                connect.connect(this.grid, "onRowDblClick", this, "onRowDblClick");
-                connect.connect(this.grid, "onCellClick", this, "onCellClick");
+                this.connectArray.push(connect.connect(this.grid, "onRowDblClick", this, "onRowDblClick"));
+                this.connectArray.push(connect.connect(this.grid, "onCellClick", this, "onCellClick"));
             }
             else {
                 this.grid.setStore(this.store);
                 this.grid.selection.clear();
-				this._closeLoading();
+				//this._closeLoading();
                 this.resize();
 				
             }
+        },
+        destroyConnect:function(){
+        	kernel.forEach(this.connectArray, connect.disconnect);
         },
         _openLoading:function(){
 			domStyle.set(this._gridData,"display","none");

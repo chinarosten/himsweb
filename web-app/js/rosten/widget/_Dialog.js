@@ -16,6 +16,8 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 		queryDlgClose : null,
 		mode : "OKCANCEL",
 		initialized : false,
+		connectArray:[],//关联connect句柄
+		
 		constructor : function(arguments) {
 			for (var property in arguments) {
 				this[property] = arguments[property];
@@ -39,7 +41,7 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 				domStyle.set(this._dialog.domNode, "height", this.height);
 				this._dialog.containerNode.appendChild(this.contentPane);
 				this._dialog.containerNode.appendChild(this.controlPane);
-				connect.connect(this._dialog, "hide", this, function() {
+				this.connectArray.push(connect.connect(this._dialog, "hide", this, function() {
 					// 为了使hide后显示界面在下一个界面出来前完全消失，采用摧毁方法
 					this._dialog.destroy();
 					/*
@@ -52,7 +54,7 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 					 * if(node.style.display!="none"){ node.style.display =
 					 * "none"; } })
 					 */
-				});
+				}));
 			} else {
 				this.contentPane = kernel.query("#system_dialog_contentpane",
 				this._dialog.domNode)[0];
@@ -61,6 +63,9 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 				this.initialized = true;
 			}
 		},
+		destroyConnect:function(){
+        	kernel.forEach(this.connectArray, connect.disconnect);
+        },
 		open : function() {
 			if (this.initialized == false) {
 				this.buildContent(this.contentPane);
@@ -75,6 +80,7 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 		close : function() {
 			this._dialog.hide();
 			this.queryDlgClose();
+			this.destroyContent();
 		},
 		destroy : function() {
 			if (this._dialog)
@@ -84,6 +90,7 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 		    var data = this.getData();
 			this._dialog.hide();
 			this.callback(data);
+			this.destroyContent();
 		},
 		buildControl : function(node) {
 			if (this.mode == "OKCANCEL") {
@@ -98,8 +105,8 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 					iconClass : "cancelIcon"
 				}, document.createElement("div"));
 
-				connect.connect(btn2, "onClick", this, "close");
-				connect.connect(btn1, "onClick", this, "doAction");
+				this.connectArray.push(connect.connect(btn2, "onClick", this, "close"));
+				this.connectArray.push(connect.connect(btn1, "onClick", this, "doAction"));
 				node.appendChild(btn1.domNode);
 				node.appendChild(btn2.domNode);
 				domStyle.set(node, "marginRight", "auto");
@@ -112,7 +119,7 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 					showLabel : true,
 					iconClass : "okIcon"
 				}, document.createElement("div"));
-				connect.connect(btn1, "onClick", this, "close");
+				this.connectArray.push(connect.connect(btn1, "onClick", this, "close"));
 				node.appendChild(btn1.domNode);
 				domStyle.set(node, "marginRight", "auto");
 				domStyle.set(node, "marginLeft", "auto");

@@ -1,7 +1,7 @@
 define(["dojo/_base/declare",
 		"dijit/_WidgetBase", 
 		"dijit/_TemplatedMixin",
-		"dojox/layout/ContentPane",
+		"dojox/layout/ContentPane"
 		], function(declare,_WidgetBase,_TemplatedMixin,ContentPane) {
 	return declare("rosten.widget.RostenContentPane", [_WidgetBase, _TemplatedMixin], {
 		templateString: '<div data-dojo-attach-point="containerNode"></div>',

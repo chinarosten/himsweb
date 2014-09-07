@@ -3,6 +3,7 @@
  */
 define(["dojo/_base/declare",
 		"dojo/_base/lang",
+		"dojo/_base/kernel",
 		"dojo/data/ItemFileWriteStore",
 		"dojo/_base/xhr",
 		"dojo/dom-style",
@@ -18,7 +19,7 @@ define(["dojo/_base/declare",
 		"rosten/widget/_Dialog",
 		"rosten/widget/CheckBoxTree",
 		"rosten/util/general"], 
-		function(declare,lang, ItemFileWriteStore,xhr,domStyle,domClass,connect,win,domConstruct,ComboBox,TextBox,Button,CheckBox,MultiSelect,_Dialog,CheckBoxTree,General) {
+		function(declare,lang,kernel, ItemFileWriteStore,xhr,domStyle,domClass,connect,win,domConstruct,ComboBox,TextBox,Button,CheckBox,MultiSelect,_Dialog,CheckBoxTree,General) {
 	return declare("rosten.widget.DepartUserDialog", [_Dialog], {
 		general:new General(),
 	
@@ -35,8 +36,8 @@ define(["dojo/_base/declare",
         height: "565px",
         width: "600px",
         returnData: [],
-        
         treeLable:null,
+        connectArray:[],//关联connect句柄
         
         buildContent: function(node){
         	domClass.add(node,"departUser");
@@ -89,7 +90,7 @@ define(["dojo/_base/declare",
 				label:"\u67e5\u8be2"//查询
 			});
 			td3.appendChild(this.searchButton.domNode);
-        	connect.connect(this.searchButton,"onClick" ,this,"searchFresh");
+			this.connectArray.push(connect.connect(this.searchButton,"onClick" ,this,"searchFresh"));
         	
         	tr.appendChild(td3);
         	
@@ -159,7 +160,7 @@ define(["dojo/_base/declare",
         		var allRightBtn = document.createElement("button");
             	domClass.add(allRightBtn,"allRight");
             	buttonChoose.appendChild(allRightBtn);
-            	connect.connect(allRightBtn, "onclick", this, function(){
+            	this.connectArray.push(connect.connect(allRightBtn, "onclick", this, function(){
     				 this._getStoreItem(this.treeStore,{},function(items){
     				 	for (var i = 0; i < items.length; i++) {
                             var item = items[i];
@@ -170,14 +171,14 @@ define(["dojo/_base/declare",
                         	this.tree.model.updateCheckbox(item,false);
                         }
     				 });	
-            	});
+            	}));
             	buttonChoose.appendChild(document.createElement("br"));
         	}
         	
         	var rightBtn = document.createElement("button");
         	domClass.add(rightBtn,"right");
         	buttonChoose.appendChild(rightBtn);
-        	connect.connect(rightBtn, "onclick", this, function(){
+        	this.connectArray.push(connect.connect(rightBtn, "onclick", this, function(){
         		if(this.type=="multile"){
         			this._getStoreItem(this.treeStore,{checkbox: true},function(items){
     					for (var i = 0; i < items.length; i++) {
@@ -197,13 +198,13 @@ define(["dojo/_base/declare",
         			}
         		}
 				        		
-        	});
+        	}));
         	buttonChoose.appendChild(document.createElement("br")); 
         	
         	var leftBtn = document.createElement("button");
         	domClass.add(leftBtn,"left");
         	buttonChoose.appendChild(leftBtn);
-        	connect.connect(leftBtn, "onclick", this, function(){
+        	this.connectArray.push(connect.connect(leftBtn, "onclick", this, function(){
 				 var _node = this.searchResult.domNode;
 				 for (var i = _node.length - 1; i>=0; i--) {
 				 	if (_node.options[i].value==this.searchResult.get("value")) {
@@ -211,16 +212,16 @@ define(["dojo/_base/declare",
 		            }
 				 }
 				      		
-        	});
+        	}));
         	buttonChoose.appendChild(document.createElement("br")); 
         	
         	if(this.type=="multile"){
         		var allLeftBtn = document.createElement("button");
             	domClass.add(allLeftBtn,"allLeft");
             	buttonChoose.appendChild(allLeftBtn);
-            	connect.connect(allLeftBtn, "onclick", this, function(){
+            	this.connectArray.push(connect.connect(allLeftBtn, "onclick", this, function(){
     				 domConstruct.empty(this.searchResult.domNode);
-            	});
+            	}));
             	buttonChoose.appendChild(document.createElement("br")); 
         	}
         	
@@ -269,7 +270,7 @@ define(["dojo/_base/declare",
             	noSelectSpan.innerHTML = "\u53cd\u9009";//反选
             	footTd.appendChild(noSelectSpan);
             	
-            	connect.connect(this.allselectnode, "onClick", this, function(){
+            	this.connectArray.push(connect.connect(this.allselectnode, "onClick", this, function(){
             		this.allselectnode.set("checked",true);
             		this.noselectnode.set("checked",false);
             		//选中所有结点
@@ -279,9 +280,9 @@ define(["dojo/_base/declare",
                         	this.tree.model.updateCheckbox(item,true);
                         }
     				 });	
-    	       	});
+    	       	}));
             	
-            	connect.connect(this.noselectnode, "onClick", this, function(){
+            	this.connectArray.push(connect.connect(this.noselectnode, "onClick", this, function(){
             		this.noselectnode.set("checked",true);
             		this.allselectnode.set("checked",false);
             		//清空所有结点
@@ -291,7 +292,7 @@ define(["dojo/_base/declare",
                         	this.tree.model.updateCheckbox(item,false);
                         }
     				 });
-    	       	});
+    	       	}));
             	
             	footTr.appendChild(footTd);
             	tfoot.appendChild(footTr);
@@ -328,11 +329,11 @@ define(["dojo/_base/declare",
             };
             this.tree = new CheckBoxTree.tree(_treeArgs, treenode);
             if (!this.showCheckBox) {
-                connect.connect(this.tree, "onClick", this, "onclick");
+            	this.connectArray.push(connect.connect(this.tree, "onClick", this, "onclick"));
             }
             
             if(this.type!="multile" && this.isSelected){
-            	connect.connect(this.tree, "onLoad", this, function(){
+            	this.connectArray.push(connect.connect(this.tree, "onLoad", this, function(){
     				//默认选中唯一的数据
         			this._getStoreItem(this.treeStore,{type:"user"},function(items){
         				if(items.length==1){
@@ -341,7 +342,7 @@ define(["dojo/_base/declare",
         				}
         				this.afterLoad();
     				 });
-    			});
+    			}));
             }
             
             this.tree.startup();
@@ -363,6 +364,9 @@ define(["dojo/_base/declare",
         },
         afterLoad:function(){
         	
+        },
+        destroyConnect:function(){
+        	kernel.forEach(this.connectArray, connect.disconnect);
         },
         _addOption:function(node,item){
         	var c = win.doc.createElement('option');

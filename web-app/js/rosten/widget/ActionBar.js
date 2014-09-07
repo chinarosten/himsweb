@@ -20,7 +20,9 @@ define(["dojo/_base/declare",
         actionTextHeight : 12,
 
         templateString : '<div data-dojo-attach-point="containerNode" class="ActionBarOuter">actionBar is Loading...</div>',
-
+        
+        connectArray:[],//关联connect句柄
+        
         constructor : function() {
         },
         postCreate : function() {
@@ -40,7 +42,12 @@ define(["dojo/_base/declare",
             if (src && src != "") {
                 this.actionBarSrc = src;
             }
+            
+//            if (this.toolBar && this.toolBar.destroyRecursive){
+//            	this.toolBar.destroyRecursive();
+//            }
             this.toolBar.destroyDescendants();
+            
             this._getData(this.actionBarSrc);
             console.log("ActionBar refresh is end");
         },
@@ -64,6 +71,9 @@ define(["dojo/_base/declare",
         onDownloadError:function(data){
             
         },
+        destroyConnect:function(){
+        	kernel.forEach(this.connectArray, connect.disconnect);
+        },
         _setListData : function(data) {
 
             for (var i = 0; i < data.length; i++) {
@@ -83,9 +93,9 @@ define(["dojo/_base/declare",
                  * 此版本只兼容包含一个"rosten."号的情况
                  */
                 if (object.action.indexOf(".") != -1) {
-                    connect.connect(button, "onClick", rosten, general.stringRight(object.action, "."));
+                    this.connectArray.push(connect.connect(button, "onClick", rosten, general.stringRight(object.action, ".")));
                 } else {
-                    connect.connect(button, "onClick", object.action);
+                    this.connectArray.push(connect.connect(button, "onClick", object.action));
                 }
                 this.toolBar.addChild(button);
             }
