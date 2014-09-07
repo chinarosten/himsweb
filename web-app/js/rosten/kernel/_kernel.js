@@ -5,7 +5,8 @@
  */
 define(["dojo/_base/window", 
 		"dojo/_base/kernel", 
-		"dojo/_base/lang", 
+		"dojo/_base/lang",
+		"dojo/_base/connect",
 		"dojo/_base/xhr", 
 		"dojo/dom-construct", 
 		"dojo/dom", 
@@ -13,14 +14,23 @@ define(["dojo/_base/window",
 		"dojo/dom-class",
 		"dojo/dom-style",
 		"dijit/registry"], 
-		function(win, kernel, lang, xhr, domConstruct, dom, has, domClass, domStyle,registry) {
+		function(win, kernel, lang, connect,xhr, domConstruct, dom, has, domClass, domStyle,registry) {
     var rosten = {
     	version:"V1.0",
         variable : {},
         dojoPath : "js", //以当前载入的html页面判断dojo所在目录
         dojothemecss : "claro", //采用dojo的默认样式
         rostenthemecss : "normal", //rosten定制css样式
-        webPath : "/web"	//根路径
+        webPath : "/web",	//根路径
+        connectArray:[]		//关联connect句柄
+    };
+    rosten.addConnect=function(connect){
+        if(connect!=undefined){
+            rosten.connectArray.push(connect);
+        }
+    };
+    rosten.destroyConnect=function(){
+        kernel.forEach(rosten.connectArray, connect.disconnect);
     };
     rosten.setDojoVersion = function(dojoVersion) {
         rosten.dojoVersion = dojoVersion;
