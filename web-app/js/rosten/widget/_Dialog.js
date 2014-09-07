@@ -80,7 +80,7 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 		close : function() {
 			this._dialog.hide();
 			this.queryDlgClose();
-			this.destroyContent();
+			this.destroyConnect();
 		},
 		destroy : function() {
 			if (this._dialog)
@@ -90,7 +90,7 @@ define(["dojo/_base/declare", "dojo/_base/kernel", "dojo/dom-style", "dojo/_base
 		    var data = this.getData();
 			this._dialog.hide();
 			this.callback(data);
-			this.destroyContent();
+			this.destroyConnect();
 		},
 		buildControl : function(node) {
 			if (this.mode == "OKCANCEL") {
