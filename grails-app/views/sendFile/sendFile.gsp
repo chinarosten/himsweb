@@ -134,8 +134,14 @@
 					};
 				};
 				sendfile_submit = function(object){
-					//从后台获取下一处理人
+					//判断是否已经创建word文档
 					
+					if("${hasWordOLE}"=="false"){
+						rosten.alert("请先创建正文！");
+						return;
+					}
+					
+					//从后台获取下一处理人
 					//增加对多次单击的次数----2014-9-4
 					var buttonWidget = object.target;
 					rosten.toggleAction(buttonWidget,true);
@@ -208,7 +214,7 @@
 					rosten.openNewWindow("sendFile_addWord", rosten.webPath + "/sendFile/addWord/${sendFile?.id }");
 				};
 				sendFile_readWord = function(){
-					rosten.openNewWindow("sendFile_readWord", rosten.webPath + "/sendFile/readWord/${sendFile?.id }");
+					rosten.openNewWindow("sendFile_readWord", rosten.webPath + "/sendFile/addWord/${sendFile?.id }");
 				};
 				page_quit = function(){
 					rosten.pagequit();

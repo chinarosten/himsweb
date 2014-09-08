@@ -31,9 +31,53 @@ class SendFileController {
 	def taskService
 	def systemService
 	
-	def addWordFile1 ={
+	def addWord = {
+		def model =[:]
 		SystemUtil sysUtil = new SystemUtil()
+		
+		String path = request.getContextPath();
+		String bases = request.getHeader("X-FORWARDED-HOST")
+		if(bases==null || bases.length()<1){
+			bases =request.getHeader("Host")
+		}
+		  
+		if(bases==null || bases.length()<1){
+			bases =request.getServerName()+":"+request.getServerPort()
+		}
+		String servletPath = request.getScheme()+"://"+ bases+ path+"/"
+		
+		def sendFile = SendFile.get(params.id)
+		model["sendFile"] = sendFile
+		model["servletPath"] = servletPath
+		
+		//获取wordOLE文件
+		def attachmentInstance =  Attachment.findByBeUseIdAndType(params.id,"wordOLE")
+		if(attachmentInstance){
+			model["wordTemplate"] = servletPath + "system/downloadFile/"+ attachmentInstance.id
+		}
+		
+		render(view:'/sendFile/word',model:model)
+	}
+	def addWordFile1 ={
 		try{
+			def sendFile = SendFile.get(params.id)
+			
+			//获取wordOLE文件
+			def attachmentInstance =  Attachment.findByBeUseIdAndType(params.id,"wordOLE")
+			if(attachmentInstance){
+				//已经存在当前文件则进行替换
+				def f = request.getFile("wordFile")
+				f.transferTo(new File(attachmentInstance.url,attachmentInstance.realName))
+				
+				attachmentInstance.createdDate = new Date()
+				attachmentInstance.save(flush:true)
+				
+				render "ok"
+				return
+			}
+			
+			
+			SystemUtil sysUtil = new SystemUtil()
 			def uploadPath
 			def currentUser = (User) springSecurityService.getCurrentUser()
 			def companyPath = currentUser.company?.shortName
@@ -72,7 +116,6 @@ class SendFileController {
 			attachment.beUseId = params.id
 			attachment.upUser = currentUser
 			
-			def sendFile = SendFile.get(params.id)
 			sendFile.addToAttachments(attachment)
 			sendFile.save(flush:true)
 			
@@ -596,12 +639,6 @@ class SendFileController {
 		render json as JSON
 	}
 	
-	def addWord = {
-		def model =[:]
-		def sendFile = SendFile.get(params.id)
-		model["sendFile"] = sendFile
-		render(view:'/sendFile/word',model:model)
-	}
 	def sendFileDelete ={
 		def ids = params.id.split(",")
 		def json
@@ -760,6 +797,11 @@ class SendFileController {
 		}
 		model["fieldAcl"] = fa
 		
+		model["hasWordOLE"] = "false"
+		def attachmentInstance =  Attachment.findByBeUseIdAndType(sendFile.id,"wordOLE")
+		if(attachmentInstance){
+			model["hasWordOLE"] = "true"
+		}
 		render(view:'/sendFile/sendFile',model:model)
 	}
 

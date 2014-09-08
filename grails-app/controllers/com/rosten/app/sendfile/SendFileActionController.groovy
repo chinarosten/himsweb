@@ -48,8 +48,8 @@ class SendFileActionController {
 		def webPath = request.getContextPath() + "/"
 		def actionList = []
 		actionList << createAction("退出",webPath + imgPath + "quit_1.gif","page_quit")
-		actionList << createAction("新建文档",webPath + imgPath + "word_new.png","weboffice_newDoc")
-		actionList << createAction("打开文档",webPath + imgPath + "word_open.png","weboffice_docOpen")
+		//actionList << createAction("新建文档",webPath + imgPath + "word_new.png","weboffice_newDoc")
+		//actionList << createAction("打开文档",webPath + imgPath + "word_open.png","weboffice_docOpen")
 		actionList << createAction("保存文档",webPath + imgPath + "Save.gif","word_save")
 		actionList << createAction("打印文档",webPath + imgPath + "word_print.png","weboffice_print")
 		actionList << createAction("隐藏/显示菜单",webPath + imgPath + "word_menu.png","word_menu")

@@ -13,7 +13,7 @@
 		kernel.addOnLoad(function() {
 			rosten.init({webpath:"${request.getContextPath()}"});
 			rosten.cssinit();
-			weboffice_notifyCtrlReady();
+			weboffice_notifyCtrlReady("${wordTemplate?wordTemplate:""}");
 		});
 		page_quit = function(){
 			weboffice_close();
@@ -22,7 +22,7 @@
 			parentWin.location.reload();
 		};
 		word_save = function(){
-			var returnValue = weboffice_uploadDoc([{name:"filename",value:"${sendFile?.serialNo}.doc"},{name:"type",value:"doc"}],"http://192.168.0.106:8080/himsweb/sendFile/addWordFile1/${sendFile?.id}");
+			var returnValue = weboffice_uploadDoc([{name:"filename",value:"${sendFile?.serialNo}.doc"},{name:"type",value:"doc"}],"${servletPath}sendFile/addWordFile1/${sendFile?.id}");
 			if("ok" == returnValue){
 				page_quit();
 			} else {

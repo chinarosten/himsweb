@@ -43,11 +43,16 @@ define(function() {
 	 *					新建文档
 	 *
 	 ****************************************************/
-	weboffice_newDoc = function() {
+	weboffice_newDoc = function(wordPath) {
 		try {
 			//目前默认为word,doctype:doc,wps,xls
 			var doctype = "doc";
-			webObj.LoadOriginalFile("", doctype);
+			if(wordPath && wordPath!=""){
+				webObj.LoadOriginalFile(wordPath, doctype);
+			}else{
+				webObj.LoadOriginalFile("", doctype);
+			}
+			
 		} catch(e) {
 			alert("异常\r\nError:" + e + "\r\nError Code:" + e.number + "\r\nError Des:" + e.description);
 		}
@@ -993,11 +998,11 @@ define(function() {
 	 *		控件初始化WebOffice方法
 	 *
 	 ****************************************************/
-	weboffice_notifyCtrlReady = function() {
+	weboffice_notifyCtrlReady = function(wordPath) {
 		webObj.SetWindowText("Rosten恒传技术", 0);
 		webObj.OptionFlag |= 128;
 		// 新建文档
-		 weboffice_newDoc();
+		 weboffice_newDoc(wordPath);
 		 webObj.ShowToolBar = false;   //隐藏weboffice自带工具栏
 		 //默认隐藏office工具栏
 		 webObj.HideMenuArea("hideall","","","");
