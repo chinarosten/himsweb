@@ -388,5 +388,10 @@ define(["dojo/_base/window",
             }
         }
     };
+    rosten.logout = function(){
+    	var url = rosten.webPath + "/j_spring_security_logout";
+    	window.location = url;
+    };
+    
     return rosten;
 });
