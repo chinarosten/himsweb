@@ -75,7 +75,7 @@ define(["dojo/_base/kernel"
         }
         rosten.replaceRostenTheme(rostencss);
 
-        connect.subscribe("loadjsfile", null, function(oString) {
+        connect.subscribe("loadjsfile", null, function(obj) {
         	domStyle.set(registry.byId("home").domNode,"display","none");
     		domStyle.set(registry.byId("modelMain").domNode,"display","");
     		registry.byId("modelMain").resize();
@@ -83,14 +83,18 @@ define(["dojo/_base/kernel"
             /*
              * 用于加载对应的js文件,此方法在后续开发过程中需要修改
              */
+    		var oString = obj.naviMenu;
+    		var oRight = "";
+    		if(obj.naviRight) oRight = obj.naviRight;
             console.log("loadjs file is :" + oString);
+            
             if (oString == "plat" || oString == "system") {
             	deleteMailNavigation();
              	require(["rosten/app/SystemManage"],function(){
              		if(oString=="plat"){
              			show_systemNaviEntity("companyManage");
              		}else{
-             			show_systemNaviEntity("userManage");
+             			show_systemNaviEntity(oRight);
              		}
              	});
             }else if (oString == "person") {
@@ -99,13 +103,13 @@ define(["dojo/_base/kernel"
             	deleteMailNavigation();
             	require(["rosten/app/BbsManage"],function(){
             		if(rosten.variable.showStartBbs==undefined || rosten.variable.showStartBbs!=true){
-            			show_bbsNaviEntity("mybbsManage");
+            			show_bbsNaviEntity(oRight);
             		}
             	});
             } else if (oString == "sendfile") {
             	deleteMailNavigation();
                 require(["rosten/app/SendFileManage"],function(){
-                	show_sendFileNaviEntity("mySendfileManage");
+                	show_sendFileNaviEntity(oRight);
                 });
             } else if (oString == "receivefile") {
             	deleteMailNavigation();
@@ -115,27 +119,27 @@ define(["dojo/_base/kernel"
             }else if(oString=="personconfig"){
                 deleteMailNavigation();
                 require(["rosten/app/SmsManage"],function(){
-                	show_smsNaviEntity("gtaskManage");
+                	show_smsNaviEntity(oRight);
                 });
             }else if (oString == "meeting") {
             	deleteMailNavigation();
             	require(["rosten/app/MeetingManage"],function(){
-            		show_meetingNaviEntity("myMeetingManage");
+            		show_meetingNaviEntity(oRight);
             	});
             }else if (oString == "dsj") {
             	deleteMailNavigation();
             	require(["rosten/app/DsjManage"],function(){
-            		show_dsjNaviEntity("myDsjManage");
+            		show_dsjNaviEntity(oRight);
             	});
             }else if (oString == "workflow") {
             	deleteMailNavigation();
             	require(["rosten/app/WorkFlowManage"],function(){
-            		show_workFlowNaviEntity("flowDefinedManage");
+            		show_workFlowNaviEntity(oRight);
             	});
             }else if (oString == "public") {
             	deleteMailNavigation();
             	require(["rosten/app/PublicManage"],function(){
-            		show_publicNaviEntity("downloadFileManage");
+            		show_publicNaviEntity(oRight);
             	});
             }
         });

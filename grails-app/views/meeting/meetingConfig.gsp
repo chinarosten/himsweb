@@ -74,7 +74,7 @@
 </div>
 <div style="text-Align:center">
 	
-<g:form id="meetingConfig_form" name="meetingConfig_form" url='[controller:"meeting",action:"meetingConfigSave"]' onsubmit="return false;" class="rosten_form" style="text-align:left">
+<g:form id="meetingConfig_form" name="meetingConfig_form" url='[controller:"meeting",action:"meetingConfigSave"]' onsubmit="return false;" class="rosten_form" style="text-align:left;margin:10px">
 	<fieldset class="fieldset-form">
 	<legend class="tableHeader">配置文档</legend>
 		<input id="id" data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-props='name:"id",style:{display:"none"},value:"${meetingConfig?.id }"' />

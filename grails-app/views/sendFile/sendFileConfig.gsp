@@ -74,7 +74,7 @@
 </div>
 <div style="text-Align:center">
 	
-<g:form id="sendFileConfig_form" name="sendFileConfig_form" url='[controller:"sendFile",action:"sendFileConfigSave"]' onsubmit="return false;" class="rosten_form" style="text-align:left">
+<g:form id="sendFileConfig_form" name="sendFileConfig_form" url='[controller:"sendFile",action:"sendFileConfigSave"]' onsubmit="return false;" class="rosten_form" style="text-align:left;margin:10px">
 	<fieldset class="fieldset-form">
 	<legend class="tableHeader">配置文档</legend>
 		<input id="id" data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-props='name:"id",style:{display:"none"},value:"${sendFileConfig?.id }"' />

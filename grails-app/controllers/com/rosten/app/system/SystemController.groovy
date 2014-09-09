@@ -2436,6 +2436,7 @@ class SystemController {
 					model["name"] = it.resourceName
 					model["href"] = "javascript:show_naviEntity(\"" + it.url + "\")"
 					model["img"] = it.imgUrl
+					model["url"] = it.url
 					resourceList << model
 				}
 			}else if("admin".equals(userType)){
@@ -2445,6 +2446,7 @@ class SystemController {
 					model["name"] = it.resourceName
 					model["href"] = "javascript:show_naviEntity(\"" + it.url + "\")"
 					model["img"] = it.imgUrl
+					model["url"] = it.url
 					resourceList << model
 				}
 			}else if("normal".equals(userType)){
@@ -2461,6 +2463,7 @@ class SystemController {
 					model["name"] = it.resourceName
 					model["href"] = "javascript:show_naviEntity(\"" + it.url + "\")"
 					model["img"] = it.imgUrl
+					model["url"] = it.url
 					resourceList << model
 				}
 			}

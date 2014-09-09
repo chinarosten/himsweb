@@ -96,7 +96,7 @@
 <body>
 	<div data-dojo-type="rosten/widget/ActionBar" id="rosten_actionBar" data-dojo-props='actionBarSrc:"${createLink(controller:'systemAction',action:'logoSet')}"'></div>
 		<div style="text-Align:center">
-        <div class="rosten_form">
+        <div class="rosten_form" style="margin:10px">
         	<input id="id" data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-props='name:"id",style:{display:"none"},value:"${logoSet?.id }"' />
         	<input id="companyId" data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
         	<fieldset class="fieldset-form">

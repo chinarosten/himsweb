@@ -94,7 +94,7 @@
 </div>
 <div style="text-Align:center">
 	
-<g:form id="userSimple_form" name="userSimple_form" onsubmit="return false;" class="rosten_form" style="text-align:left">
+<g:form id="userSimple_form" name="userSimple_form" onsubmit="return false;" class="rosten_form" style="text-align:left;margin:10px">
 	<fieldset class="fieldset-form">
 	<legend class="tableHeader">个人资料</legend>
 		<input id="id" data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-props='name:"id",style:{display:"none"},value:"${user?.id }"' />
