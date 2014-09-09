@@ -660,7 +660,7 @@ class MeetingController {
 		FieldAcl fa = new FieldAcl()
 		if("normal".equals(user.getUserType())){
 			//普通用户
-			fa.readOnly = ["nowYear","nowSN","nowCancel","frontYear","frontSN","frontCancel"]
+			//fa.readOnly = ["nowYear","nowSN","nowCancel","frontYear","frontSN","frontCancel"]
 		}else{
 //			fa.readOnly = ["nowCancel","frontCancel"]
 		}

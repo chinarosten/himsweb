@@ -17,8 +17,9 @@
 		 		"dijit/Editor",
 				"dijit/_editor/plugins/FontChoice",
 		 		"rosten/widget/TitlePane",
-		     	"rosten/widget/ActionBar",
-		     	"rosten/app/SystemApplication"
+		 		"rosten/widget/ActionBar",
+		     	"rosten/app/Application",
+		     	"rosten/kernel/behavior"
 		     	],function(parser,kernel,registry,xhr){
 			kernel.addOnLoad(function(){
 				rosten.init({webpath:"${request.getContextPath()}"});
@@ -49,10 +50,11 @@
 				}
 				
 				var content = {};
-				var content = registry.byId("content");
-				if(content.attr("value")!=""){
-					content.content = content.attr("value");
+				var contentdom = registry.byId("content");
+				if(contentdom.attr("value")!=""){
+					content.content = contentdom.attr("value");
 				}
+				
 		    	rosten.readSync(rosten.webPath + "/system/personWorkLogSave",content,function(data){
 					if(data.result=="true"){
 						rosten.alert("保存成功！").queryDlgClose= function(){
@@ -61,9 +63,11 @@
 					}else{
 						rosten.alert("保存失败!");
 					}
-				});
-		    }
-			
+				},null,"rosten_form");
+		    };
+			page_quit = function(){
+				rosten.pagequit();
+			};
 
 		});	
 
@@ -86,8 +90,8 @@
                        <tr>
 						    <td width="120"><div align="right"><span style="color:red">*&nbsp;</span>日期：</div></td>
 						    <td width="250">
-						    	<input id="date" data-dojo-type="dijit/form/ValidationTextBox" 
-				                 	data-dojo-props='readOnly:true,trim:true,placeHolder:"领导发布后自动生成",
+						    	<input id="date" data-dojo-type="dijit/form/DateTextBox" 
+				                 	data-dojo-props='trim:true,required:true,name:"date",
 										value:"${workLog?.getFormattedCreatedDate()}"
 				                '/>
 						    </td>

@@ -710,6 +710,16 @@ define(["dojo/_base/kernel"
             rosten.alert("删除失败!");
         }
     };
+    main.commonCallback = function(data){
+		var sucessStr = "成功!";
+		var failureStr = "失败!";
+    	if (data.result == "true" || data.result == true) {
+            rosten.alert(sucessStr);
+            rosten.kernel.refreshGrid();
+        } else {
+            rosten.alert(failureStr);
+        }
+    };
     lang.mixin(rosten,main);
     return main;
 });

@@ -16,7 +16,7 @@ class User {
 	boolean passwordExpired
 	
 	//所属公司
-	@GridColumn(name="所属公司")
+	//@GridColumn(name="所属公司")
 	def getCompanyName(){
 		if(company) return company.companyName
 		else return null
@@ -92,7 +92,7 @@ class User {
 	
 	//是否领导
 	boolean leaderFlag = false
-	@GridColumn(name="领导",width="40px",colIdx=6)
+	//@GridColumn(name="领导",width="40px",colIdx=6)
 	def getleaderFlagValue(){
 		if(leaderFlag)return "是"
 		else return "否"

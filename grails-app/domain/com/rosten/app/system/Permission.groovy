@@ -24,7 +24,7 @@ class Permission {
 		return _array.unique().join(",")
 	}
 	//是否匿名访问
-	@GridColumn(name="是否匿名访问",colIdx=3)
+	//@GridColumn(name="是否匿名访问",colIdx=3)
 	def getIsAnonymousValue(){
 		if(isAnonymous)return "是"
 		else return "否"

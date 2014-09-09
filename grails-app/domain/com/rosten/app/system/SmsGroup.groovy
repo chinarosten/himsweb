@@ -22,6 +22,7 @@ class SmsGroup {
 	
     static constraints = {
 		members nullable:true,blank:true
+		description nullable:true,blank:true
     }
 	static mapping = {
 		id generator:'uuid.hex',params:[separator:'-']

@@ -609,7 +609,7 @@ class SendFileController {
 		FieldAcl fa = new FieldAcl()
 		if("normal".equals(user.getUserType())){
 			//普通用户
-			fa.readOnly = ["category","subCategory","nowYear","nowSN","nowCancel","frontYear","frontSN","frontCancel"]
+			//fa.readOnly = ["category","subCategory","nowYear","nowSN","nowCancel","frontYear","frontSN","frontCancel"]
 		}
 		model["fieldAcl"] = fa
 		
@@ -877,7 +877,7 @@ class SendFileController {
 		FieldAcl fa = new FieldAcl()
 		if("normal".equals(user.getUserType())){
 			//普通用户
-			fa.readOnly = ["nowYear","nowSN","nowCancel","frontYear","frontSN","frontCancel"]
+			//fa.readOnly = ["nowYear","nowSN","nowCancel","frontYear","frontSN","frontCancel"]
 		}
 		model["fieldAcl"] = fa
 		

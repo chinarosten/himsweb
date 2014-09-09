@@ -31,6 +31,13 @@
 					};
 					return false;
 				}
+				var chinaName = registry.byId("chinaName");
+				if(!chinaName.isValid()){
+					rosten.alert("中文名不正确！").queryDlgClose = function(){
+						chinaName.focus();
+					};
+					return false;
+				}
 				var password = registry.byId("password");
 				if(!password.isValid()){
 					rosten.alert("密码不正确！").queryDlgClose = function(){
@@ -113,50 +120,36 @@
                                 </div>
                             </td>
                             <td>
-                            	<g:if test='${userType.equals("admin") }'>
-                            		<input id="userNameFront" data-dojo-type="dijit/form/ValidationTextBox" 
-                                	data-dojo-props='name:"userNameFront","class":"input",style:{width:"50px"},
-              							value:"${company?.shortName}-",disabled:true
-                                	'/>
-                                	
-                                	<input id="username" data-dojo-type="dijit/form/ValidationTextBox" 
-	                                	data-dojo-props='name:"username",${fieldAcl.isReadOnly("username")},
-	                                		"class":"input",
-	                                		trim:true,
-	                                		required:true,
-	                                		promptMessage:"请正确输入用户名...",
-	                                		style:{width:"140px"},
-	                                		<g:if test="${username && !"".equals(username)}">disabled:true,</g:if>
-	              							value:"${username}"
-	                                '/>
-                            	</g:if>
-                            	<g:else>
-                            		<input id="username" data-dojo-type="dijit/form/ValidationTextBox" 
-	                                	data-dojo-props='name:"username",${fieldAcl.isReadOnly("username")},
-	                                		"class":"input",
-	                                		trim:true,
-	                                		required:true,
-	                                		promptMessage:"请正确输入用户名...",
-	              							value:"${user?.username}"
-	                                '/>
-                            	</g:else>
+                           		<input id="userNameFront" data-dojo-type="dijit/form/ValidationTextBox" 
+                               	data-dojo-props='name:"userNameFront","class":"input",style:{width:"50px"},
+             							value:"${company?.shortName}-",disabled:true
+                               	'/>
+                               	
+                               	<input id="username" data-dojo-type="dijit/form/ValidationTextBox" 
+                                	data-dojo-props='name:"username",${fieldAcl.isReadOnly("username")},
+                                		"class":"input",
+                                		trim:true,
+                                		required:true,
+                                		promptMessage:"请正确输入用户名...",
+                                		style:{width:"140px"},
+              							value:"${username}"
+                                '/>
                             	
                             </td>
                         </tr>
                         <tr>
                             <td width="100">
-                                <div align="right" >中文名：</div>
+                                <div align="right" ><span style="color:red">*&nbsp;</span>中文名：</div>
                             </td>
                             <td>
                             	<input id="chinaName" data-dojo-type="dijit/form/ValidationTextBox" 
                                 	data-dojo-props='name:"chinaName",${fieldAcl.isReadOnly("chinaName")},
                                 		"class":"input",
-                                		trim:true,
+                                		trim:true,required:true,
               							value:"${user?.chinaName}"
                                 '/>
                             </td>
                         </tr>
-                        <g:if test='${userType.equals("admin") }'>
 	                        <tr>
 		                        <td>
 		                        	 <div align="right"><span style="color:red">*&nbsp;</span>用户类型：</div>
@@ -177,8 +170,7 @@
 									
 		                        </td>
 		                    </tr>
-                        </g:if>
-						<tr>
+		                <tr>
                             <td>
                                 <div align="right">
                                     <span style="color:red">*&nbsp;</span>用户密码：
@@ -235,7 +227,6 @@
 	                            </td>
 	                        </tr>
                         </g:if>
-                        <g:if test='${userType.equals("admin") }'>
                         	<tr>
 	                           <td>
 	                                <div align="right"><span style="color:red">*&nbsp;</span>所属部门：</div>
@@ -272,7 +263,6 @@
 								
 	                            </td>
 	                        </tr>
-                        </g:if>
                         <g:if test='${userType.equals("super") }'>
 	                        <tr>
 		                        <td>

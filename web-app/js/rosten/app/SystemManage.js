@@ -173,7 +173,7 @@ define(["dojo/_base/connect",
             return;
         var content = {status:"是"};
         content.id = unids;
-        rosten.read(rosten.webPath + "/system/serviceStatus", content, delete_callback);
+        rosten.read(rosten.webPath + "/system/serviceStatus", content, rosten.commonCallback);
     };
     close_service = function(){
     	var unids = rosten.getGridUnid("multi");
@@ -181,7 +181,7 @@ define(["dojo/_base/connect",
             return;
         var content = {status:"否"};
         content.id = unids;
-        rosten.read(rosten.webPath + "/system/serviceStatus", content, delete_callback);
+        rosten.read(rosten.webPath + "/system/serviceStatus", content, rosten.commonCallback);
     };
     add_resource = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");

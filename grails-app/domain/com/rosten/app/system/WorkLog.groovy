@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Date;
 
 import com.rosten.app.annotation.GridColumn
+import com.rosten.app.util.Util
 
 class WorkLog {
 	String id
@@ -27,6 +28,13 @@ class WorkLog {
 	
 	//日志内容
 	@GridColumn(name="日志内容",colIdx=3,formatter="personWorkLog_formatTopic")
+	def getFormattedContent(){
+		if(this.content){
+			return Util.getLimitLengthString(this.content, 500, "...")
+		}else{
+			return ""
+		}
+	}
 	String content
 	
 	//所属用户

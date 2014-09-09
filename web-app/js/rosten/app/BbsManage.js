@@ -35,7 +35,7 @@ define([ "dojo/_base/connect", "dijit/registry","rosten/util/general", "rosten/k
 	};
 	bbs_resetSearch = function(){
 		switch(rosten.kernel.navigationEntity) {
-		case "mybbsManage":
+		default:
 			registry.byId("s_serialno").set("value","");
 			registry.byId("s_topic").set("value","");
 			registry.byId("s_status").set("value","");

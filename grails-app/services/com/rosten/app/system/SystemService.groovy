@@ -23,6 +23,7 @@ class SystemService {
 		def pa=[max:max,offset:offset]
 		def query = {
 			eq("user",user)
+			order("createDate", "desc")
 		}
 		return c.list(pa,query)
 	}

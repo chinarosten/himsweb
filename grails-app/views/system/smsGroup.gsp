@@ -53,7 +53,10 @@
 						rosten.alert("保存失败!");
 					}
 				});
-		    }
+		    };
+		    addUser = function(){
+		    	selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","members");
+			};
 			
 
 		});	
@@ -83,7 +86,7 @@
 				  </tr>
 				  <tr>
 				    <td align="right"><span style="color:red">*&nbsp;</span>成员：
-				    	<a href="javascript:selectUser('${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}','members')">
+				    	<a href="javascript:addUser()">
                            <img src="${resource(dir:'images/rosten/share',file:'group.gif')}" width="16" height="16" border="0" align="absbottom">
 						</a>
 				    <td ><textarea id="members" name="members" rows="10" data-dojo-type="dijit/form/SimpleTextarea" 

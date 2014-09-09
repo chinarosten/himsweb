@@ -37,13 +37,15 @@ class SystemController {
 	def personWorkLogSave ={
 		def model=[:]
 		def workLog = new WorkLog()
-		if(params.unid && !"".equals(params.unid)){
-			workLog = WorkLog.get(params.unid)
+		if(params.id && !"".equals(params.id)){
+			workLog = WorkLog.get(params.id)
 		}else{
 			workLog.user = springSecurityService.getCurrentUser()
 		}
 		
 		workLog.properties = params
+		workLog.clearErrors()
+		workLog.createDate = Util.convertToTimestamp(params.date)
 		
 		if(workLog.save(flush:true)){
 			model["result"] = "true"
@@ -432,16 +434,18 @@ class SystemController {
 		def dataList = Model.findAllByCompany(company)
 		def json = [identifier:'id',label:'name',items:[]]
 		dataList.each{
-			def sMap = ["id":it.id,"name":it.modelName,"parentId":null,"children":[]]
-			def childMap
-			it.resources.each{item->
-				def resourceMap = ["id":item.id,"name":item.resourceName,"type":"resource"]
-				json.items += resourceMap
-				
-				childMap = ["_reference":item.id,]
-				sMap.children += childMap
+			if(!it.modelCode.equals("sms") && !it.modelCode.equals("question")){
+				def sMap = ["id":it.id,"name":it.modelName,"parentId":null,"children":[]]
+				def childMap
+				it.resources.each{item->
+					def resourceMap = ["id":item.id,"name":item.resourceName,"type":"resource"]
+					json.items += resourceMap
+					
+					childMap = ["_reference":item.id,]
+					sMap.children += childMap
+				}
+				json.items+=sMap
 			}
-			json.items+=sMap
 		}
 		render json as JSON
 	}
@@ -655,7 +659,7 @@ class SystemController {
 		FieldAcl fa = new FieldAcl()
 		if("normal".equals(user.getUserType())){
 			//普通用户
-			fa.readOnly = ["resourceName","url","imgUrl","description"]
+			//fa.readOnly = ["resourceName","url","imgUrl","description"]
 		}
 		model["fieldAcl"] = fa
 		
@@ -812,7 +816,7 @@ class SystemController {
 		fa.readOnly +=["allowresourcesName"]
 		if("normal".equals(user.getUserType())){
 			//普通用户
-			fa.readOnly += ["permissionName","setOperation","isAnonymous","description"]
+			//fa.readOnly += ["permissionName","setOperation","isAnonymous","description"]
 		}
 		model["fieldAcl"] = fa
 		render(view:'/system/permission',model:model)
@@ -923,7 +927,7 @@ class SystemController {
 		fa.readOnly +=["allowpermissionsName"]
 		if("normal".equals(user.getUserType())){
 			//普通用户
-			fa.readOnly += ["authority","description"]
+			//fa.readOnly += ["authority","description"]
 		}
 		model["fieldAcl"] = fa
 		
@@ -1018,7 +1022,7 @@ class SystemController {
 		FieldAcl fa = new FieldAcl()
 		if("normal".equals(user.getUserType())){
 			//普通用户
-			fa.readOnly += ["typeName","description"]
+			//fa.readOnly += ["typeName","description"]
 		}
 		model["fieldAcl"] = fa
 		render(view:'/system/userType',model:model)
@@ -1174,7 +1178,7 @@ class SystemController {
 		fa.readOnly +=["allowusersName","allowrolesName"]
 		if("normal".equals(user.getUserType())){
 			//普通用户
-			fa.readOnly += ["groupName","description"]
+			//fa.readOnly += ["groupName","description"]
 		}
 		model["fieldAcl"] = fa
 		

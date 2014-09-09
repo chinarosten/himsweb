@@ -69,7 +69,7 @@ class SystemActionController {
 		def strname ="question"
 		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
 		actionList << createAction("查看",imgPath + "read.gif","read_" + strname)
-		actionList << createAction("修改",imgPath + "ok.png","change_" + strname)
+		//actionList << createAction("修改",imgPath + "ok.png","change_" + strname)
 		actionList << createAction("删除",imgPath + "delete.png","delete_" + strname)
 		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
 		render actionList as JSON
@@ -243,9 +243,9 @@ class SystemActionController {
 		actionList << createAction("返回",webPath + imgPath + "quit_1.gif","page_quit")
 		
 		def user = User.get(params.userId)
-		if(user && (systemService.checkIsRosten(user.username) || user.sysFlag)){
+		//if(user && (systemService.checkIsRosten(user.username) || user.sysFlag)){
 			actionList << createAction("保存",webPath + imgPath + "Save.gif","user_add")
-		}
+		//}
 		render actionList as JSON
 	}
 	def administratorView = {
@@ -283,7 +283,7 @@ class SystemActionController {
 		
 		if(args){
 			//允许修改，删除操作
-			actionList << createAction("修改",imgPath + "ok.png","change_" + strname)
+			//actionList << createAction("修改",imgPath + "ok.png","change_" + strname)
 			actionList << createAction("删除",imgPath + "delete.png","delete_" + strname)
 		}
 		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
