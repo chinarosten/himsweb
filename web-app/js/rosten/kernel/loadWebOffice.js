@@ -19,7 +19,7 @@ if(checkIsIE()){
 	s +="<param name='_ExtentX' value='6350'><param name='_ExtentY' value='6350'>";
 	s +="</OBJECT>";
 }else{
-	s += '<object  id="Control" TYPE="application/x-itst-activex" ALIGN="baseline" BORDER="0" WIDTH="100%"HEIGHT="600px"';
+	s += '<object  id="Control" TYPE="application/x-itst-activex" ALIGN="baseline" BORDER="0" WIDTH="100%"HEIGHT="768px"';
 	s += 'clsid="{E77E049B-23FC-4DB8-B756-60529A35FAD5}" event_NotifyCtrlReady="NotifyCtrlReady" event_NotifyToolBarClick="NotifyToolBarClick" event_NotifyWordEvent="NotifyWordEvent">';
 	s += '</object>';
 }
