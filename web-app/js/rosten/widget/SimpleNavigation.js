@@ -20,6 +20,9 @@ define(["dojo/_base/declare",
         '	>Loading...</div>' +
         '</div>',
         navigationData:null,//传入参数记录
+        
+        defaultentry:"",//缺省的导航信息
+        
         constructor: function(){
         },
 		postCreate: function(){
@@ -62,6 +65,8 @@ define(["dojo/_base/declare",
         	}
 			var ulnode = document.createElement("ul");
             for (var i = 0; i < data.length; i++) {
+            	if(i==0) this.defaultEntity = data[i].url;
+            	
                 var showName = data[i]["name"];
                 var img = data[i]["img"];
                 var href = data[i]["href"];
