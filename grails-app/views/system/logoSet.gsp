@@ -13,6 +13,31 @@
 		 		"rosten/widget/ActionBar"
 		     	],function(registry){
 			saveLogoSet = function(){
+
+				var companyName = registry.byId("companyName");
+				if(!companyName.isValid()){
+					rosten.alert("单位名称不正确！").queryDlgClose = function(){
+						companyName.focus();
+					};
+					return;
+				}
+
+				var shortName = registry.byId("shortName");
+				if(!shortName.isValid()){
+					rosten.alert("简称不正确！").queryDlgClose = function(){
+						shortName.focus();
+					};
+					return;
+				}
+
+				var companyAddress = registry.byId("companyAddress");
+				if(!companyAddress.isValid()){
+					rosten.alert("地址不正确！").queryDlgClose = function(){
+						companyAddress.focus();
+					};
+					return;
+				}
+
 				var logoname = registry.byId("logoName");
 				if(!logoname.isValid()){
 					rosten.alert("Logo配置名称不正确！").queryDlgClose = function(){
@@ -38,16 +63,18 @@
 					return;
 				}
 				var content = {};
+				content.companyName = companyName.attr("value");
+				content.shortName = shortName.attr("value");
+				content.companyPhone = registry.byId("companyPhone").attr("value");
+				content.companyFax = registry.byId("companyFax").attr("value");
+				content.companyAddress = companyAddress.attr("value");
+				
 				content.logoName = logoname.attr("value");
 				content.imgFileName = imgfilename.attr("value");
 				content.modelId = registry.byId("modelId").attr("value");
 				content.imgfilepath = content.imgFileName;
 				content.cssStyle = cssStyle.attr("value");
 				
-				var description = registry.byId("description");
-				if(description.attr("value")!=""){
-					content.description = description.attr("value");
-				}
 				content.id = registry.byId("id").attr("value");
 				content.companyId = registry.byId("companyId").attr("value");
 			
@@ -71,10 +98,102 @@
 		<div style="text-Align:center">
         <div class="rosten_form">
         	<input id="id" data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-props='name:"id",style:{display:"none"},value:"${logoSet?.id }"' />
-        	<input id="companyId" data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-props='name:"companyId",style:{display:"none"},value:"${companyId }"' />
+        	<input id="companyId" data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-props='name:"companyId",style:{display:"none"},value:"${company?.id }"' />
+        	<fieldset class="fieldset-form">
+        		<legend class="tableHeader">单位信息</legend>
+        		<table class="tableData" style="text-align:left;margin:10px 10px 10px 20px">
+        			<tbody>
+						  <tr>
+                            <td width="120">
+                                <div align="right">
+                                    <span style="color:red">*&nbsp;</span>单位名称：
+                                </div>
+                            </td>
+                            <td  width="450">
+                                <input id="companyName" data-dojo-type="dijit/form/ValidationTextBox" 
+                                	data-dojo-props='name:"companyName",
+                                		"class":"input",
+                                		style:{width:"400px",marginLeft:"1px"},
+                                		trim:true,
+                                		required:true,
+                                		promptMessage:"请正确输入名称...",
+              							value:"${company?.companyName}"
+                               '/>
+                            </td>
+                    	</tr> 
+                    	<tr>
+                        	<td>
+                                <div align="right" >
+                                    <span style="color:red">*&nbsp;</span>简称：
+                                </div>
+                            </td>
+                             <td>
+                             	<input id="shortName" data-dojo-type="dijit/form/ValidationTextBox"
+                             		data-dojo-props='name:"shortName",
+                                		"class":"input",
+                                		style:{width:"60px",marginLeft:"1px"},
+                                		trim:true,
+                                		required:true,
+                                		promptMessage:"请正确输入简称...",
+              							value:"${company?.shortName}"
+                                '/>
+    						</td>
+                        </tr> 
+                        <tr>
+                        	<td>
+                                <div align="right" >电话号码：</div>
+                            </td>
+                             <td>
+                             	<input id="companyPhone" data-dojo-type="dijit/form/ValidationTextBox"
+                             		data-dojo-props='name:"companyPhone",
+                                		"class":"input",
+                                		style:{width:"180px",marginLeft:"1px"},
+                                		trim:true,
+                                		promptMessage:"请正确输入电话号码...",
+              							value:"${company?.companyPhone}"
+                                '/>
+    						</td>
+                        </tr>
+                        <tr>
+                        	<td>
+                                <div align="right" >传真号码：
+                                </div>
+                            </td>
+                             <td>
+                             	<input id="companyFax" data-dojo-type="dijit/form/ValidationTextBox"
+                             		data-dojo-props='name:"companyFax",
+                                		"class":"input",
+                                		style:{width:"180px",marginLeft:"1px"},
+                                		trim:true,
+                                		promptMessage:"请正确输入传真号码...",
+              							value:"${company?.companyFax}"
+                                '/>
+    						</td>
+                        </tr>
+                        <tr>
+                        	<td>
+                                <div align="right" >
+                                    <span style="color:red">*&nbsp;</span>地址：
+                                </div>
+                            </td>
+                             <td>
+                             	<input id="companyAddress" data-dojo-type="dijit.form.ValidationTextBox"
+                             		data-dojo-props='name:"companyAddress",
+                                		"class":"input",
+                                		style:{width:"400px",marginLeft:"1px"},
+                                		trim:true,
+                                		required:true,
+                                		promptMessage:"请正确输入地址...",
+              							value:"${company?.companyAddress}"
+                                '/>
+    						</td>
+                        </tr>    			
+        			</tbody>
+        		</table>
+        	</fieldset>
             <fieldset class="fieldset-form">
                 <legend class="tableHeader">Logo配置</legend>
-                <table class="tableData" style="text-align:left">
+                <table class="tableData" style="text-align:left;margin:10px 10px 10px 20px">
                     <tbody>
                         <tr>
                             <td width="120">
@@ -171,21 +290,6 @@
                                 
                             </td>
                     	</tr>
-                        <tr>
-                        	<td>
-                                <div align="right" >内容描述：</div>
-                            </td>
-
-							<td ><textarea id="description" data-dojo-type="dijit/form/SimpleTextarea" 
-    							data-dojo-props='name:"description",
-                                		"class":"input",
-                                		style:{width:"400px",marginLeft:"1px"},
-                                		trim:true,
-                                		value:"${logoSet?.description }"
-                            	'>
-    							</textarea>
-    						</td>
-                        </tr>
                     </tbody>
                 </table>
             </fieldset>

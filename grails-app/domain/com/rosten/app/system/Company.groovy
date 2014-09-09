@@ -94,7 +94,7 @@ class Company {
 		table "ROSTEN_COMPANY"
 	}
 	def beforeDelete(){
-		Company.withNewSession{
+		Company.withNewSession{session->
 			//主要针对超级管理员情况,company允许为空-----------
 			User.findAllByCompany(this).each{user->
 				user.delete()
@@ -113,8 +113,9 @@ class Company {
 			}
 			//------------------------------------------
 			LogoSet.findAllByCompany(this).each{logoset->
-				logoset.delete(flush:true)
+				logoset.delete()
 			}
+			session.flush()
 		}
 	}
 }

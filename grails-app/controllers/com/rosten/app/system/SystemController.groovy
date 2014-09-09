@@ -2605,7 +2605,7 @@ class SystemController {
 			}
 			
 			serialNoList.each{item->
-				model[item.id + "&" + Util.obj2str(item.serialNo).padLeft(2,"0")] = item.modelCode + ":" + item.modelName + "&" + item.modelUrl
+				model[item.id + "&" + Util.obj2str(item.serialNo).padLeft(2,"0")] = item.modelCode + ":" + item.modelName + "&" + getLastModelUrl(item.modelUrl)
 				_indexList << item.serialNo
 			}
 			
@@ -2617,7 +2617,7 @@ class SystemController {
 				_indexList << indexValue
 				_index = indexValue + 1
 				
-				model[item.id + "&" + Util.obj2str(indexValue).padLeft(2,"0")] = item.modelCode + ":" + item.modelName + "&" + item.modelUrl
+				model[item.id + "&" + Util.obj2str(indexValue).padLeft(2,"0")] = item.modelCode + ":" + item.modelName + "&" + getLastModelUrl(item.modelUrl)
 			}
 			
 			if(defaultModel){
@@ -2627,6 +2627,13 @@ class SystemController {
 			}
 		}
 		render model as JSON
+	}
+	private def getLastModelUrl ={url->
+		if(!url.contains(request.contextPath)){
+			return request.contextPath + url
+		}else{
+			return url
+		}
 	}
 	private def getIndexValue = {index,arrayList->
 		if(arrayList.contains(index)){
@@ -2644,27 +2651,47 @@ class SystemController {
 		def logoSet = LogoSet.findWhere(company:user.company)
 		if(logoSet==null) {
 			logoSet = new LogoSet()
-			model.companyId = user.company.id
+			model.company = user.company
 			
 		}else{
-			model.companyId = logoSet.company.id
+			model.company = logoSet.company
 		}
 		model.logoSet = logoSet
 		render(view:'/system/logoSet',model:model)
 	}
 	def logoSetSave ={
 		def json=[:]
+		
+		def company = Company.get(params.companyId)
+		def oldCompanyName = company.companyName
+		//修改单位信息
+		company.companyName = params.companyName
+		company.shortName = params.shortName
+		company.companyPhone = params.companyPhone
+		company.companyFax = params.companyFax
+		company.companyAddress = params.companyAddress
+		company.save()
+		
+		//修改部门信息
+		def depart = Depart.findByDepartNameAndCompany(oldCompanyName,company)
+		if(depart){
+			//更新部门信息
+			depart.departName = params.companyName
+			depart.save()
+		}
+		
+		//修改logo信息
 		def logoSet = new LogoSet()
 		if(params.id && !"".equals(params.id)){
 			logoSet = LogoSet.get(params.id)
 		}
 		logoSet.properties = params
-		logoSet.company = Company.get(params.companyId)
+		logoSet.company = company
 		
 		//默认为首页，不允许修改
 //		logoSet.model = Model.get(params.modelId)
-		logoSet.model = null
 		
+		logoSet.model = null
 		if(logoSet.save(flush:true)){
 			json["result"] = true
 		}else{

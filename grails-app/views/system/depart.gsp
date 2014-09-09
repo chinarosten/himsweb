@@ -85,6 +85,10 @@
 				else store = tree.model.store;
 							
 				rosten.confirm("您是否将删除所选中的部门？").callback = function(){
+					if(selectedTreeNode.item.parentId == null || selectedTreeNode.item.parentId=="null" || selectedTreeNode.item.parentId==""){
+						rosten.alert("当前部门不能删除！");
+						return;
+					}
 					var href = "${createLink(controller:'system',action:'departDelete')}";
 					if(!selectedTreeNode.item.root){
 						href = href + "/"+selectedTreeNode.item.id;

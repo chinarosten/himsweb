@@ -726,7 +726,7 @@ class SystemService {
 			model.description ="系统配置文件管理模块"
 
 			def resource = new Resource()
-			resource.resourceName = "Logo设置"
+			resource.resourceName = "单位信息"
 			resource.url = "logSet"
 			resource.imgUrl = "images/rosten/navigation/Logo.gif"
 			model.addToResources(resource)
@@ -827,11 +827,120 @@ class SystemService {
 			//个人配置
 			initData_person(path,company)
 			
+			//添加服务信息,只添加公共的服务
+			initData_service(path,company)
+			
 		}catch(Exception e){
 			print e.message
 			return false
 		}
 		return true
+	}
+	
+	def systemInit ={
+		//系统初始化-------------------------------
+		//创建超超级用户
+		def adminRole = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN').save(failOnError: true)
+		def adminUser = User.findByUsername('rostenadmin') ?: new User(
+				username:'rostenadmin',
+				password:'rosten_2014',
+				userCode:'rostenadmin',
+				enabled: true).save(failOnError: true)
+
+		if (!adminUser.authorities.contains(adminRole)) {
+			UserRole.create adminUser, adminRole,true
+		}
+		
+		//创建超超级用户管理模块菜单
+		if(Model.findByCompany(null)==null){
+			
+			def model = new Model(modelName:"首页",description:"首页",serialNo:1,modelCode:"start")
+			model.modelUrl = "js:home"
+			model.save(fialOnError:true)
+			
+			model = new Model(modelName:"电子邮件",description:"电子邮件",serialNo:2,modelCode:"person")
+			model.modelUrl = "/mail/navigation@tree"
+			model.save(fialOnError:true)
+			
+			model = new Model(modelName:"平台管理",description:"超级管理员系统平台配置文件管理模块",serialNo:3,modelCode:"plat")
+			model.modelUrl = "/system/navigation"
+			
+			def resource = new Resource()
+			resource.resourceName = "组织机构管理"
+			resource.url = "companyManage"
+			resource.imgUrl = "images/rosten/navigation/Organize.gif"
+			model.addToResources(resource)
+			
+			resource = new Resource()
+			resource.resourceName = "应用管理员"
+			resource.url = "adminManage"
+			resource.imgUrl = "images/rosten/navigation/Administrator.gif"
+			model.addToResources(resource)
+			
+			resource = new Resource()
+			resource.resourceName = "组织机构初始化"
+			resource.url = "systemToolManage"
+			resource.imgUrl = "images/rosten/navigation/OrganizeInit.gif"
+			model.addToResources(resource)
+			
+			resource = new Resource()
+			resource.resourceName = "广告管理"
+			resource.url = "advertiseManage"
+			resource.imgUrl = "images/rosten/navigation/Advertise.gif"
+			model.addToResources(resource)
+			
+			resource = new Resource()
+			resource.resourceName = "你问我答"
+			resource.url = "questionManage"
+			resource.imgUrl = "images/rosten/navigation/Question.gif"
+			model.addToResources(resource)
+			
+			resource = new Resource()
+			resource.resourceName = "短信管理"
+			resource.url = "smsManage"
+			resource.imgUrl = "images/rosten/navigation/Resource.gif"
+			model.addToResources(resource)
+			
+			resource = new Resource()
+			resource.resourceName = "日志管理"
+			resource.url = "systemLogManage"
+			resource.imgUrl = "images/rosten/navigation/log.gif"
+			model.addToResources(resource)
+			
+			model.save(failOnError: true)
+		}
+		
+		//创建公司信息
+		
+		
+		
+	}
+	
+	private def initData_service ={path,company ->
+		def _service = new NormalService()
+		_service.serviceName = "部门通讯录"
+		_service.company = company
+		_service.functionArgs = "contact"
+		_service.save(flush:true)
+		
+		_service = new NormalService()
+		_service.serviceName = "手机短信"
+		_service.company = company
+		_service.functionArgs = "sms"
+		_service.save(flush:true)
+		
+		_service = new NormalService()
+		_service.serviceName = "你问我答"
+		_service.company = company
+		_service.functionArgs = "question"
+		_service.save(flush:true)
+		
+		_service = new NormalService()
+		_service.serviceName = "写邮件"
+		_service.company = company
+		_service.functionArgs = "addMail"
+		_service.save(flush:true)
+		
 	}
 	def checkIsRosten(String usercode) {
 		if ("rostenadmin".equals(usercode))
