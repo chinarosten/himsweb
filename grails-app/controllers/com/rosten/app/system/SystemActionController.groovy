@@ -223,7 +223,10 @@ class SystemActionController {
 	}
 	
 	def resourceView ={
-		render createCommonAction(null,"resource",true) as JSON
+		def _list = createCommonAction(null,"resource",true)
+		_list << createAction("设置为缺省",imgPath + "changeStatus.gif","resource_setDefault")
+		_list << createAction("取消设置",imgPath + "config_delete.png","resource_cancelDefault")
+		render  _list as JSON
 	}
 	def resourceForm ={
 		def webPath = request.getContextPath() + "/"

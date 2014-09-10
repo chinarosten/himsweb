@@ -567,6 +567,27 @@ class SystemController {
 		}
 		render json as JSON
 	}
+	def resourceSetDefault ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def resource = Resource.get(it)
+				if(resource){
+					if("true".equals(params.isDefault)){
+						resource.isDefault = true
+					}else{
+						resource.isDefault = false
+					}
+					resource.save(flush: true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
+	}
 	def resourceDelete ={
 		def ids = params.id.split(",")
 		def json

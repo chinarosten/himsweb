@@ -106,14 +106,14 @@
 			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>用户名：</div></td>
 			    <td width="240">
 			    	<input id="username" data-dojo-type="dijit/form/ValidationTextBox" 
-	                 	data-dojo-props='readOnly:true,"class":"input",trim:true,
+	                 	data-dojo-props='readOnly:true,"class":"input",trim:true,disabled:true,
 							value:"${user?.username}"
 	                '/>
 			    </td>
 			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>所属部门：</div></td>
 			    <td width="240">
 			    	<input data-dojo-type="dijit/form/ValidationTextBox" 
-	                 	data-dojo-props='"class":"input",readOnly:true,
+	                 	data-dojo-props='"class":"input",readOnly:true,disabled:true,
 							value:"${user?.getDepartName()}"
 	                '/>
 	           </td>
@@ -129,7 +129,7 @@
 			    <td><div align="right">具有角色：</div></td>
 			    <td>
 			    	<input id="allowrolesName" data-dojo-type="dijit/form/ValidationTextBox" 
-	                 	data-dojo-props='readOnly:true,"class":"input",
+	                 	data-dojo-props='readOnly:true,"class":"input",disabled:true,
 							value:"${allowrolesName}"
 	                '/>
 	           </td>
@@ -138,14 +138,14 @@
 			    <td><div align="right">是否管理员：</div></td>
 			    <td>
 			    	<input id="admin1" data-dojo-type="dijit/form/RadioButton"
-	               		data-dojo-props='type:"radio",readOnly:true,
+	               		data-dojo-props='type:"radio",readOnly:true,disabled:true,
 	               			<g:if test="${user?.sysFlag }">checked:true,</g:if>
 								value:"true"
 	                  '/>
 						<label for="admin1">是</label>
 						
                       <input id="admin2" data-dojo-type="dijit/form/RadioButton"
-                   		data-dojo-props='readOnly:true,type:"radio",
+                   		data-dojo-props='readOnly:true,type:"radio",disabled:true,
                    			<g:if test="${!user?.sysFlag }">checked:true,</g:if>
     							value:"false"
                       '/>
@@ -250,8 +250,9 @@
 	                <input id="loginName" data-dojo-type="dijit/form/ValidationTextBox" 
 	                 	data-dojo-props='name:"loginName",trim:true,"class":"input",required:true,
 							value:"${emailConfig?emailConfig.loginName:user?.email}",
-							invalidMessage:"登录名地址是非法的(格式为:example@126.com)",
-							missingMessage:"登录名格式为:example@126.com"
+							invalidMessage:"登录名地址是非法的(格式为:example@rostensoft.com)",
+							promptMessage:"登录名格式为:example@rostensoft.com",
+							missingMessage:"登录名格式为:example@rostensoft.com"
 	                '/>
 			    </td>
 			    <td width="130"><div align="right"><span style="color:red">*&nbsp;</span>密码：</div></td>

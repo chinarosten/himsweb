@@ -221,6 +221,22 @@ define(["dojo/_base/connect",
 		rosten.openNewWindow("resource", rosten.webPath + "/system/resourceShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
 		rosten.kernel.getGrid().clearSelected();
     };
+    resource_setDefault = function(){
+    	var unids = rosten.getGridUnid("multi");
+        if (unids == "")
+            return;
+        var content = {isDefault:"true"};
+        content.id = unids;
+        rosten.read(rosten.webPath + "/system/resourceSetDefault", content, rosten.commonCallback);
+    };
+    resource_cancelDefault = function(){
+    	var unids = rosten.getGridUnid("multi");
+        if (unids == "")
+            return;
+        var content = {isDefault:"false"};
+        content.id = unids;
+        rosten.read(rosten.webPath + "/system/resourceSetDefault", content, rosten.commonCallback);
+    };
     add_resource = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
