@@ -128,6 +128,20 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/kernel/beha
 			}
 		});
     };
+    modeler_formatTopic = function(value,rowIndex){
+    	return "<a href=\"javascript:modeler_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+    };
+    modeler_onMessageOpen = function(rowIndex){
+    	if (has("ie")) {
+    		rosten.alert("此功能不支持IE浏览器！");
+    		return;
+    	}
+    	var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("modeler", rosten.webPath + "/modeler/web/editor.html?id=" + unid);
+		rosten.kernel.getGrid().clearSelected();
+    };
     save_modeler = function(){
     	var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");

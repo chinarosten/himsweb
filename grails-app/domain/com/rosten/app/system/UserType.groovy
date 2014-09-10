@@ -5,7 +5,7 @@ import com.rosten.app.annotation.GridColumn
 class UserType {
 	String id
 	
-	@GridColumn(name="用户类型")
+	@GridColumn(name="用户类型",formatter="userType_formatTopic")
 	String typeName
 	
 	//描述

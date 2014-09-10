@@ -4,7 +4,7 @@ class Role {
 	
 	String id
 	//角色名称
-	@GridColumn(name="角色名称")
+	@GridColumn(name="角色名称",formatter="role_formatTopic")
 	String authority
 	
 	//具有权限

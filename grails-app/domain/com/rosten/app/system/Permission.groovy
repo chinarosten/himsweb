@@ -8,7 +8,7 @@ class Permission {
 	String id
 	
 	//权限名称
-	@GridColumn(name="权限名称",colIdx=1)
+	@GridColumn(name="权限名称",colIdx=1,formatter="permission_formatTopic")
 	String permissionName
 	
 	//操作类型集合

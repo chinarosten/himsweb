@@ -7,7 +7,7 @@ class Model {
 	String id
 	
 	//模块名称
-	@GridColumn(name="模块名称")
+	@GridColumn(name="模块名称",formatter="model_formatTopic")
 	String modelName
 	
 	//模块代码

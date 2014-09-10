@@ -695,7 +695,7 @@ class SystemController {
 					sMap["imgUrl"] = item.imgUrl
 					sMap["description"] = item.description
 					sMap["getModelName"] = item.getModelName()
-			
+					sMap["getTab"] = item.getTab()
 					datajson.items+=sMap
 				}
 			}
@@ -2437,6 +2437,7 @@ class SystemController {
 					model["href"] = "javascript:show_naviEntity(\"" + it.url + "\")"
 					model["img"] = it.imgUrl
 					model["url"] = it.url
+					model["isDefault"] = it.isDefault
 					resourceList << model
 				}
 			}else if("admin".equals(userType)){
@@ -2447,6 +2448,7 @@ class SystemController {
 					model["href"] = "javascript:show_naviEntity(\"" + it.url + "\")"
 					model["img"] = it.imgUrl
 					model["url"] = it.url
+					model["isDefault"] = it.isDefault
 					resourceList << model
 				}
 			}else if("normal".equals(userType)){
@@ -2464,6 +2466,7 @@ class SystemController {
 					model["href"] = "javascript:show_naviEntity(\"" + it.url + "\")"
 					model["img"] = it.imgUrl
 					model["url"] = it.url
+					model["isDefault"] = it.isDefault
 					resourceList << model
 				}
 			}

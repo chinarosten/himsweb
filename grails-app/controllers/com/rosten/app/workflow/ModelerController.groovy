@@ -231,7 +231,7 @@ class ModelerController {
 
 			_gridHeader << ["name":"序号","width":"26px","colIdx":0,"field":"rowIndex"]
 			_gridHeader << ["name":"流程id","width":"120px","colIdx":1,"field":"key"]
-			_gridHeader << ["name":"流程名称","width":"auto","colIdx":2,"field":"name"]
+			_gridHeader << ["name":"流程名称","width":"auto","colIdx":2,"field":"name","formatter":"modeler_formatTopic"]
 			_gridHeader << ["name":"版本号","width":"60px","colIdx":3,"field":"version"]
 			_gridHeader << ["name":"创建时间","width":"130px","colIdx":4,"field":"createTime"]
 			_gridHeader << ["name":"更新时间","width":"130px","colIdx":5,"field":"lastUpdateTime"]

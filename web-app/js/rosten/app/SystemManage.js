@@ -3,9 +3,11 @@
  */
 define(["dojo/_base/connect",
         "dijit/registry",
+        "rosten/util/general",
         "rosten/app/Application",
-        "rosten/kernel/behavior"], function(connect,registry) {
-
+        "rosten/kernel/behavior"], function(connect,registry,General) {
+	var general = new General();
+	
 	user_search = function(){
 		var content = {};
 		
@@ -86,6 +88,16 @@ define(["dojo/_base/connect",
                 rosten.alert("修改密码失败!");
             }
         });
+    };
+    user_formatTopic = function(value,rowIndex){
+    	return "<a href=\"javascript:user_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+    };
+    user_onMessageOpen = function(rowIndex){
+    	var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("user", rosten.webPath + "/system/userShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
     };
     add_user = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
@@ -183,6 +195,32 @@ define(["dojo/_base/connect",
         content.id = unids;
         rosten.read(rosten.webPath + "/system/serviceStatus", content, rosten.commonCallback);
     };
+    formatResourceTab = function(value){
+    	if(value && value!=""){
+			var imgs = general.splitString(value,",");
+			var _values="";
+			for(var i = 0; i < imgs.length; i ++){
+				if(_values==""){
+					_values = "<img style=\"margin-left:4px\" src=\"" + rosten.webPath + "/" + imgs[i] + "\" />";
+				}else{
+					_values += "<img style=\"margin-left:4px\" src=\"" + rosten.webPath + "/" + imgs[i] + "\" />";
+				}
+			}
+			return _values;
+		}else{
+			return "";
+		}
+    };
+    resource_formatTopic = function(value,rowIndex){
+    	return "<a href=\"javascript:resource_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+    };
+    resource_onMessageOpen = function(rowIndex){
+    	var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("resource", rosten.webPath + "/system/resourceShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
+    };
     add_resource = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
@@ -211,6 +249,16 @@ define(["dojo/_base/connect",
             rosten.readNoTime(rosten.webPath + "/system/resourceDelete", content, delete_callback);
         };
     };
+    permission_formatTopic = function(value,rowIndex){
+    	return "<a href=\"javascript:permission_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+    };
+    permission_onMessageOpen = function(rowIndex){
+    	var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("permission", rosten.webPath + "/system/permissionShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
+    };
     add_permission = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
@@ -238,6 +286,16 @@ define(["dojo/_base/connect",
             content.id = unids;
             rosten.readNoTime(rosten.webPath + "/system/permissionDelete", content, delete_callback);
         };
+    };
+    role_formatTopic = function(value,rowIndex){
+    	return "<a href=\"javascript:role_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+    };
+    role_onMessageOpen = function(rowIndex){
+    	var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("role", rosten.webPath + "/system/roleShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
     };
     add_role = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
@@ -268,6 +326,16 @@ define(["dojo/_base/connect",
             rosten._readNoTime(rosten.webPath + "/system/roleDelete", content, delete_callback);
         };
     };
+    group_formatTopic = function(value,rowIndex){
+    	return "<a href=\"javascript:group_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+    };
+    group_onMessageOpen = function(rowIndex){
+    	var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("group", rosten.webPath + "/system/groupShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
+    };
     add_group = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");
         var companyId = rosten.kernel.getUserInforByKey("companyid");
@@ -296,6 +364,16 @@ define(["dojo/_base/connect",
             content.id = unids;
             rosten.readNoTime(rosten.webPath + "/system/groupDelete", content, delete_callback);
         };
+    };
+    model_formatTopic = function(value,rowIndex){
+    	return "<a href=\"javascript:model_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+    };
+    model_onMessageOpen = function(rowIndex){
+    	var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("model", rosten.webPath + "/system/modelShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
     };
     model_deleteFlow = function(){
     	 var unids = rosten.getGridUnid("multi");
@@ -450,6 +528,16 @@ define(["dojo/_base/connect",
             content.id = unids;
             rosten.readSyncNoTime(rosten.webPath + "/system/companyDelete", content, delete_callback);
         };
+    };
+    userType_formatTopic = function(value,rowIndex){
+    	return "<a href=\"javascript:userType_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+    };
+    userType_onMessageOpen = function(rowIndex){
+    	var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("userType", rosten.webPath + "/system/userTypeShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
     };
     add_userType = function() {
         var userid = rosten.kernel.getUserInforByKey("idnumber");

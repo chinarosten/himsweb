@@ -8,7 +8,7 @@ class Group1 {
 	String id
 	
 	//群组名称
-	@GridColumn(name="群组名称",colIdx=1)
+	@GridColumn(name="群组名称",colIdx=1,formatter="group_formatTopic")
 	String groupName
 	
 	//人员名称

@@ -97,7 +97,7 @@ class SystemActionController {
 		actionList << createAction("机构初始化",imgPath + "init.gif","systemtool_init")
 		actionList << createAction("拷贝机构初始化",imgPath + "copyInit.gif","systemtool_copyInit")
 		actionList << createAction("删除机构数据",imgPath + "delete.png","systemtool_deleteData")
-		actionList << createAction("添加功能模块",imgPath + "add.png","systemtool_addResource")
+		actionList << createAction("新增功能模块",imgPath + "add.png","systemtool_addResource")
 		actionList << createAction("重新登录系统",imgPath + "refreshSystem.gif","refreshSystem")
 		render actionList as JSON
 	}
@@ -278,7 +278,7 @@ class SystemActionController {
 			actionList =[]
 		}
 		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
-		actionList << createAction("添加",imgPath + "add.png","add_" + strname)
+		actionList << createAction("新增",imgPath + "add.png","add_" + strname)
 		actionList << createAction("查看",imgPath + "read.gif","read_" + strname)
 		
 		if(args){

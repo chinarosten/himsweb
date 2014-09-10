@@ -6,7 +6,7 @@ class SmsGroup {
 	String id
 	
 	//群组名称
-	@GridColumn(name="群组名称" ,width="150px")
+	@GridColumn(name="群组名称" ,width="150px",formatter="smsGroup_formatTopic")
 	String groupName
 	
 	//群组成员

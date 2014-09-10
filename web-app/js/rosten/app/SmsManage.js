@@ -157,6 +157,16 @@ define(["dojo/dom",
             });
         };
 	};
+	smsGroup_formatTopic = function(value,rowIndex){
+    	return "<a href=\"javascript:smsGroup_onMessageOpen(" + rowIndex + ");\">" + value + "</a>";
+    };
+    smsGroup_onMessageOpen = function(rowIndex){
+    	var unid = rosten.kernel.getGridItemValue(rowIndex,"id");
+        var userid = rosten.kernel.getUserInforByKey("idnumber");
+		var companyId = rosten.kernel.getUserInforByKey("companyid");
+		rosten.openNewWindow("smsGroup", rosten.webPath + "/system/smsGroupShow/" + unid + "?userid=" + userid + "&companyId=" + companyId);
+		rosten.kernel.getGrid().clearSelected();
+    };
     add_smsGroup = function() {
         var unid = rosten.kernel.getUserInforByKey("idnumber");
         rosten.openNewWindow("smsGroup", rosten.webPath + "/system/smsGroupAdd?userid=" + unid);

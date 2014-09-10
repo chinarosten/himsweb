@@ -146,6 +146,31 @@
                                '/>
                             </td>
                         </tr>
+                        <tr>
+	                        <td>
+	                        	 <div align="right"><span style="color:red">*&nbsp;</span>默认显示资源：</div>
+	                        </td>
+	                        <td>
+	                        	<input id="isDefault1" data-dojo-type="dijit/form/RadioButton"
+                             		data-dojo-props='name:"isDefault",
+                             			type:"radio",
+                             			${fieldAcl.isReadOnly("isDefault")},
+                             			<g:if test="${_resource?.isDefault && _resource.isDefault==true }">checked:true,</g:if>
+              							value:"true"
+                                '/>
+								<label for="isDefault1">是</label>
+								
+                                <input id="isDefault2" data-dojo-type="dijit/form/RadioButton"
+                             		data-dojo-props='name:"isDefault",
+                             			type:"radio",
+                             			${fieldAcl.isReadOnly("isDefault")},
+                             			<g:if test="${!_resource?.isDefault || _resource.isDefault==false }">checked:true,</g:if>
+              							value:"false"
+                                '/>
+								<label for="isDefault2">否</label>
+								
+	                        </td>
+	                    </tr>
 						<tr>
                         	<td>
                                 <div align="right" >内容描述：</div>

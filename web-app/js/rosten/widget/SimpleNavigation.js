@@ -65,7 +65,13 @@ define(["dojo/_base/declare",
         	}
 			var ulnode = document.createElement("ul");
             for (var i = 0; i < data.length; i++) {
+            	
+            	//处理缺省导航信息----2014-9-10-------------------
             	if(i==0) this.defaultEntity = data[i].url;
+            	if(data[i].isDefault == true || data[i].isDefault == "true"){
+            		this.defaultEntity = data[i].url;
+            	}
+            	//------------------------------------------
             	
                 var showName = data[i]["name"];
                 var img = data[i]["img"];
