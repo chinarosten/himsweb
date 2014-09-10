@@ -85,6 +85,8 @@
 					}else{
 						rosten.alert("保存失败！");
 					}	
+				},function(error){
+					rosten.alert("系统错误，请通知管理员！");
 				});
 			}
 

@@ -71,7 +71,9 @@
 					}else{
 						rosten.alert("保存失败！");
 					}	
-				},null,"userSimple_form");
+				},function(error){
+					rosten.alert("系统错误，请通知管理员！");
+				},"userSimple_form");
 			};
 			userSimple_checkIsOnMail = function(args){
 				if(args){

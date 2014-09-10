@@ -93,7 +93,9 @@
 					}else{
 						rosten.alert("保存失败!");
 					}
-				},null,"rosten_form");
+				},function(error){
+					rosten.alert("系统错误，请通知管理员！");
+				},"rosten_form");
 			};
 			authorize_selectUser = function(){
 				var rostenShowDialog = rosten.selectUser("${createLink(controller:'system',action:'userTreeDataStore',params:[companyId:company?.id])}","single");

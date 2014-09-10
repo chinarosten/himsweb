@@ -46,7 +46,9 @@
 					}else{
 						rosten.alert("保存失败!");
 					}
-				},null,"rosten_form");
+				},function(error){
+					rosten.alert("系统错误，请通知管理员！");
+				},"rosten_form");
 			};
 			permission_addResource = function(){
 				rostenShowDialog = selectResource1("${createLink(controller:'system',action:'resourceTreeDataStore',params:[companyId:company?.id])}");

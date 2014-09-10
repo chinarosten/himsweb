@@ -47,7 +47,7 @@
 				if(unid.innerHTML!=""){
 					content.id = unid.innerHTML;
 				}
-				rosten.read("${createLink(controller:'system',action:'advertiseSave')}",content,function(data){
+				rosten.readSync("${createLink(controller:'system',action:'advertiseSave')}",content,function(data){
 					if(data.result=="true"){
 						if(data.unid){
 							if(unid.innerHTML==""){
@@ -58,6 +58,8 @@
 					}else{
 						rosten.alert("保存失败!");
 					}	
+				},function(error){
+					rosten.alert("系统错误，请通知管理员！");
 				});
 			}
 	     });
