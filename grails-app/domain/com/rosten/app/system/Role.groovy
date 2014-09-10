@@ -60,5 +60,6 @@ class Role {
 	def beforeDelete(){
 		RoleGroup.removeAll(this)
 		UserRole.removeAll(this)
+		RolePermission.removeAll(this)
 	}
 }

@@ -21,7 +21,7 @@
                 	data-dojo-props='trim:true
                '/>
             </td>
-            <th width="5%">用户名</th>
+            <th width="5%">中文名</th>
             <td width="18%">
             	<input id="s_chinaName"  data-dojo-type="dijit/form/ValidationTextBox" 
                 	data-dojo-props='trim:true

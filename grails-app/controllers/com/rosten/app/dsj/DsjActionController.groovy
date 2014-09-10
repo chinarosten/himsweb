@@ -73,7 +73,7 @@ class DsjActionController {
 				}
 			}
 		}else{
-			//新建
+			//新增
 			actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 		}
 		
@@ -85,7 +85,7 @@ class DsjActionController {
 		def strname = "dsj"
 		
 		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
-		actionList << createAction("新建大事记",imgPath + "add.png","add_"+ strname)
+		actionList << createAction("新增大事记",imgPath + "add.png","add_"+ strname)
 		actionList << createAction("查看大事记",imgPath + "read.gif","read_" + strname)
 		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
 		

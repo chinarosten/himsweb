@@ -61,7 +61,7 @@ class MeetingActionController {
 				}
 			}
 		}else{
-			//新建
+			//新增
 			actionList << createAction("保存",webPath +imgPath + "Save.gif",strname + "_add")
 		}
 		
@@ -91,7 +91,7 @@ class MeetingActionController {
 		def strname = "meeting"
 		
 		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
-		actionList << createAction("新建会议通知",imgPath + "add.png","add_"+ strname)
+		actionList << createAction("新增会议通知",imgPath + "add.png","add_"+ strname)
 		actionList << createAction("查看会议通知",imgPath + "read.gif","read_" + strname)
 		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
 		

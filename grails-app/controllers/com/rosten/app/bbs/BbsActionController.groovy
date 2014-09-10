@@ -48,7 +48,7 @@ class BbsActionController {
 				
 			}
 		}else{
-			//新建公告
+			//新增公告
 			actionList << createAction("保存",webPath + imgPath + "Save.gif","bbs_add")
 		}
 		render actionList as JSON
@@ -93,7 +93,7 @@ class BbsActionController {
 		def actionList =[]
 		def strname = "bbs"
 		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
-		actionList << createAction("新建公告",imgPath + "add.png","add_"+ strname)
+		actionList << createAction("新增公告",imgPath + "add.png","add_"+ strname)
 		actionList << createAction("查看公告",imgPath + "read.gif","read_" + strname)
 		
 		actionList << createAction("刷新",imgPath + "fresh.gif","freshGrid")
