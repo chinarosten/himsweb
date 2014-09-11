@@ -507,7 +507,8 @@ class BbsController {
 		}
 		
 		//当前文档特殊字段处理
-		if(nextStatus.equals("已发布")){
+		def isPublish = false	//判断是否发布公告，此状态只存在状态为已结束的情况
+		if((nextStatus.equals("已发布") || nextStatus.equals("已结束")) && bbs.serialNo==null){
 			bbs.publisher = currentUser
 			bbs.publisherDepart = currentUser.getDepartName()
 			
@@ -515,6 +516,12 @@ class BbsController {
 			bbs.addDefaultReader("all")
 			
 			bbs.serialNo = bbsConfig.nowYear + bbsConfig.nowSN.toString().padLeft(4,"0")
+			
+			//修改配置文档中的流水号
+			bbsConfig.nowSN += 1
+			bbsConfig.save()
+			
+			isPublish = true
 		}
 		
 		if(bbs.save(flush:true)){
@@ -522,13 +529,14 @@ class BbsController {
 			def logContent
 			switch (true){
 				case bbs.status.contains("已发布"):
-				case bbs.status.contains("已签发"):
-					logContent = "签发文件【" + nextUsers.join("、") + "】"
-					
-					//修改配置文档中的流水号
-					bbsConfig.nowSN += 1
-					bbsConfig.save(flush:true)
-					
+					logContent = "发布公告【" + nextUsers.join("、") + "】"
+					break
+				case bbs.status.contains("已结束"):
+					if(isPublish){
+						logContent = "发布公告"
+					}else{
+						logContent = "结束流程"
+					}
 					break
 				case bbs.status.contains("归档"):
 					logContent = "归档"

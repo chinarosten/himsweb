@@ -93,8 +93,8 @@
 			    <td width="240">
 			    	<input id="nowYear" data-dojo-type="dijit/form/ValidationTextBox" 
 	                 	data-dojo-props='name:"nowYear",${fieldAcl.isReadOnly("nowYear")},
-	                 		trim:true,
 	                 		"class":"input",
+	                 		trim:true,
 	                 		required:true,
 							value:"${bbsConfig?.nowYear}"
 	                '/>
@@ -128,9 +128,9 @@
 			    <td>
 			    	<input id="frontYear" data-dojo-type="dijit/form/ValidationTextBox" 
 	                 	data-dojo-props='name:"frontYear",${fieldAcl.isReadOnly("frontYear")},
+	                 		"class":"input",
 	                 		trim:true,
 	                 		required:true,
-	                 		"class":"input",
 							value:"${bbsConfig?.frontYear}"
 	                '/>
 			    </td>

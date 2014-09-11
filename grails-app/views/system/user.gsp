@@ -38,6 +38,13 @@
 					};
 					return false;
 				}
+				var userTypeName = registry.byId("userTypeName");
+				if(!userTypeName.isValid()){
+					rosten.alert("用户类型不正确！").queryDlgClose = function(){
+						userTypeName.focus();
+					};
+					return false;
+				}
 				var password = registry.byId("password");
 				if(!password.isValid()){
 					rosten.alert("密码不正确！").queryDlgClose = function(){
@@ -160,6 +167,7 @@
 		                        	<select id="userTypeName" data-dojo-type="dijit/form/ComboBox"
 	                             		data-dojo-props='name:"userTypeName",
 	                             			autoComplete:true,
+	                             			trim:true,required:true,
 	                             			style:{fontSize:"14px",width:"194px"},
 	                             			${fieldAcl.isReadOnly("userTypeName")},
 	              							value:"${user?.userTypeEntity?.typeName }"

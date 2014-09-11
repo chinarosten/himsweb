@@ -2321,7 +2321,7 @@ class SystemController {
 			}
 		}
 		if(params.id){
-			fa.readOnly << "username"
+			//fa.readOnly << "username"
 		}
 		model["fieldAcl"] = fa
 		render(view:'/system/user',model:model)
