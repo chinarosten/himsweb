@@ -23,7 +23,7 @@ class AccountService {
 			eq("company",company)
 			
 			searchArgs.each{k,v->
-				like(k,"%" + v + "%")
+				eq(k,v)
 			}
 			
 			order("date", "desc")
@@ -36,7 +36,7 @@ class AccountService {
 			eq("company",company)
 			
 			searchArgs.each{k,v->
-				like(k,"%" + v + "%")
+				eq(k,v)
 			}
 			
 			order("date", "desc")
