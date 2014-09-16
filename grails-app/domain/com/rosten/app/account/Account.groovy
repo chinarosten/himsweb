@@ -10,7 +10,7 @@ class Account {
 	
 	//添加时间
 	Date date = new Date()
-	@GridColumn(name="日期",width="106px",colIdx=1)
+	@GridColumn(name="日期",width="80px",colIdx=1)
 	def getFormattedDate(){
 		if(date!=null){
 			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd")
@@ -21,29 +21,29 @@ class Account {
 	}
 	
 	//类型：支出、收入
-	@GridColumn(name="类型",width="50px",colIdx=2)
+	@GridColumn(name="类型",width="40px",colIdx=2)
 	String purpose = "支出"
 	
 	//项目名称
-	@GridColumn(name="项目名称",colIdx=3)
+	@GridColumn(name="项目名称",width="180px",colIdx=3)
 	def getProjectName(){
 		return project?project.name:""
 	}
 	
 	//用途
 	Category category
-	@GridColumn(name="用途",colIdx=4)
+	@GridColumn(name="用途",width="80px",colIdx=4)
 	def getCategoryName(){
 		return category?category.name:""
 	}
 	
 	//金额
-	@GridColumn(name="金额",colIdx=5,formatter="account_formatTitle")
+	@GridColumn(name="金额",width="100px",colIdx=5,formatter="account_formatTitle")
 	int money
 	
 	//添加人
 	User user
-	@GridColumn(name="添加人",colIdx=6)
+	@GridColumn(name="添加人",width="50px",colIdx=6)
 	def getUserName(){
 		if(user!=null){
 			return user.getFormattedName()

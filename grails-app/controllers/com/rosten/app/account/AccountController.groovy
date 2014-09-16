@@ -57,6 +57,8 @@ class AccountController {
 		account.properties = params
 		account.clearErrors()
 		
+		account.date = Util.convertToTimestamp(params.date)
+		
 		if(params.project){
 			def project = Project.findByName(params.project)
 			if(project){
@@ -105,6 +107,19 @@ class AccountController {
 		//2014-9-1 增加搜索功能
 		def searchArgs =[:]
 		
+		if(params.purpose && !"".equals(params.purpose)) searchArgs["purpose"] = params.purpose
+		if(params.project && !"".equals(params.project)){
+			 def _project = Project.findByCompanyAndName(company,params.project)
+			 if(_project){
+				 searchArgs["project"] = _project
+			 }
+		}
+		if(params.category && !"".equals(params.category)){
+			def _category = Category.findByCompanyAndName(company,params.category)
+			if(_category){
+				searchArgs["category"] = _category
+			}
+		}	
 		if(params.refreshHeader){
 			model["gridHeader"] = accountService.getAccountListLayout()
 		}

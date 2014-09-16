@@ -154,7 +154,8 @@
 						    	<textarea id="remark" data-dojo-type="dijit/form/SimpleTextarea" 
 	    							data-dojo-props='name:"remark",
 	                               		style:{width:"550px"},rows:"10",
-	                               		trim:true
+	                               		trim:true,
+	                               		value:"${account?.remark}"
 	                           '>
 	    						</textarea>
 						    						    
