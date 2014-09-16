@@ -141,6 +141,11 @@ define(["dojo/_base/kernel"
             	require(["rosten/app/PublicManage"],function(){
             		show_publicNaviEntity(oRight);
             	});
+            }else if (oString == "accountManage") {
+            	deleteMailNavigation();
+            	require(["rosten/app/AccountManage"],function(){
+            		show_naviEntity(oRight);
+            	});
             }
         });
 		
