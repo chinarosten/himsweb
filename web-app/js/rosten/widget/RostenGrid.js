@@ -62,6 +62,7 @@ define(["dojo/_base/declare",
         pageSize: 15,//每页条目数,控制获取后台条目数
         showPageControl: true, // 是否载入页面控制信息
         emptymsg: "\u76ee\u524d\u6682\u65e0\u6570\u636e\uff01",//目前暂无数据！
+        
         pageControl: {
             page: 1,
             total: 0,
@@ -128,7 +129,7 @@ define(["dojo/_base/declare",
         },
         _gotoPage:function(pagenum){
         	var content = {refreshHeader:false,refreshPageControl:false,refreshData:true};
-        	this.gotoPage(pagenum,content);
+        	this.gotoPage(pagenum,null,content);
         },
 		gotoPage: function(pagenum){
 			//显示loading进度条
@@ -149,15 +150,30 @@ define(["dojo/_base/declare",
                 content.showAllData = true;
             }
             
+            //用户传入参数
+            console.log(arguments[1]);
             if(arguments[1]==undefined){
+            	if(arguments[1]!=null){
+            		this.urlContent = null;
+            	}
+            }else{
+                this.urlContent = arguments[1];
+            }
+            
+            //后台内部刷新参数
+            if(arguments[2]==undefined){
             	//默认刷新grid所有信息
 				content.refreshHeader = this.refreshHeader;
 				content.refreshData = this.refreshData;
 				content.refreshPageControl = this.refreshPageControl;
+				
 			}else{
-				for (var name in arguments[1]) {
-					content[name] = arguments[1][name];
-				}
+				
+				//2014-9-19增加搜索存储参数------------
+//				for (var name in arguments[1]) {
+//					content[name] = arguments[1][name];
+//				}
+				//-------------------------------
 				if(content.refreshHeader==undefined){
 					content.refreshHeader = this.refreshHeader;
 				}
@@ -168,6 +184,7 @@ define(["dojo/_base/declare",
 					content.refreshPageControl = this.refreshPageControl;
 				}
 			}
+            
 			if(this.urlContent!=null){
 				lang.mixin(content,this.urlContent);
 			}
