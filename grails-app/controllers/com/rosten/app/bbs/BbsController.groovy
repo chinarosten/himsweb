@@ -416,7 +416,8 @@ class BbsController {
 		//流程引擎相关信息处理-------------------------------------------------------------------------------------
 		
 		//结束当前任务，并开启下一节点任务
-		taskService.complete(bbs.taskId)	//结束当前任务
+		def completeMap =["input":100000]
+		taskService.complete(bbs.taskId,completeMap)	//结束当前任务
 		
 		ProcessInstance processInstance = workFlowService.getProcessIntance(bbs.processInstanceId)
 		if(!processInstance || processInstance.isEnded()){
