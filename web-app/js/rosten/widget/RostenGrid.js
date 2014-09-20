@@ -129,7 +129,7 @@ define(["dojo/_base/declare",
         },
         _gotoPage:function(pagenum){
         	var content = {refreshHeader:false,refreshPageControl:false,refreshData:true};
-        	this.gotoPage(pagenum,null,content);
+        	this.gotoPage(pagenum,false,content);
         },
 		gotoPage: function(pagenum){
 			//显示loading进度条
@@ -152,13 +152,11 @@ define(["dojo/_base/declare",
             
             //用户传入参数
             console.log(arguments[1]);
-            if(arguments[1]==undefined){
-            	if(arguments[1]!=null){
-            		this.urlContent = null;
-            	}
-            }else{
-                this.urlContent = arguments[1];
+            if(arguments[1]!=false){
+            	//更换搜索条件
+            	this.urlContent = arguments[1];
             }
+            console.log(this.urlContent);
             
             //后台内部刷新参数
             if(arguments[2]==undefined){

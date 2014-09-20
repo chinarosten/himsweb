@@ -31,7 +31,7 @@ define([ "dojo/_base/connect", "dijit/registry","rosten/util/general", "rosten/k
 //		var count = Object.keys(content).length
 //		if(count==0) return ;
 		
-		rosten.kernel.refreshGrid(rosten.kernel.getGrid().defaultUrl, content);
+		rosten.kernel.refreshGrid(null, content);
 	};
 	bbs_resetSearch = function(){
 		switch(rosten.kernel.navigationEntity) {
