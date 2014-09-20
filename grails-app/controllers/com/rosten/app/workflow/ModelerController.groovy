@@ -12,13 +12,71 @@ import org.codehaus.jackson.JsonNode
 import org.codehaus.jackson.map.ObjectMapper
 import org.codehaus.jackson.node.ObjectNode
 import grails.converters.JSON
+import javax.xml.stream.XMLInputFactory
+import javax.xml.stream.XMLStreamReader
 import com.rosten.app.util.Util
 import com.rosten.app.system.Company
 import org.activiti.engine.ActivitiException
+import com.rosten.app.util.SystemUtil
 
 class ModelerController {
 	def repositoryService
 	
+	def addModelUpload ={
+		def model =[:]
+		model["companyId"] = params.companyId
+		render(view:'/modeler/fileUpload',model:model)
+	}
+	def uploadModel = {
+		def json=[:]
+		try {
+			SystemUtil sysUtil = new SystemUtil()
+			def company = Company.get(params.companyId)
+			
+			//获取附件信息
+			def f = request.getFile("inputFile")
+			if (f.empty) {
+				json["result"] = "blank"
+				render json as JSON
+				return
+			}
+			
+			//转换xml
+			InputStreamReader inStream = new InputStreamReader(f.getInputStream(), "UTF-8");
+			XMLInputFactory xif = XMLInputFactory.newInstance();
+			XMLStreamReader xtr = xif.createXMLStreamReader(inStream);
+			BpmnModel bpmnModel = new BpmnXMLConverter().convertToBpmnModel(xtr);
+			
+			//创建model
+			Model model = repositoryService.newModel();
+			
+			def processName = bpmnModel.getMainProcess().getName();
+			def processKey = company.shortName + "_" + bpmnModel.getMainProcess().getId();
+			
+			model.setName(processName);
+			model.setKey(processKey);
+			model.setCategory(params.companyId)
+
+			def modelObjectNode = [:]
+			modelObjectNode["name"] = processName
+			modelObjectNode["revision"] = 1
+			modelObjectNode["key"] = processKey
+			model.setMetaInfo(modelObjectNode.toString());
+
+			repositoryService.saveModel(model);
+			
+			BpmnJsonConverter jsonConverter = new BpmnJsonConverter();
+			ObjectNode editorNode = jsonConverter.convertToJson(bpmnModel);
+			repositoryService.addModelEditorSource(model.getId(), editorNode.toString().getBytes("utf-8"));
+			
+			json["result"] = true
+			
+		}catch (Exception e) {
+			json["result"] = false
+		}
+		
+		render json as JSON
+	}
 	def flowSelect ={
 		def flowList =[]
 		def deploymentList = repositoryService.createDeploymentQuery().deploymentCategory(params.companyId).orderByDeploymenTime().desc().list()
@@ -272,6 +330,7 @@ class ModelerController {
 		}
 		render json as JSON
 	}
+	
 	def deploy ={
 		def json=[:]
 		try {
