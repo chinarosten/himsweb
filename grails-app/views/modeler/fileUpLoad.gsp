@@ -8,7 +8,7 @@
 <body>
 	<div style="text-Align:center">
         <form data-dojo-type="dijit/form/Form" method="post" class="rosten_form" id="file_form" style="width:560px;text-align:left" 
-        		enctype="multipart/form-data" action="${createLink(controller:'modeler',action:'uploadModel',params:[companyId:companyId])}">
+        	target="upload_iframe" enctype="multipart/form-data" action="${createLink(controller:'modeler',action:'uploadModel',params:[companyId:companyId])}">
             <fieldset class="fieldset-form">
                 <legend class="tableHeader">附件上传</legend>
                 <table class="tableData upload" style="margin:2px;">
@@ -30,6 +30,8 @@
 				
             </fieldset>
 		</form>
+		<iframe name="upload_iframe" style="display:none">
+		</iframe>
 	</div>
 </body>
 </html>

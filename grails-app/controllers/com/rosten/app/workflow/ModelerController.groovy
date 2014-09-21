@@ -28,7 +28,7 @@ class ModelerController {
 		render(view:'/modeler/fileUpload',model:model)
 	}
 	def uploadModel = {
-		def json=[:]
+		def ostr
 		try {
 			SystemUtil sysUtil = new SystemUtil()
 			def company = Company.get(params.companyId)
@@ -69,13 +69,12 @@ class ModelerController {
 			ObjectNode editorNode = jsonConverter.convertToJson(bpmnModel);
 			repositoryService.addModelEditorSource(model.getId(), editorNode.toString().getBytes("utf-8"));
 			
-			json["result"] = true
-			
+			ostr ="<script>var _parent = window.parent;_parent.rosten.alert('导入成功').queryDlgClose=function(){_parent.rosten.kernel.hideRostenShowDialog();_parent.rosten.kernel.refreshGrid();}</script>"
 		}catch (Exception e) {
-			json["result"] = false
+			ostr ="<script>window.parent.rosten.alert('导入失败');</script>"
 		}
 		
-		render json as JSON
+		render ostr
 	}
 	def flowSelect ={
 		def flowList =[]
