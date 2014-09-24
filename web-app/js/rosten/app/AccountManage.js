@@ -189,6 +189,9 @@ define([ "dojo/_base/connect", "dojo/_base/lang","dijit/registry", "dojo/_base/k
 			};
 			rosten.kernel.addRightContent(naviJson);
 			break;
+		case "accountStatic":
+			rosten.kernel.setHref(rosten.webPath + "/account/accountStatic?companyId=" + companyId, oString);
+            break;
 		}
 		
 	}

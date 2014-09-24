@@ -6,6 +6,14 @@ import com.rosten.app.system.User
 class AccountActionController {
 	def imgPath ="images/rosten/actionbar/"
 	
+	def accountStatic ={
+		def actionList =[]
+		def strname = "accountStatic"
+		actionList << createAction("退出",imgPath + "quit_1.gif","returnToMain")
+		
+		render actionList as JSON
+	}
+	
 	def accountForm ={
 		def webPath = request.getContextPath() + "/"
 		def actionList = []

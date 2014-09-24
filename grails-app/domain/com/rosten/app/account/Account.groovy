@@ -38,7 +38,7 @@ class Account {
 	}
 	
 	//金额
-	@GridColumn(name="金额",width="100px",colIdx=5,formatter="account_formatTitle")
+	@GridColumn(name="金额(元)",width="100px",colIdx=5,formatter="account_formatTitle")
 	int money
 	
 	//添加人

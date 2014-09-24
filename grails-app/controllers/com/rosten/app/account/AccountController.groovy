@@ -10,6 +10,33 @@ class AccountController {
 	def springSecurityService
 	def accountService
 	
+	def accountStatic ={
+		def model =[:]
+		def company = Company.get(params.companyId)
+		
+		def resultList =[]
+		def projects =  Project.findAllByCompany(company)
+		projects.each{
+			def _map =[:]
+			_map["name"] = it.name
+			
+			def zcmoney = 0
+			Account.findAllByProjectAndPurpose(it,"支出").each{item->
+				zcmoney += item.money
+			}
+			_map["zcmoney"] = zcmoney
+			
+			def srmoney = 0
+			Account.findAllByProjectAndPurpose(it,"收入").each{item->
+				srmoney += item.money
+			}
+			_map["srmoney"] = srmoney
+			
+			resultList << _map
+		}
+		model["resultList"] = resultList
+		render(view:'/account/static',model:model)
+	}
 	
 	def searchView ={
 		def model =[:]
