@@ -469,6 +469,9 @@ class SystemService {
 					resource.resourceName = rs.resourceName
 					resource.url = rs.url
 					resource.imgUrl = rs.imgUrl
+					resource.serialNo = rs.serialNo
+					resource.isDefault = rs.isDefault
+					
 					resource.description = rs.description
 					model.addToResources(resource)
 				}
@@ -480,11 +483,87 @@ class SystemService {
 		}
 		return true
 	}
-	
-	private def initData_workFlow ={ path,company ->
+	private def initData_system ={path,company,serialNo->
+		def model = new Model(company:company)
+		model.modelName = "系统管理"
+		model.modelUrl = path + "/system/navigation"
+		model.modelCode = "system"
+		model.serialNo = serialNo
+		model.description ="系统配置文件管理模块"
+
+		def resource = new Resource()
+		resource.resourceName = "单位信息"
+		resource.url = "logSet"
+		resource.imgUrl = "images/rosten/navigation/Logo.gif"
+		model.addToResources(resource)
+
+		resource = new Resource()
+		resource.resourceName = "模块管理"
+		resource.url = "modelManage"
+		resource.imgUrl = "images/rosten/navigation/Model.gif"
+		model.addToResources(resource)
+
+		resource = new Resource()
+		resource.resourceName = "部门管理"
+		resource.url = "departManage"
+		resource.imgUrl = "images/rosten/navigation/Depart.gif"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "员工类型"
+		resource.url = "userTypeManage"
+		resource.imgUrl = "images/rosten/navigation/UserType.gif"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "员工信息"
+		resource.url = "userManage"
+		resource.imgUrl = "images/rosten/navigation/User.gif"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "群组管理"
+		resource.url = "groupManage"
+		resource.imgUrl = "images/rosten/navigation/Group.gif"
+		model.addToResources(resource)
+
+		resource = new Resource()
+		resource.resourceName = "角色管理"
+		resource.url = "roleManage"
+		resource.imgUrl = "images/rosten/navigation/Role.gif"
+		model.addToResources(resource)
+
+		resource = new Resource()
+		resource.resourceName = "权限管理"
+		resource.url = "permissionManage"
+		resource.imgUrl = "images/rosten/navigation/Permission.gif"
+		model.addToResources(resource)
+
+		resource = new Resource()
+		resource.resourceName = "资源管理"
+		resource.url = "resourceManage"
+		resource.imgUrl = "images/rosten/navigation/Resource.gif"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "常用服务"
+		resource.url = "serviceManage"
+		resource.imgUrl = "images/rosten/navigation/config.png"
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "模块初始化"
+		resource.url = "systemModelInit"
+		resource.imgUrl = "images/rosten/navigation/rosten.png"
+		model.addToResources(resource)
+		
+		model.save()
+	}
+	private def initData_workFlow ={ path,company,serialNo ->
 		def model = new Model(company:company)
 		model.modelName = "流程管理"
 		model.modelCode = "workflow"
+		model.serialNo = serialNo
 		model.modelUrl = path + "/system/navigation"
 		model.description ="流程管理模块"
 
@@ -500,15 +579,15 @@ class SystemService {
 		resource.imgUrl = "images/rosten/navigation/flow.png"
 		model.addToResources(resource)
 		
-		model.save(flush:true)
+		model.save()
 	}
 	
-	private def initData_bbs ={ path,company ->
+	private def initData_bbs ={ path,company,serialNo ->
 		def model = new Model(company:company)
 		model.modelName = "通知公告"
 		model.modelCode = "bbs"
 		model.modelUrl = path + "/system/navigation"
-		model.serialNo = 6
+		model.serialNo = serialNo
 		model.description ="公告栏模块"
 
 		def resource = new Resource()
@@ -535,14 +614,14 @@ class SystemService {
 		resource.imgUrl = "images/rosten/navigation/bbs_all.gif"
 		model.addToResources(resource)
 		
-		model.save(flush:true)
+		model.save()
 	}
-	private def initData_sendfile ={path,company ->
+	private def initData_sendfile ={path,company,serialNo ->
 		def model = new Model(company:company)
 		model.modelName = "发文管理"
 		model.modelCode = "sendfile"
 		model.modelUrl = path + "/system/navigation"
-		model.serialNo = 7
+		model.serialNo = serialNo
 		model.description ="发文管理模块"
 		
 		def resource = new Resource()
@@ -569,14 +648,14 @@ class SystemService {
 		resource.imgUrl = "images/rosten/navigation/bbs_all.gif"
 		model.addToResources(resource)
 		
-		model.save(flush:true)
+		model.save()
 	}
-	private def initData_receivefile ={path,company ->
+	private def initData_receivefile ={path,company,serialNo ->
 		def model = new Model(company:company)
 		model.modelName = "收文管理"
 		model.modelCode = "receivefile"
 		model.modelUrl = path + "/system/navigation"
-		model.serialNo = 8
+		model.serialNo = serialNo
 		model.description ="收文管理模块"
 		
 		def resource = new Resource()
@@ -597,15 +676,15 @@ class SystemService {
 		resource.imgUrl = "images/rosten/navigation/bbs_all.gif"
 		model.addToResources(resource)
 		
-		model.save(flush:true)
+		model.save()
 
 	}
-	private def initData_meeting ={path,company ->
+	private def initData_meeting ={path,company,serialNo ->
 		def model = new Model(company:company)
 		model.modelName = "会议通知"
 		model.modelCode = "meeting"
 		model.modelUrl = path + "/system/navigation"
-		model.serialNo = 9
+		model.serialNo = serialNo
 		model.description ="会议通知模块"
 		
 		def resource = new Resource()
@@ -626,15 +705,15 @@ class SystemService {
 		resource.imgUrl = "images/rosten/navigation/bbs_all.gif"
 		model.addToResources(resource)
 		
-		model.save(flush:true)
+		model.save()
 
 	}
-	private def initData_dsj ={path,company ->
+	private def initData_dsj ={path,company,serialNo ->
 		def model = new Model(company:company)
 		model.modelName = "大事记"
 		model.modelCode = "dsj"
 		model.modelUrl = path + "/system/navigation"
-		model.serialNo = 10
+		model.serialNo = serialNo
 		model.description ="大事记模块"
 		
 		def resource = new Resource()
@@ -655,7 +734,7 @@ class SystemService {
 		resource.imgUrl = "images/rosten/navigation/bbs_all.gif"
 		model.addToResources(resource)
 		
-		model.save(flush:true)
+		model.save()
 
 	}
 	private def initData_public ={path,company ->
@@ -664,7 +743,7 @@ class SystemService {
 		model.modelName = "公共资源"
 		model.modelCode = "public"
 		model.modelUrl = path + "/system/navigation"
-		model.serialNo = 100
+		model.serialNo = 99
 		model.description ="公共资源模块"
 		
 		def resource = new Resource()
@@ -673,16 +752,16 @@ class SystemService {
 		resource.imgUrl = "images/rosten/navigation/attach.png"
 		model.addToResources(resource)
 		
-		model.save(flush:true)
+		model.save()
 
 	}
-	private def initData_person ={path,company ->
+	private def initData_person ={path,company,serialNo ->
 		//公共资源
 		def model = new Model(company:company)
 		model.modelName = "个人工作台"
 		model.modelCode = "personconfig"
 		model.modelUrl = path + "/system/navigation"
-		model.serialNo = 5
+		model.serialNo = serialNo
 		model.description ="个人工作台模块"
 		
 		def resource = new Resource()
@@ -715,118 +794,62 @@ class SystemService {
 		resource.imgUrl = "images/rosten/navigation/rosten.png"
 		model.addToResources(resource)
 		
-		model.save(flush:true)
+		model.save()
 	}
+	
 	def initData_first ={path,company->
 		try{
 			
-			def model = new Model(company:company)
-			model.modelName = "系统管理"
-			model.modelUrl = path + "/system/navigation"
-			model.modelCode = "system"
-			model.description ="系统配置文件管理模块"
-
-			def resource = new Resource()
-			resource.resourceName = "单位信息"
-			resource.url = "logSet"
-			resource.imgUrl = "images/rosten/navigation/Logo.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "模块管理"
-			resource.url = "modelManage"
-			resource.imgUrl = "images/rosten/navigation/Model.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "部门管理"
-			resource.url = "departManage"
-			resource.imgUrl = "images/rosten/navigation/Depart.gif"
-			model.addToResources(resource)
+			//删除当前单位下面的所有模块信息（除系统管理等基础模块）
+			def modelCodes = ["system","workflow","public","sms","question","personconfig"]
+			Model.findAllByCompany(company).each{
+				if(!modelCodes.contains(it.modelCode)){
+					it.delete()
+				}
+			}
 			
-			resource = new Resource()
-			resource.resourceName = "员工类型"
-			resource.url = "userTypeManage"
-			resource.imgUrl = "images/rosten/navigation/UserType.gif"
-			model.addToResources(resource)
-			
-			resource = new Resource()
-			resource.resourceName = "员工信息"
-			resource.url = "userManage"
-			resource.imgUrl = "images/rosten/navigation/User.gif"
-			model.addToResources(resource)
-			
-			resource = new Resource()
-			resource.resourceName = "群组管理"
-			resource.url = "groupManage"
-			resource.imgUrl = "images/rosten/navigation/Group.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "角色管理"
-			resource.url = "roleManage"
-			resource.imgUrl = "images/rosten/navigation/Role.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "权限管理"
-			resource.url = "permissionManage"
-			resource.imgUrl = "images/rosten/navigation/Permission.gif"
-			model.addToResources(resource)
-
-			resource = new Resource()
-			resource.resourceName = "资源管理"
-			resource.url = "resourceManage"
-			resource.imgUrl = "images/rosten/navigation/Resource.gif"
-			model.addToResources(resource)
-			
-			resource = new Resource()
-			resource.resourceName = "常用服务"
-			resource.url = "serviceManage"
-			resource.imgUrl = "images/rosten/navigation/Service.gif"
-			model.addToResources(resource)
-			
-			model.save(flush:true)
+			//系统管理
+			initData_system(path,company,4)
 			
 			//流程管理
-			initData_workFlow(path,company)
+			initData_workFlow(path,company,5)
 			
-			//公告栏
-			initData_bbs(path,company)
+			//个人工作台
+			initData_person(path,company,6)
+			
+			//通知公告
+			initData_bbs(path,company,7)
 			
 			//发文管理
-			initData_sendfile(path,company)
+			initData_sendfile(path,company,8)
 			
 			//收文管理
-			initData_receivefile(path,company)
+			initData_receivefile(path,company,9)
 			
 			//会议通知
-			initData_meeting(path,company)
+			initData_meeting(path,company,10)
 			
 			//大事记
-			initData_dsj(path,company)
+			initData_dsj(path,company,11)
 			
-			//公共资源
-			initData_public(path,company)
-
-			model = new Model(company:company)
+			def model = new Model(company:company)
 			model.modelName = "短信发送"
 			model.modelCode = "sms"
 			model.modelUrl = "js:sms"
 			model.description ="短信发送模块"
-			model.serialNo = 98
-			model.save(flush:true)
+			model.serialNo = 97
+			model.save()
 
 			model = new Model(company:company)
 			model.modelName = "你问我答"
 			model.modelCode = "question"
 			model.modelUrl = "js:question"
 			model.description ="你问我答模块"
-			model.serialNo = 99
-			model.save(flush:true)
+			model.serialNo = 98
+			model.save()
 			
-			//个人配置
-			initData_person(path,company)
+			//公共资源
+			initData_public(path,company)
 			
 			//添加服务信息,只添加公共的服务
 			initData_service(path,company)
@@ -838,7 +861,7 @@ class SystemService {
 		return true
 	}
 	
-	def systemInit ={
+	def systemInit ={ path ->
 		//系统初始化-------------------------------
 		//创建超超级用户
 		def adminRole = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN').save(failOnError: true)
@@ -909,38 +932,45 @@ class SystemService {
 			model.addToResources(resource)
 			
 			model.save(failOnError: true)
+			
+			//创建公司信息
 		}
-		
-		//创建公司信息
-		
-		
-		
 	}
 	
 	private def initData_service ={path,company ->
+		
+		//清空所有service
+		NormalService.findAllByCompany(company).each{
+			it.delete()
+		}
+		
 		def _service = new NormalService()
 		_service.serviceName = "部门通讯录"
 		_service.company = company
 		_service.functionArgs = "contact"
-		_service.save(flush:true)
+		_service.imgUrl = "images/rosten/service/bmtxl.gif"
+		_service.save()
 		
 		_service = new NormalService()
 		_service.serviceName = "手机短信"
 		_service.company = company
 		_service.functionArgs = "sms"
-		_service.save(flush:true)
+		_service.imgUrl = "images/rosten/service/dxx.gif"
+		_service.save()
 		
 		_service = new NormalService()
 		_service.serviceName = "你问我答"
 		_service.company = company
 		_service.functionArgs = "question"
-		_service.save(flush:true)
+		_service.imgUrl = "images/rosten/service/zcxt.gif"
+		_service.save()
 		
 		_service = new NormalService()
 		_service.serviceName = "写邮件"
 		_service.company = company
 		_service.functionArgs = "addMail"
-		_service.save(flush:true)
+		_service.imgUrl = "images/rosten/service/yj.gif"
+		_service.save()
 		
 	}
 	def checkIsRosten(String usercode) {

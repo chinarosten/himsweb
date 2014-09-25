@@ -38,13 +38,15 @@
 					};
 					return false;
 				}
-				var userTypeName = registry.byId("userTypeName");
-				if(!userTypeName.isValid()){
-					rosten.alert("用户类型不正确！").queryDlgClose = function(){
-						userTypeName.focus();
-					};
-					return false;
-				}
+				<g:if test='${!userType.equals("super") }'>
+					var userTypeName = registry.byId("userTypeName");
+					if(!userTypeName.isValid()){
+						rosten.alert("用户类型不正确！").queryDlgClose = function(){
+							userTypeName.focus();
+						};
+						return false;
+					}
+				</g:if>
 				var password = registry.byId("password");
 				if(!password.isValid()){
 					rosten.alert("密码不正确！").queryDlgClose = function(){
@@ -129,11 +131,12 @@
                                 </div>
                             </td>
                             <td>
+                            <g:if test='${!userType.equals("super") }'>
                            		<input id="userNameFront" data-dojo-type="dijit/form/ValidationTextBox" 
                                	data-dojo-props='name:"userNameFront","class":"input",style:{width:"50px"},
              							value:"${company?.shortName}-",disabled:true
                                	'/>
-                               	
+                             </g:if>  	
                                	<input id="username" data-dojo-type="dijit/form/ValidationTextBox" 
                                 	data-dojo-props='name:"username",${fieldAcl.isReadOnly("username")},
                                 		"class":"input",
@@ -159,6 +162,7 @@
                                 '/>
                             </td>
                         </tr>
+                        <g:if test='${!userType.equals("super") }'>
 	                        <tr>
 		                        <td>
 		                        	 <div align="right"><span style="color:red">*&nbsp;</span>用户类型：</div>
@@ -180,6 +184,7 @@
 									
 		                        </td>
 		                    </tr>
+		                  </g:if>
 		                <tr>
                             <td>
                                 <div align="right">
@@ -236,44 +241,6 @@
 									<button data-dojo-type="dijit.form.Button" data-dojo-props='onClick:function(){selectCompany()}'>选择</button>
 	                            </td>
 	                        </tr>
-                        </g:if>
-                        	<tr>
-	                           <td>
-	                                <div align="right"><span style="color:red">*&nbsp;</span>所属部门：</div>
-	                            </td>
-	                            <td>
-	                            	<input id="allowdepartsName" data-dojo-type="dijit/form/ValidationTextBox" 
-	                                	data-dojo-props='name:"allowdepartsName",${fieldAcl.isReadOnly("allowdepartsName")},
-	                                		"class":"input",
-	                                		trim:true,
-	                                		required:true,
-	                                		style:{width:"400px"},
-	              							value:"${user?.getDepartName()}"
-	                                '/>
-	                                <g:hiddenField name="allowdepartsId" value="${user?.getDepartEntity()?.id }" />
-									<button data-dojo-type="dijit.form.Button" data-dojo-props='onClick:function(){selectDepart("${createLink(controller:'system',action:'departTreeDataStore',params:[companyId:company?.id])}")}'>选择</button>
-	                            </td>
-	                        </tr>
-							<tr>
-	                           <td>
-	                                <div align="right">具有角色：</div>
-	                            </td>
-	                            <td>
-	                            	<input id="allowrolesName" data-dojo-type="dijit/form/ValidationTextBox"
-	                   					data-dojo-props='"class":"input",
-	                   						trim:true,
-	                   						style:{width:"400px"},
-	                   						${fieldAcl.isReadOnly("allowrolesName")},
-	                   						value:"${allowrolesName }"
-	                   				'/>
-	                   				<g:hiddenField name="allowrolesId" value="${allowrolesId }" />
-									<button data-dojo-type="dijit.form.Button" 
-										data-dojo-props = 'onClick:function(){selectRole("${createLink(controller:'system',action:'roleSelect',params:[companyId:company?.id])}")}'
-									>选择</button>
-								
-	                            </td>
-	                        </tr>
-                        <g:if test='${userType.equals("super") }'>
 	                        <tr>
 		                        <td>
 		                        	 <div align="right"><span style="color:red">*&nbsp;</span>是否管理员：</div>
@@ -299,7 +266,45 @@
 									
 		                        </td>
 		                    </tr>
-	                    </g:if>
+                        </g:if>
+                        <g:else>
+                        	<tr>
+	                           <td>
+	                                <div align="right"><span style="color:red">*&nbsp;</span>所属部门：</div>
+	                            </td>
+	                            <td>
+	                            	<input id="allowdepartsName" data-dojo-type="dijit/form/ValidationTextBox" 
+	                                	data-dojo-props='name:"allowdepartsName",${fieldAcl.isReadOnly("allowdepartsName")},
+	                                		"class":"input",
+	                                		trim:true,
+	                                		required:true,
+	                                		style:{width:"400px"},
+	              							value:"${user?.getDepartName()}"
+	                                '/>
+	                                <g:hiddenField name="allowdepartsId" value="${user?.getDepartEntity()?.id }" />
+									<button data-dojo-type="dijit.form.Button" data-dojo-props='onClick:function(){selectDepart("${createLink(controller:'system',action:'departTreeDataStore',params:[companyId:company?.id])}")}'>选择</button>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                           <td>
+	                                <div align="right">具有角色：</div>
+	                            </td>
+	                            <td>
+	                            	<input id="allowrolesName" data-dojo-type="dijit/form/ValidationTextBox"
+	                   					data-dojo-props='"class":"input",
+	                   						trim:true,
+	                   						style:{width:"400px"},
+	                   						${fieldAcl.isReadOnly("allowrolesName")},
+	                   						value:"${allowrolesName }"
+	                   				'/>
+	                   				<g:hiddenField name="allowrolesId" value="${allowrolesId }" />
+									<button data-dojo-type="dijit.form.Button" 
+										data-dojo-props = 'onClick:function(){selectRole("${createLink(controller:'system',action:'roleSelect',params:[companyId:company?.id])}")}'
+									>选择</button>
+								
+	                            </td>
+	                        </tr>
+	                    </g:else>
 	                    <tr>
 	                        <td>
 	                        	 <div align="right"><span style="color:red">*&nbsp;</span>CSS样式表：</div>
