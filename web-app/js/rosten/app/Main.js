@@ -86,7 +86,7 @@ define(["dojo/_base/kernel"
     		var oString = obj.naviMenu;
     		var oRight = "";
     		if(obj.naviRight) oRight = obj.naviRight;
-            console.log("loadjs file is :" + oString);
+            console.log("loadjs file is :" + oString + ";oRight:" + oRight);
             
             if (oString == "plat" || oString == "system") {
             	deleteMailNavigation();
@@ -330,10 +330,7 @@ define(["dojo/_base/kernel"
     more_workLog = function(){
         var key = rosten.kernel.getMenuKeyByCode("personconfig");
         if(key!=null){
-            rosten.kernel._naviMenuShow(key);
-            require(["rosten/app/SmsManage"],function(){
-                show_naviEntity("personWorkLog");
-            });
+            rosten.kernel._naviMenuShow(key,"personWorkLog");
         }else{
             rosten.alert("未找到相对应的模块,请通知管理员");
         }
@@ -341,10 +338,7 @@ define(["dojo/_base/kernel"
     more_gtask = function(){
     	var key = rosten.kernel.getMenuKeyByCode("personconfig");
     	if(key!=null){
-    		rosten.kernel._naviMenuShow(key);
-    		require(["rosten/app/SmsManage"],function(){
-    			//show_bbsNaviEntity("gtaskManage");
-    		});
+    		rosten.kernel._naviMenuShow(key,"gtaskManage");
     	}else{
     		rosten.alert("未找到相对应的模块,请通知管理员");
     	}
@@ -451,11 +445,7 @@ define(["dojo/_base/kernel"
     	var key = rosten.kernel.getMenuKeyByCode("public");
     	if(key!=null){
     		rosten.variable.showStartDownloadFile = true;
-    		rosten.kernel._naviMenuShow(key);
-    		require(["rosten/app/PublicManage"],function(){
-    			show_publicNaviEntity("downloadFileManage");
-    			rosten.variable.showStartDownloadFile = false;
-    		});
+    		rosten.kernel._naviMenuShow(key,"downloadFileManage");
     	}else{
     		rosten.alert("未找到相对应的模块,请通知管理员");
     	}
@@ -526,11 +516,7 @@ define(["dojo/_base/kernel"
     	var key = rosten.kernel.getMenuKeyByCode("bbs");
     	if(key!=null){
     		rosten.variable.showStartBbs = true;
-    		rosten.kernel._naviMenuShow(key);
-    		require(["rosten/app/BbsManage"],function(){
-    			show_bbsNaviEntity("newbbsManage");
-    			rosten.variable.showStartBbs = false;
-    		});
+    		rosten.kernel._naviMenuShow(key,"newbbsManage");
     	}else{
     		rosten.alert("未找到相对应的模块,请通知管理员");
     	}
