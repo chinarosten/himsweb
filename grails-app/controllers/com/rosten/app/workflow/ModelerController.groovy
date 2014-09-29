@@ -18,9 +18,150 @@ import com.rosten.app.util.Util
 import com.rosten.app.system.Company
 import org.activiti.engine.ActivitiException
 import com.rosten.app.util.SystemUtil
+import com.rosten.app.system.Model
 
 class ModelerController {
 	def repositoryService
+	def modelerService
+	def workFlowService
+	
+	def flowBusinessDeleteFlow ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def flowBusiness = FlowBusiness.get(it)
+				if(flowBusiness){
+					flowBusiness.relationFlow = null
+					flowBusiness.relationFlowName = null
+					flowBusiness.save(flush:true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'false']
+		}
+		render json as JSON
+	}
+	def flowBusinessAddFlow ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def flowBusiness = FlowBusiness.get(it)
+				if(flowBusiness){
+					flowBusiness.relationFlow = params.flowId
+					flowBusiness.relationFlowName = params.flowName
+					flowBusiness.save(flush:true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'false']
+		}
+		render json as JSON
+	}
+	def flowBusinessDelete ={
+		def ids = params.id.split(",")
+		def json
+		try{
+			ids.each{
+				def flowBusiness = FlowBusiness.get(it)
+				if(flowBusiness){
+					flowBusiness.delete(flush: true)
+				}
+			}
+			json = [result:'true']
+		}catch(Exception e){
+			json = [result:'error']
+		}
+		render json as JSON
+	}
+	def flowBusinessSave ={
+		def json=[:]
+		def flowBusiness = new FlowBusiness()
+		if(params.id && !"".equals(params.id)){
+			flowBusiness = FlowBusiness.get(params.id)
+			flowBusiness.properties = params
+			flowBusiness.clearErrors()
+			
+			flowBusiness.model = Model.get(params.modelId)
+			
+			if(flowBusiness.save(flush:true)){
+				json["result"] = "true"
+			}else{
+				flowBusiness.errors.each{
+					println it
+				}
+				json["result"] = "false"
+			}
+			render json as JSON
+			
+		}else{
+			flowBusiness.properties = params
+			flowBusiness.clearErrors()
+			flowBusiness.company = Company.get(params.companyId)
+			flowBusiness.model = Model.get(params.modelId)
+			if(flowBusiness.save(flush:true)){
+				json["result"] = "true"
+			}else{
+				flowBusiness.errors.each{
+					println it
+				}
+				json["result"] = "false"
+			}
+			render json as JSON
+		}
+		
+	}
+	def flowBusinessAdd1 ={
+		redirect(action:"flowBusinessShow",params:params)
+	}
+	def flowBusinessShow ={
+		def model =[:]
+		
+		def company = Company.get(params.companyId)
+		def flowBusiness = new FlowBusiness()
+		if(params.id){
+			flowBusiness = FlowBusiness.get(params.id)
+		}
+		model["company"] = company
+		model["flowBusiness"] = flowBusiness
+		
+		def allowRelationFlow = []
+		if(flowBusiness.relationFlow && !"".equals(flowBusiness.relationFlow)){
+			flowBusiness.relationFlow.split(",").each{
+				def _result = workFlowService.getProcessDefinition(it)
+				allowRelationFlow << _result.name + "(" + _result.version + ")"
+			}
+		}
+		model["allowRelationFlow"] = allowRelationFlow.join(',')
+		
+		render(view:'/modeler/flowBusiness',model:model)
+	}
+	def flowBusinessGrid ={
+		def json=[:]
+		def company = Company.get(params.companyId)
+		if(params.refreshHeader){
+			json["gridHeader"] = modelerService.getFlowBusinessListLayout()
+		}
+		if(params.refreshData){
+			def args =[:]
+			int perPageNum = Util.str2int(params.perPageNum)
+			int nowPage =  Util.str2int(params.showPageNum)
+			
+			args["offset"] = (nowPage-1) * perPageNum
+			args["max"] = perPageNum
+			args["company"] = company
+			json["gridData"] = modelerService.getFlowBusinessListDataStore(args)
+			
+		}
+		if(params.refreshPageControl){
+			def total = modelerService.getFlowBusinessCount(company)
+			json["pageControl"] = ["total":total.toString()]
+		}
+		render json as JSON
+	}
 	
 	def addModelUpload ={
 		def model =[:]

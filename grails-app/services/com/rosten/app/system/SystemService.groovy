@@ -571,12 +571,21 @@ class SystemService {
 		resource.resourceName = "模型工作区"
 		resource.url = "workFlowManage"
 		resource.imgUrl = "images/rosten/navigation/config.png"
+		resource.serialNo = 1
 		model.addToResources(resource)
 		
 		resource = new Resource()
 		resource.resourceName = "流程定义"
 		resource.url = "flowDefinedManage"
 		resource.imgUrl = "images/rosten/navigation/flow.png"
+		resource.serialNo = 2
+		model.addToResources(resource)
+		
+		resource = new Resource()
+		resource.resourceName = "业务流程"
+		resource.url = "flowBusinessManage"
+		resource.imgUrl = "images/rosten/navigation/flow.png"
+		resource.serialNo = 3
 		model.addToResources(resource)
 		
 		model.save()
