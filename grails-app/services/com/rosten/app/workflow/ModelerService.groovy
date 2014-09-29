@@ -1,6 +1,7 @@
 package com.rosten.app.workflow
 
 import com.rosten.app.util.GridUtil
+import com.rosten.app.system.Model
 
 class ModelerService {
 
@@ -29,5 +30,8 @@ class ModelerService {
 		def c = FlowBusiness.createCriteria()
 		def query = { eq("company",company) }
 		return c.count(query)
+	}
+	def getModelById ={id->
+		return Model.get(id)
 	}
 }

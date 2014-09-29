@@ -18,14 +18,13 @@ import com.rosten.app.util.Util
 import com.rosten.app.system.Company
 import org.activiti.engine.ActivitiException
 import com.rosten.app.util.SystemUtil
-import com.rosten.app.system.Model
 
 class ModelerController {
 	def repositoryService
 	def modelerService
 	def workFlowService
 	
-	def flowBusinessDeleteFlow ={
+	def flowBusinessDeleteFlow1 ={
 		def ids = params.id.split(",")
 		def json
 		try{
@@ -43,7 +42,7 @@ class ModelerController {
 		}
 		render json as JSON
 	}
-	def flowBusinessAddFlow ={
+	def flowBusinessAddFlow1 ={
 		def ids = params.id.split(",")
 		def json
 		try{
@@ -85,7 +84,7 @@ class ModelerController {
 			flowBusiness.properties = params
 			flowBusiness.clearErrors()
 			
-			flowBusiness.model = Model.get(params.modelId)
+			flowBusiness.model = modelerService.getModelById(params.modelId)
 			
 			if(flowBusiness.save(flush:true)){
 				json["result"] = "true"
@@ -101,7 +100,7 @@ class ModelerController {
 			flowBusiness.properties = params
 			flowBusiness.clearErrors()
 			flowBusiness.company = Company.get(params.companyId)
-			flowBusiness.model = Model.get(params.modelId)
+			flowBusiness.model = modelerService.getModelById(params.modelId)
 			if(flowBusiness.save(flush:true)){
 				json["result"] = "true"
 			}else{

@@ -8,7 +8,7 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/app/Applica
    	 var unids = rosten.getGridUnid("multi");
         if (unids == "")
             return;
-        rosten.readNoTime(rosten.webPath + "/modeler/flowBusinessDeleteFlow/" + unids, {}, function(data){
+        rosten.readNoTime(rosten.webPath + "/modeler/flowBusinessDeleteFlow1/" + unids, {}, function(data){
        	 if (data.result == "true" || data.result == true) {
                 rosten.alert("成功!");
                 rosten.kernel.refreshGrid();
@@ -31,7 +31,7 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/app/Applica
         rosten.selectDialog("关联流程选择", id, rosten.webPath + "/modeler/flowSelect?companyId="+companyId, false, initValue);
         rosten[id].callback = function(data) {
        	 var content = {flowId:data[0].id,flowName:data[0].name};
-            rosten.read(rosten.webPath + "/modeler/flowBusinessAddFlow/" + unids, content, function(_data){
+            rosten.read(rosten.webPath + "/modeler/flowBusinessAddFlow1/" + unids, content, function(_data){
            	 if (_data.result == "true" || _data.result == true) {
                     rosten.alert("成功!");
                     rosten.kernel.refreshGrid();
@@ -79,7 +79,14 @@ define([ "dojo/_base/connect", "dijit/registry", "dojo/has", "rosten/app/Applica
                 return;
             var content = {};
             content.id = unids;
-            rosten._readNoTime(rosten.webPath + "/modeler/flowBusinessDelete", content, delete_callback);
+            rosten._readNoTime(rosten.webPath + "/modeler/flowBusinessDelete", content, function(data){
+            	if (data.result == "true" || data.result == true) {
+                    rosten.alert("成功!");
+                    rosten.kernel.refreshGrid();
+                } else {
+                    rosten.alert("失败!");
+                }
+            });
         };
     };
 	

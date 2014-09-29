@@ -126,6 +126,7 @@
                    					data-dojo-props='"class":"input",
                    						style:"width:400px",
                    						trim:true,
+                   						name:"relationFlowName",
                    						value:"${allowRelationFlow }"
                    				'/>
                    				<g:hiddenField name="relationFlow" value="${flowBusiness.relationFlow }" />
