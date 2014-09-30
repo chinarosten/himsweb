@@ -17,9 +17,11 @@ define(["dojo/_base/declare",
         callback: null,
         callbackargs: null,
         onLoadFunction: null,
+        title:"\u7cfb\u7edf\u5bf9\u8bdd\u6846",//系统对话框
         postCreate: function(){
             this.dialog = new RostenDialog({
                 id: "rosten_showDialog",
+                title:this.title,
                 renderStyles: true
             }, this.containerNode.domNode);
             
