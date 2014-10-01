@@ -2116,16 +2116,20 @@ class SystemController {
 	def userSave ={
 		def model=[:]
 		
+		//如果账号已经存在则登录名不变
+		def username
 		def user = new User()
 		if(params.id && !"".equals(params.id)){
 			user = User.get(params.id)
+			username = user.username
 		}else{
 			user.enabled = true
-			if(!params.sysFlag && params.userNameFront){
-				params.username = params.userNameFront + params.username
+			if(params.userNameFront){
+				username = params.userNameFront + params.username
 			}
 		}
 		user.properties = params
+		user.username = username
 		user.clearErrors()
 		
 		if(params.userTypeName && !params.userTypeName.equals(user.getUserTypeName())){
