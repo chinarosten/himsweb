@@ -174,7 +174,7 @@
 	                             			trim:true,required:true,
 	                             			style:{fontSize:"14px",width:"194px"},
 	                             			${fieldAcl.isReadOnly("userTypeName")},
-	              							value:"${user?.userTypeEntity?.typeName }"
+	              							value:"${userTypeEntity?userTypeEntity.typeName:user?.userTypeEntity?.typeName }"
 	                                '>
 	                                <g:each in="${userTypeList}" var="item">
 	                                	<option value="${item.id }">${item.typeName }</option>

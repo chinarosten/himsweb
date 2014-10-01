@@ -2297,7 +2297,12 @@ class SystemController {
 			model["username"] = Util.strRight(_user.username, "-")
 			
 		}else{
-//			model["user"] = new User()
+			if(loginUser.company){
+				def userTypeList = UserType.findAllByCompany(loginUser.company)
+				if(userTypeList && userTypeList.size()>0){
+					model["userTypeEntity"] = userTypeList[0]
+				}
+			}
 		}
 		if(params.companyId){
 			def company = Company.get(params.companyId)
