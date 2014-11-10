@@ -12,6 +12,7 @@ define(["dojo/_base/declare",
 		"dojo/number",
 		"dijit/_WidgetBase", 
 		"dijit/_TemplatedMixin",
+		"dijit/_WidgetsInTemplateMixin",
 		"dojo/text!./templates/RostenGrid.html",
 		"dijit/form/TextBox",
 		"dojox/collections/SortedList", 
@@ -32,6 +33,7 @@ define(["dojo/_base/declare",
 		         number,
 		         _WidgetBase,
 		         _TemplatedMixin,
+		         _WidgetsInTemplateMixin,
 		         template,
 		         TextBox,
 		         SortedList,
@@ -41,8 +43,8 @@ define(["dojo/_base/declare",
 		         behavior,
 		         gendialog,
 		         general) {
-	return declare("rosten.widget.RostenGrid", [_WidgetBase, _TemplatedMixin], {
-		//widgetsInTemplate: true, //解析RostenGrid.html中的dojoType等dojo特有信息，false不会解析
+	return declare("rosten.widget.RostenGrid", [_WidgetBase, _TemplatedMixin,_WidgetsInTemplateMixin], {
+//		widgetsInTemplate: true, //解析RostenGrid.html中的dojoType等dojo特有信息，false不会解析
 		templateString: template,
 		id: "",
         url: "",
@@ -62,6 +64,8 @@ define(["dojo/_base/declare",
         pageSize: 15,//每页条目数,控制获取后台条目数
         showPageControl: true, // 是否载入页面控制信息
         emptymsg: "\u76ee\u524d\u6682\u65e0\u6570\u636e\uff01",//目前暂无数据！
+        
+        imgSrc:"images/rosten/share/wait.gif",
         
         pageControl: {
             page: 1,
@@ -346,7 +350,7 @@ define(["dojo/_base/declare",
         },
         pageKeyPress: function(event){
             if (event.keyCode == 13) {
-                var _9 = number.format(this.gotopage.setAttribute("value"));
+                var _9 = number.format(this.gotopage.get("value"));
                 if (_9 != null) {
                     if (_9 > this.pageControl.totalpages) {
                         _9 = this.pageControl.totalpages;
