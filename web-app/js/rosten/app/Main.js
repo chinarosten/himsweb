@@ -94,7 +94,7 @@ define(["dojo/_base/kernel"
              		if(oString=="plat"){
              			show_systemNaviEntity("companyManage");
              		}else{
-             			show_systemNaviEntity(oRight);
+             			show_naviEntity(oRight);
              		}
              	});
             }else if (oString == "person") {
@@ -693,6 +693,7 @@ define(["dojo/_base/kernel"
      */
     show_naviEntity = function(oString) {
         console.log(oString);
+        rosten.kernel.getNavigation().rendNavigationClass(oString);
     };
     freshGrid = function() {
         rosten.kernel.refreshGrid();

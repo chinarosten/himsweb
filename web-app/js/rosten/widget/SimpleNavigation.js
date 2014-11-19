@@ -2,12 +2,14 @@
  * @author rosten
  */
 define(["dojo/_base/declare",
+        "dojo/_base/kernel", 
 		"dojo/_base/lang",
+		"dojo/dom-class",
 		"dojo/_base/xhr",
 		"dijit/_WidgetBase", 
 		"dijit/_TemplatedMixin",
 		"dojox/collections/SortedList", 
-		"rosten/util/general"], function(declare,lang, xhr,_WidgetBase,_TemplatedMixin,SortedList,general) {
+		"rosten/util/general"], function(declare,kernel,lang,domClass,xhr,_WidgetBase,_TemplatedMixin,SortedList,general) {
 	return declare("rosten.widget.SimpleNavigation", [_WidgetBase, _TemplatedMixin], {
 		
 		general:new general(),
@@ -22,6 +24,8 @@ define(["dojo/_base/declare",
         navigationData:null,//传入参数记录
         
         defaultentry:"",//缺省的导航信息
+        
+        ulnode:null,
         
         constructor: function(){
         },
@@ -76,9 +80,11 @@ define(["dojo/_base/declare",
                 var showName = data[i]["name"];
                 var img = data[i]["img"];
                 var href = data[i]["href"];
+                var liId = this.general.stringLeft(this.general.stringRight(href,"\""),"\"");
                 
 				var linode = document.createElement("li");
-				
+				linode.setAttribute("liid",liId);
+				 
                 var linknode = document.createElement("A");
                 linknode.setAttribute("href", href);
                 
@@ -93,11 +99,22 @@ define(["dojo/_base/declare",
                 linode.appendChild(linknode);
                 ulnode.appendChild(linode);
                 
-                this.navigationData.add(this.general.stringLeft(this.general.stringRight(href,"\""),"\""),showName);
+                this.navigationData.add(liId,showName);
+                
+                this.ulnode = ulnode;
                 
             }
 			this.containerNode.appendChild(ulnode);
             console.log("navigation set data end");
+        },
+        rendNavigationClass:function(str){
+        	kernel.forEach(this.ulnode.childNodes, function(entry){
+        		if(entry.getAttribute("liid")==str){
+        			domClass.add(entry, "bgClass");
+        		}else{
+        			domClass.remove(entry, "bgClass");
+        		}
+        	});
         },
 		getShowName:function(key){
 			if(this.navigationData.contains(key)){
